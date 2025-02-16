@@ -12,12 +12,14 @@ public class Partenaire {
     private int id_categorie;
 
     public Partenaire() {}
-    public Partenaire( String nom, String email, String adresse, String description, Date date_ajout) {
+    public Partenaire(String nom, String email, String adresse, String description, java.sql.Date date_ajout, int id_categorie)
+    {
         this.nom = nom;
         this.email = email;
         this.adresse = adresse;
         this.description = description;
         this.date_ajout = date_ajout;
+        this.id_categorie = id_categorie;
 
     }
 
@@ -91,5 +93,11 @@ public class Partenaire {
                 '}';
     }
 
+    public int getId_categorie() {
+        return id_categorie;
+    }
 
+    public void setId_categorie(int id_categorie) {
+        this.id_categorie = id_categorie;
+    }
 }

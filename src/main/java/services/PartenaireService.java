@@ -18,13 +18,14 @@ public class PartenaireService implements CrudInterface <Partenaire>{
 
     @Override
     public void create(Partenaire obj) throws Exception {
-        String sql = "insert into Partenaire(nom,email,adresse,description,date_ajout)values(?,?,?,?,?)";
+        String sql = "insert into Partenaire(nom,email,adresse,date_ajout,description,id_categorie)values(?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, obj.getNom());
         preparedStatement.setString(2, obj.getEmail());
         preparedStatement.setString(3, obj.getAdresse());
-        preparedStatement.setString(4, obj.getDescription());
-        preparedStatement.setDate(5, obj.getDate_ajout());
+        preparedStatement.setDate(4, obj.getDate_ajout());
+        preparedStatement.setString(5, obj.getDescription());
+        preparedStatement.setInt(6, obj.getId_categorie());
         preparedStatement.executeUpdate();
 
     }
