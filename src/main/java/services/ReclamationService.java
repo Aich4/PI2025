@@ -43,7 +43,7 @@ public class ReclamationService implements Crud<Reclamation> {
 
     @Override
     public void update(Reclamation obj) throws Exception {
-        String sql = "UPDATE reclamation SET description_rec = ?, type_rec = ?, date = ? WHERE id_rec = ?";
+        String sql = "UPDATE reclamation SET description_rec = ?, type_rec = ?, date_rec = ? WHERE id_rec = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obj.getDescription());
             stmt.setString(2, obj.getType());
@@ -87,7 +87,7 @@ public class ReclamationService implements Crud<Reclamation> {
                         rs.getInt("id_rec"),
                         rs.getString("description_rec"),
                         rs.getString("type_rec"),
-                        rs.getDate("date")
+                        rs.getDate("date_rec")
                 );
                 reclamations.add(obj);
             }
@@ -110,8 +110,8 @@ public class ReclamationService implements Crud<Reclamation> {
                 obj = new Reclamation(
                         rs.getInt("id_rec"),
                         rs.getString("description_rec"),
-                        rs.getString("type"),
-                        rs.getDate("date")
+                        rs.getString("type_rec"),
+                        rs.getDate("date_rec")
                 );
             }
         } catch (SQLException e) {

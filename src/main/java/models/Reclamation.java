@@ -1,11 +1,15 @@
 package models;
 import java.util.Date;
 
+
 public class Reclamation {
     private int id_rec;
     private String description_rec;  // Correction du nom du champ
     private String type_rec;
     private Date date_rec;
+
+    private static final List<String> TYPES_VALIDES = Arrays.asList("site", "bug", "pack", "commercant", "guide");
+
 
     // Constructeur
     public Reclamation(int id_rec, String description_rec, String type_rec , Date date_rec) {
@@ -39,6 +43,14 @@ public class Reclamation {
 
     public Date getDate() { return date_rec; }
     public void setDate(Date date_rec) { this.date_rec = date_rec; }
+
+    public void setType_rec(String type_rec) {
+        if (TYPES_VALIDES.contains(type_rec.toLowerCase())) {
+            this.type_rec = type_rec;
+        } else {
+            throw new IllegalArgumentException("Type de réclamation invalide. Doit être l'un de : " + TYPES_VALIDES);
+        }
+    }
 
     @Override
     public String toString() {
