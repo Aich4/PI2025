@@ -61,9 +61,21 @@
                   <ListView fx:id="ListView" prefHeight="360.0" prefWidth="808.0" />
                </content>
                 </ScrollPane>
+            <Button layoutX="625.0" layoutY="151.0" mnemonicParsing="false" onAction="#ajout" prefHeight="32.0" prefWidth="224.0" text="ajouter une destination" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
             </children>
         </Pane>
-        <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">
+        <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">
             <children>
                 <Separator prefWidth="232.0" />
                 <VBox prefHeight="138.0" prefWidth="250.0">
@@ -158,7 +170,7 @@
                         </VBox>
                     </children>
                 </VBox>
-                <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" text="show Activite" textFill="#413852">
+                <Button mnemonicParsing="false" onAction="#showActivite" prefHeight="32.0" prefWidth="224.0" text="Show Activite" textFill="#413852">
                     <effect>
                         <DropShadow>
                             <color>
@@ -170,6 +182,18 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
+            <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" text="Show Destination" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
             </children>
             <effect>
                 <DropShadow radius="18.7725" width="56.09" />

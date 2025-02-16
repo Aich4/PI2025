@@ -2,6 +2,8 @@ package Controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import models.Activite;
 import services.ActiviteService;
@@ -12,6 +14,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import services.DestinationService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
 import java.util.List;
@@ -68,7 +71,25 @@ public class AjoutActivite {
 
     @FXML
     void showActivite(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListActiviteBack.fxml"));
+        try {
+            Parent root = loader.load();
+            Heure.getScene().setRoot(root);
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void showDestination(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListDestinationBack.fxml"));
+        try {
+            Parent root = loader.load();
+            Heure.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML

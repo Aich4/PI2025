@@ -98,7 +98,7 @@ public class GestionDestination {
 
     @FXML
     void showActivite(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutActivite.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListActiviteBack.fxml"));
         try {
             Parent root = loader.load();
             ratingDestination.getScene().setRoot(root);
