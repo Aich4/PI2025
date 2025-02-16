@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListDestination">
+    <VBox>
+        <Label style="-fx-font-size: 20px; -fx-text-fill: #B05A36;" text="Liste des Destinations" />
+        <TextField fx:id="searchField" promptText="Search" />
+        <GridPane fx:id="gridContainer" hgap="10.0" vgap="10.0">
+         <opaqueInsets>
+            <Insets top="10.0" />
+         </opaqueInsets></GridPane>
+    </VBox>
+</ScrollPane>
