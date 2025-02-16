@@ -1,6 +1,6 @@
 package models;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Partenaire {
     private int id;
@@ -9,6 +9,7 @@ public class Partenaire {
     String adresse;
     String description ;
     Date date_ajout;
+    private int id_categorie;
 
     public Partenaire() {}
     public Partenaire( String nom, String email, String adresse, String description, Date date_ajout) {

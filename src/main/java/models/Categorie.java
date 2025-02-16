@@ -16,6 +16,12 @@ public class Categorie {
         this.nbr_partenaire = nbr_partenaire;
 
     }
+    public Categorie( String nom, String description,String logo) {
+
+        this.nom = nom;
+        this.description = description;
+        this.logo = logo;
+    }
 
     public Categorie( String nom, String description, String logo, int nbr_partenaire) {
         this.nom = nom;

@@ -67,4 +67,28 @@ public class CategorieService implements CrudInterface <Categorie> {
         }
         return list;
     }
+
+    public List<String> getAllNames() throws Exception {
+        List<String> list = new ArrayList<>();
+        String sql = "select * from Categorie";
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            list.add(rs.getString("nom"));
+        }
+        return list;
+    }
+
+    public int getIdByNom(String nom) throws Exception {
+        String sql = "select id from categorie where nom=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, nom);
+
+        ResultSet rs = preparedStatement.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id");
+
+        }
+        return -1;
+    }
 }
