@@ -6,6 +6,7 @@ import utils.MyDb;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class DestinationService implements CrudInterface<Destination> {
         ps.setDouble(7, obj.getRate());
         ps.setInt(8, obj.getId());
         ps.executeUpdate();
+
     }
 
     @Override
@@ -92,5 +94,26 @@ public class DestinationService implements CrudInterface<Destination> {
         }
         return -1;
 
+    }
+    public boolean updatee(Destination destination) {
+        try {
+            // Example: Update the destination in the database
+            String sql = "update destination set nom_destination = ?,description=?,image_destination=?,latitude=?,longitude=?,temperature=?,rate=? where id=?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, destination.getNom_destination());
+            ps.setString(2, destination.getDecription());
+            ps.setString(3, destination.getImage_destination());
+            ps.setDouble(4, destination.getLatitude());
+            ps.setDouble(5, destination.getLongitude());
+            ps.setDouble(6, destination.getTemperature());
+            ps.setDouble(7, destination.getRate());
+            ps.setInt(8, destination.getId());
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Return true if update was successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
