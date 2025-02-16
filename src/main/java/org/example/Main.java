@@ -2,7 +2,8 @@ package org.example;
 
 import models.Reclamation;
 import models.Reponse;
-import services.ReponseServices;
+import services.ReclamationService;
+import services.ReponseService;
 import java.util.Date;
 
 public class Main {
@@ -13,7 +14,7 @@ public class Main {
 
         try {
             // Création et ajout d'une réclamation
-            Reclamation reclamation = new Reclamation(5, "F", typeR.Coach, 2, 2, new Date());
+            Reclamation reclamation = new Reclamation(5, "F", "type_rec.", new Date());
 
             //reclamationService.create(reclamation);
             // System.out.println("Réclamation ajoutée : " + reclamation);
@@ -37,7 +38,7 @@ public class Main {
             //  System.out.println("Réponses ajoutées avec succès !");
 
             System.out.println("\n=== SUPPRESSION D'UNE RÉPONSE ===");
-            reponseService.delete(reponse1.getId());
+            reponseService.delete(reponse1.getId_rec());
             System.out.println("Réponse supprimée avec succès !");
 
 

@@ -2,56 +2,51 @@ package models;
 import java.util.Date;
 
 public class Reclamation {
-    private int idReclamation;
-    private String description;  // Correction du nom du champ
-    private int id_coach;
-    private int id_adherent;
-    private Date date;
+    private int id_rec;
+    private String description_rec;  // Correction du nom du champ
+    private String type_rec;
+    private Date date_rec;
 
-    public Reclamation(int idReclamation, String description, typeR type, int id_coach, int id_adherent, Date date) {
-        this.idReclamation = idReclamation;
-        this.description = description;
-        this.id_coach = id_coach;
-        this.id_adherent = id_adherent;
-        this.date = date;
+    // Constructeur
+    public Reclamation(int id_rec, String description_rec, String type_rec , Date date_rec) {
+        this.id_rec = id_rec;
+        this.description_rec = description_rec;
+        this.type_rec = type_rec;
+        this.date_rec = date_rec;
     }
 
+    // Méthodes
     public void ajouterReclamation() {
         // Implémentation pour ajouter une réclamation
     }
-
     public void consulterReclamation() {
         // Implémentation pour consulter une réclamation
     }
-
     public void supprimerReclamation() {
         // Implémentation pour supprimer une réclamation
     }
 
     // Getters et Setters
-    public int getIdReclamation() { return idReclamation; }
-    public void setIdReclamation(int idReclamation) { this.idReclamation = idReclamation; }
+    public int getIdReclamation() { return id_rec; }
+    public void setIdReclamation(int id_rec) { this.id_rec = id_rec; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getDescription() { return description_rec; }
+    public void setDescription(String description_rec) { this.description_rec = description_rec; }
 
-    public int getId_coach() { return id_coach; }
-    public void setId_coach(int id_coach) { this.id_coach = id_coach; }
+    public String getType() { return type_rec; }
+    public void setType(String type_rec) { this.type_rec = type_rec; }
 
-    public int getId_adherent() { return id_adherent; }
-    public void setId_adherent(int id_adherent) { this.id_adherent = id_adherent; }
 
-    public Date getDate() { return date; }
-    public void setDate(Date date) { this.date = date; }
+    public Date getDate() { return date_rec; }
+    public void setDate(Date date_rec) { this.date_rec = date_rec; }
 
     @Override
     public String toString() {
         return "Reclamation{" +
-                "idReclamation=" + idReclamation +
-                ", description='" + description + '\'' +
-                ", id_coach=" + id_coach +
-                ", id_adherent=" + id_adherent +
-                ", date=" + date +
+                "id=" + id_rec +
+                ", description='" + description_rec + '\'' +
+                ", type=" + type_rec +
+                ", date=" + date_rec +
                 '}';
     }
 }

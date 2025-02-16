@@ -1,6 +1,6 @@
 package services;
 
-import Models.Reponse;
+import models.Reponse;
 import Utils.MyDb;
 
 import java.sql.*;
@@ -16,11 +16,11 @@ public class ReponseService implements Crud<Reponse> {
 
     @Override
     public boolean create(Reponse obj) throws Exception {
-        String sql = "INSERT INTO reponse (id_reclamation, date_reponse, contenu) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO reponse (id_rec, date_rep, contenu_rep) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, obj.getId_reclamation());
-            stmt.setDate(2, new Date(obj.getDate_reponse().getTime()));
-            stmt.setString(3, obj.getContenu());
+            stmt.setInt(1, obj.getId_rec());
+            stmt.setDate(2, new Date(obj.getDate_rep().getTime()));
+            stmt.setString(3, obj.getContenu_rep());
 
             int res = stmt.executeUpdate();
             if (res > 0) {
@@ -37,12 +37,12 @@ public class ReponseService implements Crud<Reponse> {
 
     @Override
     public void update(Reponse obj) throws Exception {
-        String sql = "UPDATE reponse SET id_reclamation = ?, date_reponse = ?, contenu = ? WHERE id = ?";
+        String sql = "UPDATE reponse SET id_rec = ?, date_rep = ?, contenu_rep = ? WHERE id_rep = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, obj.getId_reclamation());
-            stmt.setDate(2, new Date(obj.getDate_reponse().getTime()));
-            stmt.setString(3, obj.getContenu());
-            stmt.setInt(4, obj.getId());
+            stmt.setInt(1, obj.getId_rec());
+            stmt.setDate(2, new Date(obj.getDate_rep().getTime()));
+            stmt.setString(3, obj.getContenu_rep());
+            stmt.setInt(4, obj.getId_rep());
 
             stmt.executeUpdate();
             System.out.println("Réponse mise à jour avec succès !");
@@ -52,10 +52,10 @@ public class ReponseService implements Crud<Reponse> {
     }
 
     @Override
-    public void delete(int id) throws Exception {
-        String sql = "DELETE FROM reponse WHERE id = ?";
+    public void delete(int id_rep) throws Exception {
+        String sql = "DELETE FROM reponse WHERE id_rep = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setInt(1, id_rep);
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -78,10 +78,10 @@ public class ReponseService implements Crud<Reponse> {
 
             while (rs.next()) {
                 Reponse obj = new Reponse(
-                        rs.getInt("id"),
-                        rs.getInt("id_reclamation"),
-                        rs.getDate("date_reponse"),
-                        rs.getString("contenu")
+                        rs.getInt("id_rep"),
+                        rs.getInt("id_rec"),
+                        rs.getDate("date_rep"),
+                        rs.getString("contenu_rep")
                 );
                 reponses.add(obj);
             }
@@ -92,20 +92,20 @@ public class ReponseService implements Crud<Reponse> {
     }
 
     @Override
-    public Reponse getById(int id) throws Exception {
-        String sql = "SELECT * FROM reponse WHERE id = ?";
+    public Reponse getById(int id_rep) throws Exception {
+        String sql = "SELECT * FROM reponse WHERE id_rep = ?";
         Reponse obj = null;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setInt(1, id_rep);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 obj = new Reponse(
-                        rs.getInt("id"),
-                        rs.getInt("id_reclamation"),
-                        rs.getDate("date_reponse"),
-                        rs.getString("contenu")
+                        rs.getInt("id_rep"),
+                        rs.getInt("id_rec"),
+                        rs.getDate("date_rep"),
+                        rs.getString("contenu_rep")
                 );
             }
         } catch (SQLException e) {

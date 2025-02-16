@@ -1,6 +1,6 @@
 package services;
 
-import Models.Reclamation;
+import models.Reclamation;
 import Utils.MyDb;
 
 import java.sql.*;
@@ -21,13 +21,11 @@ public class ReclamationService implements Crud<Reclamation> {
 
     @Override
     public boolean create(Reclamation obj) throws Exception {
-        String sql = "INSERT INTO reclamation(description, typeR, id_coach, id_adherent, date) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reclamation(description_rec, type_rec, date_rec) " +
+                "VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obj.getDescription());
-            stmt.setString(2, obj.getType().name()); // Supposant que typeR est un enum
-            stmt.setInt(3, obj.getId_coach());
-            stmt.setInt(4, obj.getId_adherent());
+            stmt.setString(2, obj.getType());
             stmt.setDate(5, new Date(obj.getDate().getTime()));
 
             int res = stmt.executeUpdate();
@@ -45,14 +43,12 @@ public class ReclamationService implements Crud<Reclamation> {
 
     @Override
     public void update(Reclamation obj) throws Exception {
-        String sql = "UPDATE reclamation SET description = ?, typeR = ?, id_coach = ?, id_adherent = ?, date = ? WHERE idReclamation = ?";
+        String sql = "UPDATE reclamation SET description_rec = ?, type_rec = ?, date = ? WHERE id_rec = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obj.getDescription());
-            stmt.setString(2, obj.getType().name());
-            stmt.setInt(3, obj.getId_coach());
-            stmt.setInt(4, obj.getId_adherent());
-            stmt.setDate(5, new Date(obj.getDate().getTime()));
-            stmt.setInt(6, obj.getIdReclamation());
+            stmt.setString(2, obj.getType());
+            stmt.setDate(3, new Date(obj.getDate().getTime()));
+            stmt.setInt(4, obj.getIdReclamation());
 
             stmt.executeUpdate();
             System.out.println("Réclamation mise à jour avec succès !");
@@ -63,7 +59,7 @@ public class ReclamationService implements Crud<Reclamation> {
 
     @Override
     public void delete(int id) throws Exception {
-        String sql = "DELETE FROM reclamation WHERE idReclamation = ?";
+        String sql = "DELETE FROM reclamation WHERE id_rec = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
 
@@ -88,11 +84,9 @@ public class ReclamationService implements Crud<Reclamation> {
 
             while (rs.next()) {
                 Reclamation obj = new Reclamation(
-                        rs.getInt("idReclamation"),
-                        rs.getString("description"),
-                        Models.typeR.valueOf(rs.getString("type")),
-                        rs.getInt("id_coach"),
-                        rs.getInt("id_adherent"),
+                        rs.getInt("id_rec"),
+                        rs.getString("description_rec"),
+                        rs.getString("type_rec"),
                         rs.getDate("date")
                 );
                 reclamations.add(obj);
@@ -104,21 +98,19 @@ public class ReclamationService implements Crud<Reclamation> {
     }
 
     @Override
-    public Reclamation getById(int id) throws Exception {
-        String sql = "SELECT * FROM reclamation WHERE idReclamation = ?";
+    public Reclamation getById(int id_rec) throws Exception {
+        String sql = "SELECT * FROM reclamation WHERE id_rec = ?";
         Reclamation obj = null;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setInt(1, id_rec);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 obj = new Reclamation(
-                        rs.getInt("idReclamation"),
-                        rs.getString("description"),
-                        Models.typeR.valueOf(rs.getString("type")),
-                        rs.getInt("id_coach"),
-                        rs.getInt("id_adherent"),
+                        rs.getInt("id_rec"),
+                        rs.getString("description_rec"),
+                        rs.getString("type"),
                         rs.getDate("date")
                 );
             }
