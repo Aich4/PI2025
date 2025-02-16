@@ -183,7 +183,7 @@
                                     <Image url="@categories.png" />
                                  </image>
                               </ImageView>
-                              <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Categories">
+                              <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Activite">
                                  <font>
                                     <Font name="Cambria Math" size="16.0" />
                                  </font>
@@ -200,6 +200,18 @@
                   </VBox>
                </children>
             </VBox>
+            <Button mnemonicParsing="false" onAction="#showActivite" prefHeight="32.0" prefWidth="224.0" text="show Activite" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
          </children>
          <effect>
             <DropShadow radius="18.7725" width="56.09" />

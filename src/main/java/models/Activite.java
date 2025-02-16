@@ -1,24 +1,44 @@
 package models;
 
+import java.sql.Date;
+
 public class Activite {
-    int id;
-    String nom_activite,date,heure,statut;
+    int id,id_destination;
+    String nom_activite,heure,statut;
+    Date date;
     public Activite() {}
-    public Activite(int id, String nom_activite, String date, String heure, String statut) {
+    public Activite(int id, String nom_activite, Date date, String heure, String statut, int id_destination) {
         this.id = id;
+        this.nom_activite = nom_activite;
+        this.date = date;
+        this.heure = heure;
+        this.statut = statut;
+        this.id_destination = id_destination;
+
+    }
+    public Activite(int id_destination,String nom_activite, Date date, String heure, String statut) {
+        this.id_destination = id_destination;
         this.nom_activite = nom_activite;
         this.date = date;
         this.heure = heure;
         this.statut = statut;
 
     }
-    public Activite(String nom_activite, String date, String heure, String statut) {
+    public Activite(String nom_activite, Date date, String heure, String statut) {
 
         this.nom_activite = nom_activite;
         this.date = date;
         this.heure = heure;
         this.statut = statut;
 
+    }
+
+    public int getId_destination() {
+        return id_destination;
+    }
+
+    public void setId_destination(int id_destination) {
+        this.id_destination = id_destination;
     }
 
     public int getId() {
@@ -45,11 +65,11 @@ public class Activite {
         this.heure = heure;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

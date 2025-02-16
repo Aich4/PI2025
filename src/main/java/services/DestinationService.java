@@ -71,4 +71,26 @@ public class DestinationService implements CrudInterface<Destination> {
         return list;
 
     }
+    public List<String> getAllNames() throws Exception {
+        List<String> list = new ArrayList<>();
+        String sql = "select * from destination";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(rs.getString("nom_destination"));
+
+        }
+        return list;
+    }
+    public int getIdByName(String name) throws Exception {
+        String sql = "select id from destination where nom_destination = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id");
+        }
+        return -1;
+
+    }
 }

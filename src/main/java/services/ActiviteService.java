@@ -16,12 +16,13 @@ public class ActiviteService implements CrudInterface<Activite> {
 
     @Override
     public void create(Activite obj) throws Exception {
-        String sql = "insert into activite (nom_activite,date,heure,statut) values (?,?,?,?)";
+        String sql = "insert into activite (nom_activite,date,heure,statut,id_destination) values (?,?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1,obj.getNom_activite());
-        ps.setString(2,obj.getDate());
+        ps.setDate(2, obj.getDate());
         ps.setString(3,obj.getHeure());
         ps.setString(4,obj.getStatut());
+        ps.setInt(5,obj.getId_destination());
         ps.executeUpdate();
     }
 
@@ -30,7 +31,7 @@ public class ActiviteService implements CrudInterface<Activite> {
         String sql = "update activite set nom_activite=?,date=?,heure=?,statut=? where id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1,obj.getNom_activite());
-        ps.setString(2,obj.getDate());
+        ps.setDate(2, obj.getDate());
         ps.setString(3,obj.getHeure());
         ps.setString(4,obj.getStatut());
         ps.setInt(5,obj.getId());
@@ -55,7 +56,7 @@ public class ActiviteService implements CrudInterface<Activite> {
             Activite activite = new Activite();
             activite.setId(rs.getInt("id"));
             activite.setNom_activite(rs.getString("nom_activite"));
-            activite.setDate(rs.getString("date"));
+            activite.setDate(java.sql.Date.valueOf(rs.getString("date")));
             activite.setHeure(rs.getString("heure"));
             activite.setStatut(rs.getString("statut"));
             activites.add(activite);
