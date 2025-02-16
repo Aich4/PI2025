@@ -3,10 +3,7 @@ package services;
 import models.Partenaire;
 import utils.MyDb;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,9 +64,31 @@ public class PartenaireService implements CrudInterface <Partenaire>{
             obj.setAdresse(rs.getString("adresse"));
             obj.setDescription(rs.getString("description"));
             obj.setDate_ajout(rs.getDate("date_ajout"));
+            obj.setId_categorie(rs.getInt("id_categorie"));
             list.add(obj);
 
         }
         return list;
     }
+
+    public String getCategorieNameById(int id_categorie) {
+        String categorieName = "";
+        try {
+            String query = "SELECT nom FROM categorie WHERE id = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, id_categorie);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                categorieName = rs.getString("nom");
+                System.out.println("Nom de la catégorie trouvé : " + categorieName);  // Ajout d'un log de débogage
+            } else {
+                System.out.println("Aucune catégorie trouvée pour l'ID : " + id_categorie);  // Log si la catégorie n'est pas trouvée
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categorieName;
+    }
+
 }

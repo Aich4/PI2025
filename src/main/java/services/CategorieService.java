@@ -91,4 +91,13 @@ public class CategorieService implements CrudInterface <Categorie> {
         }
         return -1;
     }
+
+    public String getNomById(int idCategorie) {
+        String sql = "select nom from categorie where id=?";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+
+        return sql;
+    }
+
 }
