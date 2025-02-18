@@ -1,4 +1,4 @@
-package tests;
+package Tests;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,18 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
-
-public class MainFx extends Application{
+public class MainFx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GestionDestination.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AddPack.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("GestionActivite");
-        stage.setWidth(1920);
-        stage.setHeight(1080);
+        stage.setTitle("Gestion Pack");
+        stage.setWidth(1350);
         stage.show();
     }
 
