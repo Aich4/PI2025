@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 public class ListActiviteBack {
-    ActiviteService activiteService = new ActiviteService();
+    ActiviteService activiteService ;
     public ListActiviteBack() {
         this.activiteService = new ActiviteService();
     }

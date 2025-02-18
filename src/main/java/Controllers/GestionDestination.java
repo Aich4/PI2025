@@ -45,23 +45,62 @@ public class GestionDestination {
 
     @FXML
     void ajoutDestination(ActionEvent event) {
-        Destination d = new Destination(this.nomDestination.getText(),this.descriptionDestination.getText(),imagePath,Double.parseDouble(this.latitudeDestination.getText()),Double.parseDouble(this.longitudeDestination.getText()),Double.parseDouble(this.temperatureDestination.getText()),Double.parseDouble(this.ratingDestination.getText()));
-        try{
-            this.ds.create(d);
-            reset();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setContentText("Destination created");
-            alert.showAndWait();
-        }catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+
+        String nom = this.nomDestination.getText().trim();
+        String description = this.descriptionDestination.getText().trim();
+        String image = imagePath;
+        String latitudeStr = this.latitudeDestination.getText().trim();
+        String longitudeStr = this.longitudeDestination.getText().trim();
+        String temperatureStr = this.temperatureDestination.getText().trim();
+        String ratingStr = this.ratingDestination.getText().trim();
+
+// Check if fields are empty
+        if (nom.isEmpty() || description.isEmpty() || image.isEmpty() || image == null ||
+                latitudeStr.isEmpty() || longitudeStr.isEmpty() || temperatureStr.isEmpty() || ratingStr.isEmpty()) {
+            showAlert("Error", "All fields must be filled!", Alert.AlertType.ERROR);
+            return;
+        }
+
+        try {
+            double latitude = Double.parseDouble(latitudeStr);
+            double longitude = Double.parseDouble(longitudeStr);
+            double temperature = Double.parseDouble(temperatureStr);
+            double rating = Double.parseDouble(ratingStr);
+
+            // Validate rating range
+            if (rating < 0 || rating > 5) {
+                showAlert("Error", "Rating must be between 0 and 5.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Create and save the destination
+            Destination d = new Destination(nom, description, image, latitude, longitude, temperature, rating);
+            try {
+                this.ds.create(d);
+                reset();
+                showAlert("Success", "Destination created successfully!", Alert.AlertType.INFORMATION);
+
+            } catch (Exception e) {
+
+                showAlert("erreur", e.getMessage(), Alert.AlertType.INFORMATION);
+            }
+
+
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Latitude, Longitude, Temperature, and Rating must be valid numbers.", Alert.AlertType.ERROR);
         }
     }
 
-    @FXML
+// Utility method to show alerts
+        private void showAlert(String title, String content, Alert.AlertType type) {
+            Alert alert = new Alert(type);
+            alert.setTitle(title);
+            alert.setContentText(content);
+            alert.showAndWait();
+        }
+
+
+        @FXML
     void chooseImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select an Image");
