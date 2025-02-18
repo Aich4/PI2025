@@ -4,9 +4,12 @@ package Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import models.Pack;
 import services.ServicePack;
 
@@ -72,28 +75,56 @@ public class AddPack {
             alert.showAndWait();
         }}
 
-        @FXML
-        void showpack(ActionEvent event){
+    @FXML
+    void showpack(ActionEvent event){
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ShowPack.fxml"));
-            try {
-                Parent root = loader.load();
-                nom_Pack.getScene().setRoot(root);
+            Parent root = loader.load();
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
+            // Afficher la nouvelle fenêtre
+            Scene currentScene = ((Node) event.getSource()).getScene();
+            currentScene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        void reset() {
-            this.nom_Pack.clear();
-            this.description.clear();
-            this.avantages.clear();
-            this.prix.clear();
-            this.duree.clear();
-            this.statut1.clear();
-        }
-
-
     }
+
+    void reset() {
+        this.nom_Pack.clear();
+        this.description.clear();
+        this.avantages.clear();
+        this.prix.clear();
+        this.duree.clear();
+        this.statut1.clear();
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

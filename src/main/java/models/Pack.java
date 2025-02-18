@@ -1,5 +1,7 @@
 package models;
 
+import javafx.scene.control.ListCell;
+
 public class Pack {
     private int id_Pack, duree;
     private String nom_Pack, description, avantages, statut;
@@ -88,14 +90,21 @@ public class Pack {
 
     @Override
     public String toString() {
-        return "Pack{" +
-                "id_Pack=" + id_Pack +
-                ", nom_Pack='" + nom_Pack + '\'' +
-                ", description='" + description + '\'' +
-                ", prix=" + prix +
-                ", duree=" + duree +
-                " jours, avantages='" + avantages + '\'' +
-                ", statut='" + statut + '\'' +
-                '}';
+        return getId_Pack() + " | " + "Nom: " + nom_Pack + " | Description: " + description +
+                " | Prix: " + prix + " | Durée: " + duree + " | Avantages: " + avantages +
+                " | Statut: " + statut;
     }
-}
+    public static class PackListCell extends ListCell<Pack> {
+        @Override
+        protected void updateItem(Pack pack, boolean empty) {
+            super.updateItem(pack, empty);
+
+            if (empty || pack == null) {
+                setText(null);
+            } else {
+                setText(pack.getNom_Pack() + " - " + pack.getPrix() + " TND");
+            }
+        }
+
+
+}}

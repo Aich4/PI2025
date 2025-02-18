@@ -14,7 +14,7 @@ public class MainFx extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Gestion Pack");
-        stage.setWidth(1200);
+        stage.setWidth(1350);
         stage.show();
     }
 

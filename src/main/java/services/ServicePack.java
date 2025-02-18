@@ -28,7 +28,8 @@ public class ServicePack implements Ipack<Pack> {
     }
 
     @Override
-    public void update(Pack obj) throws SQLException {
+    public void update(Pack obj)  {
+        try{
         String sql = "UPDATE pack SET nom_Pack = ?, description = ?, prix = ?, duree = ?, avantages = ?, statut = ? WHERE id_Pack = ?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setString(1, obj.getNom_Pack());
@@ -39,15 +40,28 @@ public class ServicePack implements Ipack<Pack> {
         pstmt.setString(6, obj.getStatut());
         pstmt.setInt(7, obj.getId_Pack());
         pstmt.executeUpdate();
+        pstmt.executeUpdate();
+        System.out.println("pack modifié avec succès !");
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
+    }
     }
 
+
     @Override
-    public void delete(int id) throws SQLException {
+    public boolean delete(int id) throws SQLException {
         String sql = "DELETE FROM pack WHERE id_Pack = ?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1, id);
-        pstmt.executeUpdate();
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            int rowsAffected = pstmt.executeUpdate(); // Check the number of rows deleted
+
+            return rowsAffected > 0; // Return true if at least one row was deleted
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if deletion fails
+        }
     }
+
 
     @Override
     public List<Pack> getAll() throws SQLException {
@@ -63,6 +77,9 @@ public class ServicePack implements Ipack<Pack> {
             p.setPrix(rs.getFloat("prix"));
             p.setDuree(rs.getInt("duree"));
             p.setAvantages(rs.getString("avantages"));
+            p.setStatut(rs.getString("statut"));  // Add this to fetch 'statut'
+
+            list.add(p); // Add the Pack to the list
         }
         return list;
     }
