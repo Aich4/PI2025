@@ -43,31 +43,57 @@ public class AjoutActivite {
 
     @FXML
     void ajoutActivite(ActionEvent event) {
-        LocalDate localDate = Date.getValue();
+        // Validate inputs
+        if (idDest.getValue() == null || nom.getText().isEmpty() || Date.getValue() == null ||
+                Heure.getText().isEmpty() || Statut.getValue() == null) {
+
+            showAlert(Alert.AlertType.WARNING, "Warning", "All fields must be filled!");
+            return;
+        }
+
+        // Validate destination
         int id;
         try {
             id = this.destinationService.getIdByName(idDest.getValue());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            showAlert(Alert.AlertType.ERROR, "Error", "Invalid destination selected!");
+            return;
+        }
+
+        // Validate date (should not be in the past)
+        LocalDate localDate = Date.getValue();
+        if (localDate.isBefore(LocalDate.now())) {
+            showAlert(Alert.AlertType.WARNING, "Warning", "Date cannot be in the past!");
+            return;
         }
 
         java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
 
-        Activite activite = new Activite(id,nom.getText(),sqlDate,Heure.getText(),Statut.getValue());
+        // Validate time format (HH:mm)
+        if (!Heure.getText().matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
+            showAlert(Alert.AlertType.WARNING, "Warning", "Invalid time format! Use HH:mm.");
+            return;
+        }
+
+        // Create and save activity
+        Activite activite = new Activite(id, nom.getText(), sqlDate, Heure.getText(), Statut.getValue());
 
         try {
             this.activiteService.create(activite);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setContentText("Activite created");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Activity created successfully!");
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
     }
+
+    // Utility function to show alerts
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     @FXML
     void showActivite(ActionEvent event) {
