@@ -13,6 +13,7 @@ import services.CategorieService;
 import services.PartenaireService;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class GestionPartenaire {
     void save(ActionEvent event) {
         try {
             // Conversion correcte de LocalDate en java.sql.Date
-            java.sql.Date sqlDate = java.sql.Date.valueOf(this.date.getValue());
+            Date sqlDate = Date.valueOf(this.date.getValue());
 
             // Récupération du nom de la catégorie sélectionnée
             String nomCategorie = this.idcategorie.getValue();
@@ -113,6 +114,25 @@ public class GestionPartenaire {
             e.printStackTrace(); // Afficher l'exception si elle se produit
         }
     }
+
+
+    private Partenaire partenaireActuel;
+
+    public void setPartenaire(Partenaire partenaire) {
+        this.partenaireActuel = partenaire;
+
+        // Pré-remplir les champs avec les données du partenaire sélectionné
+        nompartenaire.setText(partenaire.getNom());
+        emailpartenaire.setText(partenaire.getEmail());
+        adresse.setText(partenaire.getAdresse());
+        description.setText(partenaire.getDescription());
+        date.setValue(partenaire.getDate_ajout().toLocalDate()); // Conversion Date -> LocalDate
+
+        idcategorie.setValue(cs.getNomById(partenaire.getId_categorie()));
+    }
+
+
+    
 
 
 }

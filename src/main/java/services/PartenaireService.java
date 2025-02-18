@@ -29,16 +29,17 @@ public class PartenaireService implements CrudInterface <Partenaire>{
 
     @Override
     public void update(Partenaire obj) throws Exception {
-        String sql = "update Partenaire set nom=?,email=?,adresse=?,description=? where id=?";
+        String sql = "UPDATE Partenaire SET nom=?, email=?, adresse=?, description=?, date_ajout=? WHERE id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, obj.getNom());
         preparedStatement.setString(2, obj.getEmail());
         preparedStatement.setString(3, obj.getAdresse());
         preparedStatement.setString(4, obj.getDescription());
         preparedStatement.setDate(5, obj.getDate_ajout());
+        preparedStatement.setInt(6, obj.getId());  // Ajout de l'ID manquant
         preparedStatement.executeUpdate();
-
     }
+
 
     @Override
     public void delete(int id) throws Exception {

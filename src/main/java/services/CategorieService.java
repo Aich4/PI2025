@@ -37,6 +37,7 @@ public class CategorieService implements CrudInterface <Categorie> {
         preparedStatement.setString(2, obj.getDescription());
         preparedStatement.setString(3, obj.getLogo());
         preparedStatement.setInt(4, obj.getNbr_partenaire());
+        preparedStatement.setInt(5, obj.getId());
         preparedStatement.executeUpdate();
     }
 
