@@ -14,6 +14,12 @@ public class Reponse {
         this.date_rep = date_rep;
         this.contenu_rep = contenu_rep;
     }
+    public Reponse(int id_rec, Date date_rep, String contenu_rep) {
+
+        this.id_rec = id_rec;
+        this.date_rep = date_rep;
+        this.contenu_rep = contenu_rep;
+    }
 
     // Méthodes
     public void afficher_rep() {

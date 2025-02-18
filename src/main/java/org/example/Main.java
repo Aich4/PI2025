@@ -9,7 +9,7 @@ import java.util.Date;
 public class Main {
     public static void main(String[] args) {
         // Initialisation des services
-        ReclamationService reclamationService = new ReclamationService();
+      /*  ReclamationService reclamationService = new ReclamationService();
         ReponseService reponseService = new ReponseService();
 
         try {
@@ -48,5 +48,5 @@ public class Main {
             System.out.println("Erreur : " + e.getMessage());
             e.printStackTrace();
         }
-    }
-}
+    }*/
+}}

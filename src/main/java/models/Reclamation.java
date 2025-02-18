@@ -1,5 +1,8 @@
 package models;
-import java.util.Date;
+import java.util.Arrays;
+import java.sql.Date;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class Reclamation {
@@ -7,8 +10,7 @@ public class Reclamation {
     private String description_rec;  // Correction du nom du champ
     private String type_rec;
     private Date date_rec;
-
-    private static final List<String> TYPES_VALIDES = Arrays.asList("site", "bug", "pack", "commercant", "guide");
+    //private Boolean etat_rec;
 
 
     // Constructeur
@@ -17,6 +19,15 @@ public class Reclamation {
         this.description_rec = description_rec;
         this.type_rec = type_rec;
         this.date_rec = date_rec;
+        //this.etat_rec = false;
+    }
+
+    public Reclamation(String description_rec, String type_rec , Date date_rec) {
+
+        this.description_rec = description_rec;
+        this.type_rec = type_rec;
+        this.date_rec = date_rec;
+
     }
 
     // Méthodes
@@ -44,6 +55,12 @@ public class Reclamation {
     public Date getDate() { return date_rec; }
     public void setDate(Date date_rec) { this.date_rec = date_rec; }
 
+ /*public Boolean getEtat() { return etat_rec; }
+    public void setEtat(Boolean etat_rec) { this.etat_rec = etat_rec; }*/
+
+
+    //ctrl saisie
+    private static final List<String> TYPES_VALIDES = Arrays.asList("site", "bug", "pack", "commercant", "guide", "autre");
     public void setType_rec(String type_rec) {
         if (TYPES_VALIDES.contains(type_rec.toLowerCase())) {
             this.type_rec = type_rec;
@@ -52,6 +69,28 @@ public class Reclamation {
         }
     }
 
+    public class DescriptionControl {
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            String description_rec;
+
+            while (true) {
+                System.out.print("Entrez la description (max 800 caractères) : ");
+                description_rec = scanner.nextLine();
+
+                if (description_rec.length() <= 800) {
+                    break; // Sortir de la boucle si la description est valide
+                } else {
+                    System.out.println("Erreur : La description ne doit pas dépasser 800 caractères. Veuillez réessayer.");
+                }
+            }
+
+            System.out.println("Description valide : " + description_rec);
+            scanner.close();
+        }
+    }
+
+
     @Override
     public String toString() {
         return "Reclamation{" +
@@ -59,6 +98,7 @@ public class Reclamation {
                 ", description='" + description_rec + '\'' +
                 ", type=" + type_rec +
                 ", date=" + date_rec +
+                /*", etat=" + etat_rec +*/
                 '}';
     }
 }
