@@ -5,8 +5,10 @@ public class Mission {
     String description;
     int points_recompense;
     String statut;
+    int idRec;
 
     public Mission() {};
+
 
     public Mission(int id, String description, int points_recompense, String statut) {
         this.id = id;
@@ -14,11 +16,12 @@ public class Mission {
         this.points_recompense = points_recompense;
         this.statut = statut;
     }
-    public Mission(String description, int points_recompense, String statut) {
-        this.id = id;
+
+    public Mission(String description, int points_recompense, String statut, int idRec) {
         this.description = description;
         this.points_recompense = points_recompense;
         this.statut = statut;
+        this.idRec = idRec;
     }
 
     public int getId() {
@@ -49,6 +52,14 @@ public class Mission {
         return statut;
     }
 
+    public int getIdRec() {
+        return idRec;
+    }
+
+    public void setIdRec(int idRec) {
+        this.idRec = idRec;
+    }
+
     public void setStatut(String statut) {
         this.statut = statut;
     }
@@ -62,4 +73,6 @@ public class Mission {
                 ", statut='" + statut + '\'' +
                 '}';
     }
+
+
 }

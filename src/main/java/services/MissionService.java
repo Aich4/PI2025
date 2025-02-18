@@ -16,22 +16,24 @@ public class MissionService implements CrudInterface<Mission>{
 
     @Override
     public void create(Mission obj) throws Exception {
-        String sql = "insert into mission (description,points_recompense,statut) values (?,?,?)";
+        String sql = "insert into mission (description,points_recompense,statut,id_recompense) values (?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1,obj.getDescription());
         ps.setInt(2,obj.getPoints_recompense());
         ps.setString(3,obj.getStatut());
+        ps.setInt(4,obj.getIdRec());
         ps.executeUpdate();
     }
 
     @Override
-    public void update(Mission obj) throws Exception {
-        String sql = "update mission set description=?,points_recompense=?,statut=? where id=?";
+    public  void update(Mission obj) throws Exception {
+        String sql = "update mission set description=?,points_recompense=?,statut=?,id_recompense=?  where id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1,obj.getDescription());
         ps.setInt(2,obj.getPoints_recompense());
         ps.setString(3,obj.getStatut());
-        ps.setInt(4,obj.getId());
+        ps.setInt(4,obj.getIdRec());
+        ps.setInt(5,obj.getId());
         ps.executeUpdate();
     }
 
@@ -55,6 +57,7 @@ public class MissionService implements CrudInterface<Mission>{
             mission.setDescription(rs.getString("description"));
             mission.setPoints_recompense(rs.getInt("points_recompense"));
             mission.setStatut(rs.getString("statut"));
+            mission.setIdRec(rs.getInt("id_recompense"));
             missions.add(mission);
         }
         return missions;

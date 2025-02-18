@@ -2,12 +2,17 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import models.Mission;
 import models.Recompense;
 import services.RecompenseService;
+
+import java.io.IOException;
 
 public class recompense {
 
@@ -45,6 +50,22 @@ public class recompense {
         }
 
     }
+
+    @FXML
+    void ShowRec(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/css/ShowRecompense.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène depuis l'événement (plus sûr que d'utiliser descriptionRec)
+            ((Button) event.getSource()).getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de chargement de ShowRecompense.fxml", e);
+        }
+    }
+
 
     void reset() {
         this.descriptionRec.clear();

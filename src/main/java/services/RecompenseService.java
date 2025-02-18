@@ -59,4 +59,37 @@ public class RecompenseService implements CrudInterface<Recompense>{
         }
         return recompenses;
     }
+
+    public List<String> getAllDescription() throws Exception {
+        List<String> list = new ArrayList<>();
+        String sql = "select * from recompense";
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            list.add(rs.getString("description"));
+        }
+        return list;
+    }
+
+    public int getIdByDescrption(String desc) throws Exception {
+        String sql = "select id from recompense where description=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, desc);
+
+        ResultSet rs = preparedStatement.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id");
+
+        }
+        return -1;
+    }
+
+    public String getDescriptionById(int idrecompense) {
+        String sql = "select description from recompense where id=?";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+
+        return sql;
+    }
+
 }
