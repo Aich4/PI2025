@@ -97,21 +97,30 @@ public class ListCategorie {
 
                         // Événement du bouton "Supprimer"
                         btnSupprimer.setOnAction(event -> {
-                            try {
-                                ss.delete(categorie.getId());  // Supprimer le partenaire de la base de données
-                                afficherCategories();  // Rafraîchir la liste après suppression
+                            // Créer une alerte de confirmation
+                            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                            confirmationAlert.setTitle("Confirmer la suppression");
+                            confirmationAlert.setHeaderText("Êtes-vous sûr de vouloir supprimer cette catégorie ?");
+                            confirmationAlert.setContentText("Cette action est irréversible.");
 
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Succès");
-                                alert.setHeaderText(null);
-                                alert.setContentText("La categorie a été supprimée avec succès !");
-                                alert.showAndWait();  // Afficher la notification
+                            // Attendre la réponse de l'utilisateur
+                            confirmationAlert.showAndWait().ifPresent(response -> {
+                                if (response == ButtonType.OK) {
+                                    try {
+                                        ss.delete(categorie.getId());  // Supprimer la catégorie de la base de données
+                                        afficherCategories();  // Rafraîchir la liste après suppression
 
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                                        // Afficher une notification de succès
+                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                        alert.setTitle("Succès");
+                                        alert.setHeaderText(null);
+                                        alert.setContentText("La catégorie a été supprimée avec succès !");
+                                        alert.showAndWait();  // Afficher la notification
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                         });
 
                         // Appliquer le HBox complet au graphique
@@ -123,6 +132,7 @@ public class ListCategorie {
             e.printStackTrace();
         }
     }
+
 
     private void afficherDialogueModificationCategorie(Categorie categorie) {
         Dialog<ButtonType> dialog = new Dialog<>();

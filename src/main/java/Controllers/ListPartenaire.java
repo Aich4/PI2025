@@ -130,23 +130,31 @@ public class ListPartenaire {
 
                                 // Événement du bouton "Supprimer"
                                 btnSupprimer.setOnAction(event -> {
-                                    try {
-                                        ss.delete(partenaire.getId());  // Supprimer le partenaire de la base de données
-                                        afficherPartenaire();  // Rafraîchir la liste après suppression
+                                    // Créer une alerte de confirmation
+                                    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                                    confirmationAlert.setTitle("Confirmer la suppression");
+                                    confirmationAlert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce partenaire ?");
+                                    confirmationAlert.setContentText("Cette action est irréversible.");
 
-                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                        alert.setTitle("Succès");
-                                        alert.setHeaderText(null);
-                                        alert.setContentText("Le partenaire a été supprimé avec succès !");
-                                        alert.showAndWait();  // Afficher la notification
+                                    // Attendre la réponse de l'utilisateur
+                                    confirmationAlert.showAndWait().ifPresent(response -> {
+                                        if (response == ButtonType.OK) {
+                                            try {
+                                                ss.delete(partenaire.getId());  // Supprimer le partenaire de la base de données
+                                                afficherPartenaire();  // Rafraîchir la liste après suppression
 
-
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                                // Afficher une notification de succès
+                                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                                alert.setTitle("Succès");
+                                                alert.setHeaderText(null);
+                                                alert.setContentText("Le partenaire a été supprimé avec succès !");
+                                                alert.showAndWait();  // Afficher la notification
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
                                 });
-
 
                                 // Ajouter les boutons dans un HBox (horizontal)
                                 HBox hbox = new HBox(10, infoLabel, btnModifier, btnSupprimer);
@@ -161,4 +169,5 @@ public class ListPartenaire {
             e.printStackTrace();
         }
     }
+
 }
