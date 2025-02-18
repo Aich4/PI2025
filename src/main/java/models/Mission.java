@@ -14,6 +14,12 @@ public class Mission {
         this.points_recompense = points_recompense;
         this.statut = statut;
     }
+    public Mission(String description, int points_recompense, String statut) {
+        this.id = id;
+        this.description = description;
+        this.points_recompense = points_recompense;
+        this.statut = statut;
+    }
 
     public int getId() {
         return id;

@@ -13,6 +13,11 @@ public class Recompense {
         this.cout_en_points = cout_en_points;
         this.disponibilite = disponibilite;
     }
+    public Recompense(String description, int cout_en_points, String disponibilite) {
+        this.description = description;
+        this.cout_en_points = cout_en_points;
+        this.disponibilite = disponibilite;
+    }
 
     public int getId() {
         return id;
