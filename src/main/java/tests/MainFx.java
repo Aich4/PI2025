@@ -11,7 +11,7 @@ public class MainFx extends Application {
     public void start(Stage stage) throws Exception {
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/css/recompense.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/css/mission.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);

@@ -265,6 +265,8 @@
                   </VBox>
                </children>
             </VBox>
+            <Button mnemonicParsing="false" onAction="#mission" prefHeight="54.0" prefWidth="226.0" text="Mission" />
+            <Button mnemonicParsing="false" onAction="#recompense" prefHeight="56.0" prefWidth="241.0" text="Recompense" />
          </children>
          <effect>
             <DropShadow radius="18.7725" width="56.09" />

@@ -4,12 +4,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import models.Recompense;
 import services.RecompenseService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import services.RecompenseService;
@@ -153,6 +156,36 @@ public class showrec {
                 throw new RuntimeException(e);
             }
             afficherRecompenses(); // Rafraîchir la liste
+        }
+    }
+
+    @FXML
+    void mission(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/css/mission.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène depuis l'événement (plus sûr que d'utiliser descriptionRec)
+            ((Button) event.getSource()).getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de chargement de ShowRecompense.fxml", e);
+        }
+    }
+
+    @FXML
+    void recompense(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/css/recompense.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène depuis l'événement (plus sûr que d'utiliser descriptionRec)
+            ((Button) event.getSource()).getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de chargement de ShowRecompense.fxml", e);
         }
     }
 

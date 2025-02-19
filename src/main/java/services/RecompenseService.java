@@ -84,12 +84,18 @@ public class RecompenseService implements CrudInterface<Recompense>{
         return -1;
     }
 
-    public String getDescriptionById(int idrecompense) {
+    public String getDescriptionById(int idrecompense) throws Exception {
         String sql = "select description from recompense where id=?";
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, idrecompense);
 
-        return sql;
+        ResultSet rs = preparedStatement.executeQuery();
+        if (rs.next()) {
+            return rs.getString("description"); // ✅ Retourne la description
+        }
+
+        return null; // Retourne null si aucune description trouvée
     }
+
 
 }

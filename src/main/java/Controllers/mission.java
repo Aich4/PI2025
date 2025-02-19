@@ -86,5 +86,37 @@ public class mission {
         }
     }
 
+    @FXML
+    void mission(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/css/mission.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène depuis l'événement (plus sûr que d'utiliser descriptionRec)
+            ((Button) event.getSource()).getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de chargement de ShowRecompense.fxml", e);
+        }
+    }
+
+    @FXML
+    void recompense(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/css/recompense.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène depuis l'événement (plus sûr que d'utiliser descriptionRec)
+            ((Button) event.getSource()).getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de chargement de ShowRecompense.fxml", e);
+        }
+    }
+
+
+
 }
 
