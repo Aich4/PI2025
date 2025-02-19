@@ -5,10 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import models.Mission;
 import services.MissionService;
 import services.RecompenseService;
@@ -88,74 +90,126 @@ public class showmission{
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Modifier la mission");
         dialog.setHeaderText("Modifier les informations de la mission");
+        dialog.setResizable(true); // Permet le redimensionnement
 
         // Champs de saisie
-        TextField descField = new TextField(mission.getDescription());
+        TextArea descField = new TextArea(mission.getDescription()); // TextArea pour la description
         descField.setPromptText("Description");
+        descField.setPrefWidth(300);
+        descField.setPrefHeight(80); // Augmenter la hauteur
 
         TextField pointsField = new TextField(String.valueOf(mission.getPoints_recompense()));
         pointsField.setPromptText("Points de récompense");
+        pointsField.setPrefWidth(150);
 
-        TextField statutField = new TextField(mission.getStatut());
-        statutField.setPromptText("Statut");
+        // ComboBox pour le statut
+        ComboBox<String> statutBox = new ComboBox<>();
+        statutBox.getItems().addAll("En cours", "Expiré");
+        statutBox.setValue(mission.getStatut());
+        statutBox.setPrefWidth(150);
 
         // ComboBox pour la récompense (idRec)
         ComboBox<String> idRecComboBox = new ComboBox<>();
         try {
-            idRecComboBox.getItems().addAll(rs.getAllDescription()); // Ajouter les descriptions des récompenses
-            // Sélectionner la description actuelle dans la ComboBox
+            idRecComboBox.getItems().addAll(rs.getAllDescription());
             String currentDescription = rs.getDescriptionById(mission.getIdRec());
-            idRecComboBox.setValue(currentDescription); // Prendre la description associée à la mission
+            idRecComboBox.setValue(currentDescription);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        idRecComboBox.setPrefWidth(250);
 
-        // Mise en page
+        // Mise en page avec GridPane
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(20, 20, 20, 20));
+
         grid.add(new Label("Description:"), 0, 0);
         grid.add(descField, 1, 0);
         grid.add(new Label("Points de récompense:"), 0, 1);
         grid.add(pointsField, 1, 1);
         grid.add(new Label("Statut:"), 0, 2);
-        grid.add(statutField, 1, 2);
+        grid.add(statutBox, 1, 2);
         grid.add(new Label("Récompense:"), 0, 3);
         grid.add(idRecComboBox, 1, 3);
 
-        dialog.getDialogPane().setContent(grid);
+        // Mise en page globale avec VBox
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(grid);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
 
-        // Ajout des boutons
+        dialog.getDialogPane().setContent(vbox);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         // Affichage de la boîte de dialogue
         Optional<ButtonType> result = dialog.showAndWait();
 
-        // Si l'utilisateur valide, mettre à jour la mission
+        // Si l'utilisateur valide, on vérifie les données avant de mettre à jour
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                mission.setDescription(descField.getText());
-                mission.setPoints_recompense(Integer.parseInt(pointsField.getText()));
-                mission.setStatut(statutField.getText());
+                String description = descField.getText().trim();
+                String pointsText = pointsField.getText().trim();
+                String statut = statutBox.getValue();
+                String selectedDescription = idRecComboBox.getValue();
+
+                // Vérification des champs
+                if (description.isEmpty()) {
+                    showAlert("Erreur", "La description ne peut pas être vide.");
+                    return;
+                }
+
+                int points;
+                try {
+                    points = Integer.parseInt(pointsText);
+                    if (points < 0) {
+                        showAlert("Erreur", "Les points de récompense doivent être positifs.");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    showAlert("Erreur", "Veuillez entrer un nombre valide pour les points de récompense.");
+                    return;
+                }
+
+                if (statut == null) {
+                    showAlert("Erreur", "Veuillez sélectionner un statut.");
+                    return;
+                }
+
+                if (selectedDescription == null) {
+                    showAlert("Erreur", "Veuillez sélectionner une récompense.");
+                    return;
+                }
+
+                // Mise à jour de la mission
+                mission.setDescription(description);
+                mission.setPoints_recompense(points);
+                mission.setStatut(statut);
 
                 // Récupérer l'ID de la récompense sélectionnée
-                String selectedDescription = idRecComboBox.getValue();
                 int idRec = rs.getIdByDescrption(selectedDescription);
                 mission.setIdRec(idRec);
 
                 ms.update(mission); // Mettre à jour la mission dans la base de données
                 afficherMissions(); // Rafraîchir la liste
-            } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText("Format incorrect");
-                alert.setContentText("Veuillez entrer un nombre valide pour les points de récompense.");
-                alert.showAndWait();
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
     }
+
+    // Méthode pour afficher une alerte
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+
 
     // Méthode pour supprimer une mission
     private void supprimerMission(Mission mission) {

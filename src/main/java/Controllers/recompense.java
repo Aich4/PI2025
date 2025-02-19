@@ -4,10 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import models.Mission;
 import models.Recompense;
 import services.RecompenseService;
@@ -28,27 +25,77 @@ public class recompense {
     @FXML
     private TextArea descriptionRec;
 
+
     @FXML
-    private TextField disponibilite;
+    private ComboBox<String> disponibilite;
+
 
     @FXML
     void createRec(ActionEvent event) {
-
-        Recompense r = new Recompense(this.descriptionRec.getText(),Integer.parseInt(this.cout_en_points.getText()), this.disponibilite.getText());
         try {
-            this.rs.create(r);
-            reset();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setContentText("Recompense created");
-            alert.showAndWait();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
+            // Récupération et validation des champs
+            String descriptionText = descriptionRec.getText().trim();
+            String coutText = cout_en_points.getText().trim();
+            String disponibiliteValue = disponibilite.getValue();
 
+            // Vérification des champs obligatoires
+            if (descriptionText.isEmpty()) {
+                showAlert("Erreur", "La description ne peut pas être vide.");
+                return;
+            }
+
+            if (coutText.isEmpty()) {
+                showAlert("Erreur", "Le coût en points est requis.");
+                return;
+            }
+
+            int cout;
+            try {
+                cout = Integer.parseInt(coutText);
+                if (cout < 0) {
+                    showAlert("Erreur", "Le coût en points doit être un nombre positif.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                showAlert("Erreur", "Veuillez entrer un nombre valide pour le coût en points.");
+                return;
+            }
+
+            if (disponibiliteValue == null || disponibiliteValue.isEmpty()) {
+                showAlert("Erreur", "Veuillez sélectionner une disponibilité.");
+                return;
+            }
+
+            // Création de la récompense
+            Recompense r = new Recompense(descriptionText, cout, disponibiliteValue);
+
+            // Enregistrement dans la base de données
+            rs.create(r);
+            reset();
+
+            // Affichage d'un message de succès
+            showAlert("Succès", "Récompense créée avec succès !", Alert.AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            showAlert("Erreur", e.getMessage());
+        }
+    }
+
+    // Méthode pour afficher une alerte
+    private void showAlert(String title, String message) {
+        showAlert(title, message, Alert.AlertType.ERROR);
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void remplirComboBoxDisponibilite() {
+        disponibilite.getItems().addAll("Disponible", "Indisponible");
     }
 
     @FXML
@@ -100,7 +147,14 @@ public class recompense {
     void reset() {
         this.descriptionRec.clear();
         this.cout_en_points.clear();
-        this.disponibilite.clear();
+        this.disponibilite.getItems().clear();;
+    }
+
+    @FXML
+    public void initialize() {
+
+        remplirComboBoxDisponibilite();
+
     }
 
 }

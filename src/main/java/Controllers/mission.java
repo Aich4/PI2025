@@ -28,33 +28,84 @@ public class mission {
     private TextField points_recompense;
 
     @FXML
-    private TextField statut;
+    private ComboBox<String> statut;
 
     @FXML
     private ComboBox<String> idRec;
 
     @FXML
     void createMission(ActionEvent event) throws Exception {
-
-        String descriptionRec = this.idRec.getValue();
-        int idRec = rs.getIdByDescrption(descriptionRec);
-
-        Mission m = new Mission(this.description.getText(),Integer.parseInt(this.points_recompense.getText()), this.statut.getText(),idRec);
         try {
-            this.ms.create(m);
-            reset();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setContentText("Mission created");
-            alert.showAndWait();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
+            // Récupération et validation des champs
+            String descriptionText = description.getText().trim();
+            String pointsText = points_recompense.getText().trim();
+            String statutValue = statut.getValue();
+            String descriptionRec = idRec.getValue();
 
+            // Vérification des champs obligatoires
+            if (descriptionText.isEmpty()) {
+                showAlert("Erreur", "La description ne peut pas être vide.");
+                return;
+            }
+
+            if (pointsText.isEmpty()) {
+                showAlert("Erreur", "Les points de récompense sont requis.");
+                return;
+            }
+
+            int points;
+            try {
+                points = Integer.parseInt(pointsText);
+                if (points < 0) {
+                    showAlert("Erreur", "Les points de récompense doivent être un nombre positif.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                showAlert("Erreur", "Veuillez entrer un nombre valide pour les points de récompense.");
+                return;
+            }
+
+            if (statutValue == null || statutValue.isEmpty()) {
+                showAlert("Erreur", "Veuillez sélectionner un statut.");
+                return;
+            }
+
+            if (descriptionRec == null || descriptionRec.isEmpty()) {
+                showAlert("Erreur", "Veuillez sélectionner une récompense.");
+                return;
+            }
+
+            // Récupération de l'ID de la récompense
+            int idRec = rs.getIdByDescrption(descriptionRec);
+
+            // Création de la mission
+            Mission m = new Mission(descriptionText, points, statutValue, idRec);
+
+            // Enregistrement dans la base de données
+            ms.create(m);
+            reset();
+
+            // Affichage d'un message de succès
+            showAlert("Succès", "Mission créée avec succès !", Alert.AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            showAlert("Erreur", e.getMessage());
+        }
     }
+
+    // Méthode pour afficher une alerte
+    private void showAlert(String title, String message) {
+        showAlert(title, message, Alert.AlertType.ERROR);
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     @FXML
     void listMission(ActionEvent event) {
         try {
@@ -70,11 +121,15 @@ public class mission {
         }
     }
 
+    private void remplirComboBoxStatut() {
+        statut.getItems().addAll("En cours", "Expiré");
+    }
+
 
     void reset() {
         this.description.clear();
         this.points_recompense.clear();
-        this.statut.clear();
+        this.statut.getItems().clear();
     }
 
     @FXML
@@ -84,6 +139,8 @@ public class mission {
         } catch (Exception e) {
             e.printStackTrace(); // Afficher l'exception si elle se produit
         }
+        remplirComboBoxStatut();
+
     }
 
     @FXML

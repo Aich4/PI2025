@@ -5,10 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import models.Recompense;
 import services.RecompenseService;
 
@@ -86,22 +88,29 @@ public class showrec {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Modifier la récompense");
         dialog.setHeaderText("Modifier les informations de la récompense");
+        dialog.setResizable(true); // Permet le redimensionnement
 
         // Champs de saisie
-        TextField descField = new TextField(recompense.getDescription());
+        TextArea descField = new TextArea(recompense.getDescription()); // TextArea au lieu de TextField
         descField.setPromptText("Description");
+        descField.setPrefWidth(300); // Largeur ajustée
+        descField.setPrefHeight(80); // Augmenter la hauteur pour plus de visibilité
 
         TextField coutField = new TextField(String.valueOf(recompense.getCout_en_points()));
         coutField.setPromptText("Coût en points");
+        coutField.setPrefWidth(150);
 
         ComboBox<String> dispoBox = new ComboBox<>();
         dispoBox.getItems().addAll("Disponible", "Indisponible");
         dispoBox.setValue(recompense.getDisponibilite());
+        dispoBox.setPrefWidth(150);
 
-        // Mise en page
+        // Mise en page avec GridPane
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(20, 20, 20, 20)); // Ajoute du padding pour aérer
+
         grid.add(new Label("Description:"), 0, 0);
         grid.add(descField, 1, 0);
         grid.add(new Label("Coût en points:"), 0, 1);
@@ -109,36 +118,71 @@ public class showrec {
         grid.add(new Label("Disponibilité:"), 0, 2);
         grid.add(dispoBox, 1, 2);
 
-        dialog.getDialogPane().setContent(grid);
+        // Mise en page globale avec VBox
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(grid);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
 
-        // Ajout des boutons
+        dialog.getDialogPane().setContent(vbox);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         // Affichage de la boîte de dialogue
         Optional<ButtonType> result = dialog.showAndWait();
 
-        // Si l'utilisateur valide, mettre à jour la récompense
+        // Si l'utilisateur valide, on vérifie les données avant de mettre à jour
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                recompense.setDescription(descField.getText());
-                recompense.setCout_en_points(Integer.parseInt(coutField.getText()));
-                recompense.setDisponibilite(dispoBox.getValue());
+                String description = descField.getText().trim();
+                String coutText = coutField.getText().trim();
+                String disponibilite = dispoBox.getValue();
 
-                try {
-                    rs.update(recompense); // Mettre à jour la base de données
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                // Vérification des champs
+                if (description.isEmpty()) {
+                    showAlert("Erreur", "La description ne peut pas être vide.");
+                    return;
                 }
+
+                int cout;
+                try {
+                    cout = Integer.parseInt(coutText);
+                    if (cout < 0) {
+                        showAlert("Erreur", "Le coût en points doit être un nombre positif.");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    showAlert("Erreur", "Veuillez entrer un nombre valide pour le coût en points.");
+                    return;
+                }
+
+                if (disponibilite == null) {
+                    showAlert("Erreur", "Veuillez sélectionner une disponibilité.");
+                    return;
+                }
+
+                // Mise à jour de la récompense
+                recompense.setDescription(description);
+                recompense.setCout_en_points(cout);
+                recompense.setDisponibilite(disponibilite);
+
+                rs.update(recompense); // Mettre à jour la base de données
                 afficherRecompenses(); // Rafraîchir la liste
-            } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText("Format incorrect");
-                alert.setContentText("Veuillez entrer un nombre valide pour le coût en points.");
-                alert.showAndWait();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }
+
+    // Méthode pour afficher une alerte
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
 
 
     // Méthode pour supprimer une récompense
