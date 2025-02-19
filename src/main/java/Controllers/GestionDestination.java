@@ -45,53 +45,88 @@ public class GestionDestination {
 
     @FXML
     void ajoutDestination(ActionEvent event) {
+        String nom = nomDestination.getText().trim();
+        String description = descriptionDestination.getText().trim();
+        String image = (imagePath != null) ? imagePath.trim() : "";
+        String latitudeStr = latitudeDestination.getText().trim();
+        String longitudeStr = longitudeDestination.getText().trim();
+        String temperatureStr = temperatureDestination.getText().trim();
+        String ratingStr = ratingDestination.getText().trim();
 
-        String nom = this.nomDestination.getText().trim();
-        String description = this.descriptionDestination.getText().trim();
-        String image = imagePath;
-        String latitudeStr = this.latitudeDestination.getText().trim();
-        String longitudeStr = this.longitudeDestination.getText().trim();
-        String temperatureStr = this.temperatureDestination.getText().trim();
-        String ratingStr = this.ratingDestination.getText().trim();
-
-// Check if fields are empty
-        if (nom.isEmpty() || description.isEmpty() || image.isEmpty() || image == null ||
-                latitudeStr.isEmpty() || longitudeStr.isEmpty() || temperatureStr.isEmpty() || ratingStr.isEmpty()) {
-            showAlert("Error", "All fields must be filled!", Alert.AlertType.ERROR);
+        // Validate text fields
+        if (!isValidText(nom, 3)) {
+            showAlert("Error", "Name must be at least 3 characters long and contain only letters and spaces.", Alert.AlertType.ERROR);
+            return;
+        }
+        if (!isValidText(description, 10)) {
+            showAlert("Error", "Description must be at least 10 characters long and contain only valid text.", Alert.AlertType.ERROR);
             return;
         }
 
+        // Validate image path
+        if (!isValidImagePath(image)) {
+            showAlert("Error", "Invalid image file! Must be a .jpg, .jpeg, or .png file.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        // Validate numeric fields
+        Double latitude = validateDouble(latitudeStr, "Latitude", -90, 90);
+        Double longitude = validateDouble(longitudeStr, "Longitude", -180, 180);
+        Double temperature = validateDouble(temperatureStr, "Temperature", -50, 60);
+        Double rating = validateDouble(ratingStr, "Rating", 0, 5);
+
+        if (latitude == null || longitude == null || temperature == null || rating == null) {
+            return; // showAlert is already called inside validateDouble
+        }
+
+        // Ensure rating has at most one decimal place
+        if (!isValidDecimal(ratingStr, 1)) {
+            showAlert("Error", "Rating must have at most one decimal place.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        // Create and save the destination
+        Destination d = new Destination(nom, description, image, latitude, longitude, temperature, rating);
         try {
-            double latitude = Double.parseDouble(latitudeStr);
-            double longitude = Double.parseDouble(longitudeStr);
-            double temperature = Double.parseDouble(temperatureStr);
-            double rating = Double.parseDouble(ratingStr);
-
-            // Validate rating range
-            if (rating < 0 || rating > 5) {
-                showAlert("Error", "Rating must be between 0 and 5.", Alert.AlertType.ERROR);
-                return;
-            }
-
-            // Create and save the destination
-            Destination d = new Destination(nom, description, image, latitude, longitude, temperature, rating);
-            try {
-                this.ds.create(d);
-                reset();
-                showAlert("Success", "Destination created successfully!", Alert.AlertType.INFORMATION);
-
-            } catch (Exception e) {
-
-                showAlert("erreur", e.getMessage(), Alert.AlertType.INFORMATION);
-            }
-
-
-        } catch (NumberFormatException e) {
-            showAlert("Error", "Latitude, Longitude, Temperature, and Rating must be valid numbers.", Alert.AlertType.ERROR);
+            ds.create(d);
+            reset();
+            showAlert("Success", "Destination created successfully!", Alert.AlertType.INFORMATION);
+        } catch (Exception e) {
+            showAlert("Error", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-// Utility method to show alerts
+    // Helper method to validate text fields (name, description)
+    private boolean isValidText(String text, int minLength) {
+        return text.matches("^[A-Za-zÀ-ÿ'\\s]{" + minLength + ",}$");
+    }
+
+    // Helper method to validate image file format
+    private boolean isValidImagePath(String path) {
+        return path.matches(".*\\.(jpg|jpeg|png)$");
+    }
+
+    // Helper method to validate numeric fields with a range
+    private Double validateDouble(String value, String fieldName, double min, double max) {
+        try {
+            double num = Double.parseDouble(value);
+            if (num < min || num > max) {
+                showAlert("Error", fieldName + " must be between " + min + " and " + max + ".", Alert.AlertType.ERROR);
+                return null;
+            }
+            return num;
+        } catch (NumberFormatException e) {
+            showAlert("Error", fieldName + " must be a valid number.", Alert.AlertType.ERROR);
+            return null;
+        }
+    }
+
+    // Helper method to validate decimal places
+    private boolean isValidDecimal(String value, int decimalPlaces) {
+        return value.matches("^\\d+(\\.\\d{1," + decimalPlaces + "})?$");
+    }
+
+    // Utility method to show alerts
         private void showAlert(String title, String content, Alert.AlertType type) {
             Alert alert = new Alert(type);
             alert.setTitle(title);
