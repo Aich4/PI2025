@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2025 at 07:20 PM
+-- Generation Time: Feb 12, 2025 at 09:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -98,6 +98,17 @@ CREATE TABLE `destination` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `destination_activite`
+--
+
+CREATE TABLE `destination_activite` (
+  `id_destination` int(11) NOT NULL,
+  `id_activite` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `doctrine_migration_versions`
 --
 
@@ -140,7 +151,8 @@ CREATE TABLE `mission` (
   `id` int(11) NOT NULL,
   `description` varchar(255) NOT NULL,
   `points_recompense` int(11) NOT NULL,
-  `statut` varchar(255) NOT NULL
+  `statut` varchar(255) NOT NULL,
+  `id_recompense` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -183,7 +195,9 @@ CREATE TABLE `partenaire` (
 CREATE TABLE `reclamation` (
   `id` int(11) NOT NULL,
   `type_rec` varchar(255) NOT NULL,
-  `description_rec` varchar(255) NOT NULL
+  `description_rec` varchar(255) NOT NULL,
+  `id_reponse` int(11) DEFAULT NULL,
+  `id_user` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -232,6 +246,39 @@ CREATE TABLE `user` (
   `id_reclamation` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_abonnement`
+--
+
+CREATE TABLE `user_abonnement` (
+  `id_user` int(11) NOT NULL,
+  `id_abonnement` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_activite`
+--
+
+CREATE TABLE `user_activite` (
+  `id_user` int(11) NOT NULL,
+  `id_activite` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_mission`
+--
+
+CREATE TABLE `user_mission` (
+  `id_user` int(11) NOT NULL,
+  `id_mission` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -268,6 +315,13 @@ ALTER TABLE `destination`
   ADD KEY `fk_dest` (`id_activite`);
 
 --
+-- Indexes for table `destination_activite`
+--
+ALTER TABLE `destination_activite`
+  ADD PRIMARY KEY (`id_destination`,`id_activite`),
+  ADD KEY `id_activite` (`id_activite`);
+
+--
 -- Indexes for table `doctrine_migration_versions`
 --
 ALTER TABLE `doctrine_migration_versions`
@@ -286,7 +340,8 @@ ALTER TABLE `messenger_messages`
 -- Indexes for table `mission`
 --
 ALTER TABLE `mission`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_recompense` (`id_recompense`);
 
 --
 -- Indexes for table `pack`
@@ -305,7 +360,9 @@ ALTER TABLE `partenaire`
 -- Indexes for table `reclamation`
 --
 ALTER TABLE `reclamation`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_reponse` (`id_reponse`),
+  ADD KEY `fk_reclamation_user` (`id_user`);
 
 --
 -- Indexes for table `recompense`
@@ -324,6 +381,27 @@ ALTER TABLE `reponse`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_abonnement`
+--
+ALTER TABLE `user_abonnement`
+  ADD PRIMARY KEY (`id_user`,`id_abonnement`),
+  ADD KEY `id_abonnement` (`id_abonnement`);
+
+--
+-- Indexes for table `user_activite`
+--
+ALTER TABLE `user_activite`
+  ADD PRIMARY KEY (`id_user`,`id_activite`),
+  ADD KEY `id_activite` (`id_activite`);
+
+--
+-- Indexes for table `user_mission`
+--
+ALTER TABLE `user_mission`
+  ADD PRIMARY KEY (`id_user`,`id_mission`),
+  ADD KEY `id_mission` (`id_mission`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -418,10 +496,51 @@ ALTER TABLE `destination`
   ADD CONSTRAINT `fk_dest` FOREIGN KEY (`id_activite`) REFERENCES `activite` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Constraints for table `destination_activite`
+--
+ALTER TABLE `destination_activite`
+  ADD CONSTRAINT `destination_activite_ibfk_1` FOREIGN KEY (`id_destination`) REFERENCES `destination` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `destination_activite_ibfk_2` FOREIGN KEY (`id_activite`) REFERENCES `activite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `mission`
+--
+ALTER TABLE `mission`
+  ADD CONSTRAINT `fk_mission_recompense` FOREIGN KEY (`id_recompense`) REFERENCES `recompense` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
 -- Constraints for table `partenaire`
 --
 ALTER TABLE `partenaire`
   ADD CONSTRAINT `fk_part` FOREIGN KEY (`id_categorie`) REFERENCES `categorie` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `reclamation`
+--
+ALTER TABLE `reclamation`
+  ADD CONSTRAINT `fk_reclamation_reponse` FOREIGN KEY (`id_reponse`) REFERENCES `reponse` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_reclamation_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_abonnement`
+--
+ALTER TABLE `user_abonnement`
+  ADD CONSTRAINT `user_abonnement_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_abonnement_ibfk_2` FOREIGN KEY (`id_abonnement`) REFERENCES `abonnement` (`id_abonnement`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_activite`
+--
+ALTER TABLE `user_activite`
+  ADD CONSTRAINT `user_activite_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_activite_ibfk_2` FOREIGN KEY (`id_activite`) REFERENCES `activite` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_mission`
+--
+ALTER TABLE `user_mission`
+  ADD CONSTRAINT `user_mission_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_mission_ibfk_2` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
