@@ -93,12 +93,17 @@ public class CategorieService implements CrudInterface <Categorie> {
         return -1;
     }
 
-    public String getNomById(int idCategorie) {
+    public String getNomById(int idCategorie) throws Exception {
         String sql = "select nom from categorie where id=?";
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, idCategorie);
+        ResultSet rs = preparedStatement.executeQuery();
+        if (rs.next()) {
+            return rs.getString("nom");
 
-        return sql;
+        }
+        return null;
+
     }
 
 }

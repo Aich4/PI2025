@@ -2,10 +2,12 @@ package Controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.CategorieService;
 import javafx.geometry.Insets;
 import javafx.event.ActionEvent;
@@ -30,6 +32,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ListCategorie {
 
@@ -45,6 +48,23 @@ public class ListCategorie {
     @FXML
     void initialize() {
         afficherCategories();
+    }
+
+    @FXML
+    void goToCat(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddCategorie.fxml"));
+            Parent root = loader.load();
+
+            // Récupérer la scène actuelle et changer le contenu
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void afficherCategories() {
@@ -141,7 +161,6 @@ public class ListCategorie {
 
         TextField nomField = new TextField(categorie.getNom());
         TextField descriptionField = new TextField(categorie.getDescription());
-        TextField nbrPartenaireField = new TextField(String.valueOf(categorie.getNbr_partenaire()));
 
         Label logoLabel = new Label(categorie.getLogo() != null ? categorie.getLogo() : "Aucune image sélectionnée");
         Button btnUpload = new Button("Choisir une image");
@@ -156,14 +175,7 @@ public class ListCategorie {
 
             File selectedFile = fileChooser.showOpenDialog(null);
             if (selectedFile != null) {
-                try {
-                    // Copier l'image dans un dossier local
-                    File destination = new File(selectedFile.getName());
-                    Files.copy(selectedFile.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    logoLabel.setText(destination.getAbsolutePath()); // Afficher le chemin
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                logoLabel.setText(selectedFile.getAbsolutePath()); // Afficher le chemin du fichier
             }
         });
 
@@ -179,30 +191,76 @@ public class ListCategorie {
         grid.add(new Label("Logo:"), 0, 2);
         grid.add(btnUpload, 1, 2);
         grid.add(logoLabel, 2, 2);
-        grid.add(new Label("Nombre de partenaires:"), 0, 3);
-        grid.add(nbrPartenaireField, 1, 3);
 
         dialog.getDialogPane().setContent(grid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == ButtonType.OK) {
-                categorie.setNom(nomField.getText());
-                categorie.setDescription(descriptionField.getText());
-                categorie.setLogo(logoLabel.getText()); // Enregistrer le chemin du logo
-                categorie.setNbr_partenaire(Integer.parseInt(nbrPartenaireField.getText()));
+        boolean saisieCorrecte;
+        do {
+            saisieCorrecte = true; // On suppose que la saisie est correcte au départ
 
-                try {
-                    ss.update(categorie);  // Mettre à jour la base de données
-                    afficherCategories();   // Rafraîchir la liste après modification
-                } catch (Exception e) {
-                    e.printStackTrace();
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                String nom = nomField.getText().trim();
+                String description = descriptionField.getText().trim();
+                String logo = logoLabel.getText();
+
+                // Vérification du nom
+                if (nom.isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom ne peut pas être vide.");
+                    saisieCorrecte = false;
+                } else if (nom.matches("\\d+")) { // Vérifie si le nom contient uniquement des chiffres
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom ne peut pas contenir uniquement des chiffres.");
+                    saisieCorrecte = false;
                 }
-            }
-            return null;
-        });
 
-        dialog.showAndWait();
+                // Vérification de la description
+                if (description.isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "La description ne peut pas être vide.");
+                    saisieCorrecte = false;
+                } else if (isOnlyDigits(description)) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "La description ne peut pas contenir uniquement des chiffres.");
+                    saisieCorrecte = false;
+                }
+
+                // Vérification de l'image
+                if (logo.equals("Aucune image sélectionnée") || logo.trim().isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner une image.");
+                    saisieCorrecte = false;
+                }
+
+                // Si toutes les saisies sont valides, on met à jour la catégorie
+                if (saisieCorrecte) {
+                    categorie.setNom(nom);
+                    categorie.setDescription(description);
+                    categorie.setLogo(logo);
+
+                    try {
+                        ss.update(categorie);  // Mettre à jour la base de données
+                        afficherCategories();   // Rafraîchir la liste après modification
+                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Catégorie mise à jour avec succès.");
+                    } catch (Exception e) {
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la mise à jour : " + e.getMessage());
+                    }
+                }
+            } else {
+                break; // L'utilisateur a annulé, on sort de la boucle
+            }
+        } while (!saisieCorrecte); // Tant que la saisie est incorrecte, on redemande les informations
+    }
+
+    private boolean isOnlyDigits(String str) {
+        return str.matches("\\d+");
+    }
+
+
+
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     private void supprimerCategorie(Categorie categorie) {

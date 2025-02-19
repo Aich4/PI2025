@@ -4,10 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import models.Partenaire;
 import services.CategorieService;
 import services.PartenaireService;
@@ -161,6 +163,7 @@ public class GestionPartenaire {
     }
 
 
+
     @FXML
     public void initialize() {
         try {
@@ -169,6 +172,9 @@ public class GestionPartenaire {
             e.printStackTrace(); // Afficher l'exception si elle se produit
         }
     }
+
+
+
 
 
     private Partenaire partenaireActuel;
@@ -183,10 +189,30 @@ public class GestionPartenaire {
         description.setText(partenaire.getDescription());
         date.setValue(partenaire.getDate_ajout().toLocalDate()); // Conversion Date -> LocalDate
 
-        idcategorie.setValue(cs.getNomById(partenaire.getId_categorie()));
+        try {
+            idcategorie.setValue(cs.getNomById(partenaire.getId_categorie()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
+
+    private void afficherCreationPartenaire() {
+        // Réinitialiser les champs du formulaire de création du partenaire
+        nompartenaire.clear();
+        emailpartenaire.clear();
+        adresse.clear();
+        description.clear();
+        date.setValue(null);  // Si vous utilisez un contrôle DatePicker pour la date
+        idcategorie.setValue(null);  // Si vous avez une combobox ou un choix de catégorie
+
+        // Afficher ou rediriger vers la vue de création
+        System.out.println("Retour à la création de partenaire.");
+
+        // Exemple de changement de scène (si nécessaire, adaptez-le selon votre cas)
+        // mainStage.setScene(createPartenaireScene);  // Remplacez mainStage et createPartenaireScene par vos objets réels
+    }
     
 
 

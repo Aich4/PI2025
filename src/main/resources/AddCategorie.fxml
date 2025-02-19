@@ -23,7 +23,7 @@
             <Image url="@bg.jpeg" />
          </image>
       </ImageView>
-      <Pane layoutX="402.0" layoutY="71.0" prefHeight="511.0" prefWidth="379.0" style="-fx-background-color: #ff760d;">
+      <Pane blendMode="DARKEN" layoutX="400.0" layoutY="66.0" prefHeight="511.0" prefWidth="381.0" style="-fx-background-color: #ff760d;">
          <effect>
             <DropShadow height="37.38" radius="15.850000000000001" width="28.02">
                <color>
@@ -32,7 +32,7 @@
             </DropShadow>
          </effect>
          <children>
-            <Button layoutX="69.0" layoutY="353.0" mnemonicParsing="false" onAction="#save" prefHeight="32.0" prefWidth="97.0" text="Enregistrer" textFill="#413852">
+            <Button blendMode="LIGHTEN" layoutX="83.0" layoutY="353.0" mnemonicParsing="false" onAction="#save" prefHeight="32.0" prefWidth="97.0" text="Enregistrer" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -44,7 +44,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Label layoutX="100.0" layoutY="105.0" prefHeight="44.0" prefWidth="311.0" text="Ajouter un Pack" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="45.0" layoutY="98.0" prefHeight="44.0" prefWidth="311.0" text="Ajouter une catégorie" textFill="WHITE">
                <font>
                   <Font size="28.0" />
                </font>
@@ -70,12 +70,16 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button layoutX="190.0" layoutY="357.0" mnemonicParsing="false" onAction="#show" prefHeight="25.0" prefWidth="126.0" text="afficher" />
-            <Button layoutX="69.0" layoutY="303.0" mnemonicParsing="false" onAction="#chooseImage" prefHeight="32.0" prefWidth="262.0" text="image" textFill="#413852">
+            <Button blendMode="LIGHTEN" layoutX="202.0" layoutY="353.0" mnemonicParsing="false" onAction="#show" prefHeight="32.0" prefWidth="107.0" text="afficher" textFill="#413852">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Button>
+
+            <Button blendMode="LIGHTEN" layoutX="69.0" layoutY="303.0" mnemonicParsing="false" onAction="#chooseImage" prefHeight="32.0" prefWidth="262.0" text="image" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
-                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                        <Color red="0.557894766330719" green="0.14636127650737762" blue="0.06405457854270935" />
                      </color>
                   </DropShadow>
                </effect>

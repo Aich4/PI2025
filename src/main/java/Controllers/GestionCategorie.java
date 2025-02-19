@@ -47,6 +47,9 @@ public class GestionCategorie {
         if (description.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "La description ne peut pas être vide.");
             return;
+        } else if (isOnlyDigits(description)) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "La description ne peut pas contenir uniquement des chiffres.");
+            return;
         }
 
         // Vérification de l'image
@@ -69,9 +72,10 @@ public class GestionCategorie {
     }
 
     // Méthode pour vérifier si le texte contient uniquement des chiffres
-    private boolean isOnlyDigits(String text) {
-        return text.matches("\\d+"); // Vérifie si le texte contient uniquement des chiffres
+    private boolean isOnlyDigits(String str) {
+        return str.matches("\\d+");
     }
+
 
     // Méthode pour afficher les alertes
     private void showAlert(Alert.AlertType alertType, String title, String contentText) {
