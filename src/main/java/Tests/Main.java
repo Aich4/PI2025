@@ -1,4 +1,4 @@
-package tests;
+package Tests;
 
 import models.Activite;
 import services.ActiviteService;
