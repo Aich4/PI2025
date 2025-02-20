@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ShowAbonnement">
+    <children>
+        <AnchorPane layoutX="30.0" layoutY="30.0" prefHeight="756.0" prefWidth="911.0">
+            <children>
+                <ImageView fitHeight="795.0" fitWidth="1295.0" layoutX="116.0" layoutY="-32.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@bg.jpeg" />
+                    </image>
+                </ImageView>
+                <Pane layoutX="288.0" layoutY="142.0" prefHeight="464.0" prefWidth="715.0" style="-fx-background-color: #ff760d;">
+                    <effect>
+                        <DropShadow height="37.38" radius="15.850000000000001" width="28.02">
+                            <color>
+                                <Color opacity="0.8548632264137268" />
+                            </color>
+                        </DropShadow>
+                    </effect>
+                    <children>
+                        <Label layoutX="161.0" layoutY="17.0" prefHeight="44.0" prefWidth="280.0" text="listes des abonnements" textFill="WHITE">
+                            <font>
+                                <Font size="26.0" />
+                            </font>
+                            <effect>
+                                <Glow level="0.8" />
+                            </effect>
+                        </Label>
+                        <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="35.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@liv.png" />
+                            </image>
+                            <effect>
+                                <Glow />
+                            </effect>
+                        </ImageView>
+                        <VBox layoutX="35.0" layoutY="73.0" prefHeight="346.0" prefWidth="643.0" spacing="10.0">
+                     <children>
+                        <ListView fx:id="listview" prefHeight="350.0" prefWidth="527.0" />
+                     </children>
+                        </VBox>
+                        <TextField fx:id="idrecher" layoutX="463.0" layoutY="28.0" onInputMethodTextChanged="#recherche" prefHeight="27.0" prefWidth="162.0" promptText="Search" styleClass="round-layout" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css" />
+                  <Button layoutX="633.0" layoutY="29.0" mnemonicParsing="false" onAction="#tri" prefHeight="25.0" prefWidth="40.0" text="Tri" />
+                    </children>
+                </Pane>
+                <VBox layoutX="-30.0" layoutY="-32.0" prefHeight="794.0" prefWidth="240.0" spacing="20.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css">
+                    <children>
+                        <Separator prefWidth="232.0" />
+                        <VBox prefHeight="138.0" prefWidth="206.0">
+                            <children>
+                                <Separator prefHeight="4.0" prefWidth="240.0" />
+                                <HBox alignment="TOP_CENTER" prefHeight="37.0" prefWidth="240.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css" />
+                                  <ImageView fitHeight="59.0" fitWidth="204.0" pickOnBounds="true" preserveRatio="true">
+                                      <image>
+                                          <Image url="@LOGO.png" />
+                                      </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                                  </ImageView>
+                            </children>
+                        </VBox>
+                        <VBox prefHeight="332.0" prefWidth="240.0">
+                            <children>
+                                <Separator prefHeight="39.0" prefWidth="240.0" />
+                                <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="232.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css" />
+                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
+                                <VBox prefHeight="184.0" prefWidth="220.0">
+                                    <children>
+                                        <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="171.0" text="Packs">
+                                            <font>
+                                                <Font name="Cambria Math" size="22.0" />
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets left="10.0" />
+                                            </opaqueInsets>
+                                        </Label>
+                                        <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css">
+                                            <children>
+                                                <ImageView fitHeight="45.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@stat.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Statistique">
+                                                    <font>
+                                                        <Font name="Cambria Math" size="16.0" />
+                                                    </font>
+                                                    <opaqueInsets>
+                                                        <Insets left="10.0" />
+                                                    </opaqueInsets>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                        <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css">
+                                            <children>
+                                                <ImageView fitHeight="39.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@webbb.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="..">
+                                                    <font>
+                                                        <Font name="Cambria Math" size="16.0" />
+                                                    </font>
+                                                    <opaqueInsets>
+                                                        <Insets left="10.0" />
+                                                    </opaqueInsets>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                        <HBox prefHeight="12.0" prefWidth="220.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css">
+                                            <children>
+                                                <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@cat.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label contentDisplay="CENTER" prefHeight="50.0" prefWidth="115.0" text="Categories">
+                                                    <font>
+                                                        <Font name="Cambria Math" size="16.0" />
+                                                    </font>
+                                                    <opaqueInsets>
+                                                        <Insets left="10.0" />
+                                                    </opaqueInsets>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets left="20.0" />
+                                    </VBox.margin>
+                                </VBox>
+                                  <Separator prefWidth="200.0" />
+                                <VBox prefHeight="138.0" prefWidth="250.0">
+                                    <children>
+                                        <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="172.0" text="Abonnements">
+                                            <font>
+                                                <Font name="Cambria Math" size="22.0" />
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets left="10.0" />
+                                            </opaqueInsets>
+                                        </Label>
+                                        <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css">
+                                            <children>
+                                                <ImageView fitHeight="45.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@stat.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Statistique">
+                                                    <font>
+                                                        <Font name="Cambria Math" size="16.0" />
+                                                    </font>
+                                                    <opaqueInsets>
+                                                        <Insets left="10.0" />
+                                                    </opaqueInsets>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                        <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css">
+                                            <children>
+                                                <ImageView fitHeight="39.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@webbb.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="..">
+                                                    <font>
+                                                        <Font name="Cambria Math" size="16.0" />
+                                                    </font>
+                                                    <opaqueInsets>
+                                                        <Insets left="10.0" />
+                                                    </opaqueInsets>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                        <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/style.css">
+                                            <children>
+                                                <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@cat.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Categories">
+                                                    <font>
+                                                        <Font name="Cambria Math" size="16.0" />
+                                                    </font>
+                                                    <opaqueInsets>
+                                                        <Insets left="10.0" />
+                                                    </opaqueInsets>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets left="20.0" top="20.0" />
+                                    </VBox.margin>
+                                </VBox>
+                            </children>
+                        </VBox>
+                  <VBox prefHeight="151.0" prefWidth="240.0" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#showAbon" prefHeight="25.0" prefWidth="239.0" text="Liste abonnements" />
+                        <Button mnemonicParsing="false" onAction="#showPack" prefHeight="25.0" prefWidth="243.0" text="Liste pack" />
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#showDash" prefHeight="25.0" prefWidth="233.0" text="Dashboard" />
+                  <Button layoutX="10.0" layoutY="714.0" mnemonicParsing="false" onAction="#logOut" prefHeight="25.0" prefWidth="233.0" text="Logout" />
+                    </children>
+                    <effect>
+                        <DropShadow radius="18.7725" width="56.09" />
+                    </effect>
+                </VBox>
+                <Button layoutX="1083.0" layoutY="32.0" mnemonicParsing="false" onAction="#reload" prefHeight="26.0" prefWidth="45.0" text="🔄">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Button>
+            <Button layoutX="255.0" layoutY="32.0" mnemonicParsing="false" onAction="#retour" prefHeight="26.0" prefWidth="45.0" text="&lt;--">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <VBox fx:id="DetailsP" layoutX="1049.0" layoutY="211.0" prefHeight="193.0" prefWidth="252.0" spacing="10" stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/css/styles.css">
+               <children>
+                  <Label stylesheets="@../../../../3a12-javafx/3a12-javafx/src/main/resources/css/styles.css" text="Details Abonnement">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nom_pack" text="Date de souscription" textFill="#1829df" />
+                  <Label fx:id="dateS" />
+                  <Label fx:id="description" text="Date d'expiration" textFill="#1829df" />
+                  <Label fx:id="dateE" />
+                  <Label fx:id="duree" text="Statut" textFill="#1829df" />
+                  <Label fx:id="statuta" />
+                  <Label fx:id="prix" text="Pack" textFill="#1829df" />
+                  <Label fx:id="pack" />
+
+               </children>
+            </VBox>
+            <Button layoutX="1049.0" layoutY="500.0" mnemonicParsing="false" onAction="#updateabonnement" prefHeight="32.0" prefWidth="220.0" style="-fx-background-color: #ff760d;" text="Modifier abonnement" textFill="WHITE">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button layoutX="1049.0" layoutY="552.0" mnemonicParsing="false" onAction="#supprimerA" prefHeight="32.0" prefWidth="220.0" style="-fx-background-color: #ff760d;" text="Supprimer abonnement" textFill="WHITE">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

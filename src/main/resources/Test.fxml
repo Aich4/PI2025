@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="561.0" prefWidth="108.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TestController">
+   <children>
+      <ImageView fitHeight="760.0" fitWidth="1152.0" layoutX="-13.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@bg.jpeg" />
+         </image>
+      </ImageView>
+      <Text fontSmoothingType="LCD" layoutX="65.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reclamer">
+         <font>
+            <Font name="MoonetDEMO-Regular" size="38.0" />
+         </font>
+      </Text>
+      <Text fontSmoothingType="LCD" layoutX="65.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type :">
+         <font>
+            <Font name="Aharoni Bold" size="19.0" />
+         </font>
+      </Text>
+      <Text fontSmoothingType="LCD" layoutX="65.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description :">
+         <font>
+            <Font name="Aharoni Bold" size="19.0" />
+         </font>
+      </Text>
+      <Button layoutX="537.0" layoutY="418.0" mnemonicParsing="false" onAction="#ajouterReclamation" text="Valider" textOverrun="CLIP" />
+      <TextField fx:id="desc_rec" layoutX="65.0" layoutY="282.0" prefHeight="120.0" prefWidth="530.0" promptText="Ecrire votre reclamation ici.">
+         <font>
+            <Font name="MoonetDEMO-Regular" size="12.0" />
+         </font>
+      </TextField>
+      <ImageView fitHeight="68.0" fitWidth="172.0" layoutX="19.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@LOGO.png" />
+         </image>
+      </ImageView>
+      <ComboBox fx:id="combo_rec" layoutX="132.0" layoutY="208.0" prefWidth="150.0" />
+      <Button layoutX="932.0" layoutY="39.0" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="150.0" text="retourner" />
+   </children>
+   <stylesheets>
+      <URL value="@css/styles.css" />
+      <URL value="@css/styles.css" />
+   </stylesheets>
+</AnchorPane>
