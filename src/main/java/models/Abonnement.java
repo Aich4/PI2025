@@ -3,25 +3,22 @@ package models;
 import java.sql.Date;
 
 public class Abonnement {
-    private int id_Abonnement, id_Utilisateur, id_Pack;
-    private String  statut;
+    private int id_Abonnement, id_utilisateur, id_Pack;
+    private String statut;
     private Date date_Souscription, date_Expiration;
 
-    // Constructeur avec paramètres
-    public Abonnement(int id_Abonnement, int id_Utilisateur, int id_Pack, Date date_Souscription, Date date_Expiration, String statut) {
-        this.id_Abonnement = id_Abonnement;
-        this.id_Utilisateur = id_Utilisateur;
+    // Constructor with parameters
+    public Abonnement(int id_utilisateur, int id_Pack, Date date_Souscription, Date date_Expiration, String statut) {
+        this.id_utilisateur = id_utilisateur;
         this.id_Pack = id_Pack;
         this.date_Souscription = date_Souscription;
         this.date_Expiration = date_Expiration;
         this.statut = statut;
     }
 
-    // Constructeur sans paramètres
-    public Abonnement() {
-    }
+    public Abonnement() {}
 
-    // Getters et Setters
+    // Getters and Setters
     public int getId_Abonnement() {
         return id_Abonnement;
     }
@@ -30,12 +27,12 @@ public class Abonnement {
         this.id_Abonnement = id_Abonnement;
     }
 
-    public int getId_Utilisateur() {
-        return id_Utilisateur;
+    public int getId_utilisateur() {
+        return id_utilisateur;
     }
 
-    public void setId_Utilisateur(int id_Utilisateur) {
-        this.id_Utilisateur = id_Utilisateur;
+    public void setId_utilisateur(int id_utilisateur) {
+        this.id_utilisateur = id_utilisateur;
     }
 
     public int getId_Pack() {
@@ -74,10 +71,10 @@ public class Abonnement {
     public String toString() {
         return "Abonnement{" +
                 "id_Abonnement=" + id_Abonnement +
-                ", id_Utilisateur=" + id_Utilisateur +
+                ", id_utilisateur=" + id_utilisateur +
                 ", id_Pack=" + id_Pack +
-                ", date_Souscription='" + date_Souscription + '\'' +
-                ", date_Expiration='" + date_Expiration + '\'' +
+                ", date_Souscription=" + date_Souscription +
+                ", date_Expiration=" + date_Expiration +
                 ", statut='" + statut + '\'' +
                 '}';
     }

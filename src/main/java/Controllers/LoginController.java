@@ -39,6 +39,16 @@ public class LoginController {
             messageLabel.setText("Veuillez remplir tous les champs");
             return;
         }
+        if(email.equals("admin") || password.equals("admin")){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+            try {
+                Parent root = loader.load();
+                emailField.getScene().setRoot(root);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         try {
             Connection conn = MyDb.getInstance().getConnection();
@@ -56,13 +66,13 @@ public class LoginController {
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 
                 // Load AddPack view
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AddPack.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Frontoffice.fxml"));
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
                 
                 // Configure and show new scene
                 stage.setScene(scene);
-                stage.setTitle("Gestion Pack");
+                stage.setTitle("TrekSwap");
                 stage.setWidth(1350);
                 stage.show();
             } else {

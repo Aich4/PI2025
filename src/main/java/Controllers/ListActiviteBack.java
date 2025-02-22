@@ -14,6 +14,7 @@ import services.ActiviteService;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ListActiviteBack {
@@ -127,46 +128,91 @@ public class ListActiviteBack {
         // Create the update form
         VBox updateForm = new VBox(10);
 
-// Create TextFields to display and edit the current data
+        // Create input fields with current values
         TextField nameField = new TextField(activite.getNom_activite());
-        TextField dateField = new TextField(activite.getDate().toString()); // Assuming date is stored as java.sql.Date
-        TextField timeField = new TextField(activite.getHeure());
-        TextField statusField = new TextField(activite.getStatut());
 
-// Add TextFields to the VBox
+        DatePicker datePicker = new DatePicker(activite.getDate().toLocalDate()); // Convert SQL date to LocalDate
+        TextField timeField = new TextField(activite.getHeure());
+
+        // Create ComboBox for status selection
+        ComboBox<String> statusComboBox = new ComboBox<>();
+        statusComboBox.getItems().addAll("Planned", "Ongoing", "Completed"); // Example statuses
+        statusComboBox.setValue(activite.getStatut());
+
+        // Add input fields to the form
         updateForm.getChildren().addAll(
-                new javafx.scene.control.Label("Activity Name: "), nameField,
-                new javafx.scene.control.Label("Date: "), dateField,
-                new javafx.scene.control.Label("Time: "), timeField,
-                new javafx.scene.control.Label("Status: "), statusField
+                new Label("Activity Name: "), nameField,
+                new Label("Date: "), datePicker,
+                new Label("Time (HH:mm): "), timeField,
+                new Label("Status: "), statusComboBox
         );
 
-// Create an alert to show the update form
+        // Create an alert to show the update form
         Alert updateAlert = new Alert(Alert.AlertType.CONFIRMATION);
         updateAlert.setTitle("Update Activity");
+        updateAlert.setHeaderText("Update the details of activity: " + activite.getNom_activite());
         updateAlert.getDialogPane().setContent(updateForm);
 
-// Set the behavior when the user presses the "OK" button
-        updateAlert.setHeaderText("Update the details of activity: " + activite.getNom_activite());
+        // Show the alert and handle user input
         updateAlert.showAndWait().ifPresent(response -> {
-            if (response == javafx.scene.control.ButtonType.OK) {
-                // Update the activite object with the new values from the form
-                activite.setNom_activite(nameField.getText());
-                activite.setDate(java.sql.Date.valueOf(dateField.getText())); // Convert the date string to java.sql.Date
-                activite.setHeure(timeField.getText());
-                activite.setStatut(statusField.getText());
+            if (response == ButtonType.OK) {
+                // Validate inputs
+                if (nameField.getText().isEmpty() || datePicker.getValue() == null ||
+                        timeField.getText().isEmpty() || statusComboBox.getValue() == null) {
 
-                // Save the updated activite (Assuming you have a method for this in your service)
+                    showAlert(Alert.AlertType.WARNING, "Warning", "All fields must be filled!");
+                    return;
+                }
+
+                // Validate date (should not be in the past)
+                LocalDate selectedDate = datePicker.getValue();
+                if (selectedDate.isBefore(LocalDate.now())) {
+                    showAlert(Alert.AlertType.WARNING, "Warning", "Date cannot be in the past!");
+                    return;
+                }
+
+                // Validate time format (HH:mm)
+                if (!timeField.getText().matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
+                    showAlert(Alert.AlertType.WARNING, "Warning", "Invalid time format! Use HH:mm.");
+                    return;
+                }
+
+                // Update the activite object with new values
+                activite.setNom_activite(nameField.getText());
+                activite.setDate(java.sql.Date.valueOf(selectedDate)); // Convert LocalDate to SQL Date
+                activite.setHeure(timeField.getText());
+                activite.setStatut(statusComboBox.getValue());
+
+                // Save the updated activite
                 boolean success = activiteService.updateActivite(activite);
                 if (success) {
-                    // If update was successful, refresh the ListView to reflect changes
-                    afficherActivite();
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Activity updated successfully!");
+                    afficherActivite(); // Refresh list
                 } else {
-                    // Handle update failure (optional)
-                    System.out.println("Failed to update activity.");
+                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to update activity.");
                 }
             }
         });
-
     }
+
+    // Utility function to show alerts
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    void showDash(ActionEvent event){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+        try {
+            Parent root = loader.load();
+            ListView.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

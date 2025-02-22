@@ -8,8 +8,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import models.Pack;
 import services.ServicePack;
 
@@ -26,7 +26,10 @@ public class AddPack {
     }
 
     @FXML
-    private TextField avantages;
+    private ComboBox<String> Statut1;
+
+    @FXML
+    private ComboBox<String > avantages;
 
     @FXML
     private TextField description;
@@ -41,39 +44,74 @@ public class AddPack {
     private TextField prix;
 
     @FXML
-    private TextField statut1;
+    void initialize() {
+        loadStatutValues();
+        loadAvantagesValues();
+    }
+
+    private void loadStatutValues() {
+        Statut1.getItems().addAll("Actif", "Inactif", "Expiré");
+        Statut1.setPromptText("Sélectionner un statut");
+    }
+
+    private void loadAvantagesValues() {
+        avantages.getItems().addAll("Aventure", "Détente", "Exploration", "Luxe", "Culturel", "Sportif");
+        avantages.setPromptText("Sélectionner un avantage");
+    }
 
 
     @FXML
     void save(ActionEvent event) {
-        Pack pack = new Pack(
-                nom_Pack.getText(),
-                description.getText(),
-                Integer.parseInt(prix.getText()),
-                Integer.parseInt(duree.getText()),
-                avantages.getText(),
-                statut1.getText()
+        String nom = nom_Pack.getText().trim();
+        String desc = description.getText().trim();
+        String prixStr = prix.getText().trim();
+        String dureeStr = duree.getText().trim();
+        String avantagesStr = avantages.getValue(); // Récupération correcte depuis le ComboBox
+        String statutStr = Statut1.getValue(); // Récupération correcte depuis le ComboBox
 
-        );
+
+
+        // Vérification du format du nom (doit commencer par une majuscule)
+        if (!Character.isUpperCase(nom.charAt(0))) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom du pack doit commencer par une majuscule !");
+            return;
+        }
+
+        // Vérification que prix et durée sont des nombres valides et positifs
+        int prixValue, dureeValue;
         try {
+            prixValue = Integer.parseInt(prixStr);
+            dureeValue = Integer.parseInt(dureeStr);
+            if (prixValue <= 0 || dureeValue <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix et la durée doivent être des nombres positifs !");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix et la durée doivent être des nombres valides !");
+            return;
+        }
 
+        // Création du pack si tout est valide
+        Pack pack = new Pack(nom, 0, desc, prixValue, dureeValue, avantagesStr, statutStr);
 
+        try {
             servicePack.create(pack);
-            reset();
-
-            // Success alert
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setContentText("Pack created successfully!");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Pack créé avec succès !");
         } catch (Exception e) {
-            // Error alert
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("Error: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur : " + e.getMessage());
             System.out.println(e.getMessage());
-            alert.showAndWait();
-        }}
+        }
+    }
+
+
+    // Fonction pour afficher des alertes
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     @FXML
     void showpack(ActionEvent event){
@@ -89,14 +127,7 @@ public class AddPack {
         }
     }
 
-    void reset() {
-        this.nom_Pack.clear();
-        this.description.clear();
-        this.avantages.clear();
-        this.prix.clear();
-        this.duree.clear();
-        this.statut1.clear();
-    }
+
 
 
 }
