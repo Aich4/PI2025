@@ -51,6 +51,9 @@
             <PasswordField fx:id="passwordField"
                           style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B; 
                                  -fx-prompt-text-fill: #666666; -fx-background-radius: 5;"/>
+            <Hyperlink fx:id="forgotPasswordLink" text="Mot de passe oublié?" 
+                       style="-fx-text-fill: #B05A36; -fx-font-weight: bold; -fx-underline: false;"
+                       onAction="#handleForgotPassword"/>
         </VBox>
         
         <!-- Login Button with hover effect -->

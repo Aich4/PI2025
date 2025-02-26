@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -33,8 +34,17 @@ public class FrontOffice {
     Categorie c = new Categorie();
     DestinationService ds ;
 
+    private int userId;
+
+    @FXML
+    private Button profileButton;
+
     public FrontOffice() {
         this.ds = new DestinationService();
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @FXML
@@ -216,15 +226,30 @@ public class FrontOffice {
         }
     }
     @FXML
-    void logOut(ActionEvent event)
-    {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+    protected void showProfile() {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserProfile.fxml"));
             Parent root = loader.load();
+            
+            UserProfileController controller = loader.getController();
+            controller.setUserId(userId);
+            
             categorie.getScene().setRoot(root);
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("Error loading profile view: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void logOut() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) profileButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

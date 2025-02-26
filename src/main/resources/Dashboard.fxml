@@ -58,7 +58,7 @@
                         </VBox>
                     </children>
                 </VBox>
-                <Button fx:id="aa" mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" text="Gestion user" textFill="#413852">
+                <Button fx:id="aa" mnemonicParsing="false" onAction="#showUserManagement" prefHeight="32.0" prefWidth="224.0" text="Gestion user" textFill="#413852">
                     <effect>
                         <DropShadow>
                             <color>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.UserProfileController"
+            prefHeight="762.0" prefWidth="1145.0">
+    <ImageView fitHeight="768.0" fitWidth="1150.0">
+        <image>
+            <Image url="@bg.jpeg"/>
+        </image>
+    </ImageView>
+    
+    <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" 
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          style="-fx-background-color: rgba(26, 33, 27, 0.85);">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Back Button -->
+        <HBox alignment="CENTER_LEFT">
+            <Button text="Retour" onAction="#handleBack"
+                    style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB;"/>
+        </HBox>
+
+        <!-- Profile Section -->
+        <VBox alignment="CENTER" spacing="20">
+            <!-- Profile Picture -->
+            <ImageView fx:id="profileImageView" fitHeight="150" fitWidth="150" preserveRatio="true"/>
+            <Button fx:id="changePhotoButton" text="Changer la photo" 
+                    style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB;"/>
+        </VBox>
+
+        <!-- User Information Form -->
+        <VBox spacing="15" maxWidth="400">
+            <VBox spacing="8">
+                <Label style="-fx-text-fill: #C6B9AB;" text="Nom"/>
+                <TextField fx:id="nomField" 
+                          style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B;"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label style="-fx-text-fill: #C6B9AB;" text="Prénom"/>
+                <TextField fx:id="prenomField"
+                          style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B;"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label style="-fx-text-fill: #C6B9AB;" text="Email"/>
+                <TextField fx:id="emailField"
+                          style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B;"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label style="-fx-text-fill: #C6B9AB;" text="Nouveau mot de passe (optionnel)"/>
+                <PasswordField fx:id="passwordField"
+                              style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B;"/>
+            </VBox>
+        </VBox>
+
+        <!-- Action Buttons -->
+        <HBox spacing="20" alignment="CENTER">
+            <Button text="Mettre à jour" onAction="#handleUpdate"
+                    style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB;"/>
+            <Button text="Supprimer mon compte" onAction="#handleDelete"
+                    style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB;"/>
+        </HBox>
+
+        <Label fx:id="messageLabel" style="-fx-text-fill: #B05A36;" wrapText="true"/>
+    </VBox>
+</AnchorPane> 
