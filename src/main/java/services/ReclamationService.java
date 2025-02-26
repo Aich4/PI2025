@@ -22,13 +22,18 @@ public class ReclamationService implements Crud<Reclamation> {
 
     @Override
     public boolean create(Reclamation obj) throws Exception {
-        String sql = "INSERT INTO reclamation(description_rec, type_rec, date_rec) " +
-                "VALUES (?, ?, ?/*, ?*/)";
+        // Vérification de la date avant l'insertion
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (obj.getDate().after(now)) {
+            throw new IllegalArgumentException("La date ne peut pas être dans le futur");
+        }
+
+        String sql = "INSERT INTO reclamation (description_rec, type_rec, date_rec, etat_rec) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obj.getDescription());
             stmt.setString(2, obj.getType());
-            stmt.setDate(3, new Date(obj.getDate().getTime()));
-            //stmt.setBoolean(4, obj.getEtat());
+            stmt.setTimestamp(3, obj.getDate());
+            stmt.setString(4, obj.getEtat());
 
             int res = stmt.executeUpdate();
             if (res > 0) {
@@ -45,13 +50,19 @@ public class ReclamationService implements Crud<Reclamation> {
 
     @Override
     public void update(Reclamation obj) throws Exception {
-        String sql = "UPDATE reclamation SET description_rec = ?, type_rec = ?, date_rec = ?, /*etat_rec = ?,*/ WHERE id_rec = ?";
+        // Vérification de la date avant la mise à jour
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (obj.getDate().after(now)) {
+            throw new IllegalArgumentException("La date ne peut pas être dans le futur");
+        }
+
+        String sql = "UPDATE reclamation SET description_rec = ?, type_rec = ?, date_rec = ?, etat_rec = ? WHERE id_rec = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obj.getDescription());
             stmt.setString(2, obj.getType());
-            stmt.setDate(3, new Date(obj.getDate().getTime()));
-            //stmt.setBoolean(4, obj.getEtat());
-            stmt.setInt(4, obj.getIdReclamation());
+            stmt.setTimestamp(3, obj.getDate());
+            stmt.setString(4, obj.getEtat());
+            stmt.setInt(5, obj.getIdReclamation());
 
             stmt.executeUpdate();
             System.out.println("Réclamation mise à jour avec succès !");
@@ -90,9 +101,9 @@ public class ReclamationService implements Crud<Reclamation> {
                         rs.getInt("id_rec"),
                         rs.getString("description_rec"),
                         rs.getString("type_rec"),
-                        rs.getDate("date_rec")/*,
-                        rs.getBoolean("etat_rec")*/
+                        rs.getTimestamp("date_rec")
                 );
+                obj.setEtat(rs.getString("etat_rec"));
                 reclamations.add(obj);
             }
         } catch (SQLException e) {
@@ -115,9 +126,9 @@ public class ReclamationService implements Crud<Reclamation> {
                         rs.getInt("id_rec"),
                         rs.getString("description_rec"),
                         rs.getString("type_rec"),
-                        rs.getDate("date_rec")/*,
-                        rs.getBoolean("etat_rec")*/
+                        rs.getTimestamp("date_rec")
                 );
+                obj.setEtat(rs.getString("etat_rec"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

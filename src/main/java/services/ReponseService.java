@@ -19,7 +19,7 @@ public class ReponseService implements Crud<Reponse> {
         String sql = "INSERT INTO reponse (id_rec, date_rep, contenu_rep) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, obj.getId_rec());
-            stmt.setDate(2, new Date(obj.getDate_rep().getTime()));
+            stmt.setTimestamp(2, obj.getDate_rep());
             stmt.setString(3, obj.getContenu_rep());
 
             int res = stmt.executeUpdate();
@@ -40,7 +40,7 @@ public class ReponseService implements Crud<Reponse> {
         String sql = "UPDATE reponse SET id_rec = ?, date_rep = ?, contenu_rep = ? WHERE id_rep = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, obj.getId_rec());
-            stmt.setDate(2, new Date(obj.getDate_rep().getTime()));
+            stmt.setTimestamp(2, obj.getDate_rep());
             stmt.setString(3, obj.getContenu_rep());
             stmt.setInt(4, obj.getId_rep());
 
@@ -80,7 +80,7 @@ public class ReponseService implements Crud<Reponse> {
                 Reponse obj = new Reponse(
                         rs.getInt("id_rep"),
                         rs.getInt("id_rec"),
-                        rs.getDate("date_rep"),
+                        rs.getTimestamp("date_rep"),
                         rs.getString("contenu_rep")
                 );
                 reponses.add(obj);
@@ -104,7 +104,7 @@ public class ReponseService implements Crud<Reponse> {
                 obj = new Reponse(
                         rs.getInt("id_rep"),
                         rs.getInt("id_rec"),
-                        rs.getDate("date_rep"),
+                        rs.getTimestamp("date_rep"),
                         rs.getString("contenu_rep")
                 );
             }
@@ -112,5 +112,47 @@ public class ReponseService implements Crud<Reponse> {
             System.out.println(e.getMessage());
         }
         return obj;
+    }
+
+    public List<Reponse> getAllSorted(String sortBy) throws Exception {
+        String sql = "SELECT * FROM reponse ORDER BY " +
+                (sortBy.equals("date") ? "date_rep" : "contenu_rep") +
+                (sortBy.contains("desc") ? " DESC" : " ASC");
+
+        List<Reponse> reponses = new ArrayList<>();
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Reponse obj = new Reponse(
+                        rs.getInt("id_rep"),
+                        rs.getInt("id_rec"),
+                        rs.getTimestamp("date_rep"),
+                        rs.getString("contenu_rep")
+                );
+                reponses.add(obj);
+            }
+        }
+        return reponses;
+    }
+
+    public List<Reponse> searchByContent(String searchText) throws Exception {
+        String sql = "SELECT * FROM reponse WHERE contenu_rep LIKE ?";
+        List<Reponse> reponses = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + searchText + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Reponse obj = new Reponse(
+                        rs.getInt("id_rep"),
+                        rs.getInt("id_rec"),
+                        rs.getTimestamp("date_rep"),
+                        rs.getString("contenu_rep")
+                );
+                reponses.add(obj);
+            }
+        }
+        return reponses;
     }
 }

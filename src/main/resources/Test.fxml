@@ -44,6 +44,7 @@
          </image>
       </ImageView>
       <ComboBox fx:id="combo_rec" layoutX="132.0" layoutY="208.0" prefWidth="150.0" />
+      <ComboBox layoutX="341.0" layoutY="208.0" prefWidth="150.0" />
    </children>
    <stylesheets>
       <URL value="@css/styles.css" />
