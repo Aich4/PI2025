@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.affichageReclamation">
+   <children>
+      <ImageView fitHeight="675.0" fitWidth="908.0">
+         <image>
+            <Image url="@bg.jpeg" />
+         </image>
+      </ImageView>
+      <VBox spacing="10" layoutX="49.0" layoutY="84.0">
+         <HBox spacing="10">
+            <TextField fx:id="searchField" prefWidth="200" promptText="Rechercher..." />
+            <ComboBox fx:id="triComboBox" prefWidth="150" promptText="Trier par..." />
+         </HBox>
+         <TableView fx:id="tableView" prefHeight="405.0" prefWidth="790.0">
+            <columns>
+                <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
+                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="250"/>
+                <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
+                <TableColumn fx:id="etatColumn" text="État" prefWidth="100"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="140"/>
+            </columns>
+         </TableView>
+      </VBox>
+      <ImageView fitHeight="45.0" fitWidth="157.0" layoutX="6.0" layoutY="6.0">
+         <image>
+            <Image url="@LOGO.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

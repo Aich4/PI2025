@@ -3,6 +3,7 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -16,6 +17,7 @@ import javafx.scene.control.TextField;
 import models.Reclamation;
 import services.ReclamationService;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,6 +62,17 @@ public class TestController {
             }
         } catch (Exception e) {
             System.out.println("Erreur lors de l'ajout de la réclamation: " + e.getMessage());
+        }
+    }
+    @FXML
+    void listRec(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichageReclamation.fxml"));
+        try {
+            Parent root = loader.load();
+            combo_rec.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

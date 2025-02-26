@@ -5,17 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="04f98120-fdd4-4448-8805-61b30ba79986" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controllers/MainController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controllers/affichageReclamation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/services/GeminiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/affichageReclamation.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/apiGemini.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/TestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/listReclamation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/listReclamation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Reclamation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Reclamation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Reponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Reponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/ReclamationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/ReclamationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/ReponseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/ReponseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Reponse.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tests/MainFx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tests/MainFx.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/Test.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Test.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/listReclamation.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/listReclamation.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +123,7 @@
       <workItem from="1740410262622" duration="4619000" />
       <workItem from="1740576381295" duration="7473000" />
       <workItem from="1740592556249" duration="1320000" />
-      <workItem from="1740593901347" duration="4685000" />
+      <workItem from="1740593901347" duration="8698000" />
     </task>
     <servers />
   </component>

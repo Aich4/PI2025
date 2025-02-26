@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="561.0" prefWidth="108.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TestController">
    <children>
-      <ImageView fitHeight="561.0" fitWidth="959.0" layoutX="-13.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="561.0" fitWidth="959.0" layoutX="-2.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@bg.jpeg" />
          </image>
@@ -44,7 +44,7 @@
          </image>
       </ImageView>
       <ComboBox fx:id="combo_rec" layoutX="132.0" layoutY="208.0" prefWidth="150.0" />
-      <ComboBox layoutX="341.0" layoutY="208.0" prefWidth="150.0" />
+      <Button layoutX="736.0" layoutY="24.0" mnemonicParsing="false" onAction="#listRec" text="Affichage" />
    </children>
    <stylesheets>
       <URL value="@css/styles.css" />
