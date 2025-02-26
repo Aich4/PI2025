@@ -14,8 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import models.Activite;
 import models.Destination;
+import models.Avis;
 import services.ActiviteService;
 import services.DestinationService;
+import services.AvisService;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +27,7 @@ import java.util.List;
 public class ListDestinationBack {
 
     DestinationService destinationService = new DestinationService();
+    AvisService avisService = new AvisService();
 
     @FXML
     private ListView<Destination> ListView;
@@ -36,20 +39,20 @@ public class ListDestinationBack {
 
     private void afficherDestinations() {
         try {
-            List<Destination> destinations = destinationService.getAll(); // Fetch destinations
+            List<Destination> destinations = destinationService.getAll();
             ListView.setItems(FXCollections.observableArrayList(destinations));
 
-            // Customize the display of elements in the ListView
             ListView.setCellFactory(new Callback<>() {
                 @Override
                 public ListCell<Destination> call(ListView<Destination> param) {
                     return new ListCell<>() {
-                        private final VBox vbox = new VBox();
-                        private final HBox hbox = new HBox();
+                        private final VBox vbox = new VBox(10);
+                        private final HBox hbox = new HBox(10);
                         private final ImageView imageView = new ImageView();
                         private final Button deleteButton = new Button("Delete");
                         private final Button updateButton = new Button("Update");
-                        private final Button showActivitiesButton = new Button("Show Activities"); // New button
+                        private final Button showActivitiesButton = new Button("Show Activities");
+                        private final VBox reviewsBox = new VBox(5);
 
                         @Override
                         protected void updateItem(Destination destination, boolean empty) {
@@ -59,36 +62,103 @@ public class ListDestinationBack {
                                 setText(null);
                                 setGraphic(null);
                             } else {
-                                // Clear previous content
                                 vbox.getChildren().clear();
                                 hbox.getChildren().clear();
+                                reviewsBox.getChildren().clear();
 
                                 // Display destination details
-                                setText("📍 " + destination.getNom_destination() + "\n" +
-                                        "📖 " + destination.getDecription() + "\n" +
-                                        "🌡️ Temp: " + destination.getTemperature() + "°C\n" +
-                                        "⭐ Rating: " + destination.getRate() + "\n" +
-                                        "📌 Coordinates: (" + destination.getLatitude() + ", " + destination.getLongitude() + ")");
+                                Label detailsLabel = new Label(
+                                    "📍 " + destination.getNom_destination() + "\n" +
+                                    "📖 " + destination.getDecription() + "\n" +
+                                    "🌡️ Temp: " + destination.getTemperature() + "°C\n" +
+                                    "⭐ Rating: " + destination.getRate() + "\n" +
+                                    "📌 Coordinates: (" + destination.getLatitude() + ", " + destination.getLongitude() + ")"
+                                );
+                                detailsLabel.setStyle("-fx-text-fill: #1A211B;");
 
                                 // Load destination image if available
                                 if (destination.getImage_destination() != null && !destination.getImage_destination().isEmpty()) {
                                     String imagePath = destination.getImage_destination();
-                                    imagePath = imagePath.replace("file:/", ""); // Fix path issues
-                                    imagePath = imagePath.replace("%20", " "); // Handle spaces
+                                    imagePath = imagePath.replace("file:/", "");
+                                    imagePath = imagePath.replace("%20", " ");
 
                                     Image image = new Image(new File(imagePath).toURI().toString(), 100, 75, true, true);
                                     imageView.setImage(image);
                                     vbox.getChildren().add(imageView);
                                 }
 
+                                vbox.getChildren().add(detailsLabel);
+
+                                // Load and display reviews
+                                try {
+                                    System.out.println("Loading reviews for destination: " + destination.getNom_destination() + " (ID: " + destination.getId() + ")");
+                                    List<Avis> reviews = avisService.getAvisByDestination(destination.getId());
+                                    System.out.println("Retrieved " + reviews.size() + " reviews");
+                                    
+                                    // Always show the reviews section, even if empty
+                                    Label reviewsTitle = new Label("📝 Reviews:");
+                                    reviewsTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #B05A36;");
+                                    reviewsBox.getChildren().add(reviewsTitle);
+
+                                    if (!reviews.isEmpty()) {
+                                        for (Avis review : reviews) {
+                                            System.out.println("Adding review to UI: " + review.getDescription_av());
+                                            HBox reviewHBox = new HBox(10);
+                                            Label reviewLabel = new Label("• " + review.getDescription_av());
+                                            reviewLabel.setWrapText(true); // Allow text wrapping
+                                            reviewLabel.setMaxWidth(400); // Set maximum width
+                                            
+                                            Button deleteReviewBtn = new Button("❌");
+                                            deleteReviewBtn.setStyle("-fx-background-color: transparent;");
+                                            
+                                            deleteReviewBtn.setOnAction(e -> {
+                                                try {
+                                                    System.out.println("Deleting review ID: " + review.getId());
+                                                    avisService.delete(review.getId());
+                                                    afficherDestinations(); // Refresh the list
+                                                } catch (Exception ex) {
+                                                    System.err.println("Error deleting review: " + ex.getMessage());
+                                                    ex.printStackTrace();
+                                                    
+                                                    // Show error alert
+                                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                                    alert.setTitle("Error");
+                                                    alert.setHeaderText("Failed to delete review");
+                                                    alert.setContentText("An error occurred while deleting the review.");
+                                                    alert.showAndWait();
+                                                }
+                                            });
+
+                                            reviewHBox.getChildren().addAll(reviewLabel, deleteReviewBtn);
+                                            reviewsBox.getChildren().add(reviewHBox);
+                                        }
+                                    } else {
+                                        Label noReviewsLabel = new Label("No reviews yet");
+                                        noReviewsLabel.setStyle("-fx-text-fill: #666666; -fx-font-style: italic;");
+                                        reviewsBox.getChildren().add(noReviewsLabel);
+                                    }
+                                    vbox.getChildren().add(reviewsBox);
+                                } catch (Exception e) {
+                                    System.err.println("Error loading reviews: " + e.getMessage());
+                                    e.printStackTrace();
+                                    
+                                    // Show error in UI
+                                    Label errorLabel = new Label("Error loading reviews");
+                                    errorLabel.setStyle("-fx-text-fill: red;");
+                                    reviewsBox.getChildren().add(errorLabel);
+                                    vbox.getChildren().add(reviewsBox);
+                                }
+
                                 // Add buttons
                                 deleteButton.setOnAction(event -> handleDelete(destination));
                                 updateButton.setOnAction(event -> handleUpdate(destination));
-                                showActivitiesButton.setOnAction(event -> handleShowActivities(destination)); // Show activities button click
+                                showActivitiesButton.setOnAction(event -> handleShowActivities(destination));
 
                                 hbox.getChildren().addAll(deleteButton, updateButton, showActivitiesButton);
                                 vbox.getChildren().add(hbox);
 
+                                // Style the container
+                                vbox.setStyle("-fx-background-color: rgba(198, 185, 171, 0.9); -fx-padding: 10; -fx-spacing: 10;");
                                 setGraphic(vbox);
                             }
                         }
@@ -162,8 +232,6 @@ public class ListDestinationBack {
         });
     }
 
-
-
     private void handleShowActivities(Destination destination) {
         // Create a new window or dialog to show activities related to this destination
         ActiviteService activiteService = new ActiviteService();
@@ -201,7 +269,6 @@ public class ListDestinationBack {
         activitiesAlert.showAndWait();
     }
 
-
     @FXML
     void ajout(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GestionDestination.fxml"));
@@ -212,7 +279,6 @@ public class ListDestinationBack {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
     @FXML
     void showActivite(ActionEvent event) {

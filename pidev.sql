@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2025 at 04:08 PM
+-- Generation Time: Feb 25, 2025 at 12:23 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -69,6 +69,13 @@ CREATE TABLE `avis` (
   `description_av` varchar(255) NOT NULL,
   `id_des` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `avis`
+--
+
+INSERT INTO `avis` (`id`, `description_av`, `id_des`) VALUES
+(5, 'behya', 12);
 
 -- --------------------------------------------------------
 
@@ -228,6 +235,19 @@ CREATE TABLE `partenaire` (
 
 INSERT INTO `partenaire` (`id`, `nom`, `email`, `adresse`, `description`, `date_ajout`, `id_categorie`) VALUES
 (2, 'test1', 'test@gmail.com', '2 rue kaka 2040', 'hhhh', '2025-02-21', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_reset`
+--
+
+CREATE TABLE `password_reset` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(1000) NOT NULL,
+  `expiration_time` datetime NOT NULL,
+  `id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -435,6 +455,12 @@ ALTER TABLE `partenaire`
   ADD KEY `fk_part` (`id_categorie`);
 
 --
+-- Indexes for table `password_reset`
+--
+ALTER TABLE `password_reset`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `reclamation`
 --
 ALTER TABLE `reclamation`
@@ -500,7 +526,7 @@ ALTER TABLE `activite`
 -- AUTO_INCREMENT for table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `categorie`
@@ -537,6 +563,12 @@ ALTER TABLE `pack`
 --
 ALTER TABLE `partenaire`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `password_reset`
+--
+ALTER TABLE `password_reset`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reclamation`
