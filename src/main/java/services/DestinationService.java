@@ -15,7 +15,19 @@ public class DestinationService implements CrudInterface<Destination> {
     public DestinationService() {connection = MyDb.getInstance().getConnection();}
     @Override
     public void create(Destination obj) throws Exception {
-        String sql = "insert into destination(nom_destination,description,image_destination,latitude,longitude,temperature,rate) values(?,?,?,?,?,?,?)";
+        // Check if the destination name already exists
+        String checkSql = "SELECT COUNT(*) FROM destination WHERE nom_destination = ?";
+        PreparedStatement checkPs = connection.prepareStatement(checkSql);
+        checkPs.setString(1, obj.getNom_destination());
+        ResultSet rs = checkPs.executeQuery();
+
+        rs.next();
+        if (rs.getInt(1) > 0) {
+            throw new Exception("Destination with this name already exists.");
+        }
+
+        // If not exists, insert the new destination
+        String sql = "INSERT INTO destination(nom_destination, description, image_destination, latitude, longitude, temperature, rate) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, obj.getNom_destination());
         ps.setString(2, obj.getDecription());
@@ -97,8 +109,21 @@ public class DestinationService implements CrudInterface<Destination> {
     }
     public boolean updatee(Destination destination) {
         try {
-            // Example: Update the destination in the database
-            String sql = "update destination set nom_destination = ?,description=?,image_destination=?,latitude=?,longitude=?,temperature=?,rate=? where id=?";
+            // Check if another destination already has the same name
+            String checkSql = "SELECT COUNT(*) FROM destination WHERE nom_destination = ? AND id != ?";
+            PreparedStatement checkPs = connection.prepareStatement(checkSql);
+            checkPs.setString(1, destination.getNom_destination());
+            checkPs.setInt(2, destination.getId());
+            ResultSet rs = checkPs.executeQuery();
+
+            rs.next();
+            if (rs.getInt(1) > 0) {
+                System.out.println("Another destination with this name already exists.");
+                return false; // Prevent update
+            }
+
+            // If not exists, update the destination
+            String sql = "UPDATE destination SET nom_destination = ?, description = ?, image_destination = ?, latitude = ?, longitude = ?, temperature = ?, rate = ? WHERE id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, destination.getNom_destination());
             ps.setString(2, destination.getDecription());
@@ -116,4 +141,5 @@ public class DestinationService implements CrudInterface<Destination> {
             return false;
         }
     }
+
 }

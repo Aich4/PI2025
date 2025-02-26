@@ -13,27 +13,54 @@ public class ActiviteService implements CrudInterface<Activite> {
 
     @Override
     public void create(Activite obj) throws Exception {
-        String sql = "insert into activite (nom_activite,date,heure,statut,id_destination) values (?,?,?,?,?)";
+        // Check if the activity name already exists
+        String checkSql = "SELECT COUNT(*) FROM activite WHERE nom_activite = ?";
+        PreparedStatement checkPs = connection.prepareStatement(checkSql);
+        checkPs.setString(1, obj.getNom_activite());
+        ResultSet rs = checkPs.executeQuery();
+
+        rs.next();
+        if (rs.getInt(1) > 0) {
+            throw new Exception("Activity with this name already exists.");
+        }
+
+        // If not exists, insert the new activity
+        String sql = "INSERT INTO activite (nom_activite, date, heure, statut, id_destination) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1,obj.getNom_activite());
+        ps.setString(1, obj.getNom_activite());
         ps.setDate(2, obj.getDate());
-        ps.setString(3,obj.getHeure());
-        ps.setString(4,obj.getStatut());
-        ps.setInt(5,obj.getId_destination());
+        ps.setString(3, obj.getHeure());
+        ps.setString(4, obj.getStatut());
+        ps.setInt(5, obj.getId_destination());
         ps.executeUpdate();
     }
 
+
     @Override
     public void update(Activite obj) throws Exception {
-        String sql = "update activite set nom_activite=?,date=?,heure=?,statut=? where id=?";
+        // Check if another activity already has this name
+        String checkSql = "SELECT COUNT(*) FROM activite WHERE nom_activite = ? AND id != ?";
+        PreparedStatement checkPs = connection.prepareStatement(checkSql);
+        checkPs.setString(1, obj.getNom_activite());
+        checkPs.setInt(2, obj.getId());
+        ResultSet rs = checkPs.executeQuery();
+
+        rs.next();
+        if (rs.getInt(1) > 0) {
+            throw new Exception("Another activity with this name already exists.");
+        }
+
+        // If not exists, update the activity
+        String sql = "UPDATE activite SET nom_activite=?, date=?, heure=?, statut=? WHERE id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1,obj.getNom_activite());
+        ps.setString(1, obj.getNom_activite());
         ps.setDate(2, obj.getDate());
-        ps.setString(3,obj.getHeure());
-        ps.setString(4,obj.getStatut());
-        ps.setInt(5,obj.getId());
+        ps.setString(3, obj.getHeure());
+        ps.setString(4, obj.getStatut());
+        ps.setInt(5, obj.getId());
         ps.executeUpdate();
     }
+
 
     @Override
     public void delete(int id) throws Exception {

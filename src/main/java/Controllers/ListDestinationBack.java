@@ -1,6 +1,7 @@
 package Controllers;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,8 @@ import services.DestinationService;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListDestinationBack {
@@ -30,13 +33,70 @@ public class ListDestinationBack {
     private ListView<Destination> ListView;
 
     @FXML
+    private TextField recherche;
+
+    @FXML
+    private ComboBox<String> triComboBox;
+
+
+    private ObservableList<Destination> allDestinations; // This should hold all the destinations
+
+
+    private void filtrerDestinations(String searchText) {
+        if (searchText == null || searchText.isEmpty()) {
+            ListView.setItems(allDestinations); // Show all destinations if search is empty
+        } else {
+            ObservableList<Destination> filteredList = FXCollections.observableArrayList();
+            for (Destination dest : allDestinations) {
+                if ((dest.getNom_destination() != null && dest.getNom_destination().toLowerCase().contains(searchText.toLowerCase())) ||
+                        (dest.getDecription() != null && dest.getDecription().toLowerCase().contains(searchText.toLowerCase())) ||
+                        (dest.getImage_destination() != null && dest.getImage_destination().toLowerCase().contains(searchText.toLowerCase())) ||
+                        String.valueOf(dest.getLatitude()).contains(searchText) ||
+                        String.valueOf(dest.getLongitude()).contains(searchText) ||
+                        String.valueOf(dest.getTemperature()).contains(searchText) ||
+                        String.valueOf(dest.getRate()).contains(searchText)) {
+                    filteredList.add(dest); // Add if matches
+                }
+            }
+            ListView.setItems(filteredList); // Update ListView
+        }
+    }
+
+
+    @FXML
     void initialize() {
         afficherDestinations();
+        recherche.textProperty().addListener((observable, oldValue, newValue) -> {
+            filtrerDestinations(newValue);
+        });
+        triComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> trierDestinations(newValue));
     }
+    private void trierDestinations(String critere) {
+        if (allDestinations == null) return; // Vérifie que la liste n'est pas vide
+
+        List<Destination> sortedList = new ArrayList<>(allDestinations);
+
+        switch (critere) {
+            case "Nom":
+                sortedList.sort(Comparator.comparing(Destination::getNom_destination));
+                break;
+            case "Température":
+                sortedList.sort(Comparator.comparingDouble(Destination::getTemperature));
+                break;
+            case "Rating":
+                sortedList.sort(Comparator.comparingDouble(Destination::getRate).reversed()); // Tri décroissant
+                break;
+        }
+
+        ListView.setItems(FXCollections.observableArrayList(sortedList)); // Mettre à jour la ListView
+    }
+
 
     private void afficherDestinations() {
         try {
             List<Destination> destinations = destinationService.getAll(); // Fetch destinations
+            allDestinations = FXCollections.observableArrayList(destinations); // Store in allDestinations
+            ListView.setItems(allDestinations); // Show in ListView
             ListView.setItems(FXCollections.observableArrayList(destinations));
 
             // Customize the display of elements in the ListView
@@ -98,6 +158,8 @@ public class ListDestinationBack {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     // Handle delete button click
