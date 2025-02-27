@@ -1,30 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Leaflet Map</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
-        #map { width: 100%; height: 100vh; }
+        #map { height: 100vh; }
     </style>
 </head>
 <body>
 <div id="map"></div>
+
 <script>
-    var map = L.map('map').setView([36.8065, 10.1815], 10); // Default: Tunis, Tunisia
+    var map = L.map('map').setView([35.6895, 10.7074], 7); // Default Tunisia view
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    var marker; // Store the marker reference
+
     function updateMap(lat, lon) {
-        map.setView([lat, lon], 12);
-        L.marker([lat, lon]).addTo(map).bindPopup("New Location").openPopup();
+        map.setView([lat, lon], 13);
+        if (marker) {
+            marker.setLatLng([lat, lon]);
+        } else {
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup("Selected Location").openPopup();
+        }
     }
 
-    window.updateMap = updateMap;
+    // Function to get place name from latitude and longitude
+    function getPlaceName(lat, lon) {
+        console.log("Fetching place name for:", lat, lon);
+
+        var url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var placeName = data.display_name || "Unknown Place";
+                console.log("Fetched Place Name:", placeName);
+
+                // Check if JavaFX callback exists before calling it
+                if (window.javafxCallback && typeof window.javafxCallback.onMapClick === "function") {
+                    console.log("Calling JavaFX Callback...");
+                    window.javafxCallback.onMapClick(placeName, lat, lon);
+                } else {
+                    console.error("JavaFX Callback not found!");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching place name:", error);
+            });
+    }
+
+    // Capture clicks on the map
+    map.on('click', function(event) {
+        var lat = event.latlng.lat;
+        var lon = event.latlng.lng;
+
+        // Show a marker at the clicked position
+        if (marker) {
+            marker.setLatLng([lat, lon]);
+        } else {
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup("Selected Location").openPopup();
+        }
+
+        getPlaceName(lat, lon); // Fetch place name
+    });
 </script>
 </body>
 </html>
