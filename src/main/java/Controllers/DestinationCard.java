@@ -1,6 +1,8 @@
 package Controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -8,6 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import models.Activite;
 import models.Destination;
 import services.ActiviteService;
@@ -94,6 +99,38 @@ public class DestinationCard {
             }
         }
     }
+
+    @FXML
+    void showMap(ActionEvent event) {
+        if (destination == null) {
+            System.out.println("No destination selected.");
+            return;
+        }
+
+        // Create WebView
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+
+        // Load local map.html file
+        webEngine.load(getClass().getResource("/map.html").toExternalForm());
+
+        // Inject destination coordinates dynamically
+        webEngine.documentProperty().addListener((obs, oldDoc, newDoc) -> {
+            if (newDoc != null) {
+                double lat = destination.getLatitude();
+                double lon = destination.getLongitude();
+                webEngine.executeScript("updateMap(" + lat + ", " + lon + ");");
+            }
+        });
+
+        // Create and show new stage
+        Stage mapStage = new Stage();
+        mapStage.setScene(new Scene(webView, 800, 600));
+        mapStage.setTitle("Map - " + destination.getNom_destination());
+        mapStage.show();
+    }
+
+
 
 
 

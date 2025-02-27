@@ -2,6 +2,7 @@ package Tests;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
@@ -13,7 +14,7 @@ public class MainFx extends Application {
     @Override
 
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GestionDestination.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FrontOffice.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);

@@ -18,7 +18,7 @@
         </ImageView>
         <ImageView fitHeight="57.0" fitWidth="213.0" layoutX="7.0" layoutY="4.0">
             <image>
-                <Image url="@LOGO.png" />
+                <Image url="@logo_white.png" />
             </image>
         </ImageView>
         <Button layoutX="270.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="Destinations" />
