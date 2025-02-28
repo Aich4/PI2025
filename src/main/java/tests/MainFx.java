@@ -14,7 +14,7 @@ public class MainFx extends Application {
     @Override
 
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FrontOffice.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ListDestinationBack.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
