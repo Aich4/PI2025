@@ -3,7 +3,7 @@ package models;
 import javafx.scene.control.ListCell;
 
 public class Pack {
-    private int id_Pack, duree;
+    private int id_Pack,id_utilisateur, duree;
     private String nom_Pack, description, avantages, statut;
     private float prix;
 
@@ -18,7 +18,7 @@ public class Pack {
         this.statut = statut;
     }
 
-    public Pack( String nom_Pack, String description, float prix, int duree, String avantages, String statut) {
+    public Pack( String nom_Pack,int id_utilisateur, String description, float prix, int duree, String avantages, String statut) {
         this.nom_Pack = nom_Pack;
         this.description = description;
         this.prix = prix;
@@ -87,6 +87,15 @@ public class Pack {
     public void setStatut(String statut) {
         this.statut = statut;
     }
+
+    public int getId_utilisateur() {
+        return id_utilisateur;
+    }
+
+    public void setId_Utilisateur (int id_utilisateur) {
+        this.id_utilisateur = id_utilisateur;
+    }
+
 
     @Override
     public String toString() {

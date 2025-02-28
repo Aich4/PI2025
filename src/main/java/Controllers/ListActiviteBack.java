@@ -203,4 +203,16 @@ public class ListActiviteBack {
         alert.showAndWait();
     }
 
+    @FXML
+    void showDash(ActionEvent event){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+        try {
+            Parent root = loader.load();
+            ListView.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

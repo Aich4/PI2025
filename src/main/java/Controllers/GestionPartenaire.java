@@ -15,9 +15,8 @@ import services.PartenaireService;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
-
-import static com.sun.javafx.scene.input.TouchPointHelper.reset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GestionPartenaire {
     PartenaireService ps = new PartenaireService();
@@ -50,19 +49,65 @@ public class GestionPartenaire {
 
 
     @FXML
-
     void save(ActionEvent event) {
         try {
+            // Vérification du nom
+            if (this.nompartenaire.getText() == null || this.nompartenaire.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("Le nom du partenaire est obligatoire.");
+            }
+
+            // Vérification de l'email
+            String email = this.emailpartenaire.getText();
+            if (email == null || email.trim().isEmpty()) {
+                throw new IllegalArgumentException("L'email du partenaire est obligatoire.");
+            }
+
+            // Validation de l'email (format correct et domaine valide)
+            String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+            Pattern pattern = Pattern.compile(emailRegex);
+            Matcher matcher = pattern.matcher(email);
+            if (!matcher.matches()) {
+                throw new IllegalArgumentException("L'email du partenaire est invalide. Veuillez entrer un email au format valide (par exemple : user@example.com).");
+            }
+
+            // Vérification de l'adresse
+            if (this.adresse.getText() == null || this.adresse.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("L'adresse du partenaire est obligatoire.");
+            }
+
+            // Vérification de la description
+            if (this.description.getText() == null || this.description.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("La description du partenaire est obligatoire.");
+            }
+
+            // Vérification de la catégorie
+            String nomCategorie = this.idcategorie.getValue();
+            if (nomCategorie == null || nomCategorie.trim().isEmpty()) {
+                throw new IllegalArgumentException("La catégorie est obligatoire.");
+            }
+
+            // Vérification de la date
+            if (this.date.getValue() == null) {
+                throw new IllegalArgumentException("La date d'ajout est obligatoire.");
+            }
+
+// Vérification que la date sélectionnée n'est pas dans le passé
+            LocalDate selectedDate = this.date.getValue();
+            LocalDate currentDate = LocalDate.now();  // Date actuelle
+
+            if (selectedDate.isBefore(currentDate)) {
+                throw new IllegalArgumentException("La date d'ajout ne peut pas être dans le passé. Veuillez sélectionner une date actuelle ou future.");
+            }
+
+
+
             // Conversion correcte de LocalDate en java.sql.Date
             Date sqlDate = Date.valueOf(this.date.getValue());
-
-            // Récupération du nom de la catégorie sélectionnée
-            String nomCategorie = this.idcategorie.getValue();
 
             // Conversion du nom de la catégorie en ID avec cs.getIdByNom
             int idCategorie = cs.getIdByNom(nomCategorie);
 
-            // Création de l'objet Partenaire avec les bons types de paramètres
+            // Création de l'objet Partenaire
             Partenaire p = new Partenaire(this.nompartenaire.getText(), this.emailpartenaire.getText(), this.adresse.getText(), this.description.getText(), sqlDate, idCategorie);
 
             // Sauvegarde du partenaire
@@ -73,13 +118,19 @@ public class GestionPartenaire {
 
             // Affichage de l'alerte de succès
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
+            alert.setTitle("Succès");
             alert.setContentText("Partenaire créé avec succès");
             alert.showAndWait();
-        } catch (Exception e) {
-            // Affichage de l'alerte d'erreur en cas de problème
+        } catch (IllegalArgumentException e) {
+            // Affichage de l'alerte d'erreur pour les erreurs de saisie
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
+            alert.setTitle("Erreur de saisie");
+            alert.setContentText("Erreur : " + e.getMessage());
+            alert.showAndWait();
+        } catch (Exception e) {
+            // Affichage de l'alerte d'erreur en cas de problème général
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
             alert.setContentText("Erreur lors de la création du Partenaire : " + e.getMessage());
             alert.showAndWait();
 
@@ -87,6 +138,7 @@ public class GestionPartenaire {
             e.printStackTrace();
         }
     }
+
 
     private void reset() {
     }
@@ -106,6 +158,7 @@ public class GestionPartenaire {
     }
 
 
+
     @FXML
     public void initialize() {
         try {
@@ -114,6 +167,9 @@ public class GestionPartenaire {
             e.printStackTrace(); // Afficher l'exception si elle se produit
         }
     }
+
+
+
 
 
     private Partenaire partenaireActuel;
@@ -128,10 +184,30 @@ public class GestionPartenaire {
         description.setText(partenaire.getDescription());
         date.setValue(partenaire.getDate_ajout().toLocalDate()); // Conversion Date -> LocalDate
 
-        idcategorie.setValue(cs.getNomById(partenaire.getId_categorie()));
+        try {
+            idcategorie.setValue(cs.getNomById(partenaire.getId_categorie()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
+
+    private void afficherCreationPartenaire() {
+        // Réinitialiser les champs du formulaire de création du partenaire
+        nompartenaire.clear();
+        emailpartenaire.clear();
+        adresse.clear();
+        description.clear();
+        date.setValue(null);  // Si vous utilisez un contrôle DatePicker pour la date
+        idcategorie.setValue(null);  // Si vous avez une combobox ou un choix de catégorie
+
+        // Afficher ou rediriger vers la vue de création
+        System.out.println("Retour à la création de partenaire.");
+
+        // Exemple de changement de scène (si nécessaire, adaptez-le selon votre cas)
+        // mainStage.setScene(createPartenaireScene);  // Remplacez mainStage et createPartenaireScene par vos objets réels
+    }
     
 
 

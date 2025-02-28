@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -14,11 +15,14 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import models.Activite;
+import models.Avis;
 import models.Destination;
 import services.ActiviteService;
+import services.AvisService;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class DestinationCard {
     ActiviteService activiteService = new ActiviteService();
@@ -49,6 +53,50 @@ public class DestinationCard {
         }
 
     }
+
+    @FXML
+    private void handleAvis() {
+        if (destination != null) {
+            // Prompt for avis description
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Add a Review");
+            dialog.setHeaderText("Enter your review for " + destination.getNom_destination());
+            dialog.setContentText("Review:");
+
+            // Show the dialog and wait for the user response
+            Optional<String> result = dialog.showAndWait();
+
+            result.ifPresent(description -> {
+                // Create a new Avis instance
+                Avis avis = new Avis(destination.getId(), description);
+
+                // Save the avis using AvisService
+                try {
+                    AvisService avisService = new AvisService();
+                    avisService.create(avis);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Your review has been added successfully.");
+                    alert.showAndWait();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Failed to add your review.");
+                    alert.showAndWait();
+                }
+            });
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText(null);
+            alert.setContentText("No destination selected.");
+            alert.showAndWait();
+        }
+    }
+
     @FXML
     private void handleShowActivities() {
         if (destination != null) {
@@ -99,7 +147,6 @@ public class DestinationCard {
             }
         }
     }
-
     @FXML
     void showMap(ActionEvent event) {
         if (destination == null) {
@@ -129,8 +176,6 @@ public class DestinationCard {
         mapStage.setTitle("Map - " + destination.getNom_destination());
         mapStage.show();
     }
-
-
 
 
 

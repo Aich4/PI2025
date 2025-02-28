@@ -21,7 +21,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="689.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListDestinationBack">
+<AnchorPane prefHeight="769.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListDestinationBack">
     <children>
         <ImageView fitHeight="789.0" fitWidth="1158.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -65,7 +65,7 @@
                   <ListView fx:id="ListView" prefHeight="360.0" prefWidth="808.0" />
                </content>
                 </ScrollPane>
-            <Button layoutX="707.0" layoutY="151.0" mnemonicParsing="false" onAction="#ajout" prefHeight="32.0" prefWidth="178.0" text="ajouter une destination" textFill="#413852">
+            <Button layoutX="625.0" layoutY="151.0" mnemonicParsing="false" onAction="#ajout" prefHeight="32.0" prefWidth="224.0" text="ajouter une destination" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -77,30 +77,29 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <TextField fx:id="recherche" layoutX="87.0" layoutY="155.0" promptText="recherche . . ." />
-            <ComboBox fx:id="triComboBox" layoutX="275.0" layoutY="155.0" prefWidth="150.0">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Nom" />
-                            <String fx:value="Température" />
-                            <String fx:value="Rating" />
-                        </FXCollections>
-                    </items>
+            <Button layoutX="357.0" layoutY="151.0" mnemonicParsing="false" onAction="#openMapToAddDestination" prefHeight="32.0" prefWidth="241.0" text="ajouter une destination by map" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <ComboBox fx:id="triComboBox" layoutX="182.0" layoutY="155.0" prefWidth="150.0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Nom" />
+                     <String fx:value="Température" />
+                     <String fx:value="Rating" />
+                  </FXCollections>
+               </items>
             </ComboBox>
-            <Button layoutX="447.0" layoutY="151.0" mnemonicParsing="false" onAction="#openMapToAddDestination" prefHeight="32.0" prefWidth="241.0" text="ajouter une destination by map" textFill="#413852">
-               <effect>
-                  <DropShadow>
-                     <color>
-                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
-                     </color>
-                  </DropShadow>
-               </effect>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-
-        </children>
+            <TextField fx:id="recherche" layoutX="20.0" layoutY="155.0" promptText="recherche . . ." />
+            </children>
         </Pane>
         <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">
             <children>
@@ -131,14 +130,6 @@
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
                         <VBox prefHeight="138.0" prefWidth="223.0">
                             <children>
-                                <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="171.0" text="Brows">
-                                    <font>
-                                        <Font name="Cambria Math" size="22.0" />
-                                    </font>
-                                    <opaqueInsets>
-                                        <Insets left="10.0" />
-                                    </opaqueInsets>
-                                </Label>
                                 <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css">
                                     <children>
                                         <ImageView fitHeight="45.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
@@ -156,40 +147,8 @@
                                         </Label>
                                     </children>
                                 </HBox>
-                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css">
-                                    <children>
-                                        <ImageView fitHeight="39.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@webbb.png" />
-                                            </image>
-                                        </ImageView>
-                                        <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Brows">
-                                            <font>
-                                                <Font name="Cambria Math" size="16.0" />
-                                            </font>
-                                            <opaqueInsets>
-                                                <Insets left="10.0" />
-                                            </opaqueInsets>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css">
-                                    <children>
-                                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@categories.png" />
-                                            </image>
-                                        </ImageView>
-                                        <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Activite">
-                                            <font>
-                                                <Font name="Cambria Math" size="16.0" />
-                                            </font>
-                                            <opaqueInsets>
-                                                <Insets left="10.0" />
-                                            </opaqueInsets>
-                                        </Label>
-                                    </children>
-                                </HBox>
+                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
+                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
                             </children>
                             <VBox.margin>
                                 <Insets left="20.0" />
@@ -210,6 +169,31 @@
                     </font>
                 </Button>
             <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" text="Show Destination" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <HBox prefHeight="226.0" prefWidth="223.0" />
+            <Button mnemonicParsing="false" onAction="#showDash" prefHeight="32.0" prefWidth="224.0" text="Dashboard" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="639.0" mnemonicParsing="false" onAction="#logOut" prefHeight="32.0" prefWidth="224.0" text="Log out" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>

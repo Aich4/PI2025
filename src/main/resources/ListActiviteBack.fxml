@@ -75,7 +75,7 @@
                 </Button>
             </children>
         </Pane>
-        <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">
+        <VBox layoutX="1.0" layoutY="3.0" prefHeight="771.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">
             <children>
                 <Separator prefWidth="232.0" />
                 <VBox prefHeight="138.0" prefWidth="250.0">
@@ -194,6 +194,14 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
+            <VBox prefHeight="126.0" prefWidth="223.0" />
+            <VBox prefHeight="128.0" prefWidth="223.0" />
+            <VBox layoutX="10.0" layoutY="547.0" prefHeight="128.0" prefWidth="223.0" spacing="20.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#showDash" prefHeight="25.0" prefWidth="226.0" text="Dashboard" />
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="230.0" text="Logout" />
+               </children>
+            </VBox>
             </children>
             <effect>
                 <DropShadow radius="18.7725" width="56.09" />
