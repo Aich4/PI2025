@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
@@ -73,6 +77,28 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
+            <Button layoutX="357.0" layoutY="151.0" mnemonicParsing="false" onAction="#openMapToAddDestination" prefHeight="32.0" prefWidth="241.0" text="ajouter une destination by map" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <ComboBox fx:id="triComboBox" layoutX="182.0" layoutY="155.0" prefWidth="150.0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Nom" />
+                     <String fx:value="Température" />
+                     <String fx:value="Rating" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <TextField fx:id="recherche" layoutX="20.0" layoutY="155.0" promptText="recherche . . ." />
             </children>
         </Pane>
         <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">

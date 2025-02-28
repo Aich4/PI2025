@@ -1,20 +1,30 @@
 package Controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Activite;
 import models.Destination;
 import models.Avis;
+
+import netscape.javascript.JSObject;
+
 import services.ActiviteService;
 import services.DestinationService;
 import services.AvisService;
@@ -22,6 +32,8 @@ import services.AvisService;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListDestinationBack {
@@ -31,16 +43,69 @@ public class ListDestinationBack {
 
     @FXML
     private ListView<Destination> ListView;
+    @FXML
+    private TextField recherche;
 
+    @FXML
+    private ComboBox<String> triComboBox;
+
+
+    private ObservableList<Destination> allDestinations;
+
+    private void filtrerDestinations(String searchText) {
+        if (searchText == null || searchText.isEmpty()) {
+            ListView.setItems(allDestinations); // Show all destinations if search is empty
+        } else {
+            ObservableList<Destination> filteredList = FXCollections.observableArrayList();
+            for (Destination dest : allDestinations) {
+                if ((dest.getNom_destination() != null && dest.getNom_destination().toLowerCase().contains(searchText.toLowerCase())) ||
+                        (dest.getDecription() != null && dest.getDecription().toLowerCase().contains(searchText.toLowerCase())) ||
+                        (dest.getImage_destination() != null && dest.getImage_destination().toLowerCase().contains(searchText.toLowerCase())) ||
+                        String.valueOf(dest.getLatitude()).contains(searchText) ||
+                        String.valueOf(dest.getLongitude()).contains(searchText) ||
+                        String.valueOf(dest.getTemperature()).contains(searchText) ||
+                        String.valueOf(dest.getRate()).contains(searchText)) {
+                    filteredList.add(dest); // Add if matches
+                }
+            }
+            ListView.setItems(filteredList); // Update ListView
+        }
+    }
     @FXML
     void initialize() {
         afficherDestinations();
+        recherche.textProperty().addListener((observable, oldValue, newValue) -> {
+            filtrerDestinations(newValue);
+        });
+        triComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> trierDestinations(newValue));
+    }
+    private void trierDestinations(String critere) {
+        if (allDestinations == null) return; // Vérifie que la liste n'est pas vide
+
+        List<Destination> sortedList = new ArrayList<>(allDestinations);
+
+        switch (critere) {
+            case "Nom":
+                sortedList.sort(Comparator.comparing(Destination::getNom_destination));
+                break;
+            case "Température":
+                sortedList.sort(Comparator.comparingDouble(Destination::getTemperature));
+                break;
+            case "Rating":
+                sortedList.sort(Comparator.comparingDouble(Destination::getRate).reversed()); // Tri décroissant
+                break;
+        }
+
+        ListView.setItems(FXCollections.observableArrayList(sortedList)); // Mettre à jour la ListView
     }
 
     private void afficherDestinations() {
         try {
             List<Destination> destinations = destinationService.getAll();
             ListView.setItems(FXCollections.observableArrayList(destinations));
+            ListView.setItems(allDestinations); // Show in ListView
+            ListView.setItems(FXCollections.observableArrayList(destinations));
+
 
             ListView.setCellFactory(new Callback<>() {
                 @Override
@@ -313,6 +378,69 @@ public class ListDestinationBack {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void openMapToAddDestination(ActionEvent event) {
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        webEngine.setJavaScriptEnabled(true);
+
+        // Load the actual map.html directly instead of loading a temporary page first
+        webEngine.load(getClass().getResource("/map.html").toExternalForm());
+
+        webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                JSObject window = (JSObject) webEngine.executeScript("window");
+
+                // Check if callback is already set
+                if (window.getMember("javafxCallback") == null || !(window.getMember("javafxCallback") instanceof JavaBridge)) {
+                    JavaBridge javaBridge = new JavaBridge();
+                    window.setMember("javafxCallback", javaBridge);
+                    System.out.println("JavaFX Callback injected successfully!");
+                }
+            }
+        });
+
+        Stage mapStage = new Stage();
+        mapStage.setScene(new Scene(webView, 800, 600));
+        mapStage.setTitle("Select Destination");
+        mapStage.show();
+    }
+
+
+    // Java bridge class to handle click events from the map
+    public class JavaBridge {
+        DestinationService ds = new DestinationService();
+
+        public void onMapClick(String placeName, double latitude, double longitude) {
+            System.out.println("Callback executed with: " + placeName + " (" + latitude + ", " + longitude + ")");
+
+            Platform.runLater(() -> {
+                // Show an input dialog to get the description
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Add Destination");
+                dialog.setHeaderText("Enter a description for " + placeName);
+                dialog.setContentText("Description:");
+
+                dialog.showAndWait().ifPresent(description -> {
+                    // Save to database
+                    Destination newDestination = new Destination();
+                    newDestination.setNom_destination(placeName);
+                    newDestination.setDecription(description);
+                    newDestination.setLatitude(latitude);
+                    newDestination.setLongitude(longitude);
+                    newDestination.setTemperature(25.0); // Default value
+                    newDestination.setRate(5.0); // Default rating
+                    newDestination.setImage_destination(""); // No image
+
+                    try {
+                        ds.create(newDestination);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            });
         }
     }
 

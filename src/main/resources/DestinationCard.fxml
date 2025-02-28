@@ -13,6 +13,7 @@
         <Label fx:id="descriptionLabel" text="Short description..." wrapText="true" />
         <Label fx:id="ratingLabel" style="-fx-text-fill: gold;" text="⭐ 4.5" />
       <Button mnemonicParsing="false" onAction="#handleShowActivities" text="show activities" />
+      <Button mnemonicParsing="false" onAction="#showMap" text="Show on Map" />
       <Button mnemonicParsing="false" onAction="#handleAvis" text="give notice" />
     </VBox>
 </AnchorPane>
