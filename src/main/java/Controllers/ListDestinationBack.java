@@ -22,9 +22,7 @@ import javafx.util.Callback;
 import models.Activite;
 import models.Destination;
 import models.Avis;
-
 import netscape.javascript.JSObject;
-
 import services.ActiviteService;
 import services.DestinationService;
 import services.AvisService;
