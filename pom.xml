@@ -29,7 +29,6 @@
             <artifactId>javax.mail</artifactId>
             <version>1.6.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -42,7 +41,6 @@
             <artifactId>javafx-web</artifactId>
             <version>17.0.6</version>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
