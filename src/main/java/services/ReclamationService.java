@@ -1,11 +1,18 @@
 package services;
 
+import javafx.scene.control.Button;
 import models.Reclamation;
 import Utils.MyDb;
-
+import java.util.concurrent.TimeUnit;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import java.io.IOException;
 
 public class ReclamationService implements Crud<Reclamation> {
     private  Connection conn;
@@ -24,6 +31,8 @@ public class ReclamationService implements Crud<Reclamation> {
     public boolean create(Reclamation obj) throws Exception {
         // Vérification de la date avant l'insertion
         Timestamp now = new Timestamp(System.currentTimeMillis());
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(now.getTime());
+
         if (obj.getDate().after(now)) {
             throw new IllegalArgumentException("La date ne peut pas être dans le futur");
         }
@@ -52,6 +61,7 @@ public class ReclamationService implements Crud<Reclamation> {
     public void update(Reclamation obj) throws Exception {
         // Vérification de la date avant la mise à jour
         Timestamp now = new Timestamp(System.currentTimeMillis());
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(now.getTime());
         if (obj.getDate().after(now)) {
             throw new IllegalArgumentException("La date ne peut pas être dans le futur");
         }
@@ -134,5 +144,17 @@ public class ReclamationService implements Crud<Reclamation> {
             System.out.println(e.getMessage());
         }
         return obj;
+    }
+
+    @FXML
+    void retourTest(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            Parent root = loader.load();
+            Scene scene = ((Button) event.getSource()).getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de la page Test: " + e.getMessage());
+        }
     }
 }

@@ -75,4 +75,15 @@ public class TestController {
             throw new RuntimeException(e);
         }
     }
+
+    @FXML
+    void openGemini(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/apiGemini.fxml"));
+            Parent root = loader.load();
+            combo_rec.getScene().setRoot(root);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
