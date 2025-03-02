@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -12,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.SecurityUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -145,98 +147,59 @@ public class SignupController implements Initializable {
 
     @FXML
     protected void handleSignup() {
-        messageLabel.setStyle("-fx-text-fill: #B05A36;");
-        
-        String nom = nomField.getText().trim();
-        String prenom = prenomField.getText().trim();
+        String name = nomField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
-        String userType = userTypeComboBox.getValue();
+        String type = "user"; // default type
 
-        // Validation
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || 
-            password.isEmpty() || confirmPassword.isEmpty() || userType == null) {
-            messageLabel.setText("Veuillez remplir tous les champs");
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            messageLabel.setText("Please fill in all fields");
+            messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        if (profilePhotoPath == null) {
-            messageLabel.setText("Veuillez ajouter une photo de profil");
-            return;
-        }
-
-        if (!EMAIL_PATTERN.matcher(email).matches()) {
-            messageLabel.setText("Veuillez entrer une adresse email valide");
-            return;
-        }
-
-        if (password.length() < 6) {
-            messageLabel.setText("Le mot de passe doit contenir au moins 6 caractères");
-            return;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            messageLabel.setText("Les mots de passe ne correspondent pas");
-            return;
-        }
-
-        // Only validate card photos for Commerçant and Guide
-        if (!"Touriste".equals(userType)) {
-            if (cardPhoto1Path == null || cardPhoto2Path == null) {
-                messageLabel.setText("Veuillez ajouter les photos de votre carte professionnelle");
-                return;
-            }
-        }
-
-        // Database operation
+        // Load Gmail verification page
         try {
-            Connection conn = MyDb.getInstance().getConnection();
-            String query = "INSERT INTO user (nom, prenom, email, mot_de_passe, photo_profil, type_user, photo_carte_f1, photo_carte_f2) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(query);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GmailVerification.fxml"));
+            Parent root = loader.load();
             
-            pstmt.setString(1, nom);
-            pstmt.setString(2, prenom);
-            pstmt.setString(3, email);
-            pstmt.setString(4, password);
-            pstmt.setString(5, profilePhotoPath);
-            pstmt.setString(6, userType);
+            GmailVerificationController controller = loader.getController();
+            controller.initData(name, password, type);
             
-            // Set card photos to null for Touriste
-            if ("Touriste".equals(userType)) {
-                pstmt.setNull(7, Types.VARCHAR);
-                pstmt.setNull(8, Types.VARCHAR);
-            } else {
-                pstmt.setString(7, cardPhoto1Path);
-                pstmt.setString(8, cardPhoto2Path);
-            }
+            Stage stage = (Stage) nomField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            messageLabel.setText("Failed to load Gmail verification page");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
+        }
+    }
 
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                messageLabel.setStyle("-fx-text-fill: #C6B9AB;");
-                messageLabel.setText("Inscription réussie! Veuillez vous connecter.");
-                clearFields();
+    public void createVerifiedAccount(String name, String email, String password, String type) {
+        try {
+            // Hash the password before storing
+            String hashedPassword = SecurityUtil.hashPassword(password);
+            
+            Connection conn = MyDb.getInstance().getConnection();
+            String query = "INSERT INTO user (nom, email, mot_de_passe, type_user, is_verified) VALUES (?, ?, ?, ?, true)";
+            
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, name);
+                pstmt.setString(2, email);
+                pstmt.setString(3, hashedPassword);
+                pstmt.setString(4, type);
+                pstmt.executeUpdate();
                 
-                // Automatically switch to login after 2 seconds
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(2000);
-                        javafx.application.Platform.runLater(this::switchToLogin);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }).start();
+                // Load login page after successful signup
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) messageLabel.getScene().getWindow();
+                stage.setScene(new Scene(root));
             }
-        } catch (SQLException e) {
-            if (e.getMessage().contains("Duplicate entry")) {
-                if (e.getMessage().contains("email")) {
-                    messageLabel.setText("Cette adresse email est déjà utilisée");
-                } else {
-                    messageLabel.setText("Un compte existe déjà avec ces informations");
-                }
-            } else {
-                messageLabel.setText("Erreur: " + e.getMessage());
-            }
+        } catch (Exception e) {
+            messageLabel.setText("Failed to create account. Please try again.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
         }
     }
 
