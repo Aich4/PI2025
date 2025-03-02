@@ -80,7 +80,7 @@ public class LoginController {
 
         try {
             Connection conn = MyDb.getInstance().getConnection();
-            String query = "SELECT id, mot_de_passe, type_user, is_verified FROM user WHERE email = ?";
+            String query = "SELECT id, mot_de_passe, type_user FROM user WHERE email = ?";
             
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, email);
@@ -90,22 +90,8 @@ public class LoginController {
                     String hashedPassword = rs.getString("mot_de_passe");
                     String userType = rs.getString("type_user");
                     int userId = rs.getInt("id");
-                    boolean isVerified = rs.getBoolean("is_verified");
 
                     if (SecurityUtil.checkPassword(password, hashedPassword)) {
-                        if (!isVerified && !email.equals("admin")) {
-                            // Load email verification page
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EmailVerification.fxml"));
-                            Parent root = loader.load();
-                            
-                            EmailVerificationController controller = loader.getController();
-                            controller.initData(email, userId);
-                            
-                            Stage stage = (Stage) emailField.getScene().getWindow();
-                            stage.setScene(new Scene(root));
-                            return;
-                        }
-
                         // Load appropriate page based on user type
                         if (email.equals("admin")) {
                             loadDashboard(userId);

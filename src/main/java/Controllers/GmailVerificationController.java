@@ -12,12 +12,14 @@ public class GmailVerificationController {
     @FXML private TextField gmailField;
     @FXML private Label messageLabel;
     
-    private String name;
+    private String nom;
+    private String prenom;
     private String password;
     private String type;
 
-    public void initData(String name, String password, String type) {
-        this.name = name;
+    public void initData(String nom, String prenom, String password, String type) {
+        this.nom = nom;
+        this.prenom = prenom;
         this.password = password;
         this.type = type;
     }
@@ -51,7 +53,7 @@ public class GmailVerificationController {
             Parent root = loader.load();
             
             SignupController controller = loader.getController();
-            controller.createVerifiedAccount(name, gmail, password, type);
+            controller.createVerifiedAccount(nom, gmail, password, type);
             
             Stage stage = (Stage) gmailField.getScene().getWindow();
             stage.setScene(new Scene(root));
