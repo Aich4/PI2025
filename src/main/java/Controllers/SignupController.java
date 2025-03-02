@@ -150,26 +150,40 @@ public class SignupController implements Initializable {
         String name = nomField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
-        String type = "user"; // default type
+        String confirmPassword = confirmPasswordField.getText();
+        String userType = userTypeComboBox.getValue();
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        // Validation
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || userType == null) {
             messageLabel.setText("Please fill in all fields");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        // Load Gmail verification page
+        if (!email.endsWith("@gmail.com")) {
+            messageLabel.setText("Please use a Gmail address");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            messageLabel.setText("Passwords do not match");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        // Proceed to Gmail verification
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GmailVerification.fxml"));
             Parent root = loader.load();
             
             GmailVerificationController controller = loader.getController();
-            controller.initData(name, password, type);
+            controller.initData(name, password, userType);
             
             Stage stage = (Stage) nomField.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            messageLabel.setText("Failed to load Gmail verification page");
+            messageLabel.setText("Error loading Gmail verification page");
             messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
         }
@@ -177,7 +191,7 @@ public class SignupController implements Initializable {
 
     public void createVerifiedAccount(String name, String email, String password, String type) {
         try {
-            // Hash the password before storing
+            // Hash the password
             String hashedPassword = SecurityUtil.hashPassword(password);
             
             Connection conn = MyDb.getInstance().getConnection();
@@ -190,14 +204,22 @@ public class SignupController implements Initializable {
                 pstmt.setString(4, type);
                 pstmt.executeUpdate();
                 
-                // Load login page after successful signup
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) messageLabel.getScene().getWindow();
-                stage.setScene(new Scene(root));
+                // Show success message and redirect to login
+                messageLabel.setText("Account created successfully! Please log in.");
+                messageLabel.setStyle("-fx-text-fill: green;");
+                
+                // Switch to login page after 2 seconds
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(2000);
+                        javafx.application.Platform.runLater(this::switchToLogin);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }).start();
             }
         } catch (Exception e) {
-            messageLabel.setText("Failed to create account. Please try again.");
+            messageLabel.setText("Failed to create account: " + e.getMessage());
             messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
         }

@@ -78,59 +78,22 @@ public class LoginController {
             return;
         }
 
-        // Special handling for admin login
-        if (email.equals("admin") && password.equals("admin")) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                return;
-            } catch (Exception e) {
-                messageLabel.setText("Failed to load dashboard");
-                messageLabel.setStyle("-fx-text-fill: red;");
-                e.printStackTrace();
-                return;
-            }
-        }
-
         try {
             Connection conn = MyDb.getInstance().getConnection();
-            String query = "SELECT * FROM user WHERE email = ?";
+            String query = "SELECT id, mot_de_passe, type_user, is_verified FROM user WHERE email = ?";
+            
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, email);
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
-                    String storedPassword = rs.getString("mot_de_passe");
-                    boolean isAuthenticated = false;
-                    
-                    // Check if the stored password is already hashed
-                    if (storedPassword.startsWith("$2")) {
-                        // Password is hashed, verify with BCrypt
-                        isAuthenticated = SecurityUtil.checkPassword(password, storedPassword);
-                    } else {
-                        // Password is not hashed, compare directly and update if matches
-                        if (password.equals(storedPassword)) {
-                            isAuthenticated = true;
-                            // Hash and update the password
-                            String hashedPassword = SecurityUtil.hashPassword(password);
-                            String updateQuery = "UPDATE user SET mot_de_passe = ? WHERE email = ?";
-                            try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
-                                updateStmt.setString(1, hashedPassword);
-                                updateStmt.setString(2, email);
-                                updateStmt.executeUpdate();
-                            }
-                        }
-                    }
-                    
-                    if (isAuthenticated) {
-                        int userId = rs.getInt("id");
-                        String type = rs.getString("type_user");
-                        boolean isVerified = rs.getBoolean("is_verified");
+                    String hashedPassword = rs.getString("mot_de_passe");
+                    String userType = rs.getString("type_user");
+                    int userId = rs.getInt("id");
+                    boolean isVerified = rs.getBoolean("is_verified");
 
-                        // Check if email is verified for non-admin users
-                        if (!"admin".equals(type) && !isVerified) {
+                    if (SecurityUtil.checkPassword(password, hashedPassword)) {
+                        if (!isVerified && !email.equals("admin")) {
                             // Load email verification page
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/EmailVerification.fxml"));
                             Parent root = loader.load();
@@ -143,8 +106,8 @@ public class LoginController {
                             return;
                         }
 
-                        // Navigate based on user type
-                        if ("admin".equals(type)) {
+                        // Load appropriate page based on user type
+                        if (email.equals("admin")) {
                             loadDashboard(userId);
                         } else {
                             loadFrontOffice(userId);
@@ -159,7 +122,7 @@ public class LoginController {
                 }
             }
         } catch (Exception e) {
-            messageLabel.setText("An error occurred. Please try again.");
+            messageLabel.setText("Error during login: " + e.getMessage());
             messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
         }
