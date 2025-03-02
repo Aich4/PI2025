@@ -15,7 +15,11 @@ public class DestinationService implements CrudInterface<Destination> {
     public DestinationService() {connection = MyDb.getInstance().getConnection();}
     @Override
     public void create(Destination obj) throws Exception {
-        String sql = "insert into destination(nom_destination,description,image_destination,latitude,longitude,temperature,rate) values(?,?,?,?,?,?,?)";
+        if (isNameExists(obj.getNom_destination())) {
+            throw new Exception("A destination with this name already exists!");
+        }
+
+        String sql = "INSERT INTO destination(nom_destination,description,image_destination,latitude,longitude,temperature,rate) VALUES (?,?,?,?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, obj.getNom_destination());
         ps.setString(2, obj.getDecription());
@@ -27,9 +31,14 @@ public class DestinationService implements CrudInterface<Destination> {
         ps.executeUpdate();
     }
 
+
     @Override
     public void update(Destination obj) throws Exception {
-        String sql = "update destination set nom_destination = ?,description=?,image_destination=?,latitude=?,longitude=?,temperature=?,rate=? where id=?";
+        if (isNameExistsForOtherId(obj.getNom_destination(), obj.getId())) {
+            throw new Exception("Another destination with this name already exists!");
+        }
+
+        String sql = "UPDATE destination SET nom_destination = ?, description = ?, image_destination = ?, latitude = ?, longitude = ?, temperature = ?, rate = ? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, obj.getNom_destination());
         ps.setString(2, obj.getDecription());
@@ -40,8 +49,8 @@ public class DestinationService implements CrudInterface<Destination> {
         ps.setDouble(7, obj.getRate());
         ps.setInt(8, obj.getId());
         ps.executeUpdate();
-
     }
+
 
     @Override
     public void delete(int id) throws Exception {
@@ -97,8 +106,14 @@ public class DestinationService implements CrudInterface<Destination> {
     }
     public boolean updatee(Destination destination) {
         try {
-            // Example: Update the destination in the database
-            String sql = "update destination set nom_destination = ?,description=?,image_destination=?,latitude=?,longitude=?,temperature=?,rate=? where id=?";
+            // Check if the name exists for another record
+            if (isNameExistsForOtherId(destination.getNom_destination(), destination.getId())) {
+                System.out.println("Another destination with this name already exists!");
+                return false; // Prevent update if name is taken
+            }
+
+            // Update the destination if the name is unique
+            String sql = "UPDATE destination SET nom_destination = ?, description = ?, image_destination = ?, latitude = ?, longitude = ?, temperature = ?, rate = ? WHERE id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, destination.getNom_destination());
             ps.setString(2, destination.getDecription());
@@ -116,4 +131,32 @@ public class DestinationService implements CrudInterface<Destination> {
             return false;
         }
     }
+
+    private boolean isNameExists(String name) throws Exception {
+        String sql = "SELECT COUNT(*) FROM destination WHERE nom_destination = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // If count > 0, name exists
+        }
+        return false;
+    }
+    private boolean isNameExistsForOtherId(String name, int id) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM destination WHERE nom_destination = ? AND id <> ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, name);
+        ps.setInt(2, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // Returns true if name exists in another record
+        }
+        return false;
+    }
+
+
+
+
 }
