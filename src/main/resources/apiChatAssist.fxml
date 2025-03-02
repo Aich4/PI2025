@@ -8,5 +8,5 @@
     <TextArea fx:id="inputField" layoutX="48.0" layoutY="269.0" prefHeight="38.0" prefWidth="478.0" promptText="Enter your message..." />
     <Button fx:id="sendButton" layoutX="461.0" layoutY="307.0" text="Send" />
     <TextArea fx:id="outputField" editable="false" layoutX="48.0" layoutY="78.0" />
-    <Button layoutX="48.0" layoutY="24.0" mnemonicParsing="false" onAction="TestController" text="Retour" />
+    <!--Button layoutX="48.0" layoutY="24.0" mnemonicParsing="false" onAction="TestController" text="Retour" /-->
 </AnchorPane>

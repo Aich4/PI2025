@@ -25,6 +25,10 @@ public class Reponse {
     public Reponse(int idReclamation, Date date, String contenu) {
     }
 
+    public Reponse() {
+
+    }
+
     // Méthodes
     public void afficher_rep() {
         // Implémentation pour afficher une réponse

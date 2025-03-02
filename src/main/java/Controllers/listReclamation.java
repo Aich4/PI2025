@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import models.Reclamation;
@@ -27,6 +28,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
 
 
 public class listReclamation {
@@ -40,11 +44,13 @@ public class listReclamation {
     @FXML
     private ListView<Reclamation> listRec;
 
+
     private ObservableList<Reclamation> allReclamations;
     private ReclamationService reclamationService;
 
     public listReclamation() {
         this.reclamationService = new ReclamationService();
+        this.reponseService = new ReponseService();
     }
 
     @FXML
@@ -76,40 +82,169 @@ public class listReclamation {
             allReclamations = FXCollections.observableArrayList(reclamations);
             listRec.setItems(allReclamations);
 
-            listRec.setCellFactory(lv -> new ListCell<Reclamation>() {
-                @Override
-                protected void updateItem(Reclamation rec, boolean empty) {
-                    super.updateItem(rec, empty);
-                    if (empty || rec == null) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        VBox container = new VBox(5);
-
-                        Label infoLabel = new Label(
-                            "Type: " + rec.getType() +
-                            "\nDescription: " + rec.getDescription() +
-                            "\nDate: " + rec.getDate() +
-                            "\nÉtat: " + rec.getEtatDescription()
-                        );
-
-                        HBox buttonBox = new HBox(5);
-                        Button btnModifier = new Button("Modifier");
-                        Button btnSupprimer = new Button("Supprimer");
-
-                        buttonBox.getChildren().addAll(btnModifier, btnSupprimer);
-
-                        btnModifier.setOnAction(event -> showModifyPopup(rec));
-                        btnSupprimer.setOnAction(event -> deleteReclamation(rec));
-
-                        container.getChildren().addAll(infoLabel, buttonBox);
-                        setGraphic(container);
-                    }
-                }
-            });
+            setupCellFactory();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setupCellFactory() {
+        listRec.setCellFactory(lv -> new ListCell<Reclamation>() {
+            @Override
+            protected void updateItem(Reclamation rec, boolean empty) {
+                super.updateItem(rec, empty);
+                if (empty || rec == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox container = createReclamationCell(rec);
+                    setGraphic(container);
+                }
+            }
+        });
+    }
+
+    private HBox createReclamationCell(Reclamation rec) {
+        HBox container = new HBox(10);
+        container.setPadding(new Insets(5));
+        container.getStyleClass().add("list-cell-container");
+
+        // Informations de la réclamation
+        VBox infoContainer = new VBox(5);
+        Label typeLabel = new Label("Type: " + rec.getType());
+        Label descLabel = new Label("Description: " + rec.getDescription());
+        Label dateLabel = new Label("Date: " + rec.getDate().toString());
+        Label etatLabel = new Label("État: " + rec.getEtatDescription());
+
+        // Stylisation des labels
+        typeLabel.setStyle("-fx-font-weight: bold;");
+        etatLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: " + getEtatColor(rec.getEtat()));
+
+        infoContainer.getChildren().addAll(typeLabel, descLabel, dateLabel, etatLabel);
+
+        // Conteneur pour les boutons
+        VBox buttonContainer = new VBox(5);
+        buttonContainer.setAlignment(Pos.CENTER_RIGHT);
+
+        // Boutons d'action
+        Button repondreBtn = new Button("Répondre");
+        Button modifierBtn = new Button("Modifier");
+        Button supprimerBtn = new Button("Supprimer");
+
+        // Style des boutons
+        repondreBtn.getStyleClass().add("action-button");
+        modifierBtn.getStyleClass().add("action-button");
+        supprimerBtn.getStyleClass().add("action-button");
+
+        // Actions des boutons
+        repondreBtn.setOnAction(e -> showReponsePopup(rec));
+        modifierBtn.setOnAction(e -> showModifyPopup(rec));
+        supprimerBtn.setOnAction(e -> deleteReclamation(rec));
+
+        buttonContainer.getChildren().addAll(repondreBtn, modifierBtn, supprimerBtn);
+
+        // Ajout des conteneurs à la cellule
+        container.getChildren().addAll(infoContainer, buttonContainer);
+        HBox.setHgrow(infoContainer, Priority.ALWAYS);
+
+        return container;
+    }
+
+    private String getEtatColor(String etat) {
+        switch (etat) {
+            case "0": return "red"; // Non traité
+            case "1": return "orange"; // En cours
+            case "2": return "green"; // Traité
+            default: return "black";
+        }
+    }
+
+    private void showReponsePopup(Reclamation rec) {
+        try {
+            Stage stage = new Stage();
+            VBox layout = new VBox(10);
+            layout.setPadding(new Insets(10));
+            
+            // Afficher les informations de la réclamation
+            Label recInfoLabel = new Label(
+                "Détails de la réclamation:\n" +
+                "Type: " + rec.getType() + "\n" +
+                "Description: " + rec.getDescription()
+            );
+            recInfoLabel.setStyle("-fx-font-weight: bold;");
+            
+            // Champs pour la réponse
+            Label contentLabel = new Label("Votre réponse :");
+            TextArea contentArea = new TextArea();
+            contentArea.setPromptText("Entrez votre réponse ici...");
+            contentArea.setPrefRowCount(4);
+            
+            // Date actuelle en Timestamp
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            
+            Button submitButton = new Button("Envoyer la réponse");
+            submitButton.setOnAction(e -> {
+                String contenu = contentArea.getText().trim();
+                
+                if (contenu.isEmpty()) {
+                    showAlert("Erreur", "Le contenu de la réponse ne peut pas être vide.", Alert.AlertType.ERROR);
+                    return;
+                }
+                
+                try {
+                    // Créer la réponse
+                    Reponse reponse = new Reponse();
+                    reponse.setId_rec(rec.getIdReclamation());
+                    reponse.setContenu_rep(contenu);
+                    reponse.setDate(now);
+                    
+                    // Sauvegarder la réponse
+                    if (reponseService.create(reponse)) {
+                        // Mettre à jour l'état de la réclamation
+                        rec.setEtat("1"); // En cours de traitement
+                        reclamationService.update(rec);
+                        
+                        showAlert("Succès", "Réponse envoyée avec succès", Alert.AlertType.INFORMATION);
+                        stage.close();
+                        loadReclamations(); // Rafraîchir la liste
+                    }
+                } catch (Exception ex) {
+                    showAlert("Erreur", "Erreur lors de l'envoi de la réponse: " + ex.getMessage(), Alert.AlertType.ERROR);
+                }
+            });
+            
+            // Style du bouton
+            submitButton.getStyleClass().add("action-button");
+            
+            layout.getChildren().addAll(
+                recInfoLabel,
+                new Separator(),
+                contentLabel,
+                contentArea,
+                submitButton
+            );
+            
+            // Style de la fenêtre
+            layout.setStyle("-fx-background-color: white;");
+            Scene scene = new Scene(layout, 400, 300);
+            scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+            
+            stage.setScene(scene);
+            stage.setTitle("Répondre à la réclamation");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors de l'ouverture de la fenêtre de réponse", Alert.AlertType.ERROR);
+        }
+    }
+
+    private void showAlert(String title, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     private void filtrerReclamations(String searchText) {
@@ -159,43 +294,6 @@ public class listReclamation {
         }
 
         listRec.setItems(FXCollections.observableArrayList(sorted));
-    }
-
-    private void showResponsePopup(Reclamation rec, Button sourceButton) {
-        Popup popup = new Popup();
-
-        TextField contenuField = new TextField();
-        contenuField.setPromptText("Contenu de la réponse");
-
-        DatePicker datePicker = new DatePicker();
-        Button saveButton = new Button("Enregistrer");
-
-        saveButton.setOnAction(event -> {
-            String contenu = contenuField.getText();
-            LocalDate date = datePicker.getValue();
-
-            if (contenu.isEmpty() || date == null) {
-                System.out.println("Veuillez remplir tous les champs.");
-                return;
-            }
-
-            Reponse newReponse = new Reponse(rec.getIdReclamation(), Date.valueOf(date), contenu);
-            ReponseService service = new ReponseService();
-            try {
-                if (service.create(newReponse)) {
-                    System.out.println("Réponse ajoutée avec succès !");
-                    popup.hide();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        VBox popupLayout = new VBox(10, new Label("Répondre à la réclamation"), contenuField, datePicker, saveButton);
-        popupLayout.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: black;");
-
-        popup.getContent().add(popupLayout);
-        popup.show(sourceButton.getScene().getWindow(), sourceButton.localToScreen(0, 0).getX() + 50, sourceButton.localToScreen(0, 0).getY() + 30);
     }
 
     private void showModifyPopup(Reclamation rec) {

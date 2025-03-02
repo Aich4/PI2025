@@ -54,12 +54,12 @@
       </VBox>
 
       <!-- Logo et bouton d'affichage -->
-      <ImageView fitHeight="68.0" fitWidth="172.0" layoutX="19.0" layoutY="24.0">
+      <ImageView fitHeight="68.0" fitWidth="190.0" layoutX="19.0" layoutY="24.0">
          <image>
             <Image url="@LOGO.png" />
          </image>
       </ImageView>
-      <HBox layoutX="580.0" layoutY="505.0" spacing="10">
+      <HBox layoutX="565.0" layoutY="24.0" spacing="10">
     <Button mnemonicParsing="false" onAction="#listRec" text="Affichage" />
     <Button mnemonicParsing="false" onAction="#openGemini" text="Gemini AI" />
          <Button mnemonicParsing="false" text="Assitance" />

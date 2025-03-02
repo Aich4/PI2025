@@ -1,5 +1,6 @@
 .white-background{
-    -fx-background-color: #fff;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
 }
 .tranparent{
     -fx-background-color: rgba(0,0,0,0);
@@ -22,4 +23,141 @@
     -fx-text-fill: white; /* Set text color */
     -fx-font-weight: bold; /* Set text bold */
     -fx-background-radius: 20; /* Set the radius for rounded corners */
+}
+.list-cell-container {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.list-cell-container:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.action-button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: #0056b3;
+}
+
+.delete-button {
+    -fx-background-color: #dc3545;
+}
+
+.delete-button:hover {
+    -fx-background-color: #c82333;
+}
+
+.nav-button {
+    -fx-padding: 10;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 5;
+}
+
+.list-cell {
+    -fx-padding: 10;
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.list-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.button {
+    -fx-background-radius: 20;
+    -fx-padding: 8 15;
+}
+
+.text-field, .combo-box {
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+}
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.nav-menu {
+    -fx-spacing: 10;
+}
+
+.nav-header {
+    -fx-font-size: 22px;
+    -fx-font-family: "Cambria Math";
+    -fx-padding: 0 0 10 0;
+}
+
+.nav-item {
+    -fx-padding: 8;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.nav-item:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+    -fx-font-family: "Cambria Math";
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+.nav-button:hover {
+    -fx-text-fill: #000000;
+}
+
+.search-field {
+    -fx-background-radius: 20;
+    -fx-padding: 8 15;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+}
+
+.filter-combo {
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+}
+
+.custom-list-view {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.custom-list-view .list-cell {
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 1;
+    -fx-margin: 5;
+}
+
+.custom-list-view .list-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.main-content {
+    -fx-padding: 20;
 }

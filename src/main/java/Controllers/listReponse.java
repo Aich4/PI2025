@@ -27,6 +27,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.geometry.Insets;
 
 public class listReponse {
     @FXML
@@ -63,27 +64,46 @@ public class listReponse {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    VBox container = new VBox(5);
-                    
-                    // Informations de la réponse
-                    Label contenuLabel = new Label("Contenu: " + reponse.getContenu_rep());
-                    Label dateLabel = new Label("Date: " + reponse.getDate_rep());
-                    Label reclamationLabel = new Label("ID Réclamation: " + reponse.getId_rec());
-                    
+                    VBox container = new VBox(8);
+                    container.setPadding(new Insets(10));
+                    container.setStyle("-fx-background-color: white; -fx-border-color: #E8E8E8; -fx-border-width: 0 0 1 0;");
+
+                    // En-tête avec la date
+                    Label dateLabel = new Label(reponse.getDate_rep().toString());
+                    dateLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #4682B4; -fx-font-size: 14px;");
+
+                    // Contenu de la réponse
+                    Label contenuLabel = new Label(reponse.getContenu_rep());
+                    contenuLabel.setWrapText(true);
+                    contenuLabel.setStyle("-fx-text-fill: #333333; -fx-font-size: 13px;");
+
+                    // ID Réclamation
+                    Label idRecLabel = new Label("Réclamation #" + reponse.getId_rec());
+                    idRecLabel.setStyle("-fx-font-style: italic; -fx-text-fill: #666666; -fx-font-size: 12px;");
+
                     // Boutons d'action
-                    HBox buttonBox = new HBox(5);
+                    HBox buttonBox = new HBox(10);
+                    buttonBox.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
                     Button modifierBtn = new Button("Modifier");
-                    Button supprimerBtn = new Button("Supprimer");
+                    modifierBtn.setStyle("-fx-background-color: #4682B4; -fx-text-fill: white;");
                     
+                    Button supprimerBtn = new Button("Supprimer");
+                    supprimerBtn.setStyle("-fx-background-color: #DC143C; -fx-text-fill: white;");
+
                     modifierBtn.setOnAction(event -> modifierReponse(reponse));
                     supprimerBtn.setOnAction(event -> supprimerReponse(reponse));
-                    
+
                     buttonBox.getChildren().addAll(modifierBtn, supprimerBtn);
-                    
-                    // Style
-                    container.setStyle("-fx-padding: 10; -fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 0 0 1 0;");
-                    container.getChildren().addAll(contenuLabel, dateLabel, reclamationLabel, buttonBox);
-                    
+
+                    container.getChildren().addAll(dateLabel, contenuLabel, idRecLabel, buttonBox);
+
+                    // Effet de survol
+                    container.setOnMouseEntered(e -> 
+                        container.setStyle("-fx-background-color: #F5F5F5; -fx-border-color: #E8E8E8; -fx-border-width: 0 0 1 0;"));
+                    container.setOnMouseExited(e -> 
+                        container.setStyle("-fx-background-color: white; -fx-border-color: #E8E8E8; -fx-border-width: 0 0 1 0;"));
+
                     setGraphic(container);
                 }
             }
@@ -160,6 +180,18 @@ public class listReponse {
     void retour(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            Parent root = loader.load();
+            Scene scene = ((Button) event.getSource()).getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            showAlert("Erreur", "Erreur lors du chargement de la page: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void retourner(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/listReclamation.fxml"));
             Parent root = loader.load();
             Scene scene = ((Button) event.getSource()).getScene();
             scene.setRoot(root);
