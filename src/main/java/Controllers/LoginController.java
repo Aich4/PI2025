@@ -7,222 +7,259 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import utils.MyDb;
-import utils.EmailValidator;
-import javax.mail.*;
-import javax.mail.internet.*;
-import java.util.Properties;
-import java.util.UUID;
-import java.time.LocalDateTime;
+import utils.SecurityUtil;
+import utils.EmailUtil;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import java.util.Optional;
+import java.io.FileNotFoundException;
 
 public class LoginController {
-    @FXML
-    private TextField emailField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private Label messageLabel;
     
-    @FXML
-    private PasswordField passwordField;
-    
-    @FXML
-    private Button loginButton;
-    
-    @FXML
-    private Hyperlink signupLink;
-    
-    @FXML
-    private Hyperlink forgotPasswordLink;
-    
-    @FXML
-    private Label messageLabel;
+    private static final String ADMIN_PASSWORD = "12345678";
 
     @FXML
-    protected void handleLogin() throws IOException {
+    protected void handleAdminAccess() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Admin Access");
+        dialog.setHeaderText("Enter Admin Password");
+        dialog.setContentText("Password:");
+
+        // Get the password field from the dialog
+        PasswordField pwd = new PasswordField();
+        pwd.setPrefWidth(dialog.getEditor().getPrefWidth());
+        dialog.getDialogPane().setContent(pwd);
+
+        // Request focus on the password field by default
+        pwd.requestFocus();
+
+        // Convert the result using the password field instead of the editor
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == ButtonType.OK) {
+                return pwd.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(password -> {
+            if (password.equals(ADMIN_PASSWORD)) {
+                try {
+                    // Load the admin login page
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminLogin.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) emailField.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                } catch (Exception e) {
+                    messageLabel.setText("Failed to load admin login page");
+                    messageLabel.setStyle("-fx-text-fill: red;");
+                    e.printStackTrace();
+                }
+            } else {
+                messageLabel.setText("Invalid admin password");
+                messageLabel.setStyle("-fx-text-fill: red;");
+            }
+        });
+    }
+
+    @FXML
+    protected void handleLogin() {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            messageLabel.setText("Veuillez remplir tous les champs");
+            messageLabel.setText("Please fill in all fields");
+            messageLabel.setStyle("-fx-text-fill: red;");
             return;
-        }
-        if(email.equals("admin") || password.equals("admin")){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-            try {
-                Parent root = loader.load();
-                emailField.getScene().setRoot(root);
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
 
         try {
             Connection conn = MyDb.getInstance().getConnection();
-            String query = "SELECT id, type_user FROM user WHERE email = ? AND mot_de_passe = ?";
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, email);
-            pstmt.setString(2, password);
+            String query = "SELECT id, mot_de_passe, type_user, is_verified FROM user WHERE email = ?";
             
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                messageLabel.setStyle("-fx-text-fill: #C6B9AB;");
-                messageLabel.setText("Connexion réussie!");
-                
-                int userId = rs.getInt("id");
-                String userType = rs.getString("type_user");
-                
-                // Load appropriate view based on user type
-                String fxmlPath = userType.equals("admin") ? "/Dashboard.fxml" : "/Frontoffice.fxml";
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
-                Parent root = fxmlLoader.load();
-                
-                // Set user ID in the appropriate controller
-                if ("admin".equalsIgnoreCase(userType)) {
-                    Dashboard controller = fxmlLoader.getController();
-                    controller.setUserId(userId);
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, email);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("mot_de_passe");
+                    String userType = rs.getString("type_user");
+                    int userId = rs.getInt("id");
+                    boolean isVerified = rs.getBoolean("is_verified");
+
+                    if (SecurityUtil.checkPassword(password, hashedPassword)) {
+                        if (!isVerified && !email.equals("admin")) {
+                            // Load email verification page
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EmailVerification.fxml"));
+                            Parent root = loader.load();
+                            
+                            EmailVerificationController controller = loader.getController();
+                            controller.initData(email, userId);
+                            
+                            Stage stage = (Stage) emailField.getScene().getWindow();
+                            stage.setScene(new Scene(root));
+                            return;
+                        }
+
+                        // Load appropriate page based on user type
+                        if (email.equals("admin")) {
+                            loadDashboard(userId);
+                        } else {
+                            loadFrontOffice(userId);
+                        }
+                    } else {
+                        messageLabel.setText("Invalid email or password");
+                        messageLabel.setStyle("-fx-text-fill: red;");
+                    }
                 } else {
-                    FrontOffice controller = fxmlLoader.getController();
-                    controller.setUserId(userId);
+                    messageLabel.setText("Invalid email or password");
+                    messageLabel.setStyle("-fx-text-fill: red;");
                 }
-                
-                // Configure and show new scene
-                Stage stage = (Stage) loginButton.getScene().getWindow();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.setTitle(userType.equals("admin") ? "Dashboard Admin" : "TrekSwap");
-                stage.setWidth(1350);
-                stage.show();
-            } else {
-                messageLabel.setText("Email ou mot de passe incorrect");
             }
-        } catch (SQLException e) {
-            messageLabel.setText("Erreur de connexion: " + e.getMessage());
+        } catch (Exception e) {
+            messageLabel.setText("Error during login: " + e.getMessage());
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
         }
     }
 
     @FXML
-    protected void switchToSignup() {
+    protected void handleGmailLogin() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Signup_new.fxml"));
-            Stage stage = (Stage) signupLink.getScene().getWindow();
-            Scene currentScene = stage.getScene();
-            Scene scene = new Scene(fxmlLoader.load(), currentScene.getWidth(), currentScene.getHeight());
-            stage.setScene(scene);
-            stage.setTitle("Inscription");
+            // Initialize Gmail service if not already initialized
+            EmailUtil.initializeGmailService();
+            
+            String email = emailField.getText().trim();
+            if (email.isEmpty()) {
+                messageLabel.setText("Please enter your Gmail address");
+                messageLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+
+            // Check if user exists in database
+            Connection conn = MyDb.getInstance().getConnection();
+            String query = "SELECT * FROM user WHERE email = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, email);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    int userId = rs.getInt("id");
+                    String type = rs.getString("type_user");
+
+                    // Navigate based on user type
+                    if ("admin".equals(type)) {
+                        loadDashboard(userId);
+                    } else {
+                        loadFrontOffice(userId);
+                    }
+                } else {
+                    messageLabel.setText("No account found with this Gmail address");
+                    messageLabel.setStyle("-fx-text-fill: red;");
+                }
+            }
         } catch (Exception e) {
-            messageLabel.setText("Erreur lors du passage à l'inscription: " + e.getMessage());
+            messageLabel.setText("Gmail login failed. Please try again.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
         }
     }
 
     @FXML
     protected void handleForgotPassword() {
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setTitle("Réinitialisation du mot de passe");
+        String email = emailField.getText().trim();
+        if (email.isEmpty()) {
+            messageLabel.setText("Please enter your email address");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            return;
+        }
 
-        TextField emailInput = new TextField();
-        emailInput.setPromptText("Entrez votre email Gmail");
-        emailInput.setMaxWidth(250);
+        try {
+            Connection conn = MyDb.getInstance().getConnection();
+            String query = "SELECT id FROM user WHERE email = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, email);
+                ResultSet rs = pstmt.executeQuery();
 
-        Button submitButton = new Button("Envoyer");
-        submitButton.setStyle("-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB;");
-
-        Label messageLabel = new Label();
-        messageLabel.setWrapText(true);
-
-        submitButton.setOnAction(e -> {
-            String email = emailInput.getText().trim();
-            if (email.isEmpty()) {
-                messageLabel.setText("Veuillez entrer votre email");
-                messageLabel.setStyle("-fx-text-fill: red;");
-                return;
-            }
-
-            try {
-                if (!EmailValidator.isValidGmail(email)) {
-                    messageLabel.setText("Veuillez entrer une adresse Gmail valide");
-                    messageLabel.setStyle("-fx-text-fill: red;");
-                    return;
-                }
-
-                if (userExists(email)) {
-                    String token = generateResetToken(email);
-                    if (token != null) {
-                        EmailValidator.sendPasswordResetEmail(email, token);
-                        messageLabel.setText("Un email de réinitialisation a été envoyé à votre adresse");
+                if (rs.next()) {
+                    try {
+                        // Generate reset token
+                        String resetToken = SecurityUtil.generateResetToken(email);
+                        // Send reset email
+                        EmailUtil.sendPasswordResetEmail(email, resetToken);
+                        messageLabel.setText("Password reset instructions sent to your email");
                         messageLabel.setStyle("-fx-text-fill: green;");
-                        
-                        new Thread(() -> {
-                            try {
-                                Thread.sleep(3000);
-                                javafx.application.Platform.runLater(dialog::close);
-                            } catch (InterruptedException ex) {
-                                ex.printStackTrace();
-                            }
-                        }).start();
+                    } catch (FileNotFoundException e) {
+                        messageLabel.setText("Email service not configured. Please contact administrator.");
+                        messageLabel.setStyle("-fx-text-fill: red;");
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        messageLabel.setText("Failed to send reset email. Please try again later.");
+                        messageLabel.setStyle("-fx-text-fill: red;");
+                        e.printStackTrace();
                     }
                 } else {
-                    messageLabel.setText("Aucun compte trouvé avec cet email");
+                    messageLabel.setText("No account found with this email address");
                     messageLabel.setStyle("-fx-text-fill: red;");
                 }
-            } catch (Exception ex) {
-                messageLabel.setText("Une erreur est survenue");
-                messageLabel.setStyle("-fx-text-fill: red;");
-                ex.printStackTrace();
             }
-        });
-
-        VBox layout = new VBox(10);
-        layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(20));
-        layout.getChildren().addAll(
-            new Label("Entrez votre email Gmail pour réinitialiser votre mot de passe"),
-            emailInput,
-            submitButton,
-            messageLabel
-        );
-
-        Scene scene = new Scene(layout);
-        dialog.setScene(scene);
-        dialog.showAndWait();
-    }
-
-    private boolean userExists(String email) throws SQLException {
-        Connection conn = MyDb.getInstance().getConnection();
-        String query = "SELECT id FROM user WHERE email = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+        } catch (Exception e) {
+            messageLabel.setText("An error occurred. Please try again.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
         }
     }
 
-    private String generateResetToken(String email) throws SQLException {
-        String token = UUID.randomUUID().toString();
-        LocalDateTime expirationTime = LocalDateTime.now().plusHours(24);
-
-        Connection conn = MyDb.getInstance().getConnection();
-        
-        String deleteQuery = "DELETE FROM password_reset WHERE email = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
-            pstmt.setString(1, email);
-            pstmt.executeUpdate();
+    @FXML
+    protected void handleSignUp() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Signup_new.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            messageLabel.setText("Failed to load registration page");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
         }
+    }
 
-        String insertQuery = "INSERT INTO password_reset (email, token, expiration_time) VALUES (?, ?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
-            pstmt.setString(1, email);
-            pstmt.setString(2, token);
-            pstmt.setObject(3, expirationTime);
-            pstmt.executeUpdate();
-            return token;
+    private void loadDashboard(int userId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+            Parent root = loader.load();
+            
+            Dashboard controller = loader.getController();
+            controller.setUserId(userId);
+            
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            messageLabel.setText("Failed to load dashboard");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
+        }
+    }
+
+    private void loadFrontOffice(int userId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontoffice.fxml"));
+            Parent root = loader.load();
+            
+            FrontOffice controller = loader.getController();
+            controller.setUserId(userId);
+            
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            messageLabel.setText("Failed to load front office");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            e.printStackTrace();
         }
     }
 } 

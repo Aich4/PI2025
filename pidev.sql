@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2025 at 12:23 PM
+-- Generation Time: Feb 27, 2025 at 11:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -75,7 +75,7 @@ CREATE TABLE `avis` (
 --
 
 INSERT INTO `avis` (`id`, `description_av`, `id_des`) VALUES
-(5, 'behya', 12);
+(8, 'behya barsha', 12);
 
 -- --------------------------------------------------------
 
@@ -249,6 +249,13 @@ CREATE TABLE `password_reset` (
   `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `password_reset`
+--
+
+INSERT INTO `password_reset` (`email`, `token`, `expiration_time`, `id`) VALUES
+('medyassinehaji87@gmail.com', '77872761-0319-456d-8865-2b0ea683d521', '2025-02-26 13:08:29', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -331,16 +338,21 @@ CREATE TABLE `user` (
   `photo_profil` varchar(255) DEFAULT NULL,
   `type_user` varchar(255) NOT NULL,
   `photo_carte_f1` varchar(255) DEFAULT NULL,
-  `photo_carte_f2` varchar(255) DEFAULT NULL
+  `photo_carte_f2` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `photo_profil`, `type_user`, `photo_carte_f1`, `photo_carte_f2`) VALUES
-(1, 'ahah', 'ajaja', 'ahla@gmail.com', 'ahla1234', 'uploads/profile_1739990043918_Spirale_(Boehm,_1988).svg.png', 'Touriste', NULL, NULL),
-(2, 'netej', 'ghodbane', 'netejghodbane@gmail.com', '12345678', 'uploads/profile_1740040017439_Spirale_(Boehm,_1988).svg.png', 'Touriste', NULL, NULL);
+INSERT INTO `user` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `photo_profil`, `type_user`, `photo_carte_f1`, `photo_carte_f2`, `created_at`) VALUES
+(7, 'ali', 'ali', 'ali@gmail.com', 'aliali', 'uploads/profile_1740608323601_Capture d’écran 2025-01-31 174254.png', 'Touriste', NULL, NULL, '2025-02-27 22:13:51'),
+(9, 'ali', 'zlou', 'zed@gmail.com', 'zedzed', 'uploads/profile_1740609148609_XPF1hjCm44Nt_efHDkyzYOez2zG8YjGLYAhiJJ9j1pbsDHv7mDUm9D_X7sCIDr8YMhqkAiSwT-wz4sKRnRAapXcR9FZKVKSsnZOI68v2Zg8LJ6okIb53L-i5gkCUDl29WnVqRGKsmd6_9Wx8FJK8TP8BUg4JDLOe-0aUBs_0MlMn_hmqBPCZijwlmVhB7dQT9JSYvQHNnYp4i7aFclCT79x.png', 'Touriste', NULL, NULL, '2025-02-27 22:13:51'),
+(10, 'zo', 'zo', 'zo@gmail.com', 'zozozo', '1740610604044.png', 'Touriste', NULL, NULL, '2025-02-27 22:13:51'),
+(11, 'sallah', 'sallah', 'sallah@gmail.com', 'sallahsallah', 'uploads/profile_1740610657379_XPF1hjCm44Nt_efHDkyzYOez2zG8YjGLYAhiJJ9j1pbsDHv7mDUm9D_X7sCIDr8YMhqkAiSwT-wz4sKRnRAapXcR9FZKVKSsnZOI68v2Zg8LJ6okIb53L-i5gkCUDl29WnVqRGKsmd6_9Wx8FJK8TP8BUg4JDLOe-0aUBs_0MlMn_hmqBPCZijwlmVhB7dQT9JSYvQHNnYp4i7aFclCT79x.png', 'Touriste', NULL, NULL, '2025-02-27 22:13:51'),
+(12, 'karim', 'aza9', 'aza9@gmail.com', '123456', '1740645514539.png', 'Touriste', NULL, NULL, '2025-02-27 22:13:51'),
+(13, 'kerim', 'karouma', 'ahllla@gmail.com', '142536', '1740645869651.png', 'Touriste', NULL, NULL, '2025-02-27 22:13:51');
 
 -- --------------------------------------------------------
 
@@ -526,7 +538,7 @@ ALTER TABLE `activite`
 -- AUTO_INCREMENT for table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `categorie`
@@ -568,7 +580,7 @@ ALTER TABLE `partenaire`
 -- AUTO_INCREMENT for table `password_reset`
 --
 ALTER TABLE `password_reset`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `reclamation`
@@ -592,7 +604,7 @@ ALTER TABLE `reponse`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables

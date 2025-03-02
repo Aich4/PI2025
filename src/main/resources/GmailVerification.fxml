@@ -7,7 +7,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.effect.*?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.LoginController">
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.GmailVerificationController">
     <!-- Background Image with Blur Effect -->
     <ImageView fitWidth="1920" fitHeight="1080" preserveRatio="false">
         <Image url="bg.jpeg"/>
@@ -35,52 +35,35 @@
             </effect>
         </ImageView>
 
-        <Text style="-fx-fill: #C6B9AB; -fx-font-size: 28px; -fx-font-weight: bold;" text="Connexion"/>
+        <Text style="-fx-fill: #C6B9AB; -fx-font-size: 28px; -fx-font-weight: bold;" text="Gmail Verification"/>
         
-        <!-- Email Field -->
+        <Text style="-fx-fill: #C6B9AB; -fx-font-size: 14px; -fx-text-alignment: center;" 
+              text="Please verify your Gmail account to continue" wrappingWidth="350"/>
+        
+        <!-- Gmail Field -->
         <VBox spacing="8" fillWidth="true">
-            <Label text="Email" style="-fx-text-fill: #C6B9AB; -fx-font-size: 14px;"/>
-            <TextField fx:id="emailField" 
+            <Label text="Gmail Address" style="-fx-text-fill: #C6B9AB; -fx-font-size: 14px;"/>
+            <TextField fx:id="gmailField" 
                       style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B; 
                              -fx-prompt-text-fill: #666666; -fx-background-radius: 5;"/>
         </VBox>
         
-        <!-- Password Field -->
-        <VBox spacing="8" fillWidth="true">
-            <Label text="Mot de passe" style="-fx-text-fill: #C6B9AB; -fx-font-size: 14px;"/>
-            <PasswordField fx:id="passwordField"
-                          style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B; 
-                                 -fx-prompt-text-fill: #666666; -fx-background-radius: 5;"/>
-            <Hyperlink fx:id="forgotPasswordLink" text="Mot de passe oublié?" 
-                       style="-fx-text-fill: #B05A36; -fx-font-weight: bold; -fx-underline: false;"
-                       onAction="#handleForgotPassword"/>
-        </VBox>
-        
-        <!-- Login Button with hover effect -->
-        <Button fx:id="loginButton" text="Se connecter" 
+        <!-- Verify Button -->
+        <Button fx:id="verifyButton" text="Verify Gmail" 
                 style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB; 
                        -fx-background-radius: 5; -fx-font-size: 14px; -fx-font-weight: bold;
                        -fx-cursor: hand;"
-                onAction="#handleLogin" maxWidth="Infinity">
+                onAction="#handleVerify" maxWidth="Infinity">
             <effect>
                 <DropShadow color="rgba(0, 0, 0, 0.3)" radius="5"/>
             </effect>
         </Button>
-                
-        <!-- Signup Link -->
-        <HBox alignment="CENTER" spacing="10">
-            <Text style="-fx-fill: #C6B9AB;" text="Pas encore de compte?"/>
-            <Hyperlink fx:id="signupLink" text="S'inscrire" 
-                       style="-fx-text-fill: #B05A36; -fx-font-weight: bold; -fx-underline: false;"
-                       onAction="#handleSignUp"/>
-        </HBox>
 
-        <!-- Admin Link -->
-        <HBox alignment="CENTER" spacing="10">
-            <Hyperlink fx:id="adminLink" text="Admin" 
-                      style="-fx-text-fill: #B05A36; -fx-font-weight: bold; -fx-underline: false;"
-                      onAction="#handleAdminAccess"/>
-        </HBox>
+        <!-- Back Button -->
+        <Button text="Back" 
+                style="-fx-background-color: transparent; -fx-text-fill: #C6B9AB; 
+                       -fx-border-color: #C6B9AB; -fx-border-radius: 5;"
+                onAction="#handleBack"/>
         
         <!-- Error Messages -->
         <Label fx:id="messageLabel" style="-fx-text-fill: #B05A36;" wrapText="true" alignment="CENTER"/>
