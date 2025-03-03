@@ -71,19 +71,7 @@
             <ComboBox fx:id="disponibilite" layoutX="69.0" layoutY="362.0" prefHeight="30.0" prefWidth="262.0" promptText="Disponibilite" />
             </children>
         </Pane>
-        <Button layoutX="646.0" layoutY="622.0" mnemonicParsing="false" onAction="#ShowRec" prefHeight="32.0" prefWidth="213.0" style="-fx-background-color: #ff760d;" text="Liste des recompences" textFill="WHITE">
-            <effect>
-                <DropShadow>
-                    <color>
-                        <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
-                    </color>
-                </DropShadow>
-            </effect>
-            <font>
-                <Font name="System Bold" size="14.0" />
-            </font>
-        </Button>
-        <Button layoutX="408.0" layoutY="622.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="213.0" style="-fx-background-color: #ff760d;" textFill="WHITE">
+        <Button layoutX="539.0" layoutY="594.0" mnemonicParsing="false" onAction="#ShowRec" prefHeight="32.0" prefWidth="213.0" style="-fx-background-color: #ff760d;" text="Liste des recompences" textFill="WHITE">
             <effect>
                 <DropShadow>
                     <color>

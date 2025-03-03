@@ -8,16 +8,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.Recompense;
 import services.RecompenseService;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import services.RecompenseService;
+
+
+import javafx.scene.control.ComboBox;
+
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 
 
 public class showrec {
@@ -30,6 +37,17 @@ public class showrec {
 
     @FXML
     private ListView<Recompense> listRec;
+
+    @FXML
+    private ComboBox<String> comboBoxFilter;
+
+    @FXML
+    private TextField searchLabel;
+
+
+    @FXML
+    private Button sortButton;
+
 
 
     @FXML
@@ -52,22 +70,36 @@ public class showrec {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        // Création des éléments graphiques
-                        Label label = new Label("Description: " + recompense.getDescription() + "\n" +
-                                "Coût en points: " + recompense.getCout_en_points() + "\n" +
-                                "Disponibilité: " + recompense.getDisponibilite());
+                        // 🔹 Création des éléments graphiques
+                        Label lblDescription = new Label("📜 Description : " + recompense.getDescription());
+                        Label lblCout = new Label("💰 Coût : " + recompense.getCout_en_points() + " points");
+                        Label lblDisponibilite = new Label("📅 Disponibilité : " + recompense.getDisponibilite());
 
-                        Button btnModifier = new Button("Modifier");
-                        Button btnSupprimer = new Button("Supprimer");
+                        // 🎨 Appliquer du style
+                        lblDescription.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+                        lblCout.setStyle("-fx-font-size: 13px;");
+                        lblDisponibilite.setStyle("-fx-font-size: 13px;");
 
-                        // Actions des boutons
-                        btnModifier.setOnAction(event -> modifierRecompense(recompense));
+                        // 🔘 Création des boutons
+                        Button btnModifier = new Button("✏ Modifier");
+                        Button btnSupprimer = new Button("🗑 Supprimer");
+
+                        // 🛠 Actions des boutons
+                        btnModifier.setOnAction(event -> modifierRecompense(recompense, event));
                         btnSupprimer.setOnAction(event -> supprimerRecompense(recompense));
 
-                        // Regrouper les éléments dans un HBox
+                        // 📌 Organisation des éléments
+                        VBox detailsBox = new VBox(5, lblDescription, lblCout, lblDisponibilite);
                         HBox buttonsBox = new HBox(10, btnModifier, btnSupprimer);
-                        HBox fullBox = new HBox(10, label, buttonsBox);
+                        VBox fullBox = new VBox(10, detailsBox, buttonsBox);
 
+                        // Application des styles pour l'espacement et les dimensions
+                        detailsBox.setPadding(new Insets(5));
+                        buttonsBox.setPadding(new Insets(5));
+                        fullBox.setPadding(new Insets(10));
+                        fullBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 10; -fx-background-radius: 10;");
+
+                        // Définir l'élément graphique de la cellule
                         setGraphic(fullBox);
                     }
                 }
@@ -78,100 +110,101 @@ public class showrec {
         }
     }
 
+
     @FXML
     public void initialize() {
         afficherRecompenses();
+        comboBoxFilter.setItems(FXCollections.observableArrayList("Description", "Coût en points", "Disponibilité"));
+        // Ajouter un écouteur pour le bouton "Trier"
+        sortButton.setOnAction(event -> handleSort());
+
+        // Ajouter un écouteur sur le champ de recherche pour effectuer la recherche pendant la saisie
+        searchLabel.textProperty().addListener((observable, oldValue, newValue) -> handleSearch(newValue)); // Met à jour lors de la saisie
     }
-    // Méthode pour modifier une récompense
-    private void modifierRecompense(Recompense recompense) {
-        // Création de la boîte de dialogue
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Modifier la récompense");
-        dialog.setHeaderText("Modifier les informations de la récompense");
-        dialog.setResizable(true); // Permet le redimensionnement
 
-        // Champs de saisie
-        TextArea descField = new TextArea(recompense.getDescription()); // TextArea au lieu de TextField
-        descField.setPromptText("Description");
-        descField.setPrefWidth(300); // Largeur ajustée
-        descField.setPrefHeight(80); // Augmenter la hauteur pour plus de visibilité
+    private void handleSearch(String searchText) {
+        String critere = comboBoxFilter.getSelectionModel().getSelectedItem();
 
-        TextField coutField = new TextField(String.valueOf(recompense.getCout_en_points()));
-        coutField.setPromptText("Coût en points");
-        coutField.setPrefWidth(150);
-
-        ComboBox<String> dispoBox = new ComboBox<>();
-        dispoBox.getItems().addAll("Disponible", "Indisponible");
-        dispoBox.setValue(recompense.getDisponibilite());
-        dispoBox.setPrefWidth(150);
-
-        // Mise en page avec GridPane
-        GridPane grid = new GridPane();
-        grid.setHgap(15);
-        grid.setVgap(15);
-        grid.setPadding(new Insets(20, 20, 20, 20)); // Ajoute du padding pour aérer
-
-        grid.add(new Label("Description:"), 0, 0);
-        grid.add(descField, 1, 0);
-        grid.add(new Label("Coût en points:"), 0, 1);
-        grid.add(coutField, 1, 1);
-        grid.add(new Label("Disponibilité:"), 0, 2);
-        grid.add(dispoBox, 1, 2);
-
-        // Mise en page globale avec VBox
-        VBox vbox = new VBox(10);
-        vbox.getChildren().addAll(grid);
-        vbox.setPadding(new Insets(10, 10, 10, 10));
-
-        dialog.getDialogPane().setContent(vbox);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        // Affichage de la boîte de dialogue
-        Optional<ButtonType> result = dialog.showAndWait();
-
-        // Si l'utilisateur valide, on vérifie les données avant de mettre à jour
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        if (critere == null || searchText.isEmpty()) {
             try {
-                String description = descField.getText().trim();
-                String coutText = coutField.getText().trim();
-                String disponibilite = dispoBox.getValue();
-
-                // Vérification des champs
-                if (description.isEmpty()) {
-                    showAlert("Erreur", "La description ne peut pas être vide.");
-                    return;
-                }
-
-                int cout;
-                try {
-                    cout = Integer.parseInt(coutText);
-                    if (cout < 0) {
-                        showAlert("Erreur", "Le coût en points doit être un nombre positif.");
-                        return;
-                    }
-                } catch (NumberFormatException e) {
-                    showAlert("Erreur", "Veuillez entrer un nombre valide pour le coût en points.");
-                    return;
-                }
-
-                if (disponibilite == null) {
-                    showAlert("Erreur", "Veuillez sélectionner une disponibilité.");
-                    return;
-                }
-
-                // Mise à jour de la récompense
-                recompense.setDescription(description);
-                recompense.setCout_en_points(cout);
-                recompense.setDisponibilite(disponibilite);
-
-                rs.update(recompense); // Mettre à jour la base de données
-                afficherRecompenses(); // Rafraîchir la liste
-
+                listRec.setItems(FXCollections.observableArrayList(rs.getAll()));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        try {
+            List<Recompense> filteredRecompenses;
+
+            if (critere.equals("Coût en points")) {
+                // Vérifier si la saisie est un nombre valide
+                if (!searchText.matches("\\d+")) {
+                    listRec.setItems(FXCollections.observableArrayList()); // Liste vide si lettres dans "Coût"
+                    return;
+                }
+            }
+
+            // Appeler la méthode de recherche avec le critère et la saisie
+            filteredRecompenses = rs.searchRecompenses(critere, searchText);
+
+            // Vérifier si la liste n'est pas vide avant de l'afficher
+            if (filteredRecompenses.isEmpty()) {
+                System.out.println("Aucune récompense trouvée pour ce critère.");
+            }
+
+            listRec.setItems(FXCollections.observableArrayList(filteredRecompenses));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+    private void handleSort() {
+        String critere = comboBoxFilter.getSelectionModel().getSelectedItem();
+
+        if (critere != null) {
+            try {
+                List<Recompense> sortedRecompenses = rs.sortRecompenses(critere);
+                listRec.setItems(FXCollections.observableArrayList(sortedRecompenses));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
+
+
+
+
+
+
+    // Méthode pour modifier une récompense
+    private void modifierRecompense(Recompense recompense, ActionEvent event) {
+        try {
+            // Charger la vue FXML de modification de la récompense
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/css/UpdateRecompense.fxml"));
+            Parent root = loader.load();
+
+            // Accéder au contrôleur de la vue UpdateRecompense
+            updateRec controller = loader.getController();
+
+            // Passer la recompense sélectionnée au contrôleur de UpdateRecompense
+            controller.setRecompense(recompense);
+
+            // Mettre à jour la scène avec la nouvelle vue
+            ((Button) event.getSource()).getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur de chargement de UpdateRecompense.fxml", e);
+        }
+    }
+
 
     // Méthode pour afficher une alerte
     private void showAlert(String title, String message) {

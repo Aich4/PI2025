@@ -4,8 +4,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.Glow?>
@@ -18,14 +18,14 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="689.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.showrec">
+<AnchorPane prefHeight="689.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.updateMission">
     <children>
-        <ImageView fitHeight="789.0" fitWidth="1158.0" layoutX="14.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="789.0" fitWidth="1158.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../css/bg.jpeg" />
             </image>
         </ImageView>
-        <Pane layoutX="335.0" layoutY="26.0" prefHeight="722.0" prefWidth="754.0" style="-fx-background-color: #ff760d;">
+        <Pane layoutX="456.0" layoutY="68.0" prefHeight="545.0" prefWidth="379.0" style="-fx-background-color: #ff760d;">
             <effect>
                 <DropShadow height="37.38" radius="15.850000000000001" width="28.02">
                     <color>
@@ -34,7 +34,19 @@
                 </DropShadow>
             </effect>
             <children>
-                <Label layoutX="223.0" layoutY="76.0" prefHeight="44.0" prefWidth="333.0" text="  Liste des recompenses" textFill="WHITE">
+                <Button layoutX="132.0" layoutY="485.0" mnemonicParsing="false" onAction="#updateMission" prefHeight="32.0" prefWidth="116.0" text="Enregistrer" textFill="#413852">
+                    <effect>
+                        <DropShadow>
+                            <color>
+                                <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                            </color>
+                        </DropShadow>
+                    </effect>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Label layoutX="45.0" layoutY="98.0" prefHeight="44.0" prefWidth="311.0" text="   Modifier une mission" textFill="WHITE">
                     <font>
                         <Font size="28.0" />
                     </font>
@@ -42,7 +54,7 @@
                         <Glow level="0.8" />
                     </effect>
                 </Label>
-                <ImageView fitHeight="76.0" fitWidth="100.0" layoutX="339.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="76.0" fitWidth="100.0" layoutX="152.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../css/liv.png" />
                     </image>
@@ -50,12 +62,28 @@
                         <Glow />
                     </effect>
                 </ImageView>
-            <ListView fx:id="listRec" layoutX="30.0" layoutY="212.0" prefHeight="480.0" prefWidth="696.0" />
-            <ComboBox fx:id="comboBoxFilter" layoutX="526.0" layoutY="170.0" prefWidth="150.0" promptText="Choisir le critere" />
-            <Button fx:id="sortButton" layoutX="686.0" layoutY="170.0" mnemonicParsing="false" text="Trier" />
-            <TextField fx:id="searchLabel" layoutX="400.0" layoutY="170.0" prefHeight="25.0" prefWidth="115.0" promptText="Rechercher" />
+                <TextField fx:id="points_recompense" layoutX="69.0" layoutY="281.0" prefHeight="32.0" prefWidth="262.0" promptText="point de recompence">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </TextField>
+                <TextArea fx:id="description" layoutX="69.0" layoutY="155.0" prefHeight="109.0" prefWidth="262.0" promptText="description de la mission" />
+                <ComboBox fx:id="idRec" layoutX="67.0" layoutY="381.0" prefHeight="32.0" prefWidth="262.0" promptText="recompense" />
+                <ComboBox fx:id="statut" layoutX="67.0" layoutY="333.0" prefHeight="32.0" prefWidth="262.0" promptText="Statut" />
             </children>
         </Pane>
+        <Button layoutX="539.0" layoutY="627.0" mnemonicParsing="false" onAction="#listMission" prefHeight="32.0" prefWidth="213.0" style="-fx-background-color: #ff760d;" text="Liste des missions" textFill="WHITE">
+            <effect>
+                <DropShadow>
+                    <color>
+                        <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+                    </color>
+                </DropShadow>
+            </effect>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Button>
         <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="/css/style.css">
             <children>
                 <Separator prefWidth="232.0" />
@@ -221,8 +249,8 @@
                         </VBox>
                     </children>
                 </VBox>
-            <Button mnemonicParsing="false" onAction="#mission" prefHeight="51.0" prefWidth="238.0" text="Mission" />
-            <Button mnemonicParsing="false" onAction="#recompense" prefHeight="54.0" prefWidth="240.0" text="Recompense" />
+                <Button mnemonicParsing="false" onAction="#mission" prefHeight="54.0" prefWidth="226.0" text="Mission" />
+                <Button mnemonicParsing="false" onAction="#recompense" prefHeight="56.0" prefWidth="241.0" text="Recompense" />
             </children>
             <effect>
                 <DropShadow radius="18.7725" width="56.09" />

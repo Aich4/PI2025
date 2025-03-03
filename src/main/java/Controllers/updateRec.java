@@ -10,13 +10,9 @@ import services.RecompenseService;
 
 import java.io.IOException;
 
-public class recompense {
+public class updateRec {
 
-     RecompenseService rs;
-
-    public recompense() {
-        this.rs = new RecompenseService();
-    }
+    private Recompense recompense;
 
     @FXML
     private TextField cout_en_points;
@@ -24,73 +20,63 @@ public class recompense {
     @FXML
     private TextArea descriptionRec;
 
-
     @FXML
     private ComboBox<String> disponibilite;
 
 
     @FXML
-    void createRec(ActionEvent event) {
+    void updateRec(ActionEvent event) {
         try {
-            // Récupération et validation des champs
-            String descriptionText = descriptionRec.getText().trim();
-            String coutText = cout_en_points.getText().trim();
-            String disponibiliteValue = disponibilite.getValue();
+            // Récupérer les données modifiées
+            String description = descriptionRec.getText().trim();
+            int cout = Integer.parseInt(cout_en_points.getText().trim());
+            String dispo = disponibilite.getValue();
 
-            // Vérification des champs obligatoires
-            if (descriptionText.isEmpty()) {
-                showAlert("Erreur", "La description ne peut pas être vide.");
+            if (description.isEmpty() || dispo == null) {
+                showAlert("Erreur", "Tous les champs doivent être remplis.");
                 return;
             }
 
-            if (coutText.isEmpty()) {
-                showAlert("Erreur", "Le coût en points est requis.");
-                return;
-            }
+            // Mise à jour de la récompense
+            recompense.setDescription(description);
+            recompense.setCout_en_points(cout);
+            recompense.setDisponibilite(dispo);
 
-            int cout;
-            try {
-                cout = Integer.parseInt(coutText);
-                if (cout < 0) {
-                    showAlert("Erreur", "Le coût en points doit être un nombre positif.");
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                showAlert("Erreur", "Veuillez entrer un nombre valide pour le coût en points.");
-                return;
-            }
+            // Mettre à jour dans la base de données via le service
+            RecompenseService rs = new RecompenseService();
+            rs.update(recompense); // Appeler la méthode update dans le service
 
-            if (disponibiliteValue == null || disponibiliteValue.isEmpty()) {
-                showAlert("Erreur", "Veuillez sélectionner une disponibilité.");
-                return;
-            }
+            // Retour à la page des récompenses
+            ShowRec(event);
 
-            // Création de la récompense
-            Recompense r = new Recompense(descriptionText, cout, disponibiliteValue);
-
-            // Enregistrement dans la base de données
-            rs.create(r);
-            reset();
-
-            // Affichage d'un message de succès
-            showAlert("Succès", "Récompense créée avec succès !", Alert.AlertType.INFORMATION);
-
+        } catch (NumberFormatException e) {
+            showAlert("Erreur", "Le coût en points doit être un nombre valide.");
         } catch (Exception e) {
-            showAlert("Erreur", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    private void showAlert(String title, String message) {
+        // Implémenter un mécanisme d'affichage des alertes d'erreur
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public void setRecompense(Recompense recompense) {
+        this.recompense = recompense;
+        if (recompense != null) {
+            descriptionRec.setText(recompense.getDescription());
+            cout_en_points.setText(String.valueOf(recompense.getCout_en_points()));
+            disponibilite.setValue(recompense.getDisponibilite());
         }
     }
 
-    // Méthode pour afficher une alerte
-    private void showAlert(String title, String message) {
-        showAlert(title, message, Alert.AlertType.ERROR);
-    }
+    // Méthode d'initialisation des champs
+    @FXML
+    public void initialize() {
 
-    private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        remplirComboBoxDisponibilite();
     }
 
     private void remplirComboBoxDisponibilite() {
@@ -143,17 +129,5 @@ public class recompense {
     }
 
 
-    void reset() {
-        this.descriptionRec.clear();
-        this.cout_en_points.clear();
-
-    }
-
-    @FXML
-    public void initialize() {
-
-        remplirComboBoxDisponibilite();
-
-    }
 
 }

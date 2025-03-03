@@ -4,27 +4,27 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import models.Mission;
 import services.MissionService;
 import services.RecompenseService;
 
 import java.io.IOException;
+public class updateMission {
 
-
-public class mission {
-    MissionService ms;
+    private Mission currentMission;
+    MissionService ms = new MissionService();
     RecompenseService rs;
 
-    public mission() {
-        this.ms = new MissionService();
+    public updateMission() {
         this.rs = new RecompenseService();
     }
 
     @FXML
-    private TextArea  description;
+    private TextArea description;
+
+    @FXML
+    private ComboBox<String> idRec;
 
     @FXML
     private TextField points_recompense;
@@ -33,25 +33,15 @@ public class mission {
     private ComboBox<String> statut;
 
     @FXML
-    private ComboBox<String> idRec;
-
-    @FXML
-    void createMission(ActionEvent event) throws Exception {
+    void updateMission(ActionEvent event) {
         try {
-            // Récupération et validation des champs
             String descriptionText = description.getText().trim();
             String pointsText = points_recompense.getText().trim();
             String statutValue = statut.getValue();
-            String descriptionRec = idRec.getValue();
+            String selectedRec = idRec.getValue();
 
-            // Vérification des champs obligatoires
             if (descriptionText.isEmpty()) {
                 showAlert("Erreur", "La description ne peut pas être vide.");
-                return;
-            }
-
-            if (pointsText.isEmpty()) {
-                showAlert("Erreur", "Les points de récompense sont requis.");
                 return;
             }
 
@@ -59,7 +49,7 @@ public class mission {
             try {
                 points = Integer.parseInt(pointsText);
                 if (points < 0) {
-                    showAlert("Erreur", "Les points de récompense doivent être un nombre positif.");
+                    showAlert("Erreur", "Les points de récompense doivent être positifs.");
                     return;
                 }
             } catch (NumberFormatException e) {
@@ -67,47 +57,56 @@ public class mission {
                 return;
             }
 
-            if (statutValue == null || statutValue.isEmpty()) {
-                showAlert("Erreur", "Veuillez sélectionner un statut.");
+            if (statutValue == null || selectedRec == null) {
+                showAlert("Erreur", "Veuillez remplir tous les champs.");
                 return;
             }
 
-            if (descriptionRec == null || descriptionRec.isEmpty()) {
-                showAlert("Erreur", "Veuillez sélectionner une récompense.");
-                return;
-            }
+            // Mettre à jour les informations de la mission
+            currentMission.setDescription(descriptionText);
+            currentMission.setPoints_recompense(points);
+            currentMission.setStatut(statutValue);
 
-            // Récupération de l'ID de la récompense
-            int idRec = rs.getIdByDescrption(descriptionRec);
+            // Trouver l'ID de la récompense à partir de sa description
+            int idRec = rs.getIdByDescrption(selectedRec);
+            currentMission.setIdRec(idRec);
 
-            // Création de la mission
-            Mission m = new Mission(descriptionText, points, statutValue, idRec);
+            // Mettre à jour la mission dans la base de données
+            ms.update(currentMission);
 
-            // Enregistrement dans la base de données
-            ms.create(m);
-            reset();
-
-            // Affichage d'un message de succès
-            showAlert("Succès", "Mission créée avec succès !", Alert.AlertType.INFORMATION);
-
+            // Retour à la liste des missions
+            listMission(event); // Retour à la liste après la mise à jour
         } catch (Exception e) {
-            showAlert("Erreur", e.getMessage());
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur s'est produite lors de la mise à jour de la mission.");
         }
     }
 
-
-
     // Méthode pour afficher une alerte
     private void showAlert(String title, String message) {
-        showAlert(title, message, Alert.AlertType.ERROR);
-    }
-
-    private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    // Méthode pour initialiser la mission
+    public void setMission(Mission mission) {
+        this.currentMission = mission;
+
+        // Remplir les champs de l'interface avec les données de la mission
+        description.setText(mission.getDescription());
+        points_recompense.setText(String.valueOf(mission.getPoints_recompense()));
+        statut.setValue(mission.getStatut());
+
+        // Charger la récompense associée à la mission (idRec)
+        try {
+            idRec.setValue(rs.getDescriptionById(mission.getIdRec())); // Assurez-vous que getDescriptionById fonctionne correctement
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -124,29 +123,6 @@ public class mission {
             throw new RuntimeException("Erreur de chargement de ShowMission.fxml", e);
         }
     }
-
-    private void remplirComboBoxStatut() {
-        statut.getItems().addAll("En cours", "Validé");
-    }
-
-
-    void reset() {
-        this.description.clear();
-        this.points_recompense.clear();
-
-    }
-
-    @FXML
-    public void initialize() {
-        try {
-            idRec.getItems().addAll(rs.getAllDescription()); // Ajouter directement les catégories
-        } catch (Exception e) {
-            e.printStackTrace(); // Afficher l'exception si elle se produit
-        }
-        remplirComboBoxStatut();
-
-    }
-
     @FXML
     void mission(ActionEvent event) {
         try {
@@ -177,7 +153,20 @@ public class mission {
         }
     }
 
+    @FXML
+    public void initialize() {
+        try {
+            idRec.getItems().addAll(rs.getAllDescription()); // Ajouter directement les catégories
+        } catch (Exception e) {
+            e.printStackTrace(); // Afficher l'exception si elle se produit
+        }
+        remplirComboBoxStatut();
+
+    }
+
+    private void remplirComboBoxStatut() {
+        statut.getItems().addAll("En cours", "Validé");
+    }
 
 
 }
-
