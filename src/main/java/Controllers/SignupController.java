@@ -195,13 +195,13 @@ public class SignupController implements Initializable {
             String hashedPassword = SecurityUtil.hashPassword(password);
             
             Connection conn = MyDb.getInstance().getConnection();
-            String query = "INSERT INTO user (nom, email, mot_de_passe, type_user, is_verified) VALUES (?, ?, ?, ?, true)";
+            String query = "INSERT INTO user (nom, email, mot_de_passe, type_user) VALUES (?, ?, ?, ?)";
             
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, name);
                 pstmt.setString(2, email);
                 pstmt.setString(3, hashedPassword);
-                pstmt.setString(4, type);
+                pstmt.setString(4, "user");
                 pstmt.executeUpdate();
                 
                 // Show success message and redirect to login

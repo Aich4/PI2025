@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Optional;
 import java.io.FileNotFoundException;
+import java.util.Random;
 
 public class LoginController {
     @FXML private TextField emailField;
@@ -80,7 +81,7 @@ public class LoginController {
 
         try {
             Connection conn = MyDb.getInstance().getConnection();
-            String query = "SELECT id, mot_de_passe, type_user, is_verified FROM user WHERE email = ?";
+            String query = "SELECT id, mot_de_passe, type_user FROM user WHERE email = ?";
             
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, email);
@@ -90,22 +91,8 @@ public class LoginController {
                     String hashedPassword = rs.getString("mot_de_passe");
                     String userType = rs.getString("type_user");
                     int userId = rs.getInt("id");
-                    boolean isVerified = rs.getBoolean("is_verified");
 
                     if (SecurityUtil.checkPassword(password, hashedPassword)) {
-                        if (!isVerified && !email.equals("admin")) {
-                            // Load email verification page
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EmailVerification.fxml"));
-                            Parent root = loader.load();
-                            
-                            EmailVerificationController controller = loader.getController();
-                            controller.initData(email, userId);
-                            
-                            Stage stage = (Stage) emailField.getScene().getWindow();
-                            stage.setScene(new Scene(root));
-                            return;
-                        }
-
                         // Load appropriate page based on user type
                         if (email.equals("admin")) {
                             loadDashboard(userId);
@@ -173,43 +160,31 @@ public class LoginController {
     @FXML
     protected void handleForgotPassword() {
         String email = emailField.getText().trim();
+        
         if (email.isEmpty()) {
-            messageLabel.setText("Please enter your email address");
+            messageLabel.setText("Veuillez entrer votre adresse email");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
         try {
-            Connection conn = MyDb.getInstance().getConnection();
-            String query = "SELECT id FROM user WHERE email = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setString(1, email);
-                ResultSet rs = pstmt.executeQuery();
+            // Generate a 6-digit reset code
+            String resetCode = String.format("%06d", new Random().nextInt(1000000));
 
-                if (rs.next()) {
-                    try {
-                        // Generate reset token
-                        String resetToken = SecurityUtil.generateResetToken(email);
-                        // Send reset email
-                        EmailUtil.sendPasswordResetEmail(email, resetToken);
-                        messageLabel.setText("Password reset instructions sent to your email");
-                        messageLabel.setStyle("-fx-text-fill: green;");
-                    } catch (FileNotFoundException e) {
-                        messageLabel.setText("Email service not configured. Please contact administrator.");
-                        messageLabel.setStyle("-fx-text-fill: red;");
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        messageLabel.setText("Failed to send reset email. Please try again later.");
-                        messageLabel.setStyle("-fx-text-fill: red;");
-                        e.printStackTrace();
-                    }
-                } else {
-                    messageLabel.setText("No account found with this email address");
-                    messageLabel.setStyle("-fx-text-fill: red;");
-                }
-            }
+            // Send reset code via email
+            EmailUtil.sendPasswordResetEmail(email, resetCode);
+
+            // Show reset code verification page
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResetPasswordCode.fxml"));
+            Parent root = loader.load();
+            
+            ResetPasswordCodeController controller = loader.getController();
+            controller.initData(email, resetCode);
+            
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (Exception e) {
-            messageLabel.setText("An error occurred. Please try again.");
+            messageLabel.setText("Erreur lors de l'envoi du code de réinitialisation");
             messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
         }

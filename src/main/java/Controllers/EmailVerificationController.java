@@ -20,11 +20,28 @@ public class EmailVerificationController {
     private String userEmail;
     private String verificationCode;
     private int userId;
+    private String nom;
+    private String prenom;
+    private String newPassword;
+    private boolean isProfileUpdate = false;
 
     public void initData(String email, int userId) {
         this.userEmail = email;
         this.userId = userId;
+        this.isProfileUpdate = false;
         sendVerificationCode();
+    }
+
+    public void initProfileUpdate(int userId, String nom, String prenom, String newEmail, String newPassword, String code) {
+        this.userId = userId;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.userEmail = newEmail;
+        this.newPassword = newPassword;
+        this.verificationCode = code;
+        this.isProfileUpdate = true;
+        messageLabel.setText("Code de vérification envoyé à votre nouvelle adresse email");
+        messageLabel.setStyle("-fx-text-fill: green;");
     }
 
     private void sendVerificationCode() {
@@ -53,37 +70,56 @@ public class EmailVerificationController {
         String enteredCode = verificationCodeField.getText().trim();
         
         if (enteredCode.isEmpty()) {
-            messageLabel.setText("Please enter the verification code");
+            messageLabel.setText("Veuillez entrer le code de vérification");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
         if (enteredCode.equals(verificationCode)) {
             try {
-                // Update user's verified status in database
-                Connection conn = MyDb.getInstance().getConnection();
-                String query = "UPDATE user SET is_verified = true WHERE id = ?";
-                try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                    pstmt.setInt(1, userId);
-                    pstmt.executeUpdate();
+                if (isProfileUpdate) {
+                    // Update user profile with new email
+                    Connection conn = MyDb.getInstance().getConnection();
+                    String query = newPassword.isEmpty() ?
+                        "UPDATE user SET nom = ?, prenom = ?, email = ? WHERE id = ?" :
+                        "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ? WHERE id = ?";
+                    
+                    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                        pstmt.setString(1, nom);
+                        pstmt.setString(2, prenom);
+                        pstmt.setString(3, userEmail);
+                        if (!newPassword.isEmpty()) {
+                            pstmt.setString(4, newPassword);
+                            pstmt.setInt(5, userId);
+                        } else {
+                            pstmt.setInt(4, userId);
+                        }
+                        pstmt.executeUpdate();
+                        
+                        // Return to profile page
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserProfile.fxml"));
+                        Parent root = loader.load();
+                        UserProfileController controller = loader.getController();
+                        controller.setUserId(userId);
+                        Stage stage = (Stage) verificationCodeField.getScene().getWindow();
+                        stage.setScene(new Scene(root));
+                    }
+                } else {
+                    // Original email verification logic
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontoffice.fxml"));
+                    Parent root = loader.load();
+                    FrontOffice controller = loader.getController();
+                    controller.setUserId(userId);
+                    Stage stage = (Stage) verificationCodeField.getScene().getWindow();
+                    stage.setScene(new Scene(root));
                 }
-
-                // Load the front office page
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontoffice.fxml"));
-                Parent root = loader.load();
-                
-                FrontOffice controller = loader.getController();
-                controller.setUserId(userId);
-                
-                Stage stage = (Stage) verificationCodeField.getScene().getWindow();
-                stage.setScene(new Scene(root));
             } catch (Exception e) {
-                messageLabel.setText("Error verifying email");
+                messageLabel.setText("Erreur lors de la mise à jour du profil");
                 messageLabel.setStyle("-fx-text-fill: red;");
                 e.printStackTrace();
             }
         } else {
-            messageLabel.setText("Invalid verification code");
+            messageLabel.setText("Code de vérification invalide");
             messageLabel.setStyle("-fx-text-fill: red;");
         }
     }

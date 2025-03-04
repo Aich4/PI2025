@@ -106,14 +106,14 @@ public class EmailUtil {
     }
 
     public static void sendPasswordResetEmail(String to, String resetToken) throws Exception {
-        String subject = "Reset Your TrekSwap Password";
-        String resetLink = "http://localhost:8080/reset-password?token=" + resetToken;
-        String bodyText = "Hello,\n\n" +
-                "You have requested to reset your password for TrekSwap. " +
-                "Click the link below to reset your password:\n\n" +
-                resetLink + "\n\n" +
-                "If you didn't request this, please ignore this email.\n\n" +
-                "Best regards,\nTrekSwap Team";
+        String subject = "Réinitialisation de votre mot de passe TrekSwap";
+        String bodyText = String.format("Bonjour,\n\n" +
+                "Vous avez demandé à réinitialiser votre mot de passe pour TrekSwap.\n" +
+                "Voici votre code de réinitialisation : %s\n\n" +
+                "Veuillez entrer ce code dans l'application pour réinitialiser votre mot de passe.\n\n" +
+                "Si vous n'avez pas demandé cela, veuillez ignorer cet e-mail.\n\n" +
+                "Cordialement,\n" +
+                "L'équipe TrekSwap", resetToken);
 
         sendEmail(to, subject, bodyText);
     }
