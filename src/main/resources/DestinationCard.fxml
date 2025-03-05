@@ -15,5 +15,10 @@
       <Button mnemonicParsing="false" onAction="#handleShowActivities" text="show activities" />
       <Button mnemonicParsing="false" onAction="#showMap" text="Show on Map" />
       <Button mnemonicParsing="false" onAction="#handleAvis" text="give notice" />
+        <Button fx:id="weatherButton" onAction="#showWeather" text="Show/Hide Weather" />
+        <VBox fx:id="weatherContainer" spacing="5" />
+
+
+
     </VBox>
 </AnchorPane>
