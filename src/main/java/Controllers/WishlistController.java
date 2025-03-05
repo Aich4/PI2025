@@ -1,18 +1,20 @@
 package Controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import models.Destination;
 import services.WishlistService;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -28,23 +30,54 @@ public class WishlistController {
     @FXML
     private VBox wishlistContainer;
 
+
+
+    @FXML
+    private Spinner<Integer> nmbrJours;
+
     @FXML
     private Button generateButton; // Declare the button
 
+    @FXML
+    private Button returnBtn;
+
+
+    @FXML
+    void goBack(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FrontOffice.fxml"));
+        try {
+            Parent root = loader.load();
+            generateButton.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void initialize() {
+        // Create a Label for the number of days
+        Label daysLabel = new Label("Number of Days:");
+
+        // Initialize Spinner with default values
+        nmbrJours.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 30, 5));
+
+        // Create an HBox to hold the label and spinner together
+        HBox spinnerContainer = new HBox(10, daysLabel, nmbrJours);
+        spinnerContainer.setStyle("-fx-padding: 10;");
+
         // Fetch the wishlist data
         List<Destination> wishlist = WishlistService.getInstance().getWishlist();
 
         // Clear the previous content
         wishlistContainer.getChildren().clear();
 
+        // Add the spinner container at the top
+        wishlistContainer.getChildren().add(spinnerContainer);
+
         // Loop through each destination in the wishlist
         for (Destination destination : wishlist) {
-            // Create a new HBox for each item in the wishlist
             HBox wishlistItem = new HBox(10);
             wishlistItem.setStyle("-fx-background-color: #ffffff; -fx-padding: 10; -fx-border-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);");
 
-            // Create an ImageView for the destination image (if available)
             ImageView destinationImage = new ImageView();
             if (destination.getImage_destination() != null && !destination.getImage_destination().isEmpty()) {
                 Image image = new Image(destination.getImage_destination());
@@ -54,7 +87,6 @@ public class WishlistController {
                 destinationImage.setStyle("-fx-background-radius: 25;");
             }
 
-            // Create a VBox for destination text
             VBox destinationInfo = new VBox(5);
             Text destinationName = new Text(destination.getNom_destination());
             destinationName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;");
@@ -62,31 +94,32 @@ public class WishlistController {
             destinationDescription.setStyle("-fx-font-size: 12px; -fx-text-fill: #777777;");
             destinationInfo.getChildren().addAll(destinationName, destinationDescription);
 
-            // Create a remove button or an image (e.g., heart icon for wishlist)
-            // You can add a button here if you want to allow the user to remove items from the wishlist.
-            // Example: Button removeButton = new Button("Remove");
-            // Alternatively, use an ImageView with a heart icon.
             ImageView removeIcon = new ImageView(new Image(getClass().getResourceAsStream("/heart_filled.png")));
             removeIcon.setFitHeight(20);
             removeIcon.setFitWidth(20);
             removeIcon.setOnMouseClicked(event -> {
-                // Remove the destination from the wishlist
                 WishlistService.getInstance().remove(destination);
-                // Refresh the wishlist UI
                 initialize();
             });
 
-            // Add the components to the HBox
             wishlistItem.getChildren().addAll(destinationImage, destinationInfo, removeIcon);
-
-            // Add the item to the VBox (the container)
             wishlistContainer.getChildren().add(wishlistItem);
         }
-        wishlistContainer.getChildren().add(generateButton);  // Add the button to the VBox if it's not already in the FXML
 
+        // Re-add the return button
+        wishlistContainer.getChildren().add(returnBtn);
+
+        // Re-add the generate button at the bottom
+        wishlistContainer.getChildren().add(generateButton);
     }
+
+
+
     @FXML
     void generateButtonClicked() {
+        // Get the number of days from the spinner
+        int numberOfDays = nmbrJours.getValue();
+
         // List of destinations in the wishlist
         List<Destination> wishlist = WishlistService.getInstance().getWishlist();
 
@@ -102,25 +135,30 @@ public class WishlistController {
 
         // Create a message to send to Gemini
         StringBuilder geminiInput = new StringBuilder();
-        geminiInput.append("I have a wishlist of destinations for a 3-day trip: (pls give me well constructed paragraphe exemple day 1 : ..." +
-                "day2 : ..." +
-                "..." +
-                "and pls give me directly tohe plan no ther texts )\n");
-
+        geminiInput.append("I have a wishlist of destinations for a ")
+                .append(numberOfDays)
+                .append("-day trip. Please provide a well-structured itinerary for ")
+                .append(numberOfDays)
+                .append(" days. Example format: \n")
+                .append("Day 1: ...\n")
+                .append("Day 2: ...\n")
+                .append("...\n")
+                .append("Give me only the plan, no other text.\n");
 
         // Format the wishlist destinations into the message
         for (Destination destination : wishlist) {
-            geminiInput.append("Destination: " + destination.getNom_destination() + ", ");
-            geminiInput.append("Latitude: " + destination.getLatitude() + ", ");
-            geminiInput.append("Longitude: " + destination.getLongitude() + "\n");
+            geminiInput.append("Destination: ").append(destination.getNom_destination()).append(", ");
+            geminiInput.append("Latitude: ").append(destination.getLatitude()).append(", ");
+            geminiInput.append("Longitude: ").append(destination.getLongitude()).append("\n");
         }
 
-        // Send the message to Gemini (you may need to use an API call or direct communication)
+        // Send the message to Gemini API
         String geminiResponse = sendToGemini(geminiInput.toString());
 
-        // Pass the Gemini response to the openPlanDestinationPage method
-        openPlanDestinationPage(geminiResponse);
+        Stage currentStage = (Stage) generateButton.getScene().getWindow();
+        openPlanDestinationPage(geminiResponse, currentStage);
     }
+
 
 
     private String sendToGemini(String message) {

@@ -31,32 +31,22 @@ public class planDestination {
             }
 
     }
-    public static void openPlanDestinationPage(String geminiResponse) {
+    public static void openPlanDestinationPage(String geminiResponse, Stage currentStage) {
         try {
-            // Load the planDestination.fxml
+            // Load the FXML
             FXMLLoader loader = new FXMLLoader(planDestination.class.getResource("/planDestination.fxml"));
-
-            // Load the Parent node
             Parent root = loader.load();
 
-            // Get the controller of the loaded FXML
+            // Get the controller and set the response
             planDestination controller = loader.getController();
-
-            // Set the response in the text area
             controller.setTextArea(geminiResponse);
 
-            // Get the Stage (or create a new one if you need a new window)
-            Stage stage = new Stage();
-
-            // Set the Scene with the loaded FXML content
+            // Replace the current stage's scene
             Scene scene = new Scene(root);
-            stage.setScene(scene);
-
-            // Show the stage (open the window)
-            stage.show();
+            currentStage.setScene(scene);
+            currentStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle the exception if the FXML file couldn't be loaded
         }
     }
 
