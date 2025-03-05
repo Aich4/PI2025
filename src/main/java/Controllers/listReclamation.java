@@ -6,6 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,6 +21,7 @@ import models.Reclamation;
 import models.Reponse;
 import services.ReclamationService;
 import services.ReponseService;
+import services.TextToSpeechUtil;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.ComboBox;
@@ -31,11 +37,14 @@ import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
+import java.util.Map;
+import java.util.HashMap;
 
 
 public class listReclamation {
     private ReclamationService service;
     private ReponseService reponseService;
+    private TextToSpeechUtil ttsUtil;
 
     @FXML
     private TextField searchField;
@@ -48,9 +57,33 @@ public class listReclamation {
     private ObservableList<Reclamation> allReclamations;
     private ReclamationService reclamationService;
 
+    @FXML
+    private PieChart pieChart;
+    @FXML
+    private BarChart<String, Number> barChart;
+
     public listReclamation() {
         this.reclamationService = new ReclamationService();
         this.reponseService = new ReponseService();
+        this.ttsUtil = new TextToSpeechUtil();
+    }
+
+    private String getReclamationInfo(Reclamation reclamation) {
+        return String.format("Type de réclamation : %s. Description : %s. État : %s. Date : %s",
+            reclamation.getType(),
+            reclamation.getDescription(),
+            getEtatText(reclamation.getEtat()),
+            reclamation.getDate().toString()
+        );
+    }
+
+    private String getEtatText(String etat) {
+        return switch (etat) {
+            case "0" -> "Non traité";
+            case "1" -> "Traité";
+            case "2" -> "En attente";
+            default -> etat;
+        };
     }
 
     @FXML
@@ -114,7 +147,7 @@ public class listReclamation {
         Label typeLabel = new Label("Type: " + rec.getType());
         Label descLabel = new Label("Description: " + rec.getDescription());
         Label dateLabel = new Label("Date: " + rec.getDate().toString());
-        Label etatLabel = new Label("État: " + rec.getEtatDescription());
+        Label etatLabel = new Label("État: " + getEtatText(rec.getEtat()));
 
         // Stylisation des labels
         typeLabel.setStyle("-fx-font-weight: bold;");
@@ -130,18 +163,25 @@ public class listReclamation {
         Button repondreBtn = new Button("Répondre");
         Button modifierBtn = new Button("Modifier");
         Button supprimerBtn = new Button("Supprimer");
+        Button speakBtn = new Button("🔊");  // Emoji haut-parleur pour le bouton
 
         // Style des boutons
         repondreBtn.getStyleClass().add("action-button");
         modifierBtn.getStyleClass().add("action-button");
         supprimerBtn.getStyleClass().add("action-button");
+        speakBtn.getStyleClass().add("action-button");
+        speakBtn.setStyle("-fx-background-color: #4682B4; -fx-text-fill: white;");
 
         // Actions des boutons
         repondreBtn.setOnAction(e -> showReponsePopup(rec));
         modifierBtn.setOnAction(e -> showModifyPopup(rec));
         supprimerBtn.setOnAction(e -> deleteReclamation(rec));
+        speakBtn.setOnAction(e -> {
+            String info = getReclamationInfo(rec);
+            ttsUtil.speak(info);
+        });
 
-        buttonContainer.getChildren().addAll(repondreBtn, modifierBtn, supprimerBtn);
+        buttonContainer.getChildren().addAll(repondreBtn, modifierBtn, supprimerBtn, speakBtn);
 
         // Ajout des conteneurs à la cellule
         container.getChildren().addAll(infoContainer, buttonContainer);
@@ -370,5 +410,116 @@ public class listReclamation {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @FXML
+    void showStatistics(ActionEvent event) {
+        Stage stage = new Stage();
+        VBox layout = new VBox(20);
+        layout.setPadding(new Insets(15));
+        layout.setAlignment(Pos.CENTER);
+
+        // Création du PieChart
+        PieChart pieChart = createPieChart();
+        
+        // Création du BarChart
+        BarChart<String, Number> barChart = createBarChart();
+
+        // Ajout des graphiques au layout
+        layout.getChildren().addAll(
+            new Label("Statistiques des Réclamations"),
+            new Separator(),
+            pieChart,
+            new Separator(),
+            barChart
+        );
+
+        Scene scene = new Scene(layout, 800, 600);
+        stage.setTitle("Statistiques des Réclamations");
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+    }
+
+    private PieChart createPieChart() {
+        // Calculer les statistiques
+        Map<String, Integer> typeStats = new HashMap<>();
+        for (Reclamation rec : allReclamations) {
+            typeStats.merge(rec.getType(), 1, Integer::sum);
+        }
+
+        // Créer les données du PieChart
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        typeStats.forEach((type, count) -> 
+            pieChartData.add(new PieChart.Data(type + " (" + count + ")", count))
+        );
+
+        // Créer et configurer le PieChart
+        PieChart chart = new PieChart(pieChartData);
+        chart.setTitle("Distribution des Types de Réclamations");
+        chart.setLabelsVisible(true);
+        chart.setLegendVisible(true);
+
+        // Ajouter des tooltips
+        pieChartData.forEach(data -> {
+            String percentage = String.format("%.1f%%", (data.getPieValue() / allReclamations.size() * 100));
+            Tooltip tooltip = new Tooltip(
+                data.getName() + "\n" +
+                "Nombre: " + (int)data.getPieValue() + "\n" +
+                "Pourcentage: " + percentage
+            );
+            Tooltip.install(data.getNode(), tooltip);
+        });
+
+        return chart;
+    }
+
+    private BarChart<String, Number> createBarChart() {
+        // Créer les axes
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("État");
+        yAxis.setLabel("Nombre de Réclamations");
+
+        // Créer le BarChart
+        BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
+        chart.setTitle("Réclamations par État");
+
+        // Calculer les statistiques par état
+        Map<String, Integer> etatStats = new HashMap<>();
+        for (Reclamation rec : allReclamations) {
+            String etatText = getEtatText(rec.getEtat());
+            etatStats.merge(etatText, 1, Integer::sum);
+        }
+
+        // Créer la série de données
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Nombre de Réclamations");
+
+        etatStats.forEach((etat, count) -> 
+            series.getData().add(new XYChart.Data<>(etat, count))
+        );
+
+        chart.getData().add(series);
+        chart.setLegendVisible(false);
+
+        // Ajouter des tooltips
+        series.getData().forEach(data -> {
+            Tooltip tooltip = new Tooltip(
+                "État: " + data.getXValue() + "\n" +
+                "Nombre: " + data.getYValue()
+            );
+            Tooltip.install(data.getNode(), tooltip);
+        });
+
+        return chart;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (ttsUtil != null) {
+            ttsUtil.deallocate();
+        }
     }
 }

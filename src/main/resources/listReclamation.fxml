@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="689.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.listReclamation">
+<AnchorPane prefHeight="689.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.listReclamation">
     <children>
         <ImageView fitHeight="789.0" fitWidth="1158.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -49,11 +49,8 @@
                                 <Image url="@stat.png" />
                             </image>
                         </ImageView>
-                        <Label text="Statistiques">
-                            <font>
-                                <Font name="Cambria Math" size="16.0" />
-                            </font>
-                        </Label>
+                        <Button text="Statistiques" onAction="#showStatistics" 
+                                style="-fx-background-color: #4682B4; -fx-text-fill: white; -fx-font-weight: bold;"/>
                     </HBox>
 
                     <!-- Responses Button -->
@@ -65,7 +62,7 @@
                         </ImageView>
                         <Button fx:id="basculeReponse" onAction="#basculeReponse" 
                                 text="Voir Réponses" 
-                                styleClass="nav-button"/>
+                                style="-fx-background-color: #4682B4; -fx-text-fill: white; -fx-font-weight: bold;"/>
                     </HBox>
                 </VBox>
             </children>

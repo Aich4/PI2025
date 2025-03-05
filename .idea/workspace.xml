@@ -6,8 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="04f98120-fdd4-4448-8805-61b30ba79986" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/CalendarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/CalendarController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/affichageReclamation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/affichageReclamation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/listReclamation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/listReclamation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/TextToSpeechUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/TextToSpeechUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tests/MainFx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tests/MainFx.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/listReclamation.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/listReclamation.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +66,7 @@
     "git-widget-placeholder": "GestionReclamation",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/ahmed/IdeaProjects/PI_reclamation/src/main/java",
-    "last_opened_file_path": "C:/Users/ahmed/IdeaProjects/PI_reclamation/freetts-1.2.2-bin",
+    "last_opened_file_path": "C:/Users/ahmed/IdeaProjects/PI_reclamation/freetts-1.2.2-bin/freetts-1.2/lib/mbrola.jar",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -122,7 +126,7 @@
       <workItem from="1740876452296" duration="22000" />
       <workItem from="1740876550365" duration="5971000" />
       <workItem from="1740916149913" duration="10254000" />
-      <workItem from="1741130323130" duration="3264000" />
+      <workItem from="1741130323130" duration="6528000" />
     </task>
     <servers />
   </component>

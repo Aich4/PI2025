@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.Reclamation;
 import services.ReclamationService;
+import services.TextToSpeechUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,9 +31,20 @@ public class affichageReclamation {
 
     private ReclamationService reclamationService;
     private ObservableList<Reclamation> reclamationList;
+    private TextToSpeechUtil ttsUtil;
 
     public affichageReclamation() {
         reclamationService = new ReclamationService();
+        ttsUtil = new TextToSpeechUtil();
+    }
+
+    private String getReclamationInfo(Reclamation reclamation) {
+        return String.format("Type de réclamation : %s. Description : %s. État : %s. Date : %s",
+            reclamation.getType(),
+            reclamation.getDescription(),
+            getEtatText(reclamation.getEtat()),
+            reclamation.getDate().toString()
+        );
     }
 
     @FXML
@@ -56,16 +68,12 @@ public class affichageReclamation {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    // Création du conteneur principal
-                    HBox container = new HBox(15); // Espacement entre les colonnes
+                    HBox container = new HBox(15);
                     container.setAlignment(Pos.CENTER_LEFT);
-                    container.setPrefHeight(40); // Hauteur fixe pour chaque ligne
+                    container.setPrefHeight(40);
                     container.setPadding(new Insets(5, 10, 5, 10));
-                    
-                    // Style tableau
                     container.setStyle("-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
                     
-                    // Création des "colonnes" avec largeur fixe
                     Label typeLabel = new Label(reclamation.getType());
                     typeLabel.setPrefWidth(100);
                     
@@ -80,24 +88,32 @@ public class affichageReclamation {
                     
                     // Style de l'état selon sa valeur
                     switch (reclamation.getEtat()) {
-                        case "0" -> etatLabel.setStyle("-fx-text-fill: #FF4444; -fx-font-weight: bold;"); // Rouge pour non traité
-                        case "1" -> etatLabel.setStyle("-fx-text-fill: #00C851; -fx-font-weight: bold;"); // Vert pour traité
-                        case "2" -> etatLabel.setStyle("-fx-text-fill: #FFBB33; -fx-font-weight: bold;"); // Orange pour en attente
+                        case "0" -> etatLabel.setStyle("-fx-text-fill: #FF4444; -fx-font-weight: bold;");
+                        case "1" -> etatLabel.setStyle("-fx-text-fill: #00C851; -fx-font-weight: bold;");
+                        case "2" -> etatLabel.setStyle("-fx-text-fill: #FFBB33; -fx-font-weight: bold;");
                     }
                     
                     // Conteneur pour les boutons
                     HBox buttonsBox = new HBox(5);
                     buttonsBox.setAlignment(Pos.CENTER);
+                    
                     Button modifierBtn = new Button("Modifier");
                     Button supprimerBtn = new Button("Supprimer");
+                    Button speakBtn = new Button("🔊");  // Emoji haut-parleur pour le bouton
                     
                     // Style des boutons
                     modifierBtn.setStyle("-fx-background-color: #808080; -fx-text-fill: white;");
                     supprimerBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+                    speakBtn.setStyle("-fx-background-color: #4682B4; -fx-text-fill: white;");
                     
-                    buttonsBox.getChildren().addAll(modifierBtn, supprimerBtn);
+                    // Action pour le bouton de lecture vocale
+                    speakBtn.setOnAction(event -> {
+                        String info = getReclamationInfo(reclamation);
+                        ttsUtil.speak(info);
+                    });
                     
-                    // Ajout des "colonnes" au conteneur
+                    buttonsBox.getChildren().addAll(modifierBtn, supprimerBtn, speakBtn);
+                    
                     container.getChildren().addAll(
                         typeLabel, 
                         descLabel, 
@@ -106,11 +122,9 @@ public class affichageReclamation {
                         buttonsBox
                     );
                     
-                    // Événements des boutons
                     modifierBtn.setOnAction(event -> modifierReclamation(reclamation));
                     supprimerBtn.setOnAction(event -> supprimerReclamation(reclamation));
                     
-                    // Effet hover
                     container.setOnMouseEntered(e -> 
                         container.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;")
                     );
@@ -231,6 +245,14 @@ public class affichageReclamation {
             case "2" -> "En attente";
             default -> etat;
         };
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (ttsUtil != null) {
+            ttsUtil.deallocate();
+        }
     }
 }
 
