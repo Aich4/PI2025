@@ -21,6 +21,7 @@ import models.Mission;
 import services.MissionService;
 import services.OCRService;
 import services.RecompenseService;
+import services.WhatsAppSender;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,93 +120,79 @@ public class showmission{
         }
     }
     private void ouvrirDialogueValidation(Mission mission) {
-        OCRService ocrService = new OCRService();// Instantiation de OCRService
+        OCRService ocrService = new OCRService(); // Instanciation du service OCR
 
-
-        // Vérifie si la mission a déjà été validée
-        if (mission.getStatut().equals("Validé")) {
-            System.out.println("✅ Mission déjà validée !");
+        // Vérifier si la mission est déjà validée
+        if ("Validé".equals(mission.getStatut())) {
+            afficherAlerte("Information", "✅ Mission déjà validée !", Alert.AlertType.INFORMATION);
             return;
         }
 
-        // Créer un nouveau Stage pour le dialogue de validation
+        // Création du Stage du dialogue
         Stage validationStage = new Stage();
         validationStage.setTitle("Validation de la mission");
 
-        // Créer le conteneur principal pour le dialogue (une VBox ici)
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.CENTER);
 
-        // Label pour indiquer l'action à l'utilisateur
         Label label = new Label("Veuillez télécharger une preuve pour valider la mission.");
-        vbox.getChildren().add(label);
-
-        // Créer le bouton de téléversement de fichier
         Button uploadButton = new Button("Téléverser une image");
-        vbox.getChildren().add(uploadButton);
-
-        // Afficher un emplacement pour le nom du fichier téléchargé
         TextField filePathField = new TextField();
-        filePathField.setEditable(false);  // L'utilisateur ne peut pas modifier le chemin
-        vbox.getChildren().add(filePathField);
-
-        // Créer un bouton pour valider la mission après l'OCR
+        filePathField.setEditable(false);
         Button validateButton = new Button("Valider la mission");
-        validateButton.setDisable(true); // Initialement désactivé
-        vbox.getChildren().add(validateButton);
+        validateButton.setDisable(true);
 
-        // Logique pour le bouton de téléversement
+        vbox.getChildren().addAll(label, uploadButton, filePathField, validateButton);
+
+        // Gestion du bouton de téléversement
         uploadButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Téléverser une preuve");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.*"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
 
             File file = fileChooser.showOpenDialog(validationStage);
-
             if (file != null) {
-                filePathField.setText(file.getAbsolutePath()); // Affiche le chemin du fichier
-                validateButton.setDisable(false); // Active le bouton de validation
+                filePathField.setText(file.getAbsolutePath());
+                validateButton.setDisable(false);
             }
         });
 
-        // Logique pour le bouton de validation de la mission
+        // Gestion du bouton de validation
         validateButton.setOnAction(e -> {
             File file = new File(filePathField.getText());
-            if (file.exists()) {
-                try {
-                    // Extraire le texte de l'image
-                    String texteExtrait = ocrService.extraireTexte(file);
-                    if (texteExtrait == null || texteExtrait.trim().isEmpty()) {
-                        afficherAlerte("Erreur", "Le texte extrait est vide, veuillez réessayer.", Alert.AlertType.ERROR);
-                        return;
-                    }
-
-                    String texteAttendu = "Validation"; // Modifier selon le texte attendu
-
-                    // Vérifie si le texte extrait correspond au texte attendu
-                    if (texteExtrait.contains(texteAttendu)) {
-                        missionService.valider(mission); // Appelle ta méthode de mise à jour
-                        afficherAlerte("Succès", "Mission validée avec succès !", Alert.AlertType.INFORMATION);
-                        afficherMissions(); // Rafraîchir la liste après validation
-                        validationStage.close(); // Fermer le dialogue après validation
-                    } else {
-                        afficherAlerte("Erreur", "Le texte extrait ne correspond pas à la validation attendue.", Alert.AlertType.ERROR);
-                    }
-                } catch (TesseractException te) {
-                    // Gestion d'exception spécifique à Tesseract
-                    System.out.println("❌ Erreur Tesseract : " + te.getMessage());
-                    afficherAlerte("Erreur", "Une erreur est survenue lors de l'extraction du texte.", Alert.AlertType.ERROR);
-                } catch (Exception ex) {
-                    // Gestion d'autres erreurs
-                    System.out.println("❌ Erreur lors de la validation : " + ex.getMessage());
-                    afficherAlerte("Erreur", "Une erreur est survenue lors de la validation.", Alert.AlertType.ERROR);
-                }
-            } else {
+            if (!file.exists()) {
                 afficherAlerte("Erreur", "Le fichier n'existe pas, veuillez réessayer.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            try {
+                // Extraire le texte avec OCR
+                String texteExtrait = ocrService.extraireTexte(file).trim();
+                if (texteExtrait.isEmpty()) {
+                    afficherAlerte("Erreur", "Le texte extrait est vide, veuillez réessayer.", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                String texteAttendu = "Validation"; // Adapter selon besoin
+                if (texteExtrait.contains(texteAttendu)) {
+                    missionService.valider(mission);
+                    afficherAlerte("Succès", "Mission validée avec succès !", Alert.AlertType.INFORMATION);
+                    afficherMissions();
+                    validationStage.close();
+
+                    // Envoi du message WhatsApp
+                    String messageText = "Bonjour, votre mission a été validée avec succès. Vous pouvez maintenant profiter de votre récompense.";
+                    WhatsAppSender.envoyerMessageWhatsApp(messageText);
+                } else {
+                    afficherAlerte("Erreur", "Le texte extrait ne correspond pas à la validation attendue.", Alert.AlertType.ERROR);
+                }
+            } catch (TesseractException te) {
+                afficherAlerte("Erreur OCR", "Erreur lors de l'extraction du texte : " + te.getMessage(), Alert.AlertType.ERROR);
+            } catch (Exception ex) {
+                afficherAlerte("Erreur", "Une erreur est survenue : " + ex.getMessage(), Alert.AlertType.ERROR);
             }
         });
 
-        // Créer une scène et l'ajouter au stage
         Scene scene = new Scene(vbox, 400, 200);
         validationStage.setScene(scene);
         validationStage.show();
