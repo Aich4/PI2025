@@ -60,7 +60,7 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button blendMode="LIGHTEN" layoutX="201.0" layoutY="420.0" mnemonicParsing="false" onAction="#show" prefHeight="30.0" prefWidth="115.0" text="afficher" />
+            <Button fx:id="afficher" blendMode="LIGHTEN" layoutX="201.0" layoutY="420.0" mnemonicParsing="false" onAction="#show" prefHeight="30.0" prefWidth="115.0" text="afficher" />
             <TextField fx:id="emailpartenaire" layoutX="59.0" layoutY="185.0" prefHeight="29.0" prefWidth="262.0" promptText="Email Partenaire">
                <font>
                   <Font size="14.0" />
@@ -74,6 +74,11 @@
             <DatePicker fx:id="date" layoutX="59.0" layoutY="266.0" prefHeight="25.0" prefWidth="262.0" promptText="Date" />
             <ComboBox fx:id="idcategorie" blendMode="LIGHTEN" layoutX="58.0" layoutY="382.0" prefHeight="25.0" prefWidth="262.0" promptText="categorie" />
             <Button blendMode="LIGHTEN" layoutX="58.0" layoutY="420.0" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="124.0" text="ajouter" />
+            <TextField fx:id="num_tel" layoutX="65.0" layoutY="469.0" prefHeight="29.0" prefWidth="262.0" promptText="Numero Partenaire">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
          </children>
       </Pane>
       <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">

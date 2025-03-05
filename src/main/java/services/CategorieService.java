@@ -4,10 +4,7 @@ import models.Categorie;
 import models.Partenaire;
 import utils.MyDb;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +15,10 @@ public class CategorieService implements CrudInterface <Categorie> {
 
     @Override
     public void create(Categorie obj) throws Exception {
+
+        if (categoryExists(obj.getNom())) {
+            throw new Exception("A category with this name already exists.");
+        }
         String sql="insert into categorie(nom,description,logo,nbr_partenaire)values(?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, obj.getNom());
@@ -105,5 +106,55 @@ public class CategorieService implements CrudInterface <Categorie> {
         return null;
 
     }
+
+    public void incrementNbrCategorie(int idCategorie) throws SQLException {
+        String sql = "UPDATE categorie SET nbr_partenaire = nbr_partenaire + 1 WHERE id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, idCategorie);
+        preparedStatement.executeUpdate();
+    }
+    public void decrementNbrCategorie(int categoryId) throws SQLException {
+        String sql = "UPDATE categorie SET nbr_partenaire = nbr_partenaire - 1 WHERE id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, categoryId);
+        preparedStatement.executeUpdate();
+    }
+    public boolean categoryExists(String nom) {
+        // Logic to check if a category with the same name already exists in the database
+        // Assuming you have a method to query the database, e.g., `findCategoryByName`
+        try {
+            Categorie existingCategorie = findCategoryByName(nom);
+            return existingCategorie != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Categorie findCategoryByName(String nom) {
+        Categorie categorie = null;
+        String query = "SELECT * FROM categorie WHERE nom = ?"; // Use "categorie" instead of "categories"
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, nom);  // Set the category name parameter in the query
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // If a category with the same name is found, create a Categorie object
+                    String description = rs.getString("description");
+                    String imagePath = rs.getString("logo"); // Assuming "logo" column holds the image path
+
+                    // Create the Categorie object with the fetched data
+                    categorie = new Categorie(nom, description, imagePath);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categorie; // Return the found category or null if not found
+    }
+
+
 
 }
