@@ -198,6 +198,18 @@ public class affichageReclamation {
         }
     }
 
+    @FXML
+    void voirCalendrier(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Calendar.fxml"));
+            Parent root = loader.load();
+            Scene scene = ((Button) event.getSource()).getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            showAlert("Erreur", "Erreur lors du chargement du calendrier: " + e.getMessage());
+        }
+    }
+
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

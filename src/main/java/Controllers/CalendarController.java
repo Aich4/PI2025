@@ -1,13 +1,20 @@
 package Controllers;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import services.ReclamationService;
 import models.Reclamation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import java.io.IOException;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -52,6 +59,47 @@ public class CalendarController {
         clearFilterButton.setOnAction(e -> clearDateFilter());
         updateSelectedDateRangeLabel();
         updateMonthYearLabel();
+
+        // Configuration de la ListView
+        reclamationListView.setCellFactory(lv -> new ListCell<Reclamation>() {
+            @Override
+            protected void updateItem(Reclamation reclamation, boolean empty) {
+                super.updateItem(reclamation, empty);
+                if (empty || reclamation == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox container = new HBox(15);
+                    container.setAlignment(Pos.CENTER_LEFT);
+                    container.setPrefHeight(40);
+                    container.setPadding(new Insets(5, 10, 5, 10));
+                    container.setStyle("-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
+                    
+                    Label typeLabel = new Label(reclamation.getType());
+                    typeLabel.setPrefWidth(100);
+                    
+                    Label descLabel = new Label(reclamation.getDescription());
+                    descLabel.setPrefWidth(200);
+                    
+                    Label dateLabel = new Label(reclamation.getDate().toString());
+                    dateLabel.setPrefWidth(150);
+                    
+                    Label etatLabel = new Label(reclamation.getEtat());
+                    etatLabel.setPrefWidth(100);
+                    
+                    container.getChildren().addAll(typeLabel, descLabel, dateLabel, etatLabel);
+                    
+                    container.setOnMouseEntered(e -> 
+                        container.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;")
+                    );
+                    container.setOnMouseExited(e -> 
+                        container.setStyle("-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;")
+                    );
+                    
+                    setGraphic(container);
+                }
+            }
+        });
     }
 
     private void loadReclamations() {
@@ -191,5 +239,17 @@ public class CalendarController {
         alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    void retour(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichageReclamation.fxml"));
+            Parent root = loader.load();
+            Scene scene = ((Button) event.getSource()).getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            showAlert("Erreur", "Erreur lors du retour à la page des réclamations: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 }
