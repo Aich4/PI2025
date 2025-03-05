@@ -38,6 +38,15 @@ public class CalendarController {
     private ReclamationService reclamationService = new ReclamationService();
     private ObservableList<Reclamation> reclamationData = FXCollections.observableArrayList();
 
+    private String getEtatText(String etat) {
+        return switch (etat) {
+            case "0" -> "Non traité";
+            case "1" -> "Traité";
+            case "2" -> "En attente";
+            default -> etat;
+        };
+    }
+
     @FXML
     public void initialize() {
         currentYearMonth = YearMonth.from(currentDate);
@@ -84,8 +93,15 @@ public class CalendarController {
                     Label dateLabel = new Label(reclamation.getDate().toString());
                     dateLabel.setPrefWidth(150);
                     
-                    Label etatLabel = new Label(reclamation.getEtat());
+                    Label etatLabel = new Label(getEtatText(reclamation.getEtat()));
                     etatLabel.setPrefWidth(100);
+                    
+                    // Style de l'état selon sa valeur
+                    switch (reclamation.getEtat()) {
+                        case "0" -> etatLabel.setStyle("-fx-text-fill: #FF4444; -fx-font-weight: bold;"); // Rouge pour non traité
+                        case "1" -> etatLabel.setStyle("-fx-text-fill: #00C851; -fx-font-weight: bold;"); // Vert pour traité
+                        case "2" -> etatLabel.setStyle("-fx-text-fill: #FFBB33; -fx-font-weight: bold;"); // Orange pour en attente
+                    }
                     
                     container.getChildren().addAll(typeLabel, descLabel, dateLabel, etatLabel);
                     
