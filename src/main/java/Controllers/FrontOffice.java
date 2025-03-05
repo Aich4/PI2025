@@ -162,6 +162,17 @@ public class FrontOffice {
             }
         }
     }
+    @FXML
+    void showWishlist(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Wishlist.fxml"));
+        try {
+            Parent root = loader.load();
+            categorie.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @FXML
     void addRecl(ActionEvent event) {

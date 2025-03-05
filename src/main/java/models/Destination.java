@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 public class Destination {
     private int id;
     private String nom_destination,decription,image_destination;
@@ -108,5 +110,17 @@ public class Destination {
                 ", temperature=" + temperature +
                 ", rate=" + rate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Destination that)) return false;
+        return id == that.id && Double.compare(latitude, that.latitude) == 0 && Double.compare(longitude, that.longitude) == 0 && Double.compare(temperature, that.temperature) == 0 && Double.compare(rate, that.rate) == 0 && Objects.equals(nom_destination, that.nom_destination) && Objects.equals(decription, that.decription) && Objects.equals(image_destination, that.image_destination);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nom_destination, decription, image_destination, latitude, longitude, temperature, rate);
     }
 }

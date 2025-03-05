@@ -20,6 +20,7 @@ import models.Destination;
 import services.ActiviteService;
 import services.AvisService;
 import services.WeatherService;
+import services.WishlistService;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +30,8 @@ import java.util.Optional;
 import static services.WeatherService.getWeatherIcon;
 
 public class DestinationCard {
+
+
     ActiviteService activiteService = new ActiviteService();
     private Destination destination;
 
@@ -50,7 +53,42 @@ public class DestinationCard {
     @FXML
     private Button weatherButton;
 
+    @FXML
+    private ImageView wishlistIcon;
 
+    private boolean isInWishlist = false; // Track if the destination is in the wishlist
+    private static final String HEART_EMPTY_PATH = "/heart_empty.png";
+    private static final String HEART_FILLED_PATH = "/heart_filled.png";
+
+    @FXML
+    public void initialize() {
+        // Load the default heart image (empty)
+        wishlistIcon.setImage(new Image(getClass().getResource(HEART_EMPTY_PATH).toExternalForm()));
+        wishlistIcon.setOnMouseClicked(event -> toggleWishlist());
+    }
+    private void toggleWishlist() {
+        isInWishlist = !isInWishlist;
+
+        if (isInWishlist) {
+            // Set the heart to filled when added to the wishlist
+            wishlistIcon.setImage(new Image(getClass().getResource(HEART_FILLED_PATH).toExternalForm()));
+            addToWishlist(destination);
+        } else {
+            // Set the heart to empty when removed from the wishlist
+            wishlistIcon.setImage(new Image(getClass().getResource(HEART_EMPTY_PATH).toExternalForm()));
+            removeFromWishlist(destination);
+        }
+    }
+
+    private void addToWishlist(Destination destination) {
+        WishlistService.getInstance().add(destination);
+        System.out.println(destination.getNom_destination() + " added to wishlist.");
+    }
+
+    private void removeFromWishlist(Destination destination) {
+        WishlistService.getInstance().remove(destination);
+        System.out.println(destination.getNom_destination() + " removed from wishlist.");
+    }
 
     public void setDestinationData(Destination destination) {
         nameLabel.setText(destination.getNom_destination());

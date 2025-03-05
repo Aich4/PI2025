@@ -37,6 +37,7 @@
             </VBox>
          </content>
       </ScrollPane>
+      <Button layoutX="943.0" layoutY="133.0" mnemonicParsing="false" onAction="#showWishlist" prefHeight="35.0" prefWidth="150.0" text="My Wishlist" />
 
    </children>
 </AnchorPane>

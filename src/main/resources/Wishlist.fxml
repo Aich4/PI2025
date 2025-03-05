@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+
+<ScrollPane fx:id="wishlistScroll" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.WishlistController"
+            style="-fx-background-color: #f4f4f4; -fx-border-color: #dcdcdc; -fx-border-width: 2;">
+    <VBox fx:id="wishlistContainer" spacing="15" style="-fx-padding: 20;" alignment="CENTER">
+        <!-- Sample Wishlist Item -->
+        <HBox spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 10; -fx-border-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);">
+            <ImageView fx:id="destinationImage" fitHeight="50" fitWidth="50" style="-fx-background-radius: 25;"/>
+            <VBox alignment="TOP_LEFT" spacing="5">
+                <Text fx:id="destinationName" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+                <Text fx:id="destinationDescription" style="-fx-font-size: 12px; -fx-text-fill: #777777;"/>
+            </VBox>
+            <Button fx:id="removeButton" text="Remove" style="-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-border-radius: 5; -fx-padding: 5px 10px;"/>
+        </HBox>
+
+        <!-- Additional Items will be added dynamically -->
+
+        <!-- Generate Button placed below all destination items -->
+        <Button fx:id="generateButton" text="Generate" onAction="#generateButtonClicked"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 5; -fx-padding: 10px 20px; -fx-font-size: 14px; -fx-cursor: hand;"/>
+    </VBox>
+</ScrollPane>
