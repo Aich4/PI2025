@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import models.Destination;
+import services.AvisService;
 import services.DestinationService;
+import models.Avis;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,8 +40,15 @@ public class ListDestination {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/DestinationCard.fxml"));
                     AnchorPane card = loader.load();
 
-                    DestinationCard cardController = loader.getController();
-                    cardController.setDestinationData(destination); // Set data
+                    try {
+                        AvisService avisService = new AvisService();
+                        List<Avis> avisList = avisService.getAvisByDestination(destination.getId());
+                        DestinationCard cardController = loader.getController();
+                        cardController.setDestinationData(destination, avisList);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("Failed to fetch reviews for destination ID: " + destination.getId());
+                    }
 
                     gridContainer.add(card, column, row);
                     column++;

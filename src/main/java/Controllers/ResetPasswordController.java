@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import utils.MyDb;
+import utils.SecurityUtil;
 
 
 import java.sql.Connection;
@@ -51,11 +52,15 @@ public class ResetPasswordController {
         try {
             // Hash the new password
 
+            String hashedPassword = SecurityUtil.hashPassword(password);
+
 
             // Update password in database
             Connection conn = MyDb.getInstance().getConnection();
             String query = "UPDATE user SET mot_de_passe = ? WHERE email = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+                pstmt.setString(1, hashedPassword);
 
                 pstmt.setString(2, userEmail);
                 int updated = pstmt.executeUpdate();

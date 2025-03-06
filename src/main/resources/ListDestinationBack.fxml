@@ -60,7 +60,8 @@
                 </HBox>
                 <ScrollPane layoutX="40.0" layoutY="197.0" prefHeight="371.0" prefWidth="809.0">
                <content>
-                  <ListView fx:id="ListView" prefHeight="360.0" prefWidth="808.0" />
+                  <Label text="Reviews and Ratings:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                  <ListView fx:id="reviewsListView" prefHeight="360.0" prefWidth="808.0" />
                </content>
                 </ScrollPane>
             <Button layoutX="703.0" layoutY="151.0" mnemonicParsing="false" onAction="#ajout" prefHeight="32.0" prefWidth="178.0" stylesheets="@css/styles.css" text="ajouter une destination" textFill="#413852">
