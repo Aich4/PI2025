@@ -5,7 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import models.Categorie;
 import services.CategorieService;
@@ -20,6 +23,42 @@ public class GestionCategorie {
         public GestionCategorie() {
             this.ss = new CategorieService();
         }
+
+    @FXML
+    private ImageView imageView;  // ImageView pour afficher l’image sélectionnée
+
+    private String imagePath;
+
+    @FXML
+    private Button partenaire;
+
+    @FXML
+    void navigateToAddPartenaire(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddPartenaire.fxml")); // Path to your AddPartenaire.fxml
+        try {
+            Parent root = loader.load();  // Load the AddPartenaire FXML
+            // Get the current scene and set the root to the new scene
+            imageView.getScene().setRoot(root);
+        } catch (IOException e) {
+            // Handle exception if loading fails
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page Partenaire.");
+        }
+    }
+
+
+
+    @FXML
+    void chooseImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers image", "*.jpg", "*.png", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            imagePath = selectedFile.toURI().toString();  // Stocke le chemin
+            imageView.setImage(new Image(imagePath));  // Affiche l'image immédiatement
+        }
+    }
 
     @FXML
     private TextField descriptioncategorie;
@@ -57,6 +96,12 @@ public class GestionCategorie {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Une image doit être sélectionnée.");
             return;
         }
+
+        if (ss.categoryExists(nom)) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Une catégorie avec ce nom existe déjà.");
+            return;
+        }
+
 
         // Création de la catégorie
         Categorie categorie = new Categorie(nom, description, imagePath);
@@ -100,24 +145,12 @@ public class GestionCategorie {
     }
 
 
-    private String imagePath;
         void reset (){
             this.nomcategorie.clear();
             this.descriptioncategorie.clear();
             this.imagePath = "";
 
         }
-    @FXML
-    void chooseImage(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Image File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image File", "*.jpg", "*.png"));
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            this.imagePath = selectedFile.toURI().toString();
-        }
-    }
-
 
 
 }

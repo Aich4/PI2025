@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.CategorieService;
@@ -20,12 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javafx.scene.layout.GridPane;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import java.util.Optional;
 
 public class ListCategorie {
 
@@ -97,7 +95,7 @@ public class ListCategorie {
                         HBox leftHBox = new HBox(10, imageView, label);
 
                         // Créer un HBox pour les boutons Modifier et Supprimer et pousser à droite
-                        HBox rightHBox = new HBox();
+                        HBox rightHBox = new HBox(10);
                         rightHBox.setHgrow(rightHBox, Priority.ALWAYS);
                         rightHBox.getChildren().addAll(btnModifier, btnSupprimer);
 
@@ -106,9 +104,14 @@ public class ListCategorie {
                         fullHBox.setSpacing(10);
 
                         // Gérer l'action du bouton Modifier
-                        btnModifier.setOnAction(event -> afficherDialogueModificationCategorie(categorie));
+                        btnModifier.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
+
+                        btnModifier.setOnAction(event -> afficherFenetreModificationCategorie(categorie));
+
 
                         // Événement du bouton "Supprimer"
+                        btnSupprimer.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
+
                         btnSupprimer.setOnAction(event -> {
                             // Créer une alerte de confirmation
                             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -147,100 +150,98 @@ public class ListCategorie {
     }
 
 
-    private void afficherDialogueModificationCategorie(Categorie categorie) {
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Modifier Catégorie");
-        dialog.setHeaderText("Modifiez les informations de la catégorie");
+    private void afficherFenetreModificationCategorie(Categorie categorie) {
+        Stage modificationStage = new Stage();
+        modificationStage.setTitle("Modifier Catégorie");
 
-        TextField nomField = new TextField(categorie.getNom());
-        TextField descriptionField = new TextField(categorie.getDescription());
+        // Champs modifiables
+        TextField txtNom = new TextField(categorie.getNom());
+        TextField txtDescription = new TextField(categorie.getDescription());
+        TextField txtLogo = new TextField(categorie.getLogo());
 
-        Label logoLabel = new Label(categorie.getLogo() != null ? categorie.getLogo() : "Aucune image sélectionnée");
-        Button btnUpload = new Button("Choisir une image");
+        // Labels
+        Label lblNom = new Label("Nom:");
+        Label lblDescription = new Label("Description:");
+        Label lblLogo = new Label("Logo:");
 
-        // Sélection d'une image
-        btnUpload.setOnAction(e -> {
+        // ImageView pour afficher l'image actuelle
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(150);
+        imageView.setFitHeight(150);
+
+        // Charger l'image actuelle si elle existe
+        if (categorie.getLogo() != null && !categorie.getLogo().isEmpty()) {
+            try {
+                Image image = new Image("file:" + categorie.getLogo());
+                imageView.setImage(image);
+            } catch (Exception e) {
+                System.out.println("Erreur de chargement de l'image.");
+            }
+        }
+
+        // Bouton pour sélectionner une image
+        Button btnChoisirImage = new Button("Choisir Image");
+        btnChoisirImage.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Sélectionner une image");
-            fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
-            );
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+            File file = fileChooser.showOpenDialog(modificationStage);
 
-            File selectedFile = fileChooser.showOpenDialog(null);
-            if (selectedFile != null) {
-                logoLabel.setText(selectedFile.getAbsolutePath()); // Afficher le chemin du fichier
+            if (file != null) {
+                txtLogo.setText(file.getAbsolutePath()); // Stocker le chemin de l'image
+                imageView.setImage(new Image(file.toURI().toString())); // Mettre à jour l'aperçu
             }
         });
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        // Bouton pour enregistrer les modifications
+        Button btnEnregistrer = new Button("Sauvegarder");
 
-        grid.add(new Label("Nom:"), 0, 0);
-        grid.add(nomField, 1, 0);
-        grid.add(new Label("Description:"), 0, 1);
-        grid.add(descriptionField, 1, 1);
-        grid.add(new Label("Logo:"), 0, 2);
-        grid.add(btnUpload, 1, 2);
-        grid.add(logoLabel, 2, 2);
+        btnEnregistrer.setOnAction(event -> {
+            String newNom = txtNom.getText().trim();
+            String newDescription = txtDescription.getText().trim();
+            String newLogo = txtLogo.getText().trim(); // Nouveau chemin de l’image
 
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        boolean saisieCorrecte;
-        do {
-            saisieCorrecte = true; // On suppose que la saisie est correcte au départ
-
-            Optional<ButtonType> result = dialog.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                String nom = nomField.getText().trim();
-                String description = descriptionField.getText().trim();
-                String logo = logoLabel.getText();
-
-                // Vérification du nom
-                if (nom.isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom ne peut pas être vide.");
-                    saisieCorrecte = false;
-                } else if (nom.matches("\\d+")) { // Vérifie si le nom contient uniquement des chiffres
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom ne peut pas contenir uniquement des chiffres.");
-                    saisieCorrecte = false;
-                }
-
-                // Vérification de la description
-                if (description.isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "La description ne peut pas être vide.");
-                    saisieCorrecte = false;
-                } else if (isOnlyDigits(description)) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "La description ne peut pas contenir uniquement des chiffres.");
-                    saisieCorrecte = false;
-                }
-
-                // Vérification de l'image
-                if (logo.equals("Aucune image sélectionnée") || logo.trim().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner une image.");
-                    saisieCorrecte = false;
-                }
-
-                // Si toutes les saisies sont valides, on met à jour la catégorie
-                if (saisieCorrecte) {
-                    categorie.setNom(nom);
-                    categorie.setDescription(description);
-                    categorie.setLogo(logo);
-
-                    try {
-                        ss.update(categorie);  // Mettre à jour la base de données
-                        afficherCategories();   // Rafraîchir la liste après modification
-                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Catégorie mise à jour avec succès.");
-                    } catch (Exception e) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la mise à jour : " + e.getMessage());
-                    }
-                }
-            } else {
-                break; // L'utilisateur a annulé, on sort de la boucle
+            // Vérifications des saisies
+            if (newNom.isEmpty() || newDescription.isEmpty() || newLogo.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis.");
+                return;
             }
-        } while (!saisieCorrecte); // Tant que la saisie est incorrecte, on redemande les informations
+
+            // Vérification spécifique (Exemple : Nom doit contenir au moins 3 caractères)
+            if (newNom.length() < 3) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom doit contenir au moins 3 caractères.");
+                return;
+            }
+
+            // Mise à jour de l'objet catégorie
+            categorie.setNom(newNom);
+            categorie.setDescription(newDescription);
+            categorie.setLogo(newLogo); // Mettre à jour le chemin de l’image
+
+            try {
+                ss.update(categorie); // Mettre à jour la base de données
+                afficherCategories(); // Rafraîchir la liste principale
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Catégorie mise à jour avec succès.");
+                modificationStage.close(); // Fermer la fenêtre après enregistrement
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la mise à jour : " + e.getMessage());
+            }
+        });
+
+        // Mise en page
+        VBox vbox = new VBox(10,
+                lblNom, txtNom,
+                lblDescription, txtDescription,
+                lblLogo, txtLogo,
+                imageView, btnChoisirImage, // Aperçu et bouton de sélection d'image
+                btnEnregistrer
+        );
+        vbox.setPadding(new Insets(10));
+
+        Scene scene = new Scene(vbox, 400, 450);
+        modificationStage.setScene(scene);
+        modificationStage.show();
     }
+
 
     private boolean isOnlyDigits(String str) {
         return str.matches("\\d+");
@@ -287,28 +288,4 @@ public class ListCategorie {
         successAlert.setContentText("La catégorie a été supprimée avec succès !");
         successAlert.showAndWait();
     }
-    @FXML
-    void showDash(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-        try {
-            Parent root = loader.load();
-            listcategorie.getScene().setRoot(root);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
-    void showPart(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichagePartenaire.fxml"));
-        try {
-            Parent root = loader.load();
-            listcategorie.getScene().setRoot(root);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }

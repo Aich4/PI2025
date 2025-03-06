@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import models.Mission;
 import models.Recompense;
 import services.RecompenseService;
 
@@ -147,6 +146,7 @@ public class recompense {
     void reset() {
         this.descriptionRec.clear();
         this.cout_en_points.clear();
+
     }
 
     @FXML
@@ -154,17 +154,6 @@ public class recompense {
 
         remplirComboBoxDisponibilite();
 
-    }
-    @FXML
-    void showDash(ActionEvent event){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-        try {
-            Parent root = loader.load();
-            descriptionRec.getScene().setRoot(root);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

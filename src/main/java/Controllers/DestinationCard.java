@@ -2,7 +2,12 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import javafx.scene.control.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -20,12 +25,19 @@ import models.Avis;
 import models.Destination;
 import services.ActiviteService;
 import services.AvisService;
+import services.WeatherService;
+import services.WishlistService;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import static services.WeatherService.getWeatherIcon;
+
 public class DestinationCard {
+
+
     ActiviteService activiteService = new ActiviteService();
     private Destination destination;
 
@@ -42,21 +54,76 @@ public class DestinationCard {
     private Label ratingLabel;
 
     @FXML
+
+    private VBox weatherContainer;
+
+    @FXML
+    private Button weatherButton;
+
+    @FXML
+    private ImageView wishlistIcon;
+
+    private boolean isInWishlist = false; // Track if the destination is in the wishlist
+    private static final String HEART_EMPTY_PATH = "/heart_empty.png";
+    private static final String HEART_FILLED_PATH = "/heart_filled.png";
+
+    @FXML
+    public void initialize() {
+        // Load the default heart image (empty)
+        wishlistIcon.setImage(new Image(getClass().getResource(HEART_EMPTY_PATH).toExternalForm()));
+        wishlistIcon.setOnMouseClicked(event -> toggleWishlist());
+    }
+    private void toggleWishlist() {
+        isInWishlist = !isInWishlist;
+
+        if (isInWishlist) {
+            // Set the heart to filled when added to the wishlist
+            wishlistIcon.setImage(new Image(getClass().getResource(HEART_FILLED_PATH).toExternalForm()));
+            addToWishlist(destination);
+        } else {
+            // Set the heart to empty when removed from the wishlist
+            wishlistIcon.setImage(new Image(getClass().getResource(HEART_EMPTY_PATH).toExternalForm()));
+            removeFromWishlist(destination);
+        }
+    }
+
+    private void addToWishlist(Destination destination) {
+        WishlistService.getInstance().add(destination);
+        System.out.println(destination.getNom_destination() + " added to wishlist.");
+    }
+
+    private void removeFromWishlist(Destination destination) {
+        WishlistService.getInstance().remove(destination);
+        System.out.println(destination.getNom_destination() + " removed from wishlist.");
+    }
     private Slider ratingSlider;
 
     @FXML
     private FlowPane reviewsContainer;
+
 
     public void setDestinationData(Destination destination, List<Avis> avisList) {
         nameLabel.setText(destination.getNom_destination());
         descriptionLabel.setText(destination.getDecription());
         ratingLabel.setText("⭐ " + destination.getRate());
         this.destination = destination;
+        weatherContainer.setVisible(false);
+
         // Load image if available
-        if (destination.getImage_destination() != null) {
-            Image image = new Image(destination.getImage_destination());
-            destinationImage.setImage(image);
+        if (destination.getImage_destination() != null && !destination.getImage_destination().isEmpty()) {
+            try {
+                Image image = new Image(destination.getImage_destination());
+                destinationImage.setImage(image);
+            } catch (Exception e) {
+                System.out.println("Error loading image: " + e.getMessage());
+                destinationImage.setImage(null);
+            }
+        } else {
+            destinationImage.setImage(null);
         }
+
+
+
 
         // Display reviews
         for (Avis avis : avisList) {
@@ -70,7 +137,44 @@ public class DestinationCard {
         ratingSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             ratingLabel.setText("⭐ " + Math.round(newValue.doubleValue()));
         });
+
     }
+    @FXML
+    void showWeather(ActionEvent event) {
+        if (weatherContainer.isVisible()) {
+            weatherContainer.setVisible(false);
+            weatherContainer.setManaged(false);
+        } else {
+            if (destination == null) {
+                weatherContainer.getChildren().clear();
+                weatherContainer.getChildren().add(new Label("No destination selected."));
+                return;
+            }
+
+            weatherContainer.getChildren().clear();
+
+            // Fetch weather data
+            String forecast = WeatherService.getWeeklyForecast(destination.getLatitude(), destination.getLongitude());
+
+            // Create a container for weather display
+            VBox weatherBox = new VBox(10);
+            weatherBox.setPadding(new Insets(10));
+            weatherBox.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 8px; -fx-padding: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.5, 0, 2);");
+
+            // Split forecast into lines and add styled labels
+            String[] forecastLines = forecast.split("\n");
+            for (String line : forecastLines) {
+                Label weatherLabel = new Label(getWeatherIcon(line) + " " + line);
+                weatherLabel.setStyle("-fx-font-size: 14px; -fx-padding: 5px; -fx-text-fill: #333;");
+                weatherBox.getChildren().add(weatherLabel);
+            }
+
+            weatherContainer.getChildren().add(weatherBox);
+            weatherContainer.setVisible(true);
+            weatherContainer.setManaged(true);
+        }
+    }
+
 
     @FXML
     private void handleAvis() {
@@ -204,7 +308,6 @@ public class DestinationCard {
         mapStage.setTitle("Map - " + destination.getNom_destination());
         mapStage.show();
     }
-
 
 
 

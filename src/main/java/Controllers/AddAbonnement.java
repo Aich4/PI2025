@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import models.Abonnement;
 import services.ServiceAbonnement;
 import services.ServicePack;
@@ -34,6 +35,37 @@ public class AddAbonnement {
         private ComboBox< String > nompack;
 
             private ServiceAbonnement serviceAbonnement = new ServiceAbonnement();
+
+    @FXML
+    void showDash(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/Dashboard.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void showPack(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/ShowPack.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
+
 
     @FXML
     void initialize() {

@@ -7,58 +7,22 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="689.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Dashboard">
+<AnchorPane prefHeight="639.0" prefWidth="1200.0" style="-fx-background-color: #f0f2f9;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Dashboard">
     <children>
-        <ImageView fitHeight="789.0" fitWidth="1158.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@bg.jpeg" />
-            </image>
-        </ImageView>
-        <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">
+        <VBox layoutX="1.0" prefHeight="458.0" prefWidth="263.0" spacing="10.0" style="-fx-background-color: ffffff;" styleClass="white-background" stylesheets="@css/styles.css">
             <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@LOGO.png" />
+               </image>
+            </ImageView>
                 <Separator prefWidth="232.0" />
-                <VBox prefHeight="138.0" prefWidth="250.0">
-                    <children>
-                        <Separator prefHeight="36.0" prefWidth="232.0" />
-                        <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="232.0" styleClass="mouse-moved" stylesheets="@style.css">
-                            <children>
-                                <ImageView fitHeight="81.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@LOGO.png" />
-                                    </image>
-                                    <HBox.margin>
-                                        <Insets top="20.0" />
-                                    </HBox.margin>
-                                </ImageView>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
-                        <Separator prefHeight="36.0" prefWidth="232.0" />
-                    </children>
-                </VBox>
-                <VBox prefHeight="138.0" prefWidth="250.0">
-                    <children>
-                        <Separator prefHeight="36.0" prefWidth="232.0" />
-                        <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="232.0" styleClass="mouse-moved" stylesheets="@style.css" />
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
-                        <VBox prefHeight="138.0" prefWidth="223.0">
-                            <children>
-                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
-                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
-                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
-                            </children>
-                            <VBox.margin>
-                                <Insets left="20.0" />
-                            </VBox.margin>
-                        </VBox>
-                    </children>
-                </VBox>
-                <Button fx:id="aa" mnemonicParsing="false" onAction="#showUserManagement" prefHeight="32.0" prefWidth="224.0" text="Gestion user" textFill="#413852">
+            <ImageView fitHeight="32.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                <Button fx:id="aa" mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" text="Gestion user" textFill="#413852">
                     <effect>
                         <DropShadow>
                             <color>
@@ -69,6 +33,9 @@
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
                 </Button>
                 <Button mnemonicParsing="false" onAction="#showDest" prefHeight="32.0" prefWidth="224.0" text="Gestion destination" textFill="#413852">
                     <effect>
@@ -81,6 +48,9 @@
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
                 </Button>
             <Button layoutX="10.0" layoutY="361.0" mnemonicParsing="false" onAction="#showPart" prefHeight="32.0" prefWidth="224.0" text="Gestion partenaire" textFill="#413852">
                <effect>
@@ -93,6 +63,9 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
             </Button>
             <Button layoutX="10.0" layoutY="403.0" mnemonicParsing="false" onAction="#showRec" prefHeight="32.0" prefWidth="224.0" text="Gestion Reclamation" textFill="#413852">
                <effect>
@@ -105,6 +78,9 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
             </Button>
             <Button layoutX="10.0" layoutY="445.0" mnemonicParsing="false" onAction="#showMiss" prefHeight="32.0" prefWidth="224.0" text="Gestion mission" textFill="#413852">
                <effect>
@@ -117,6 +93,9 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
             </Button>
             <Button layoutX="10.0" layoutY="487.0" mnemonicParsing="false" onAction="#showAbon" prefHeight="32.0" prefWidth="224.0" text="Gestion abonnement" textFill="#413852">
                <effect>
@@ -129,11 +108,35 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
+            </Button>
+            <ImageView fitHeight="102.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <Button layoutX="50.0" layoutY="428.0" mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="207.0" text="log out" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
             </Button>
             </children>
             <effect>
                 <DropShadow radius="18.7725" width="56.09" />
             </effect>
         </VBox>
+      <ImageView fitHeight="567.0" fitWidth="879.0" layoutX="299.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@OBJECTS@3x.png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>

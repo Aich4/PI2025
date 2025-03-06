@@ -1,12 +1,51 @@
+/* Dashboard Stylesheet */
+
 .root {
-    -fx-background-color: #f4f4f4;
+    -fx-font-family: "Cambria Math";
 }
+
+/* Background Colors */
+.white-background {
+    -fx-background-color: #ffffff;
+}
+
+/* Buttons */
 .button {
-    -fx-background-color: #3498db;
+    -fx-background-color: #ff760d;
     -fx-text-fill: white;
     -fx-font-size: 14px;
-}
-.label {
-    -fx-font-size: 16px;
     -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(72, 52, 212, 0.5), 10, 0, 0, 5);
+}
+
+.button:hover {
+    -fx-background-color: #e05e00;
+}
+
+/* Main VBox where buttons are placed */
+VBox {
+    -fx-background-color: #ffffff;
+    -fx-spacing: 20;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 20, 0.5, 0, 10);
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #1829df;
+    -fx-font-size: 16px;
+}
+
+.label.title {
+    -fx-font-size: 22px;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+}
+
+/* ListView */
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #ff760d;
+    -fx-border-width: 2px;
+    -fx-padding: 5px;
 }

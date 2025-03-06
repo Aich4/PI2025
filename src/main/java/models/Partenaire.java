@@ -10,9 +10,11 @@ public class Partenaire {
     String description ;
     Date date_ajout;
     private int id_categorie;
+    int num_tel;
+
 
     public Partenaire() {}
-    public Partenaire(String nom, String email, String adresse, String description, java.sql.Date date_ajout, int id_categorie)
+    public Partenaire(String nom, String email, String adresse, String description, java.sql.Date date_ajout, int id_categorie, int num_tel)
     {
         this.nom = nom;
         this.email = email;
@@ -20,6 +22,7 @@ public class Partenaire {
         this.description = description;
         this.date_ajout = date_ajout;
         this.id_categorie = id_categorie;
+        this.num_tel = num_tel;
 
     }
 
@@ -30,6 +33,7 @@ public class Partenaire {
         this.adresse = adresse;
         this.description = description;
         this.date_ajout = date_ajout;
+
 
     }
 
@@ -100,4 +104,15 @@ public class Partenaire {
     public void setId_categorie(int id_categorie) {
         this.id_categorie = id_categorie;
     }
+
+    public int getNum_tel() {
+        return num_tel;
+    }
+
+    public void setNum_tel(int num_tel) {
+        this.num_tel = num_tel;
+    }
+
+
+
 }

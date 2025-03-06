@@ -7,47 +7,64 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="561.0" prefWidth="108.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TestController">
+<AnchorPane prefHeight="562.0" prefWidth="838.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TestController">
    <children>
-      <ImageView fitHeight="760.0" fitWidth="1152.0" layoutX="-13.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="645.0" fitWidth="1481.0" layoutX="-2.0" pickOnBounds="true">
          <image>
-            <Image url="@bg.jpeg" />
+            <Image url="@backgroundNew.png" />
          </image>
       </ImageView>
-      <Text fontSmoothingType="LCD" layoutX="65.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reclamer">
-         <font>
-            <Font name="MoonetDEMO-Regular" size="38.0" />
-         </font>
-      </Text>
-      <Text fontSmoothingType="LCD" layoutX="65.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type :">
-         <font>
-            <Font name="Aharoni Bold" size="19.0" />
-         </font>
-      </Text>
-      <Text fontSmoothingType="LCD" layoutX="65.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description :">
-         <font>
-            <Font name="Aharoni Bold" size="19.0" />
-         </font>
-      </Text>
-      <Button layoutX="537.0" layoutY="418.0" mnemonicParsing="false" onAction="#ajouterReclamation" text="Valider" textOverrun="CLIP" />
-      <TextField fx:id="desc_rec" layoutX="65.0" layoutY="282.0" prefHeight="120.0" prefWidth="530.0" promptText="Ecrire votre reclamation ici.">
-         <font>
-            <Font name="MoonetDEMO-Regular" size="12.0" />
-         </font>
-      </TextField>
-      <ImageView fitHeight="68.0" fitWidth="172.0" layoutX="19.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+      
+      <!-- Contenu original -->
+      <VBox layoutX="116.0" layoutY="116.0" prefHeight="431.0" prefWidth="963.0" spacing="20">
+         <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Reclamer">
+            <font>
+               <Font name="MS Gothic" size="50.0" />
+            </font>
+         </Text>
+         
+         <HBox alignment="CENTER_LEFT" spacing="10">
+            <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Type :">
+               <font>
+                  <Font name="Aharoni Bold" size="19.0" />
+               </font>
+            </Text>
+            <ComboBox fx:id="combo_rec" prefWidth="150.0" />
+         </HBox>
+         
+         <VBox spacing="5">
+            <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Description :">
+               <font>
+                  <Font name="Aharoni Bold" size="19.0" />
+               </font>
+            </Text>
+            <TextField fx:id="desc_rec" prefHeight="120.0" prefWidth="530.0" promptText="Ecrire votre reclamation ici.">
+               <font>
+                  <Font name="MoonetDEMO-Regular" size="12.0" />
+               </font>
+            </TextField>
+         </VBox>
+         
+         <Button layoutX="537.0" layoutY="418.0" mnemonicParsing="false" onAction="#ajouterReclamation" stylesheets="@css/styles.css" text="Valider" textOverrun="CLIP" />
+      </VBox>
+
+      <!-- Logo et bouton d'affichage -->
+      <ImageView fitHeight="62.0" fitWidth="226.0" layoutX="19.0" layoutY="24.0">
          <image>
-            <Image url="@LOGO.png" />
+            <Image url="@logo_white.png" />
          </image>
       </ImageView>
-      <ComboBox fx:id="combo_rec" layoutX="132.0" layoutY="208.0" prefWidth="150.0" />
-      <Button layoutX="932.0" layoutY="39.0" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="150.0" text="retourner" />
+      <HBox layoutX="565.0" layoutY="24.0" spacing="10" />
+      <Button layoutX="1022.0" layoutY="562.0" mnemonicParsing="false" onAction="#goFront" text="retour" />
+ <Button layoutX="918.0" layoutY="60.0" mnemonicParsing="false" onAction="#listRec" stylesheets="@css/styles.css" text="Affichage" />
+ <Button layoutX="1002.0" layoutY="60.0" mnemonicParsing="false" onAction="#openGemini" stylesheets="@css/styles.css" text="Gemini AI" />
    </children>
    <stylesheets>
-      <URL value="@css/styles.css" />
       <URL value="@css/styles.css" />
    </stylesheets>
 </AnchorPane>

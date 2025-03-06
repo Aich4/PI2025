@@ -6,21 +6,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Abonnement;
-import models.Pack;
+
 import services.ServiceAbonnement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import services.ServicePack;
+import utils.MyDb;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ShowAbonnement {
 
@@ -38,6 +45,25 @@ public class ShowAbonnement {
 
     private final ServiceAbonnement serviceAbonnement = new ServiceAbonnement();
     private final ServicePack servicePack = new ServicePack();  // Create instance of ServicePack
+    @FXML
+    private PieChart pieChart;
+    private Connection connection = MyDb.getInstance().getConnection();
+
+    @FXML
+    private ComboBox<String> searchby;
+
+
+
+
+    private void logAction(String action, Abonnement abonnement) {
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String logMessage = timestamp + " - " + action + " Abonnement ID: " + abonnement.getId_Abonnement() +
+                ", Pack ID: " + abonnement.getId_Pack() +
+                ", User ID: " + abonnement.getId_utilisateur() +
+                ", Status: " + abonnement.getStatut();
+
+        System.out.println("📜 History Log: " + logMessage);
+    }
 
 
     @FXML
@@ -65,27 +91,44 @@ public class ShowAbonnement {
 
     @FXML
     void recherche(InputMethodEvent event) {
-        String recherche = idrecher.getText().trim(); // Retrieve the text entered in the TextField
+        String recherche = idrecher.getText().trim(); // Retrieve search input
+        String selectedAttribute = searchby.getValue(); // Get selected attribute from ComboBox
 
-        // If the search field is empty, reload all the abonnements (show all)
-        if (recherche.isEmpty()) {
-            loadAbonnements(); // Load all abonnements if nothing is typed
+        // If search field is empty, reload all abonnements
+        if (recherche.isEmpty() || selectedAttribute == null) {
+            loadAbonnements(); // Show all abonnements
             return;
         }
 
         try {
-            // Filter the abonnements by avantages using Stream API (case-insensitive)
-            List<Abonnement> resultats = serviceAbonnement.getAll().stream() // Assuming serviceAbonnement is your Service class
-                    .filter(abonnement -> abonnement.getStatut().toLowerCase()  // Filter based on the avantages field
-                            .contains(recherche.toLowerCase()))
+            List<Abonnement> filteredResults = serviceAbonnement.getAll().stream()
+                    .filter(abonnement -> {
+                        // Perform filtering based on selected attribute
+                        switch (selectedAttribute) {
+                            case "id_abonnement":
+                                return String.valueOf(abonnement.getId_Abonnement()).contains(recherche);
+                            case "id_utilisateur":
+                                return String.valueOf(abonnement.getId_utilisateur()).contains(recherche);
+                            case "statut":
+                                return abonnement.getStatut().toLowerCase().contains(recherche.toLowerCase());
+                            case "id_Pack":
+                                return String.valueOf(abonnement.getId_Pack()).contains(recherche);
+                            case "date_Souscription":
+                                return abonnement.getDate_Souscription().toString().contains(recherche);
+                            case "date_Expiration":
+                                return abonnement.getDate_Expiration().toString().contains(recherche);
+                            default:
+                                return false;
+                        }
+                    })
                     .collect(Collectors.toList());
 
             // Update the ListView with the filtered results
-            ObservableList<Abonnement> observableResults = FXCollections.observableArrayList(resultats);
-            listview.setItems(observableResults); // Set the filtered results in the ListView
+            ObservableList<Abonnement> observableResults = FXCollections.observableArrayList(filteredResults);
+            listview.setItems(observableResults);
         } catch (SQLException e) {
-            e.printStackTrace();  // Handle the exception
-            showAlert("Erreur", "Une erreur est survenue lors de la recherche des abonnements.");
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur est survenue lors de la recherche.");
         }
     }
 
@@ -105,10 +148,42 @@ public class ShowAbonnement {
     @FXML
     void initialize() throws SQLException {
         loadAbonnements();
-        listview.setOnMouseClicked(event -> showAbonnementDetails());
-        idrecher.textProperty().addListener((observable, oldValue, newValue) -> {
-            recherche(null);  // Call the recherche method with the updated text from the TextField
+        listview.setOnMouseClicked(event -> {
+            Abonnement selectedA = listview.getSelectionModel().getSelectedItem();
+            if (selectedA != null) {
+                // Display pack details directly
+                System.out.println("dateE: " + selectedA.getDate_Expiration());
+                System.out.println("dateD: " + selectedA.getDate_Souscription());
+                System.out.println("ID PACK: " + selectedA.getId_Pack());
+                System.out.println("Statut: " + selectedA.getStatut());
+
+            }
         });
+        // Listener for TextField (search box)
+        idrecher.textProperty().addListener((observable, oldValue, newValue) -> {
+            recherche(null);  // Call the search method when text changes
+        });
+
+        // Check if ComboBox is initialized
+        if (searchby == null) {
+            System.out.println("⚠ ComboBox 'searchby' is not initialized!");
+        } else {
+            System.out.println("✅ ComboBox 'searchby' loaded successfully.");
+            loadSearchOptions();
+
+            // Add a listener to the ComboBox to trigger a search when changed
+            searchby.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                recherche(null); // Call search when selection changes
+            });
+        }
+    }
+
+
+    private void loadSearchOptions() {
+        searchby.getItems().addAll(
+                "id_abonnement", "id_utilisateur", "statut",
+                "id_Pack", "date_Souscription", "date_Expiration"
+        );
     }
 
     private void loadAbonnements() {
@@ -145,7 +220,7 @@ public class ShowAbonnement {
         });
     }
 
-    private void showAbonnementDetails() {
+    /*private void showAbonnementDetails() {
         Abonnement selectedAbonnement = listview.getSelectionModel().getSelectedItem();
         if (selectedAbonnement != null) {
             pack.setText(String.valueOf(selectedAbonnement.getId_Pack()));
@@ -153,7 +228,7 @@ public class ShowAbonnement {
             dateE.setText(selectedAbonnement.getDate_Expiration().toString());
             statuta.setText(selectedAbonnement.getStatut());
         }
-    }
+    }*/
 
     @FXML
     void supprimerA(ActionEvent event) {
@@ -167,7 +242,7 @@ public class ShowAbonnement {
                 // Retirer le pack de la ListView pour mettre à jour l'affichage
                 listview.getItems().remove(selectedA);
                 listview.refresh();
-
+                logAction("Deleted", selectedA);
                 System.out.println("✅ Abonnement supprimé avec succès !");
                 loadAbonnements();// Confirmation dans la console
             } catch (SQLException e) {
@@ -192,7 +267,7 @@ public class ShowAbonnement {
 
                 UpdateAbonnement updateAController = loader.getController();
                 updateAController.setAbonnDetails(selectedA);
-
+                logAction("Updated", selectedA);
                 Scene currentScene = ((Node) event.getSource()).getScene();
                 currentScene.setRoot(root);
 
@@ -245,6 +320,46 @@ public class ShowAbonnement {
         }
     }
 
+
+    @FXML
+    void stat(ActionEvent event) {
+        updatePieChartWithStatutCount();
+    }
+
+    private void updatePieChartWithStatutCount() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+        String sql = "SELECT statut, COUNT(*) as count FROM abonnement GROUP BY statut";  // Adjust this query as needed
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String statut = rs.getString("statut");  // Ensure the column name 'statut' matches the database
+                int count = rs.getInt("count");
+
+                // Add data to the PieChart
+                pieChartData.add(new PieChart.Data(statut + " (" + count + ")", count));
+            }
+        } catch (SQLException e) {
+            // Handle any database-related errors
+            System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Clear old data and update the PieChart with the new data
+        if (!pieChartData.isEmpty()) {
+            pieChart.getData().clear();
+            pieChart.getData().addAll(pieChartData);
+        } else {
+            System.out.println("No data to display.");
+        }
+
+        // Add tooltips to display values on mouse hover
+        pieChartData.forEach(data -> {
+            data.getNode().setOnMouseEntered(event1 -> {
+                System.out.println(data.getName() + " : " + data.getPieValue());
+            });
+        });
+    }
 
 
     @FXML

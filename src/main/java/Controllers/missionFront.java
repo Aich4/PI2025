@@ -6,10 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import models.Destination;
 import models.Mission;
 import services.CategorieService;
@@ -19,12 +21,14 @@ import java.io.IOException;
 import java.util.List;
 
 public class missionFront {
-
+    private int userId;
     @FXML
     private ListView<Mission> listMission;
     MissionService ms = new MissionService();
     Mission mission = new Mission();
-
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
     @FXML
     private ComboBox<String> categorie;
     CategorieService cs = new CategorieService();
@@ -104,8 +108,8 @@ public class missionFront {
     }
 
     @FXML
-    void goDest(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FrontOffice.fxml"));
+    void goAbon(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/abonnementFront.fxml"));
         try {
             Parent root = loader.load();
             categorie.getScene().setRoot(root);
@@ -114,17 +118,42 @@ public class missionFront {
             throw new RuntimeException(e);
         }
     }
-
     @FXML
-    void logOut(ActionEvent event)
-    {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+    void goDest(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontoffice.fxml"));
         try {
             Parent root = loader.load();
             categorie.getScene().setRoot(root);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    protected void showProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserProfile.fxml"));
+            Parent root = loader.load();
+
+            UserProfileController controller = loader.getController();
+            controller.setUserId(userId);
+
+            categorie.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error loading profile view: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void logOut() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) listMission.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

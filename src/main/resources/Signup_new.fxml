@@ -25,6 +25,7 @@
             <GaussianBlur radius="5" />
          </effect>
          <image>
+
             <Image url="@background.png" />
          </image>
       </ImageView>

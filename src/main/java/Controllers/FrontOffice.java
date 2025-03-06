@@ -171,6 +171,17 @@ public class FrontOffice {
             }
         }
     }
+    @FXML
+    void showWishlist(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Wishlist.fxml"));
+        try {
+            Parent root = loader.load();
+            categorie.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @FXML
     void addRecl(ActionEvent event) {
@@ -226,6 +237,17 @@ public class FrontOffice {
     @FXML
     void goAbon(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/abonnementFront.fxml"));
+        try {
+            Parent root = loader.load();
+            categorie.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void goDest(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontoffice.fxml"));
         try {
             Parent root = loader.load();
             categorie.getScene().setRoot(root);

@@ -7,6 +7,7 @@ public class Categorie {
     String logo;
     int nbr_partenaire;
 
+
     public Categorie() {}
     public Categorie( int id,String nom, String description, String logo, int nbr_partenaire) {
         this.id=id;

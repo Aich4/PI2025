@@ -19,8 +19,8 @@ public class MainFx extends Application{
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
             // Calculate window size (80% of screen size but not smaller than minimum)
-            double width = Math.max(screenBounds.getWidth() * 0.8, 700);
-            double height = Math.max(screenBounds.getHeight() * 0.8, 800);
+            double width = 1200;
+            double height =650 ;
 
             // Load the initial scene (Login)
             FXMLLoader fxmlLoader = new FXMLLoader(MainFx.class.getResource("/Login.fxml"));
@@ -29,8 +29,8 @@ public class MainFx extends Application{
             // Configure the stage
             stage.setTitle("Connexion");
             stage.setResizable(true);
-            stage.setMinWidth(700);
-            stage.setMinHeight(800);
+            stage.setMinWidth(1200);
+            stage.setMinHeight(650);
 
             // Center the window on screen
             stage.setX((screenBounds.getWidth() - width) / 2);

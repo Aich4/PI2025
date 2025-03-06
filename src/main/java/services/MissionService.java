@@ -62,4 +62,19 @@ public class MissionService implements CrudInterface<Mission>{
         }
         return missions;
     }
+
+
+    public void valider(Mission obj) throws Exception {
+        String sql = "UPDATE mission SET statut=? WHERE id=?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+
+        obj.setStatut("Validé"); // 🔥 Assure-toi de mettre à jour l'objet aussi
+
+        ps.setString(1, obj.getStatut()); // Utiliser "Validé"
+        ps.setInt(2, obj.getId());
+
+        ps.executeUpdate();
+    }
+
+
 }

@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import models.Mission;
 import services.MissionService;
 import services.RecompenseService;
@@ -93,6 +95,8 @@ public class mission {
         }
     }
 
+
+
     // Méthode pour afficher une alerte
     private void showAlert(String title, String message) {
         showAlert(title, message, Alert.AlertType.ERROR);
@@ -112,7 +116,7 @@ public class mission {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/css/ShowMission.fxml"));
             Parent root = loader.load();
 
-            // Obtenir la scène depuis l'événement (plus sûr que d'utiliser descriptionRec)
+            // Obtenir la scène depuis l'événement
             ((Button) event.getSource()).getScene().setRoot(root);
 
         } catch (IOException e) {
@@ -122,13 +126,14 @@ public class mission {
     }
 
     private void remplirComboBoxStatut() {
-        statut.getItems().addAll("En cours", "Expiré");
+        statut.getItems().addAll("En cours", "Validé");
     }
 
 
     void reset() {
         this.description.clear();
         this.points_recompense.clear();
+
     }
 
     @FXML
@@ -172,17 +177,7 @@ public class mission {
         }
     }
 
-    @FXML
-    void showDash(ActionEvent event){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-        try {
-            Parent root = loader.load();
-            description.getScene().setRoot(root);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 }
 

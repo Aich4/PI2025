@@ -121,7 +121,18 @@ public class ShowPack {
         loadPacks();
 
         // Handle item selection
-        listview.setOnMouseClicked(event -> showPackDetails());
+        listview.setOnMouseClicked(event -> {
+            Pack selectedPack = listview.getSelectionModel().getSelectedItem();
+            if (selectedPack != null) {
+                // Display pack details directly
+                System.out.println("Pack Name: " + selectedPack.getNom_Pack());
+                System.out.println("Pack Price: " + selectedPack.getPrix());
+                System.out.println("Pack Description: " + selectedPack.getDescription());
+                System.out.println("Pack Avantages: " + selectedPack.getAvantages());
+                System.out.println("Pack Statut: " + selectedPack.getStatut());
+
+            }
+        });
         idrecher.textProperty().addListener((observable, oldValue, newValue) -> {
             recherche(null);  // Call the recherche method with the updated text from the TextField
         });
@@ -249,7 +260,7 @@ public class ShowPack {
 
     @FXML
     void showPack(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ShowPack.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ShowAbonnement.fxml"));
         try {
             Parent root = loader.load();
             idrecher.getScene().setRoot(root);
