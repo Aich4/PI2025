@@ -148,13 +148,15 @@ public class SignupController implements Initializable {
     @FXML
     protected void handleSignup() {
         String name = nomField.getText().trim();
+        String prenom = prenomField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
         String userType = userTypeComboBox.getValue();
+        String savedPhotoPath = null;
 
         // Validation
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || userType == null) {
+        if (name.isEmpty() || prenom.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || userType == null) {
             messageLabel.setText("Please fill in all fields");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
@@ -172,13 +174,37 @@ public class SignupController implements Initializable {
             return;
         }
 
+        // If profile photo was selected, save it first
+        if (profilePhotoPath != null && !profilePhotoPath.isEmpty()) {
+            try {
+                // Create the uploads directory if it doesn't exist
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
+                
+                // Generate a unique filename
+                String originalFileName = new File(profilePhotoPath).getName();
+                String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+                String newFileName = "profile_" + System.currentTimeMillis() + extension;
+                String targetPath = UPLOAD_DIR + newFileName;
+                
+                // Copy the file to the uploads directory
+                Files.copy(Paths.get(profilePhotoPath), Paths.get(targetPath), StandardCopyOption.REPLACE_EXISTING);
+                
+                // Save the new filename for database storage
+                savedPhotoPath = newFileName;
+            } catch (IOException e) {
+                messageLabel.setText("Error saving profile photo: " + e.getMessage());
+                messageLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+        }
+
         // Proceed to Gmail verification
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GmailVerification.fxml"));
             Parent root = loader.load();
             
             GmailVerificationController controller = loader.getController();
-            controller.initData(name, password, userType);
+            controller.initData(name, prenom, password, userType, savedPhotoPath);
             
             Stage stage = (Stage) nomField.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -189,19 +215,28 @@ public class SignupController implements Initializable {
         }
     }
 
-    public void createVerifiedAccount(String name, String email, String password, String type) {
+    public void createVerifiedAccount(String name, String prenom, String email, String password, String type, String photoPath) {
         try {
             // Hash the password
             String hashedPassword = SecurityUtil.hashPassword(password);
             
             Connection conn = MyDb.getInstance().getConnection();
-            String query = "INSERT INTO user (nom, email, mot_de_passe, type_user) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO user (nom, prenom, email, mot_de_passe, type_user, photo_profil) VALUES (?, ?, ?, ?, ?, ?)";
             
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, name);
-                pstmt.setString(2, email);
-                pstmt.setString(3, hashedPassword);
-                pstmt.setString(4, "user");
+                pstmt.setString(2, prenom);
+                pstmt.setString(3, email);
+                pstmt.setString(4, hashedPassword);
+                pstmt.setString(5, type);
+                
+                // Handle profile photo
+                if (photoPath != null && !photoPath.isEmpty()) {
+                    pstmt.setString(6, photoPath);
+                } else {
+                    pstmt.setNull(6, Types.VARCHAR);
+                }
+                
                 pstmt.executeUpdate();
                 
                 // Show success message and redirect to login

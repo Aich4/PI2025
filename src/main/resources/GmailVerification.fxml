@@ -10,7 +10,7 @@
 <StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.GmailVerificationController">
     <!-- Background Image with Blur Effect -->
     <ImageView fitWidth="1920" fitHeight="1080" preserveRatio="false">
-        <Image url="bg.jpeg"/>
+        <Image url="@bg.jpeg"/>
         <effect>
             <GaussianBlur radius="5"/>
         </effect>
@@ -29,7 +29,7 @@
 
         <!-- Logo with glow effect -->
         <ImageView fitHeight="120" fitWidth="120" preserveRatio="true">
-            <Image url="logo_white.png"/>
+            <Image url="@logo_white.png"/>
             <effect>
                 <Glow level="0.3"/>
             </effect>

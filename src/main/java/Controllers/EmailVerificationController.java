@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import utils.EmailUtil;
 import utils.MyDb;
+import utils.SecurityUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -89,7 +90,8 @@ public class EmailVerificationController {
                         pstmt.setString(2, prenom);
                         pstmt.setString(3, userEmail);
                         if (!newPassword.isEmpty()) {
-                            pstmt.setString(4, newPassword);
+                            String hashedPassword = SecurityUtil.hashPassword(newPassword);
+                            pstmt.setString(4, hashedPassword);
                             pstmt.setInt(5, userId);
                         } else {
                             pstmt.setInt(4, userId);

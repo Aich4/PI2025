@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.MyDb;
 import utils.EmailUtil;
+import utils.SecurityUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,14 +88,12 @@ public class UserProfileController {
                     emailField.setText(rs.getString("email"));
                     currentPhotoPath = rs.getString("photo_profil");
                     
-                    // Load profile picture
+                    // Load profile picture from the uploads directory
                     if (currentPhotoPath != null && !currentPhotoPath.isEmpty()) {
-                        Path imagePath = Paths.get(PROFILE_PICS_DIR, currentPhotoPath);
-                        File imageFile = imagePath.toFile();
-                        
-                        if (imageFile.exists()) {
+                        Path imagePath = Paths.get("uploads", currentPhotoPath);
+                        if (Files.exists(imagePath)) {
                             try {
-                                Image image = new Image(imageFile.toURI().toString());
+                                Image image = new Image(imagePath.toUri().toString());
                                 if (!image.isError()) {
                                     profileImageView.setImage(image);
                                 } else {
@@ -105,7 +104,23 @@ public class UserProfileController {
                                 loadDefaultImage();
                             }
                         } else {
-                            loadDefaultImage();
+                            // Try the old path in case it's an old photo
+                            Path oldImagePath = Paths.get(PROFILE_PICS_DIR, currentPhotoPath);
+                            if (Files.exists(oldImagePath)) {
+                                try {
+                                    Image image = new Image(oldImagePath.toUri().toString());
+                                    if (!image.isError()) {
+                                        profileImageView.setImage(image);
+                                    } else {
+                                        loadDefaultImage();
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Error loading profile image from old path: " + e.getMessage());
+                                    loadDefaultImage();
+                                }
+                            } else {
+                                loadDefaultImage();
+                            }
                         }
                     } else {
                         loadDefaultImage();
@@ -269,7 +284,8 @@ public class UserProfileController {
                 pstmt.setString(1, nom);
                 pstmt.setString(2, prenom);
                 if (!password.isEmpty()) {
-                    pstmt.setString(3, password);
+                    String hashedPassword = SecurityUtil.hashPassword(password);
+                    pstmt.setString(3, hashedPassword);
                     pstmt.setInt(4, userId);
                 } else {
                     pstmt.setInt(3, userId);

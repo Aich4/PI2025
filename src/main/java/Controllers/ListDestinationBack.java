@@ -49,6 +49,9 @@ public class ListDestinationBack {
     @FXML
     private ComboBox<String> typeTri;
 
+    @FXML
+    private ListView<String> reviewsListView;
+
     private ObservableList<Destination> allDestinations;
 
     private void filtrerDestinations(String searchText) {
@@ -467,6 +470,11 @@ public class ListDestinationBack {
                     }
                 });
             });
+        }
+
+        public void addReview(String review, int rating) {
+            String displayText = review + " - ⭐ " + rating;
+            reviewsListView.getItems().add(displayText);
         }
     }
 
