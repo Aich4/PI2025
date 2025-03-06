@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.MyDb;
+import utils.EmailUtil;
+import utils.SecurityUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 public class UserProfileController {
     @FXML private TextField nomField;
@@ -85,44 +88,50 @@ public class UserProfileController {
                     emailField.setText(rs.getString("email"));
                     currentPhotoPath = rs.getString("photo_profil");
                     
-                    // Load profile picture
+                    // Load profile picture from the uploads directory
                     if (currentPhotoPath != null && !currentPhotoPath.isEmpty()) {
-                        // Try to load from profile_pics directory first
-                        File imageFile = new File(PROFILE_PICS_DIR, currentPhotoPath);
-                        if (imageFile.exists()) {
+                        Path imagePath = Paths.get("uploads", currentPhotoPath);
+                        if (Files.exists(imagePath)) {
                             try {
-                                Image image = new Image(imageFile.toURI().toString());
+                                Image image = new Image(imagePath.toUri().toString());
                                 if (!image.isError()) {
                                     profileImageView.setImage(image);
-                                    return; // Successfully loaded profile picture
+                                } else {
+                                    loadDefaultImage();
                                 }
                             } catch (Exception e) {
                                 System.out.println("Error loading profile image: " + e.getMessage());
+                                loadDefaultImage();
                             }
-                        }
-                        
-                        // If the file doesn't exist in profile_pics, try the full path
-                        File fullPathFile = new File(currentPhotoPath);
-                        if (fullPathFile.exists()) {
-                            try {
-                                Image image = new Image(fullPathFile.toURI().toString());
-                                if (!image.isError()) {
-                                    profileImageView.setImage(image);
-                                    return; // Successfully loaded profile picture
+                        } else {
+                            // Try the old path in case it's an old photo
+                            Path oldImagePath = Paths.get(PROFILE_PICS_DIR, currentPhotoPath);
+                            if (Files.exists(oldImagePath)) {
+                                try {
+                                    Image image = new Image(oldImagePath.toUri().toString());
+                                    if (!image.isError()) {
+                                        profileImageView.setImage(image);
+                                    } else {
+                                        loadDefaultImage();
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Error loading profile image from old path: " + e.getMessage());
+                                    loadDefaultImage();
                                 }
-                            } catch (Exception e) {
-                                System.out.println("Error loading profile image from full path: " + e.getMessage());
+                            } else {
+                                loadDefaultImage();
                             }
                         }
+                    } else {
+                        loadDefaultImage();
                     }
-                    
-                    // If we get here, either there's no profile picture or loading failed
-                    loadDefaultImage();
                 }
             }
         } catch (SQLException e) {
             messageLabel.setText("Erreur lors du chargement des données");
+            messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
+            loadDefaultImage();
         }
     }
 
@@ -159,16 +168,21 @@ public class UserProfileController {
                 String fileName = System.currentTimeMillis() + extension;
                 
                 Path targetPath = Paths.get(PROFILE_PICS_DIR, fileName);
-                System.out.println("Saving profile picture to: " + targetPath.toAbsolutePath());
                 
-                // Copy the new image
+                // Load and display the image before saving to verify it's valid
+                Image newImage = new Image(selectedFile.toURI().toString());
+                if (newImage.isError()) {
+                    throw new IOException("Invalid image file");
+                }
+                profileImageView.setImage(newImage);
+                
+                // Copy the file only if the image is valid
                 Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
                 
                 // Delete the old image if it exists
                 if (currentPhotoPath != null && !currentPhotoPath.isEmpty()) {
                     try {
                         Path oldPhotoPath = Paths.get(PROFILE_PICS_DIR, currentPhotoPath);
-                        System.out.println("Deleting old profile picture: " + oldPhotoPath.toAbsolutePath());
                         Files.deleteIfExists(oldPhotoPath);
                     } catch (IOException e) {
                         System.out.println("Could not delete old profile picture: " + e.getMessage());
@@ -183,18 +197,20 @@ public class UserProfileController {
                     pstmt.setInt(2, userId);
                     pstmt.executeUpdate();
                     
-                    // Update current photo path and display
                     currentPhotoPath = fileName;
-                    Image newImage = new Image(targetPath.toUri().toString());
-                    profileImageView.setImage(newImage);
-                    
                     messageLabel.setText("Photo de profil mise à jour avec succès");
                     messageLabel.setStyle("-fx-text-fill: green;");
                 }
-            } catch (IOException | SQLException e) {
-                messageLabel.setText("Erreur lors de la mise à jour de la photo");
+            } catch (SQLException e) {
+                messageLabel.setText("Erreur lors de la mise à jour de la base de données");
                 messageLabel.setStyle("-fx-text-fill: red;");
                 e.printStackTrace();
+                loadDefaultImage();
+            } catch (IOException e) {
+                messageLabel.setText("Erreur lors du traitement de l'image");
+                messageLabel.setStyle("-fx-text-fill: red;");
+                e.printStackTrace();
+                loadDefaultImage();
             }
         }
     }
@@ -203,29 +219,76 @@ public class UserProfileController {
     protected void handleUpdate() {
         String nom = nomField.getText().trim();
         String prenom = prenomField.getText().trim();
-        String email = emailField.getText().trim();
+        String newEmail = emailField.getText().trim();
         String password = passwordField.getText();
 
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty()) {
+        if (nom.isEmpty() || prenom.isEmpty() || newEmail.isEmpty()) {
             messageLabel.setText("Veuillez remplir tous les champs obligatoires");
+            messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
         try {
             Connection conn = MyDb.getInstance().getConnection();
+            
+            // Check if email has changed
+            String checkEmailQuery = "SELECT email FROM user WHERE id = ?";
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkEmailQuery)) {
+                checkStmt.setInt(1, userId);
+                ResultSet rs = checkStmt.executeQuery();
+                
+                if (rs.next()) {
+                    String currentEmail = rs.getString("email");
+                    
+                    // If email has changed, start verification process
+                    if (!currentEmail.equals(newEmail)) {
+                        // Generate verification code
+                        Random random = new Random();
+                        String verificationCode = String.format("%06d", random.nextInt(1000000));
+                        
+                        try {
+                            // Send verification email
+                            String subject = "TrekSwap - Vérification du nouvel email";
+                            String message = String.format("Votre code de vérification est : %s\n\n" +
+                                    "Veuillez entrer ce code dans l'application pour vérifier votre nouvelle adresse email.\n\n" +
+                                    "Si vous n'avez pas demandé ce changement, veuillez ignorer cet email.", verificationCode);
+                            
+                            EmailUtil.sendEmail(newEmail, subject, message);
+                            
+                            // Store temporary data and show verification page
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EmailVerification.fxml"));
+                            Parent root = loader.load();
+                            
+                            EmailVerificationController controller = loader.getController();
+                            controller.initProfileUpdate(userId, nom, prenom, newEmail, password, verificationCode);
+                            
+                            Stage stage = (Stage) nomField.getScene().getWindow();
+                            stage.setScene(new Scene(root));
+                            return;
+                        } catch (Exception e) {
+                            messageLabel.setText("Erreur lors de l'envoi de l'email de vérification");
+                            messageLabel.setStyle("-fx-text-fill: red;");
+                            e.printStackTrace();
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            // If email hasn't changed, proceed with normal update
             String query = password.isEmpty() ?
-                "UPDATE user SET nom = ?, prenom = ?, email = ? WHERE id = ?" :
-                "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ? WHERE id = ?";
+                "UPDATE user SET nom = ?, prenom = ? WHERE id = ?" :
+                "UPDATE user SET nom = ?, prenom = ?, mot_de_passe = ? WHERE id = ?";
             
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, nom);
                 pstmt.setString(2, prenom);
-                pstmt.setString(3, email);
                 if (!password.isEmpty()) {
-                    pstmt.setString(4, password);
-                    pstmt.setInt(5, userId);
-                } else {
+                    String hashedPassword = SecurityUtil.hashPassword(password);
+                    pstmt.setString(3, hashedPassword);
                     pstmt.setInt(4, userId);
+                } else {
+                    pstmt.setInt(3, userId);
                 }
                 
                 pstmt.executeUpdate();
@@ -234,6 +297,7 @@ public class UserProfileController {
             }
         } catch (SQLException e) {
             messageLabel.setText("Erreur lors de la mise à jour du profil");
+            messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
         }
     }

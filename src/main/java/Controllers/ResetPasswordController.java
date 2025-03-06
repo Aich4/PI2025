@@ -18,19 +18,10 @@ public class ResetPasswordController {
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label messageLabel;
 
-    private String resetToken;
     private String userEmail;
 
-    public void setResetToken(String token) {
-        this.resetToken = token;
-        // Validate token and get associated email
-        this.userEmail = SecurityUtil.validateResetToken(token);
-        if (this.userEmail == null) {
-            messageLabel.setText("Invalid or expired reset token. Please request a new password reset.");
-            messageLabel.setStyle("-fx-text-fill: red;");
-            passwordField.setDisable(true);
-            confirmPasswordField.setDisable(true);
-        }
+    public void setUserEmail(String email) {
+        this.userEmail = email;
     }
 
     @FXML
@@ -40,19 +31,19 @@ public class ResetPasswordController {
 
         // Validate passwords
         if (password.isEmpty() || confirmPassword.isEmpty()) {
-            messageLabel.setText("Please fill in all fields");
+            messageLabel.setText("Veuillez remplir tous les champs");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            messageLabel.setText("Passwords do not match");
+            messageLabel.setText("Les mots de passe ne correspondent pas");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
         if (password.length() < 8) {
-            messageLabel.setText("Password must be at least 8 characters long");
+            messageLabel.setText("Le mot de passe doit contenir au moins 8 caractères");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
@@ -70,11 +61,8 @@ public class ResetPasswordController {
                 int updated = pstmt.executeUpdate();
 
                 if (updated > 0) {
-                    // Remove the used token
-                    SecurityUtil.removeResetToken(resetToken);
-
                     // Show success message and redirect to login
-                    messageLabel.setText("Password reset successful!");
+                    messageLabel.setText("Mot de passe réinitialisé avec succès!");
                     messageLabel.setStyle("-fx-text-fill: green;");
 
                     // Redirect to login after 2 seconds
@@ -92,16 +80,17 @@ public class ResetPasswordController {
                                 }
                             });
                         } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
                             e.printStackTrace();
                         }
                     }).start();
                 } else {
-                    messageLabel.setText("Failed to reset password. Please try again.");
+                    messageLabel.setText("Échec de la réinitialisation du mot de passe. Veuillez réessayer.");
                     messageLabel.setStyle("-fx-text-fill: red;");
                 }
             }
         } catch (Exception e) {
-            messageLabel.setText("An error occurred. Please try again.");
+            messageLabel.setText("Une erreur s'est produite. Veuillez réessayer.");
             messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
         }

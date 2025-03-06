@@ -1,76 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.effect.*?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.AdminLoginController">
-    <!-- Background Image with Blur Effect -->
-    <ImageView fitWidth="1920" fitHeight="1080" preserveRatio="false">
-        <Image url="bg.jpeg"/>
-        <effect>
-            <GaussianBlur radius="5"/>
-        </effect>
-    </ImageView>
-    
-    <!-- Main Content -->
-    <VBox alignment="CENTER" maxWidth="450" minWidth="350" spacing="25" 
-          style="-fx-background-color: rgba(26, 33, 27, 0.85); -fx-background-radius: 20;">
-        <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
-        </padding>
-        
-        <effect>
-            <DropShadow color="rgba(0, 0, 0, 0.3)" radius="10" spread="0.2"/>
-        </effect>
 
-        <!-- Logo with glow effect -->
-        <ImageView fitHeight="120" fitWidth="120" preserveRatio="true">
-            <Image url="logo_white.png"/>
-            <effect>
-                <Glow level="0.3"/>
-            </effect>
-        </ImageView>
-
-        <Text style="-fx-fill: #C6B9AB; -fx-font-size: 28px; -fx-font-weight: bold;" text="Admin Login"/>
-        
-        <!-- Email Field -->
-        <VBox spacing="8" fillWidth="true">
-            <Label text="Admin Email" style="-fx-text-fill: #C6B9AB; -fx-font-size: 14px;"/>
-            <TextField fx:id="adminEmailField" 
-                      style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B; 
-                             -fx-prompt-text-fill: #666666; -fx-background-radius: 5;"/>
-        </VBox>
-        
-        <!-- Password Field -->
-        <VBox spacing="8" fillWidth="true">
-            <Label text="Admin Password" style="-fx-text-fill: #C6B9AB; -fx-font-size: 14px;"/>
-            <PasswordField fx:id="adminPasswordField"
-                          style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-text-fill: #1A211B; 
-                                 -fx-prompt-text-fill: #666666; -fx-background-radius: 5;"/>
-        </VBox>
-        
-        <!-- Login Button -->
-        <Button fx:id="adminLoginButton" text="Login as Admin" 
-                style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB; 
-                       -fx-background-radius: 5; -fx-font-size: 14px; -fx-font-weight: bold;
-                       -fx-cursor: hand;"
-                onAction="#handleAdminLogin" maxWidth="Infinity">
-            <effect>
-                <DropShadow color="rgba(0, 0, 0, 0.3)" radius="5"/>
-            </effect>
-        </Button>
-
-        <!-- Back Button -->
-        <Button text="Back to Login" 
-                style="-fx-background-color: transparent; -fx-text-fill: #C6B9AB; 
-                       -fx-border-color: #C6B9AB; -fx-border-radius: 5;"
-                onAction="#handleBack"/>
-        
-        <!-- Error Messages -->
-        <Label fx:id="messageLabel" style="-fx-text-fill: #B05A36;" wrapText="true" alignment="CENTER"/>
-    </VBox>
-</StackPane> 
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="Controllers.AdminLoginController" >
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="1000.0" preserveRatio="false">
+         <effect>
+            <GaussianBlur radius="5" />
+         </effect>
+         <image>
+            <Image url="@background.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" layoutX="293.0" layoutY="39.0" maxWidth="450" minWidth="350" prefHeight="521.0" prefWidth="384.0" spacing="25" style="-fx-background-color: #ffffff; -fx-background-radius: 20;">
+         <padding>
+            <Insets bottom="40" left="40" right="40" top="40" />
+         </padding>
+         <effect>
+            <DropShadow color="rgba(0, 0, 0, 0.3)" radius="10" spread="0.2" />
+         </effect>
+         <children>
+            <ImageView fitHeight="120" fitWidth="120" preserveRatio="true">
+               <effect>
+                  <Glow level="0.3" />
+               </effect>
+               <image>
+                  <Image url="@LOGO.png" />
+               </image>
+            </ImageView>
+            <Text style="-fx-fill: #ff760d; -fx-font-size: 28px; -fx-font-weight: bold;" text="Admin Login" />
+            <VBox fillWidth="true" spacing="8">
+               <children>
+                  <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px; -fx-font-weight: bold;" text="Admin Email" />
+                  <TextField fx:id="adminEmailField" style="-fx-background-color: white; -fx-border-color: #ff760d;" />
+               </children>
+            </VBox>
+            <VBox fillWidth="true" spacing="8">
+               <children>
+                  <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px; -fx-font-weight: bold;" text="Admin Password" />
+                  <PasswordField fx:id="adminPasswordField" style="-fx-background-color: white; -fx-border-color: #ff760d;" />
+               </children>
+            </VBox>
+            <Button fx:id="adminLoginButton" maxWidth="Infinity" onAction="#handleAdminLogin" style="-fx-background-color: #ff760d; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;" text="Login as Admin" textFill="#ff760d">
+               <effect>
+                  <DropShadow color="rgba(0, 0, 0, 0.3)" radius="5" />
+               </effect>
+            </Button>
+            <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: black; -fx-border-color: #ff760d; -fx-border-radius: 5;" text="Back to Login" />
+            <Label fx:id="messageLabel" alignment="CENTER" style="-fx-text-fill: #B05A36;" wrapText="true" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

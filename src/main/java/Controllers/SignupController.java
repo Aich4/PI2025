@@ -147,15 +147,14 @@ public class SignupController implements Initializable {
 
     @FXML
     protected void handleSignup() {
-        String nom = nomField.getText().trim();
-        String prenom = prenomField.getText().trim();
+        String name = nomField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
         String userType = userTypeComboBox.getValue();
 
         // Validation
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || userType == null) {
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || userType == null) {
             messageLabel.setText("Please fill in all fields");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
@@ -179,7 +178,7 @@ public class SignupController implements Initializable {
             Parent root = loader.load();
             
             GmailVerificationController controller = loader.getController();
-            controller.initData(nom, prenom, password, userType);
+            controller.initData(name, password, userType);
             
             Stage stage = (Stage) nomField.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -196,14 +195,13 @@ public class SignupController implements Initializable {
             String hashedPassword = SecurityUtil.hashPassword(password);
             
             Connection conn = MyDb.getInstance().getConnection();
-            String query = "INSERT INTO user (nom, prenom, email, mot_de_passe, type_user) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO user (nom, email, mot_de_passe, type_user, is_verified) VALUES (?, ?, ?, ?, true)";
             
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, name);
-                pstmt.setString(2, prenomField.getText().trim());
-                pstmt.setString(3, email);
-                pstmt.setString(4, hashedPassword);
-                pstmt.setString(5, type);
+                pstmt.setString(2, email);
+                pstmt.setString(3, hashedPassword);
+                pstmt.setString(4, type);
                 pstmt.executeUpdate();
                 
                 // Show success message and redirect to login

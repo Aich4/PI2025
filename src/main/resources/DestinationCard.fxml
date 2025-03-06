@@ -5,6 +5,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.FlowPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DestinationCard">
     <VBox spacing="5" style="-fx-border-color: black; -fx-padding: 10;">
@@ -12,8 +14,11 @@
         <Label fx:id="nameLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Destination Name" />
         <Label fx:id="descriptionLabel" text="Short description..." wrapText="true" />
         <Label fx:id="ratingLabel" style="-fx-text-fill: gold;" text="⭐ 4.5" />
-      <Button mnemonicParsing="false" onAction="#handleShowActivities" text="show activities" />
-      <Button mnemonicParsing="false" onAction="#showMap" text="Show on Map" />
-      <Button mnemonicParsing="false" onAction="#handleAvis" text="give notice" />
+        <Slider fx:id="ratingSlider" min="1" max="5" value="3" showTickMarks="true" showTickLabels="true" majorTickUnit="1" minorTickCount="0" />
+        <Label text="Rate this destination:" style="-fx-font-size: 14px; -fx-text-fill: #C6B9AB;"/>
+        <Button mnemonicParsing="false" onAction="#handleShowActivities" text="show activities" />
+        <Button mnemonicParsing="false" onAction="#showMap" text="Show on Map" />
+        <Button mnemonicParsing="false" onAction="#handleAvis" text="give notice" />
+        <FlowPane fx:id="reviewsContainer" style="-fx-padding: 10;" />
     </VBox>
 </AnchorPane>
