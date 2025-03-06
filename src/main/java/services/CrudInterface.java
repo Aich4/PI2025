@@ -10,5 +10,4 @@ public interface CrudInterface<T> {
     void delete(int id) throws Exception;
 
     List<T> getAll() throws Exception;
-
 }

@@ -1,33 +1,32 @@
 package models;
 import java.util.Arrays;
-import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.sql.Timestamp;
 
 
 public class Reclamation {
     private int id_rec;
     private String description_rec;  // Correction du nom du champ
     private String type_rec;
-    private Date date_rec;
-    //private Boolean etat_rec;
+    private Timestamp date_rec;
+    private String etat_rec;
 
 
     // Constructeur
-    public Reclamation(int id_rec, String description_rec, String type_rec , Date date_rec) {
+    public Reclamation(int id_rec, String description_rec, String type_rec, Timestamp date_rec) {
         this.id_rec = id_rec;
         this.description_rec = description_rec;
         this.type_rec = type_rec;
         this.date_rec = date_rec;
-        //this.etat_rec = false;
+        this.etat_rec = "0"; // Default state is "non traité"
     }
 
-    public Reclamation(String description_rec, String type_rec , Date date_rec) {
-
+    public Reclamation(String description_rec, String type_rec, Timestamp date_rec) {
         this.description_rec = description_rec;
         this.type_rec = type_rec;
         this.date_rec = date_rec;
-
+        this.etat_rec = "0"; // Default state is "non traité"
     }
 
     // Méthodes
@@ -52,12 +51,35 @@ public class Reclamation {
     public void setType(String type_rec) { this.type_rec = type_rec; }
 
 
-    public Date getDate() { return date_rec; }
-    public void setDate(Date date_rec) { this.date_rec = date_rec; }
+    public Timestamp getDate() { return date_rec; }
+    public void setDate(Timestamp date) {
+        if (date == null) {
+            throw new IllegalArgumentException("La date ne peut pas être nulle");
+        }
+        // Vérifier si la date n'est pas dans le futur
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (date.after(now)) {
+            throw new IllegalArgumentException("La date ne peut pas être dans le futur");
+        }
+        this.date_rec = date;
+    }
 
- /*public Boolean getEtat() { return etat_rec; }
-    public void setEtat(Boolean etat_rec) { this.etat_rec = etat_rec; }*/
+    public String getEtat() { return etat_rec; }
+    public void setEtat(String etat_rec) {
+        if (!Arrays.asList("0", "1", "2").contains(etat_rec)) {
+            throw new IllegalArgumentException("État invalide. Les valeurs possibles sont: 0 (non traité), 1 (traité), 2 (en attente)");
+        }
+        this.etat_rec = etat_rec;
+    }
 
+    public String getEtatDescription() {
+        return switch (etat_rec) {
+            case "0" -> "non traité";
+            case "1" -> "traité";
+            case "2" -> "en attente";
+            default -> "état inconnu";
+        };
+    }
 
     //ctrl saisie
     private static final List<String> TYPES_VALIDES = Arrays.asList("site", "bug", "pack", "commercant", "guide", "autre");
@@ -90,6 +112,15 @@ public class Reclamation {
         }
     }
 
+    public static class DateControl {
+        public static boolean isValidTimestamp(Timestamp timestamp) {
+            if (timestamp == null) return false;
+
+            // Vérifier si la date n'est pas dans le futur
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            return !timestamp.after(now);
+        }
+    }
 
     @Override
     public String toString() {
@@ -98,7 +129,7 @@ public class Reclamation {
                 ", description='" + description_rec + '\'' +
                 ", type=" + type_rec +
                 ", date=" + date_rec +
-                /*", etat=" + etat_rec +*/
+                ", etat=" + getEtatDescription() +
                 '}';
     }
 }

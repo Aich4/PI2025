@@ -92,7 +92,7 @@ public class Dashboard {
 
     @FXML
     void showRec(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/listReclamation.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/listreclamation.fxml"));
         try {
             Parent root = loader.load();
             aa.getScene().setRoot(root);
@@ -116,5 +116,17 @@ public class Dashboard {
             e.printStackTrace();
         }
     }
+    @FXML
+    void logout(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+        try {
+            Parent root = loader.load();
+            aa.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

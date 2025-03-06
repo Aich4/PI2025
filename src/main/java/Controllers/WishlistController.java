@@ -135,7 +135,7 @@ public class WishlistController {
 
         // Create a message to send to Gemini
         StringBuilder geminiInput = new StringBuilder();
-        geminiInput.append("I have a wishlist of destinations for a ")
+        geminiInput.append("I have a wishlist of destinations in tunisia for a ")
                 .append(numberOfDays)
                 .append("-day trip. Please provide a well-structured itinerary for ")
                 .append(numberOfDays)
@@ -147,9 +147,7 @@ public class WishlistController {
 
         // Format the wishlist destinations into the message
         for (Destination destination : wishlist) {
-            geminiInput.append("Destination: ").append(destination.getNom_destination()).append(", ");
-            geminiInput.append("Latitude: ").append(destination.getLatitude()).append(", ");
-            geminiInput.append("Longitude: ").append(destination.getLongitude()).append("\n");
+            geminiInput.append("Destination: ").append(destination.getNom_destination()).append(" / ");
         }
 
         // Send the message to Gemini API

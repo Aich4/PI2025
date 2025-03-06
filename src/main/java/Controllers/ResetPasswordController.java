@@ -1,125 +1,98 @@
 package Controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import utils.MyDb;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 public class ResetPasswordController {
-    @FXML private PasswordField newPasswordField;
+    @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
-    @FXML private Button resetButton;
     @FXML private Label messageLabel;
 
-    private String token;
+    private String userEmail;
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setUserEmail(String email) {
+        this.userEmail = email;
     }
 
     @FXML
-    protected void handlePasswordReset() {
-        String newPassword = newPasswordField.getText();
+    protected void handleResetPassword() {
+        String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
         // Validate passwords
-        if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+        if (password.isEmpty() || confirmPassword.isEmpty()) {
             messageLabel.setText("Veuillez remplir tous les champs");
+            messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        if (!newPassword.equals(confirmPassword)) {
+        if (!password.equals(confirmPassword)) {
             messageLabel.setText("Les mots de passe ne correspondent pas");
+            messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        if (newPassword.length() < 8) {
+        if (password.length() < 8) {
             messageLabel.setText("Le mot de passe doit contenir au moins 8 caractères");
+            messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
         try {
-            if (isTokenValid(token)) {
-                String email = getEmailFromToken(token);
-                if (updatePassword(email, newPassword)) {
-                    messageLabel.setText("Mot de passe réinitialisé avec succès");
+            // Hash the new password
+
+
+            // Update password in database
+            Connection conn = MyDb.getInstance().getConnection();
+            String query = "UPDATE user SET mot_de_passe = ? WHERE email = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+                pstmt.setString(2, userEmail);
+                int updated = pstmt.executeUpdate();
+
+                if (updated > 0) {
+                    // Show success message and redirect to login
+                    messageLabel.setText("Mot de passe réinitialisé avec succès!");
                     messageLabel.setStyle("-fx-text-fill: green;");
-                    
-                    // Close the window after 2 seconds
+
+                    // Redirect to login after 2 seconds
                     new Thread(() -> {
                         try {
                             Thread.sleep(2000);
                             javafx.application.Platform.runLater(() -> {
-                                Stage stage = (Stage) resetButton.getScene().getWindow();
-                                stage.close();
+                                try {
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+                                    Parent root = loader.load();
+                                    Stage stage = (Stage) passwordField.getScene().getWindow();
+                                    stage.setScene(new Scene(root));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             });
                         } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
                             e.printStackTrace();
                         }
                     }).start();
                 } else {
-                    messageLabel.setText("Erreur lors de la réinitialisation du mot de passe");
+                    messageLabel.setText("Échec de la réinitialisation du mot de passe. Veuillez réessayer.");
+                    messageLabel.setStyle("-fx-text-fill: red;");
                 }
-            } else {
-                messageLabel.setText("Le lien de réinitialisation est invalide ou a expiré");
             }
-        } catch (SQLException e) {
-            messageLabel.setText("Une erreur est survenue");
+        } catch (Exception e) {
+            messageLabel.setText("Une erreur s'est produite. Veuillez réessayer.");
+            messageLabel.setStyle("-fx-text-fill: red;");
             e.printStackTrace();
-        }
-    }
-
-    private boolean isTokenValid(String token) throws SQLException {
-        Connection conn = MyDb.getInstance().getConnection();
-        String query = "SELECT expiration_time FROM password_reset WHERE token = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, token);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                LocalDateTime expirationTime = rs.getObject("expiration_time", LocalDateTime.class);
-                return LocalDateTime.now().isBefore(expirationTime);
-            }
-            return false;
-        }
-    }
-
-    private String getEmailFromToken(String token) throws SQLException {
-        Connection conn = MyDb.getInstance().getConnection();
-        String query = "SELECT email FROM password_reset WHERE token = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, token);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("email");
-            }
-            return null;
-        }
-    }
-
-    private boolean updatePassword(String email, String newPassword) throws SQLException {
-        Connection conn = MyDb.getInstance().getConnection();
-        String updateQuery = "UPDATE user SET mot_de_passe = ? WHERE email = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setString(1, newPassword);
-            pstmt.setString(2, email);
-            int rowsAffected = pstmt.executeUpdate();
-
-            // Delete the used token
-            String deleteQuery = "DELETE FROM password_reset WHERE email = ?";
-            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)) {
-                deleteStmt.setString(1, email);
-                deleteStmt.executeUpdate();
-            }
-
-            return rowsAffected > 0;
         }
     }
 } 

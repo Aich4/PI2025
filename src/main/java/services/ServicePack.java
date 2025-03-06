@@ -14,6 +14,26 @@ public class ServicePack implements Ipack<Pack> {
         connection = MyDb.getInstance().getConnection();
     }
 
+    public double getPackPriceById(int idPack) throws SQLException {
+        double price = 0.0;  // Default price if not found
+        String sql = "SELECT prix FROM pack WHERE id_Pack = ?";
+
+        // Use try-with-resources to ensure proper resource management
+        try (PreparedStatement ps = MyDb.getInstance().getConnection().prepareStatement(sql)) {
+            // Set the pack ID parameter in the query
+            ps.setInt(1, idPack);
+
+            // Execute the query and retrieve the result
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                // Get the price from the result set
+                price = rs.getDouble("prix");  // Assuming the price column is 'prix'
+            }
+        }
+
+        // Return the price found or 0.0 if not found
+        return price;
+    }
 
     public List<String> getAllPackID() {
         List<String> packNames = new ArrayList<>();
@@ -84,24 +104,24 @@ public class ServicePack implements Ipack<Pack> {
     public void update(Pack pack) throws SQLException {
 
         String sql = "UPDATE pack SET nom_Pack = ?, description = ?, prix = ?, duree = ?, avantages = ?, statut = ? WHERE id_Pack = ?";
-             PreparedStatement ps = connection.prepareStatement(sql) ;
+        PreparedStatement ps = connection.prepareStatement(sql) ;
 
-            ps.setString(1, pack.getNom_Pack());
-            ps.setString(2, pack.getDescription());
-            ps.setFloat(3, pack.getPrix());
-            ps.setInt(4, pack.getDuree());
-            ps.setString(5, pack.getAvantages());
-            ps.setString(6, pack.getStatut());
-            ps.setInt(7, pack.getId_Pack());
+        ps.setString(1, pack.getNom_Pack());
+        ps.setString(2, pack.getDescription());
+        ps.setFloat(3, pack.getPrix());
+        ps.setInt(4, pack.getDuree());
+        ps.setString(5, pack.getAvantages());
+        ps.setString(6, pack.getStatut());
+        ps.setInt(7, pack.getId_Pack());
 
-            int rowsUpdated = ps.executeUpdate();
+        int rowsUpdated = ps.executeUpdate();
 
-            if (rowsUpdated > 0) {
-                System.out.println("✅ Pack updated in the database successfully!");
-            } else {
-                System.out.println("❌ No rows updated. Check if the ID exists.");
-            }
+        if (rowsUpdated > 0) {
+            System.out.println("✅ Pack updated in the database successfully!");
+        } else {
+            System.out.println("❌ No rows updated. Check if the ID exists.");
         }
+    }
 
 
     @Override

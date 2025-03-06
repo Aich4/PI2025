@@ -12,20 +12,20 @@
     <children>
         <ImageView fitHeight="768.0" fitWidth="1150.0">
             <image>
-                <Image url="@bg.jpeg" />
+                <Image url="@backgroundNew.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="57.0" fitWidth="213.0" layoutX="7.0" layoutY="4.0">
             <image>
-                <Image url="@LOGO.png" />
+                <Image url="@css/LOGO.png" />
             </image>
         </ImageView>
-        <Button layoutX="270.0" layoutY="14.0" mnemonicParsing="false" onAction="#showDest" prefHeight="35.0" prefWidth="150.0" text="Destinations" />
-        <Button layoutX="432.0" layoutY="14.0" mnemonicParsing="false" onAction="#goMiss" prefHeight="35.0" prefWidth="150.0" text="Missions" />
-        <Button layoutX="754.0" layoutY="14.0" mnemonicParsing="false" onAction="#addRecl" prefHeight="35.0" prefWidth="150.0" text="Reclamer" />
+        <Button layoutX="270.0" layoutY="14.0" mnemonicParsing="false" onAction="#showDest" prefHeight="35.0" prefWidth="150.0" stylesheets="@css/styles.css" text="Destinations" />
+        <Button layoutX="432.0" layoutY="14.0" mnemonicParsing="false" onAction="#goMiss" prefHeight="35.0" prefWidth="150.0" stylesheets="@css/styles.css" text="Missions" />
+        <Button layoutX="754.0" layoutY="14.0" mnemonicParsing="false" onAction="#addRecl" prefHeight="35.0" prefWidth="150.0" stylesheets="@css/styles.css" text="Reclamer" />
         <ComboBox fx:id="categorie" cache="true" layoutX="915.0" layoutY="14.0" prefHeight="35.0" prefWidth="150.0" promptText="Categories" />
-        <Button layoutX="593.0" layoutY="14.0" mnemonicParsing="false" onAction="#goAbon" prefHeight="35.0" prefWidth="150.0" text="Abonnement" />
-        <Button layoutX="1093.0" layoutY="2.0" mnemonicParsing="false" onAction="#logOut" text="Logout" textFill="#c92929" />
+        <Button layoutX="593.0" layoutY="14.0" mnemonicParsing="false" onAction="#goAbon" prefHeight="35.0" prefWidth="150.0" stylesheets="@css/styles.css" text="Abonnement" />
+        <Button layoutX="1093.0" layoutY="2.0" mnemonicParsing="false" onAction="#logOut" stylesheets="@css/styles.css" text="Logout" textFill="#c92929" />
         <ScrollPane layoutX="68.0" layoutY="168.0" prefHeight="507.0" prefWidth="1025.0">
          <content>
             <ListView fx:id="listPartenaire" prefHeight="504.0" prefWidth="1023.0" />

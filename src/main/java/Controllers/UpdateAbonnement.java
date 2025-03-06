@@ -167,5 +167,29 @@ public class UpdateAbonnement {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    @FXML
+    void showDash(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/Dashboard.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+    @FXML
+    void showPack(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/ShowPack.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

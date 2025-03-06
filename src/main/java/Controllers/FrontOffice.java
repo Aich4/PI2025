@@ -237,6 +237,17 @@ public class FrontOffice {
         }
     }
     @FXML
+    void goDest(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontoffice.fxml"));
+        try {
+            Parent root = loader.load();
+            categorie.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
     protected void showProfile() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserProfile.fxml"));

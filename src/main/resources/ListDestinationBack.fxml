@@ -21,12 +21,12 @@
 
 <AnchorPane prefHeight="769.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListDestinationBack">
     <children>
-        <ImageView fitHeight="789.0" fitWidth="1158.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="789.0" fitWidth="1158.0" layoutY="-2.0" pickOnBounds="true">
             <image>
-                <Image url="@bg.jpeg" />
+                <Image url="@backgroundNew.png" />
             </image>
         </ImageView>
-        <Pane layoutX="240.0" layoutY="70.0" prefHeight="638.0" prefWidth="895.0" style="-fx-background-color: #B05A36;">
+        <Pane layoutX="240.0" layoutY="70.0" prefHeight="638.0" prefWidth="895.0" style="-fx-background-color: #ffffff;">
             <effect>
                 <DropShadow height="37.38" radius="15.850000000000001" width="28.02">
                     <color>
@@ -45,7 +45,7 @@
                                 <Glow />
                             </effect>
                         </ImageView>
-                        <Label prefHeight="86.0" prefWidth="417.0" text="Listes des destinations" textFill="WHITE">
+                        <Label prefHeight="86.0" prefWidth="417.0" text="Listes des destinations" textFill="#ff760d">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
@@ -63,7 +63,7 @@
                   <ListView fx:id="ListView" prefHeight="360.0" prefWidth="808.0" />
                </content>
                 </ScrollPane>
-            <Button layoutX="703.0" layoutY="151.0" mnemonicParsing="false" onAction="#ajout" prefHeight="32.0" prefWidth="178.0" text="ajouter une destination" textFill="#413852">
+            <Button layoutX="703.0" layoutY="151.0" mnemonicParsing="false" onAction="#ajout" prefHeight="32.0" prefWidth="178.0" stylesheets="@css/styles.css" text="ajouter une destination" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -75,7 +75,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button layoutX="462.0" layoutY="152.0" mnemonicParsing="false" onAction="#openMapToAddDestination" prefHeight="32.0" prefWidth="231.0" text="ajouter une destination by map" textFill="#413852">
+            <Button layoutX="462.0" layoutY="152.0" mnemonicParsing="false" onAction="#openMapToAddDestination" prefHeight="32.0" prefWidth="231.0" stylesheets="@css/styles.css" text="ajouter une destination by map" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -122,23 +122,7 @@
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
                         <VBox prefHeight="138.0" prefWidth="223.0">
                             <children>
-                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css">
-                                    <children>
-                                        <ImageView fitHeight="45.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@stat.png" />
-                                            </image>
-                                        </ImageView>
-                                        <Label contentDisplay="CENTER" prefHeight="38.0" prefWidth="115.0" text="Statistique">
-                                            <font>
-                                                <Font name="Cambria Math" size="16.0" />
-                                            </font>
-                                            <opaqueInsets>
-                                                <Insets left="10.0" />
-                                            </opaqueInsets>
-                                        </Label>
-                                    </children>
-                                </HBox>
+                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
                                 <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
                                 <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
                             </children>
@@ -148,7 +132,7 @@
                         </VBox>
                     </children>
                 </VBox>
-                <Button mnemonicParsing="false" onAction="#showActivite" prefHeight="32.0" prefWidth="224.0" text="Show Activite" textFill="#413852">
+                <Button mnemonicParsing="false" onAction="#showActivite" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Show Activite" textFill="#413852">
                     <effect>
                         <DropShadow>
                             <color>
@@ -160,7 +144,7 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
-            <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" text="Show Destination" textFill="#413852">
+            <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Show Destination" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -173,7 +157,7 @@
                </font>
             </Button>
             <HBox prefHeight="226.0" prefWidth="223.0" />
-            <Button mnemonicParsing="false" onAction="#showDash" prefHeight="32.0" prefWidth="224.0" text="Dashboard" textFill="#413852">
+            <Button mnemonicParsing="false" onAction="#showDash" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Dashboard" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -185,7 +169,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="639.0" mnemonicParsing="false" onAction="#logOut" prefHeight="32.0" prefWidth="224.0" text="Log out" textFill="#413852">
+            <Button layoutX="10.0" layoutY="639.0" mnemonicParsing="false" onAction="#logOut" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Log out" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
