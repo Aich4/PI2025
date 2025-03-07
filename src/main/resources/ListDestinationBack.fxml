@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="769.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListDestinationBack">
+    <children>
+        <ImageView fitHeight="789.0" fitWidth="1158.0" layoutY="-2.0" pickOnBounds="true">
+            <image>
+                <Image url="@backgroundNew.png" />
+            </image>
+        </ImageView>
+        <Pane layoutX="240.0" layoutY="70.0" prefHeight="638.0" prefWidth="895.0" style="-fx-background-color: #ffffff;">
+            <effect>
+                <DropShadow height="37.38" radius="15.850000000000001" width="28.02">
+                    <color>
+                        <Color opacity="0.8548632264137268" />
+                    </color>
+                </DropShadow>
+            </effect>
+            <children>
+                <HBox layoutX="20.0" layoutY="36.0" prefHeight="100.0" prefWidth="809.0" spacing="40.0">
+                    <children>
+                        <ImageView fitHeight="76.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@imDest.png" />
+                            </image>
+                            <effect>
+                                <Glow />
+                            </effect>
+                        </ImageView>
+                        <Label prefHeight="86.0" prefWidth="417.0" text="Listes des destinations" textFill="#ff760d">
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="40.0" />
+                            </padding>
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <ScrollPane layoutX="40.0" layoutY="197.0" prefHeight="371.0" prefWidth="809.0">
+               <content>
+                  <Label text="Reviews and Ratings:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                  <ListView fx:id="reviewsListView" prefHeight="360.0" prefWidth="808.0" />
+               </content>
+                </ScrollPane>
+            <Button layoutX="703.0" layoutY="151.0" mnemonicParsing="false" onAction="#ajout" prefHeight="32.0" prefWidth="178.0" stylesheets="@css/styles.css" text="ajouter une destination" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button layoutX="462.0" layoutY="152.0" mnemonicParsing="false" onAction="#openMapToAddDestination" prefHeight="32.0" prefWidth="231.0" stylesheets="@css/styles.css" text="ajouter une destination by map" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <ComboBox fx:id="triComboBox" layoutX="168.0" layoutY="155.0" prefHeight="25.0" prefWidth="115.0">
+            </ComboBox>
+            <TextField fx:id="recherche" layoutX="6.0" layoutY="155.0" promptText="recherche . . ." />
+            <ComboBox fx:id="typeTri" layoutX="295.0" layoutY="155.0" prefHeight="25.0" prefWidth="76.0" />
+            </children>
+        </Pane>
+        <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">
+            <children>
+                <Separator prefWidth="232.0" />
+                <VBox prefHeight="138.0" prefWidth="250.0">
+                    <children>
+                        <Separator prefHeight="36.0" prefWidth="232.0" />
+                        <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="232.0" styleClass="mouse-moved" stylesheets="@style.css">
+                            <children>
+                                <ImageView fitHeight="81.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@LOGO.png" />
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets top="20.0" />
+                                    </HBox.margin>
+                                </ImageView>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
+                        <Separator prefHeight="36.0" prefWidth="232.0" />
+                    </children>
+                </VBox>
+                <VBox prefHeight="138.0" prefWidth="250.0">
+                    <children>
+                        <Separator prefHeight="36.0" prefWidth="232.0" />
+                        <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="232.0" styleClass="mouse-moved" stylesheets="@style.css" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
+                        <VBox prefHeight="138.0" prefWidth="223.0">
+                            <children>
+                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
+                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
+                                <HBox prefHeight="32.0" prefWidth="250.0" styleClass="mouse-moved" stylesheets="@style.css" />
+                            </children>
+                            <VBox.margin>
+                                <Insets left="20.0" />
+                            </VBox.margin>
+                        </VBox>
+                    </children>
+                </VBox>
+                <Button mnemonicParsing="false" onAction="#showActivite" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Show Activite" textFill="#413852">
+                    <effect>
+                        <DropShadow>
+                            <color>
+                                <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                            </color>
+                        </DropShadow>
+                    </effect>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Show Destination" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <HBox prefHeight="226.0" prefWidth="223.0" />
+            <Button mnemonicParsing="false" onAction="#showDash" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Dashboard" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="639.0" mnemonicParsing="false" onAction="#logOut" prefHeight="32.0" prefWidth="224.0" stylesheets="@css/styles.css" text="Log out" textFill="#413852">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9164236783981323" blue="0.9051851630210876" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            </children>
+            <effect>
+                <DropShadow radius="18.7725" width="56.09" />
+            </effect>
+        </VBox>
+    </children>
+</AnchorPane>

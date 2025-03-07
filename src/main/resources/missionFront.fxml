@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.missionFront">
+    <children>
+        <ImageView fitHeight="768.0" fitWidth="1222.0">
+            <image>
+                <Image url="@backgroundNew.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="57.0" fitWidth="213.0" layoutX="14.0" layoutY="20.0">
+            <image>
+                <Image url="@logo_white.png" />
+            </image>
+        </ImageView>
+        <ScrollPane layoutX="68.0" layoutY="168.0" prefHeight="507.0" prefWidth="1073.0">
+         <content>
+            <ListView fx:id="listMission" prefHeight="498.0" prefWidth="1069.0" />
+         </content>
+        </ScrollPane>
+      <Button fx:id="profileButton" layoutX="1116.0" layoutY="24.0" mnemonicParsing="false" onAction="#showProfile" prefHeight="57.0" prefWidth="63.0" style="-fx-background-radius: 80; -fx-background-color: #ffffff;" stylesheets="@css/styles.css" textFill="#c92929" />
+      <Button layoutX="288.0" layoutY="37.0" mnemonicParsing="false" onAction="#goDest" prefHeight="32.0" prefWidth="143.0" style="-fx-background-color: #ffffff;" text="Destinations" textFill="#ff760d">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+               </color>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="444.0" layoutY="37.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="143.0" style="-fx-background-color: #ffffff;" text="Missions" textFill="#ff760d">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+               </color>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="603.0" layoutY="37.0" mnemonicParsing="false" onAction="#goAbon" prefHeight="32.0" prefWidth="143.0" style="-fx-background-color: #ffffff;" text="Abonnements" textFill="#ff760d">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+               </color>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="759.0" layoutY="37.0" mnemonicParsing="false" onAction="#addRecl" prefHeight="32.0" prefWidth="143.0" style="-fx-background-color: #ffffff;" text="Reclamer" textFill="#ff760d">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+               </color>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="924.0" layoutY="693.0" mnemonicParsing="false" onAction="#logOut" prefHeight="32.0" prefWidth="143.0" style="-fx-background-color: #ffffff;" text="Logout" textFill="#ff760d">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color red="0.28421053290367126" green="0.1428070217370987" blue="0.12105263024568558" />
+               </color>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <ComboBox fx:id="categorie" cache="true" layoutX="921.0" layoutY="37.0" prefHeight="32.0" prefWidth="150.0" promptText="Categories" style="-fx-background-color: #ffffff;" />
+      <ImageView fitHeight="45.0" fitWidth="56.0" layoutX="1125.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@utilisateur.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>

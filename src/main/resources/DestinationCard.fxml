@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="420.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DestinationCard">
+    <VBox spacing="10" style="-fx-background-color: #f9f9f9; -fx-border-color: #dddddd; -fx-border-radius: 12; -fx-padding: 15; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0.3, 0, 2);">
+
+        <!-- Destination Image with Rounded Corners -->
+        <ImageView fx:id="destinationImage" fitHeight="140" fitWidth="260">
+            <clip>
+                <Rectangle width="260" height="140" arcWidth="15" arcHeight="15" />
+            </clip>
+        </ImageView>
+
+        <!-- Destination Name & Wishlist Icon -->
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <Label fx:id="nameLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Destination Name" />
+            <ImageView fx:id="wishlistIcon" fitWidth="28" fitHeight="28" pickOnBounds="true" preserveRatio="true"/>
+        </HBox>
+
+        <!-- Description -->
+        <Label fx:id="descriptionLabel" text="Short description..." wrapText="true" style="-fx-font-size: 14px; -fx-text-fill: #555555;" />
+
+        <!-- Rating Label -->
+        <Label fx:id="ratingLabel" style="-fx-text-fill: #ffaa00; -fx-font-size: 14px;" text="⭐ 4.5" />
+
+        <!-- Action Buttons -->
+        <HBox spacing="8">
+            <Button mnemonicParsing="false" onAction="#handleShowActivities" text="Activities" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 5 15;"/>
+            <Button mnemonicParsing="false" onAction="#showMap" text="Map" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 5 15;"/>
+            <Button mnemonicParsing="false" onAction="#handleAvis" text="Review" style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 5 15;"/>
+        </HBox>
+
+        <!-- Weather Section -->
+        <VBox spacing="5">
+            <Button fx:id="weatherButton" onAction="#showWeather" text="Show Weather" style="-fx-background-color: #607D8B; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 5 15;"/>
+            <VBox fx:id="weatherContainer" spacing="5" style="-fx-background-color: #e3f2fd; -fx-padding: 10; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+        </VBox>
+
+
+    </VBox>
+</AnchorPane>
