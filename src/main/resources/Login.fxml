@@ -17,7 +17,6 @@
 <?import javafx.scene.text.Text?>
 
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LoginController"    >
    <children>
       <ImageView fitHeight="611.0" fitWidth="1000.0" layoutY="-6.0" preserveRatio="false">
@@ -79,4 +78,3 @@
       </VBox>
    </children>
 </AnchorPane>
-

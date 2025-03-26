@@ -6,13 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.scene.control.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -54,7 +48,6 @@ public class DestinationCard {
     private Label ratingLabel;
 
     @FXML
-
     private VBox weatherContainer;
 
     @FXML
@@ -96,13 +89,8 @@ public class DestinationCard {
         WishlistService.getInstance().remove(destination);
         System.out.println(destination.getNom_destination() + " removed from wishlist.");
     }
-    private Slider ratingSlider;
 
-    @FXML
-    private FlowPane reviewsContainer;
-
-
-    public void setDestinationData(Destination destination, List<Avis> avisList) {
+    public void setDestinationData(Destination destination) {
         nameLabel.setText(destination.getNom_destination());
         descriptionLabel.setText(destination.getDecription());
         ratingLabel.setText("⭐ " + destination.getRate());
@@ -122,21 +110,6 @@ public class DestinationCard {
             destinationImage.setImage(null);
         }
 
-
-
-
-        // Display reviews
-        for (Avis avis : avisList) {
-            // Create a label for each review
-            Label reviewLabel = new Label(avis.getDescription_av() + " - ⭐ " + avis.getRating());
-            // Add the review label to the UI (you may need a VBox or similar)
-            // Assuming you have a VBox named reviewsContainer to hold the reviews
-            reviewsContainer.getChildren().add(reviewLabel);
-        }
-
-        ratingSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            ratingLabel.setText("⭐ " + Math.round(newValue.doubleValue()));
-        });
 
     }
     @FXML
@@ -189,18 +162,8 @@ public class DestinationCard {
             Optional<String> result = dialog.showAndWait();
 
             result.ifPresent(description -> {
-                // Get the rating from the slider
-                int rating = (int) Math.round(ratingSlider.getValue());
-                if (rating == 0) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please select a rating before submitting your review.");
-                    alert.showAndWait();
-                    return;
-                }
-                // Create a new Avis instance with the rating
-                Avis avis = new Avis(destination.getId(), destination.getId(), description, rating);
+                // Create a new Avis instance
+                Avis avis = new Avis(destination.getId(), description);
 
                 // Save the avis using AvisService
                 try {

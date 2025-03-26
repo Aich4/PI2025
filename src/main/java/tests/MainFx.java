@@ -2,13 +2,17 @@ package Tests;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class MainFx extends Application {
-    @Override
+import java.io.IOException;
 
+
+public class MainFx extends Application{
+    @Override
     public void start(Stage stage) throws IOException {
         try {
             // Get screen dimensions
@@ -42,7 +46,6 @@ public class MainFx extends Application {
             e.printStackTrace();
             System.exit(1);
         }
-
     }
 
     public static void main(String[] args) {

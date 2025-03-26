@@ -22,7 +22,7 @@
             </ImageView>
                 <Separator prefWidth="232.0" />
             <ImageView fitHeight="32.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                <Button fx:id="aa" mnemonicParsing="false" prefHeight="32.0" prefWidth="224.0" text="Gestion user" textFill="#413852">
+                <Button fx:id="aa" mnemonicParsing="false" onAction="#showUserManagement" prefHeight="32.0" prefWidth="224.0" text="Gestion user" textFill="#413852">
                     <effect>
                         <DropShadow>
                             <color>

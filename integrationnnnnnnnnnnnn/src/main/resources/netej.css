@@ -1,9 +1,0 @@
-#wishlistContainer {
-    -fx-background-image: url("backgroundNew.png");
-    -fx-background-size: cover;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
-}
-.wishlist-background {
-    -fx-background-color: transparent;
-}

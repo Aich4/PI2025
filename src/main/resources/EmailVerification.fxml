@@ -20,7 +20,7 @@
             <GaussianBlur radius="5" />
          </effect>
          <image>
-            <Image url="@background.png" />
+            <Image url="@backgroundNew.png" />
          </image>
       </ImageView>
       <VBox alignment="CENTER" layoutX="343.0" layoutY="34.0" maxWidth="450" minWidth="350" prefHeight="538.0" prefWidth="430.0" spacing="25" style="-fx-background-color: white; -fx-background-radius: 20;">

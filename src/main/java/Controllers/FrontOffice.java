@@ -17,10 +17,8 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import models.Categorie;
 import models.Destination;
-import models.Avis;
 import services.CategorieService;
 import services.DestinationService;
-import services.AvisService;
 
 import java.io.File;
 import java.io.IOException;
@@ -151,14 +149,7 @@ public class FrontOffice {
                 AnchorPane card = loader.load();
 
                 DestinationCard cardController = loader.getController();
-                try {
-                    AvisService avisService = new AvisService();
-                    List<Avis> avisList = avisService.getAvisByDestination(destination.getId());
-                    cardController.setDestinationData(destination, avisList);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Failed to fetch reviews for destination ID: " + destination.getId());
-                }
+                cardController.setDestinationData(destination);
 
                 gridContainer.add(card, column, row);
                 column++;

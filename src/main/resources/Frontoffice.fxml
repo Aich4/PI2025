@@ -96,7 +96,7 @@
          </font>
       </Button>
       <ComboBox fx:id="categorie" cache="true" layoutX="906.0" layoutY="41.0" prefHeight="32.0" prefWidth="150.0" promptText="Categories" style="-fx-background-color: #ffffff;" />
-      <ImageView fitHeight="45.0" fitWidth="56.0" layoutX="1156.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="showProfileButton" fitHeight="45.0" fitWidth="56.0" layoutX="1156.0" layoutY="33.0" onMouseClicked="#showProfile" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@utilisateur.png" />
          </image>
