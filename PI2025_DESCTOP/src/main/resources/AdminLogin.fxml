@@ -14,10 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="Controllers.AdminLoginController" >
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AdminLoginController">
    <children>
-      <ImageView fitHeight="600.0" fitWidth="1000.0" preserveRatio="false">
+      <ImageView fitHeight="650.0" fitWidth="1200.0" preserveRatio="false">
          <effect>
             <GaussianBlur radius="5" />
          </effect>
@@ -25,7 +24,7 @@
             <Image url="@backgroundNew.png" />
          </image>
       </ImageView>
-      <VBox alignment="CENTER" layoutX="293.0" layoutY="39.0" maxWidth="450" minWidth="350" prefHeight="521.0" prefWidth="384.0" spacing="25" style="-fx-background-color: #ffffff; -fx-background-radius: 20;">
+      <VBox alignment="CENTER" layoutX="408.0" layoutY="40.0" maxWidth="450" minWidth="350" prefHeight="542.0" prefWidth="384.0" spacing="25" style="-fx-background-color: #ffffff; -fx-background-radius: 20;">
          <padding>
             <Insets bottom="40" left="40" right="40" top="40" />
          </padding>

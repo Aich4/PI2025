@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EmailVerificationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EmailVerificationController">
    <children>
-      <ImageView fitHeight="608.0" fitWidth="1000.0" layoutY="-8.0" preserveRatio="false">
+      <ImageView fitHeight="663.0" fitWidth="1200.0" layoutY="-8.0" preserveRatio="false">
          <effect>
             <GaussianBlur radius="5" />
          </effect>
