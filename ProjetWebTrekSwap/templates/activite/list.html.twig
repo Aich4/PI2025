@@ -1,0 +1,47 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des Activités{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <div class="container">
+            <h1 class="mb-4">Liste des Activités</h1>
+            <input type="text" id="search-input" placeholder="Search...">
+            <a href="{{ path('add_activite') }}" class="btn btn-info btn-sm">Ajouter</a>
+
+            {% if activites|length > 0 %}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nom Activité</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Heure</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col">Destination</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for activite in activites %}
+                        <tr>
+                            <td>{{ activite.id }}</td>
+                            <td>{{ activite.nomActivite }}</td>
+                            <td>{{ activite.date ? activite.date|date('Y-m-d') : 'N/A' }}</td>
+                            <td>{{ activite.heure }}</td>
+                            <td>{{ activite.statut }}</td>
+                            <td>{{ activite.idDestination ? 'Destination #' ~ activite.idDestination : 'N/A' }}</td>
+                            <td>
+                                <a href="{{ path('edit_activite', {'id': activite.id}) }}" class="btn btn-success btn-sm">Modifier</a>
+                                <a href="{{ path('delete_activite', {'id': activite.id}) }}" class="btn btn-warning btn-sm">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">Aucune activité trouvée.</p>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}
