@@ -1,0 +1,55 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des Partenaires{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <div class="container mt-5">
+            <h1 class="text-center mb-4 text-warning">Liste des Partenaires</h1>
+
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID Partenaire</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Adresse</th>
+                    <th>Description</th>
+                    <th>Date d'ajout</th>
+                    <th>Actions</th>  <!-- Ajout de la colonne d'actions pour éditer -->
+                </tr>
+                </thead>
+                <tbody>
+                {% for partenaire in partenaires %}
+                    <tr>
+                        <td>{{ partenaire.id }}</td>
+                        <td>{{ partenaire.nom }}</td>
+                        <td>{{ partenaire.email }}</td>
+                        <td>{{ partenaire.adresse }}</td>
+                        <td>{{ partenaire.description }}</td>
+                        <td>{{ partenaire.dateAjout ? partenaire.dateAjout|date('d/m/Y') : 'N/A' }}</td>
+                        <td>
+                            <!-- Modification du lien pour utiliser la bonne route edit_partenaire -->
+                            <a href="{{ path('edit_partenaire', { id: partenaire.id }) }}" class="btn btn-info btn-sm">
+                                Modifier
+                            </a>
+
+                            <a href="{{ path('delete_partenaire', { id: partenaire.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce partenaire ?');">
+                                Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Aucun partenaire trouvé.</td> <!-- Ajout de 7 colonnes car tu as 7 colonnes au total maintenant -->
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-center mt-4">
+                <a href="{{ path('add_partenaire') }}" class="btn btn-success">Ajouter un Partenaire</a>
+            </div>
+        </div>
+    </main>
+{% endblock %}

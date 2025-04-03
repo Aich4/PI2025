@@ -1,0 +1,53 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Ajouter un Partenaire{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <div class="container mt-5">
+            <h1 class="text-center mb-4 text-warning">Ajouter un Partenaire</h1>
+
+            {{ form_start(form) }}
+
+            <div class="mb-3">
+                {{ form_label(form.nom) }}
+                {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.nom) }} {# Afficher les erreurs pour le champ nom #}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.email) }} {# Afficher les erreurs pour le champ email #}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.adresse) }}
+                {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.adresse) }} {# Afficher les erreurs pour le champ adresse #}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.description) }} {# Afficher les erreurs pour le champ description #}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.date_ajout) }}
+                {{ form_widget(form.date_ajout, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.date_ajout) }} {# Afficher les erreurs pour le champ date_ajout #}
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success">Ajouter le Partenaire</button>
+            </div>
+
+            {{ form_end(form) }}
+
+            <div class="text-center mt-4">
+                <a href="{{ path('list_partenaire') }}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+    </main>
+{% endblock %}
