@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DestinationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DestinationRepository::class)]
 class Destination
@@ -14,24 +15,51 @@ class Destination
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Nom de la destination ne peut pas être vide.")]
+    #[Assert\Length(max: 255, maxMessage: "Le nom de la destination ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $nom_destination = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La description ne peut pas être vide.")]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image_destination = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "La latitude ne peut pas être nulle.")]
+    #[Assert\Range(
+        min: -90,
+        max: 90,
+        notInRangeMessage: "La latitude doit être comprise entre {{ min }} et {{ max }}."
+    )]
     private ?float $latitude = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "La longitude ne peut pas être nulle.")]
+    #[Assert\Range(
+        min: -180,
+        max: 180,
+        notInRangeMessage: "La longitude doit être comprise entre {{ min }} et {{ max }}."
+    )]
     private ?float $longitude = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "La température ne peut pas être nulle.")]
+    #[Assert\Range(
+        min: -100,
+        max: 100,
+        notInRangeMessage: "La température doit être comprise entre {{ min }} et {{ max }}."
+    )]
     private ?float $temperature = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "Le taux ne peut pas être nul.")]
+    #[Assert\Range(
+        min: 0,
+        max: 5,
+        notInRangeMessage: "Le taux doit être compris entre {{ min }} et {{ max }}."
+    )]
     private ?float $rate = null;
 
     public function getId(): ?int
