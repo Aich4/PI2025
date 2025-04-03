@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2025 at 12:23 PM
+-- Generation Time: Apr 03, 2025 at 02:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -339,8 +339,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `photo_profil`, `type_user`, `photo_carte_f1`, `photo_carte_f2`) VALUES
-(1, 'ahah', 'ajaja', 'ahla@gmail.com', 'ahla1234', 'uploads/profile_1739990043918_Spirale_(Boehm,_1988).svg.png', 'Touriste', NULL, NULL),
-(2, 'netej', 'ghodbane', 'netejghodbane@gmail.com', '12345678', 'uploads/profile_1740040017439_Spirale_(Boehm,_1988).svg.png', 'Touriste', NULL, NULL);
+(3, 'medyassine', 'haji', 'medyassinehaji87@gmail.com', '$2a$12$8Xlz4owA6kjZE4h1KMVEeO1CuL3YsmMLoT3r9Htke.7oQW7bfkwlS', 'profile_1743639394399.png', 'Touriste', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -592,7 +591,7 @@ ALTER TABLE `reponse`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

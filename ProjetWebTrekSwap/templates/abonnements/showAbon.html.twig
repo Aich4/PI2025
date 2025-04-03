@@ -1,0 +1,49 @@
+{% extends 'base-back.html.twig' %}
+
+{% block body %}
+<main id="main" class="main">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 text-warning">Liste des Abonnements</h1>
+        
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Abonnement</th>
+                    <th>ID Pack</th>
+                    <th>Date de Souscription</th>
+                    <th>Date d'Expiration</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for abonnement in abonnements %}
+                    <tr>
+                        <td>{{ abonnement.getIdAbonnement() }}</td>  {# Displaying the ID Abonnement #}
+                        <td>{{ abonnement.getIdPack() }}</td>  {# Displaying the Pack ID #}
+                        <td>{{ abonnement.getDateSouscription()|date('d/m/Y') }}</td>  {# Displaying the Subscription Date in format (dd/mm/yyyy) #}
+                        <td>{{ abonnement.getDateExpiration()|date('d/m/Y') }}</td>  {# Displaying the Expiration Date in format (dd/mm/yyyy) #}
+                        <td>{{ abonnement.getStatut() }}</td>  {# Displaying the Status #}
+                        <td>
+                            <a href="{{ path('edit_Abonnement', { id_abonnement: abonnement.getIdAbonnement() }) }}" class="btn btn-info btn-sm">
+                               Modifier 
+                            </a>
+                             <a href="{{ path('delete_Abonnement', { id_abonnement: abonnement.getIdAbonnement() }) }}" class="btn btn-danger btn-sm">
+                              Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Aucun abonnement trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="text-center mt-4">
+            <a href="{{ path('add_Abonnement') }}" class="btn btn-success">Ajouter un Abonnement</a>
+        </div>
+    </div>
+</main>
+{% endblock %}
