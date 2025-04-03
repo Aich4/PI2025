@@ -31,9 +31,14 @@ final class AbonnementController extends AbstractController
     #[Route('/backA', name: 'app_Abonnements')]
     public function indexBA(AbonnementRepository $abonnementRepository): Response
     {
-        // Check if user is authenticated
+        // Check if user is authenticated and has proper role
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
+        }
+
+        // Check if user has either ROLE_USER or ROLE_ADMIN
+        if (!$this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Access Denied.');
         }
 
         return $this->render('base-back.html.twig', [

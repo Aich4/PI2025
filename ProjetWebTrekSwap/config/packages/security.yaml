@@ -20,7 +20,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
-                default_target_path: app_Abonnements
+                default_target_path: app_Abonnement
                 username_parameter: email
                 password_parameter: password
             logout:
@@ -37,10 +37,10 @@ security:
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/frontA, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/back, roles: ROLE_USER }
-        - { path: ^/backA, roles: ROLE_USER }
-        - { path: ^/Abon, roles: ROLE_USER }
-        - { path: ^/pack, roles: ROLE_USER }
+        - { path: ^/back, roles: ROLE_ADMIN }
+        - { path: ^/backA, roles: ROLE_ADMIN }
+        - { path: ^/Abon, roles: ROLE_ADMIN }
+        - { path: ^/pack, roles: ROLE_ADMIN }
 
 when@test:
     security:

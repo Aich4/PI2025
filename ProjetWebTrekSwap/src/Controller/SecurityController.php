@@ -19,7 +19,11 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_Abonnements');
+            // Redirect based on user role
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('app_Abonnements');
+            }
+            return $this->redirectToRoute('app_Abonnement');
         }
 
         // get the login error if there is one
