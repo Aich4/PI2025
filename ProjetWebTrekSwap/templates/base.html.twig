@@ -54,6 +54,7 @@
           <li><a class="nav-link scrollto " href="#portfolio">Activities</a></li>
           <li><a class="nav-link scrollto" href="#team">Partners</a></li>
           <li><a class="nav-link scrollto" href="#pricing">Pricing</a></li>
+          <li><a class="nav-link scrollto" href="/DestinationFrontShow">Destinations</a></li>
           <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Drop Down 1</a></li>
@@ -131,6 +132,7 @@
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center justify-content-center">
     <div class="container position-relative">
+      {% block welcome %}
       <h1>Welcome to TrekSwap</h1>
       <h2>Where we can assure you a wonderful touristic experience</h2>
       {% if not app.user %}
@@ -142,6 +144,7 @@
           <a href="{{ path('app_Abonnement') }}" class="btn-get-started scrollto">Explore Trips</a>
         {% endif %}
       {% endif %}
+      {% endblock %}
     </div>
   </section><!-- End Hero -->
     {% block body %}

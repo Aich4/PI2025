@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block welcome %}
+
+{% endblock %}
+
+{% block body %}
+    <main class="container py-5">
+        <h1 class="text-center mb-4">Nos Destinations</h1>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for destination in destinations %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm rounded-4">
+                        <img src="{{ destination.imageDestination }}" class="card-img-top rounded-top-4" alt="{{ destination.nomDestination }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ destination.nomDestination }}</h5>
+                            <p class="card-text text-muted">{{ destination.description|length > 100 ? destination.description|slice(0, 100) ~ '...' : destination.description }}</p>
+                            <ul class="list-unstyled small text-secondary mt-auto">
+                                <li><strong>Température :</strong> {{ destination.temperature }}°C</li>
+                                <li><strong>Latitude :</strong> {{ destination.latitude }}</li>
+                                <li><strong>Longitude :</strong> {{ destination.longitude }}</li>
+                                <li><strong>Note :</strong> {{ destination.rate }}/5</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center text-muted">Aucune destination disponible pour le moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}
