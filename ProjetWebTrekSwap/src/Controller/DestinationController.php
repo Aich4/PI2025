@@ -29,6 +29,13 @@ final class DestinationController extends AbstractController
             'destinations' => $destinationRepository->findAll(),
         ]);
     }
+    #[Route('/DestinationFrontShow', name: 'listFrontDestination', methods: ['GET'])]
+    public function listDestination(DestinationRepository $destinationRepository): Response
+    {
+        return $this->render('destination/showFront.html.twig', [
+            'destinations' => $destinationRepository->findAll(),
+        ]);
+    }
 
     #[Route('/addDestination', name: 'addDestination', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $manager, ValidatorInterface $validator): Response
