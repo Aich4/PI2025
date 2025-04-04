@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SignupController">
+   <children>
+      <ImageView fitHeight="650.0" fitWidth="1200.0" layoutX="-5.0" preserveRatio="false">
+         <effect>
+            <GaussianBlur radius="5" />
+         </effect>
+         <image>
+            <Image url="@backgroundNew.png" />
+         </image>
+      </ImageView>
+      <ScrollPane fitToWidth="true" layoutX="214.0" layoutY="18.0" prefHeight="568.0" prefWidth="592.0" style="-fx-background: transparent; -fx-background-color: transparent;">
+         <content>
+            <VBox alignment="CENTER" maxWidth="706.0" minWidth="400" prefHeight="860.0" prefWidth="577.0" spacing="20" style="-fx-background-color: white; -fx-background-radius: 20;">
+               <padding>
+                  <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+               </padding>
+               <effect>
+                  <DropShadow color="rgba(0, 0, 0, 0.3)" radius="10" spread="0.2" />
+               </effect>
+               <children>
+                  <ImageView fitHeight="120" fitWidth="120" preserveRatio="true">
+                     <effect>
+                        <Glow level="0.3" />
+                     </effect>
+                     <image>
+                        <Image url="@LOGO.png" />
+                     </image>
+                  </ImageView>
+                  <Text style="-fx-fill: #ff760d; -fx-font-size: 28px; -fx-font-weight: bold;" text="Créer un compte" />
+                  <VBox alignment="CENTER" spacing="8">
+                     <children>
+                        <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px;" text="Photo de profil" />
+                        <ImageView fx:id="profileImageView" fitHeight="100" fitWidth="100" style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-background-radius: 50;">
+                           <effect>
+                              <DropShadow color="rgba(0, 0, 0, 0.3)" radius="5" />
+                           </effect>
+                        </ImageView>
+                        <Button fx:id="uploadProfilePhotoButton" onAction="#handleProfilePhotoUpload" style="-fx-background-color: #ff760d; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Choisir une photo" />
+                     </children>
+                  </VBox>
+                  <VBox fillWidth="true" spacing="15">
+                     <children>
+                        <VBox spacing="8">
+                           <children>
+                              <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px;" text="Nom" />
+                              <TextField fx:id="nomField" style="-fx-background-color: white; -fx-text-fill: #1A211B; -fx-prompt-text-fill: #666666; -fx-background-radius: 5; -fx-border-color: #ff760d;" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="8">
+                           <children>
+                              <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px;" text="Prénom" />
+                              <TextField fx:id="prenomField" style="-fx-background-color: white; -fx-text-fill: #1A211B; -fx-prompt-text-fill: #666666; -fx-background-radius: 5; -fx-border-color: #ff760d;" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="8">
+                           <children>
+                              <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px;" text="Email" />
+                              <TextField fx:id="emailField" style="-fx-background-color: white; -fx-text-fill: #1A211B; -fx-prompt-text-fill: #666666; -fx-background-radius: 5; -fx-border-color: #ff760d;" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="8">
+                           <children>
+                              <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px;" text="Mot de passe" />
+                              <PasswordField fx:id="passwordField" style="-fx-background-color: white; -fx-text-fill: #1A211B; -fx-prompt-text-fill: #666666; -fx-background-radius: 5; -fx-border-color: #ff760d;" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="8">
+                           <children>
+                              <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px;" text="Confirmer mot de passe" />
+                              <PasswordField fx:id="confirmPasswordField" style="-fx-background-color: white; -fx-text-fill: #1A211B; -fx-prompt-text-fill: #666666; -fx-background-radius: 5; -fx-border-color: #ff760d;" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="8">
+                           <children>
+                              <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px;" text="Type d'utilisateur" />
+                              <ComboBox fx:id="userTypeComboBox" maxWidth="Infinity" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-color: #ff760d;" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="cardPhotosBox" managed="false" spacing="15" visible="false">
+                     <children>
+                        <Label style="-fx-text-fill: #ff760d; -fx-font-size: 14px; -fx-font-weight: bold;" text="Photos de carte professionnelle" />
+                        <HBox alignment="CENTER" spacing="20">
+                           <children>
+                              <VBox alignment="CENTER" spacing="8">
+                                 <children>
+                                    <ImageView fx:id="cardPhoto1View" fitHeight="100" fitWidth="150" style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-background-radius: 5;">
+                                       <effect>
+                                          <DropShadow color="rgba(0, 0, 0, 0.3)" radius="5" />
+                                       </effect>
+                                    </ImageView>
+                                    <Button fx:id="uploadCard1Button" onAction="#handleCard1Upload" style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB; -fx-background-radius: 5; -fx-cursor: hand;" text="Photo Recto" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" spacing="8">
+                                 <children>
+                                    <ImageView fx:id="cardPhoto2View" fitHeight="100" fitWidth="150" style="-fx-background-color: rgba(198, 185, 171, 0.9); -fx-background-radius: 5;">
+                                       <effect>
+                                          <DropShadow color="rgba(0, 0, 0, 0.3)" radius="5" />
+                                       </effect>
+                                    </ImageView>
+                                    <Button fx:id="uploadCard2Button" onAction="#handleCard2Upload" style="-fx-background-color: #B05A36; -fx-text-fill: #C6B9AB; -fx-background-radius: 5; -fx-cursor: hand;" text="Photo Verso" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Button fx:id="signupButton" maxWidth="Infinity" onAction="#handleSignup" style="-fx-background-color: #ff760d; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;" text="S'inscrire">
+                     <effect>
+                        <DropShadow color="rgba(0, 0, 0, 0.3)" radius="5" />
+                     </effect>
+                  </Button>
+                  <HBox alignment="CENTER" spacing="10">
+                     <children>
+                        <Text style="-fx-fill: black;" text="Déjà inscrit?" />
+                        <Hyperlink fx:id="loginLink" onAction="#switchToLogin" style="-fx-text-fill: #ff760d; -fx-font-weight: bold; -fx-underline: false;" text="Se connecter" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="messageLabel" alignment="CENTER" style="-fx-text-fill: #B05A36;" wrapText="true" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
