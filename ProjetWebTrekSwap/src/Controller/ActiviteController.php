@@ -99,4 +99,14 @@ final class ActiviteController extends AbstractController
 
         return $this->redirectToRoute('list_activite'); // Redirect to the list after deletion
     }
+    #[Route('/activites/{id}', name: 'get_activites')]
+    public function getActivites(int $id, ActiviteRepository $repo): Response
+    {
+        $activities = $repo->findBy(['id_destination' => $id]);
+
+        return $this->render('activite/_list.html.twig', [
+            'activities' => $activities,
+        ]);
+    }
+
 }
