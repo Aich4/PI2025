@@ -5,6 +5,7 @@ use App\Entity\Pack;
 use App\Entity\Abonnement;
 use App\Form\AbonnementType;
 use App\Repository\AbonnementRepository;
+use App\Repository\CategorieRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +22,12 @@ final class AbonnementController extends AbstractController
     }
 
     #[Route('/frontA', name: 'app_Abonnement')]
-    public function indexA(): Response
+    public function indexA(CategorieRepository $categorieRepository): Response
     {
+        $categories = $categorieRepository->findAll();
         return $this->render('base.html.twig', [
             'controller_name' => 'AbonnementController',
+            'categories' => $categories,
         ]);
     }
 

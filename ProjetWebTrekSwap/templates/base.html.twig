@@ -57,24 +57,28 @@
           <li><a class="nav-link scrollto" href="#team">Partners</a></li>
           <li><a class="nav-link scrollto" href="#pricing">Pricing</a></li>
           <li><a class="nav-link scrollto" href="/DestinationFrontShow">Destinations</a></li>
-          <li><a class="nav-link scrollto" href="/reclamation/new">Reclamation</a></li>          
-          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+          <li><a class="nav-link scrollto" href="/reclamation/new">Reclamation</a></li>
+          <li class="dropdown">
+            <a href="#"><span>Catégories</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
+              {% for categorie in categories %}
+                <li>
+                  <a href="{{ path('categorie_partenaires', {'id': categorie.id}) }}">
+                    <img src="{{ asset('uploads/logos/' ~ categorie.logo) }}"
+                         alt="{{ categorie.nom }}"
+                         style="height: 35px; width: 35px; object-fit: cover; margin-right: 8px; vertical-align: middle;">
+                    {{ categorie.nom }}
+                  </a>
+                </li>
+              {% else %}
+                <li><a href="#">Aucune catégorie disponible</a></li>
+              {% endfor %}
             </ul>
           </li>
+
+
+
+
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           {% if app.user %}
             <li class="nav-item dropdown pe-3">

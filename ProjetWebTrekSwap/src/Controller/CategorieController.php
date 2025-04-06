@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Repository\PartenaireRepository;
+
+
 
 final class CategorieController extends AbstractController
 {
@@ -29,6 +32,15 @@ final class CategorieController extends AbstractController
         $categories = $categorieRepository->findAll();
 
         return $this->render('categorie/index.html.twig', [
+            'categories' => $categories,
+        ]);
+    }
+    #[Route('/CatshowFront', name: 'list_categoryFront', methods: ['GET'])]
+    public function listCategoriesFront(CategorieRepository $categorieRepository): Response
+    {
+        $categories = $categorieRepository->findAll();
+
+        return $this->render('categorie/ShowFront.html.twig', [
             'categories' => $categories,
         ]);
     }
@@ -122,6 +134,26 @@ final class CategorieController extends AbstractController
 
         // Rediriger vers la liste des catégories
         return $this->redirectToRoute('list_category');
+    }
+
+
+    #[Route('/categorie/{id}', name: 'categorie_partenaires')]
+    public function partenairesParCategorie(int $id, PartenaireRepository $partenaireRepository, CategorieRepository $categorieRepository): Response
+    {
+        $categorie = $categorieRepository->find($id);
+
+        // Vérifier si la catégorie existe
+        if (!$categorie) {
+            throw $this->createNotFoundException('La catégorie n\'existe pas.');
+        }
+
+        // Récupérer tous les partenaires liés à cette catégorie
+        $partenaires = $partenaireRepository->findBy(['id_categorie' => $id]);
+
+        return $this->render('categorie/partenaires.html.twig', [
+            'categorie' => $categorie,
+            'partenaires' => $partenaires,
+        ]);
     }
 
 }

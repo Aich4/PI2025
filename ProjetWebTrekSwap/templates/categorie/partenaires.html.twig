@@ -1,0 +1,19 @@
+
+
+<h2>Partenaires de la catégorie "{{ categorie.nom }}"</h2>
+
+{% if partenaires is not empty %}
+    <ul>
+        {% for partenaire in partenaires %}
+            <li>
+                <strong>{{ partenaire.nom }}</strong><br>
+                Email : {{ partenaire.email }}<br>
+                Adresse : {{ partenaire.adresse }}<br>
+                Description : {{ partenaire.description }}<br>
+                Date d'ajout : {{ partenaire.dateAjout|date('d/m/Y') }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun partenaire trouvé pour cette catégorie.</p>
+{% endif %}
