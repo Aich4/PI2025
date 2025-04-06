@@ -14,6 +14,22 @@
                         <span class="badge bg-secondary">Terminée</span>
                     {% endif %}
                 </div>
+
+                {% if activity.statut == 'active' %}
+                    <div>
+                        {% if app.user %}
+                            <a href="{{ path('activite_join', { id: activity.id }) }}"
+                               class="btn btn-sm btn-outline-primary">
+                                Rejoindre
+                            </a>
+                        {% else %}
+                            <a href="{{ path('app_login') }}"
+                               class="btn btn-sm btn-outline-secondary">
+                                Se connecter pour rejoindre
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

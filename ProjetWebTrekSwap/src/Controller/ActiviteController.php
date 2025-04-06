@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Destination;
 use App\Repository\DestinationRepository;
+use App\Controller\SecurityController;
+
 
 final class ActiviteController extends AbstractController
 {
@@ -107,6 +109,20 @@ final class ActiviteController extends AbstractController
         return $this->render('activite/_list.html.twig', [
             'activities' => $activities,
         ]);
+    }
+    #[Route('/activites/{id}/join', name: 'activite_join')]
+    public function join(Activite $activite, SecurityController $security, EntityManagerInterface $em): Response
+    {
+        $user = $security->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // TODO: Associate user to activity (e.g. via a "participants" relation)
+
+        $this->addFlash('success', 'Vous avez rejoint l\'activité avec succès.');
+        return $this->redirectToRoute('listFrontDestination');
     }
 
 }

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="" />
+    <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -188,6 +191,7 @@
       <updated>1743777849292</updated>
       <workItem from="1743777850642" duration="156000" />
       <workItem from="1743780893702" duration="274000" />
+      <workItem from="1743844394760" duration="7000" />
     </task>
     <servers />
   </component>

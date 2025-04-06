@@ -39,7 +39,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo_carte_f2 = null;
-
     public function getId(): ?int
     {
         return $this->id;
