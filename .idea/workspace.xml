@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/phpunit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/_delete_form.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/_form.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/back.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/edit.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/index.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/new.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/show.html.twig" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,6 +162,8 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/symfony/yaml" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/symfony/expression-language" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-components" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -162,7 +177,11 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;gestionDestinationEtActivite&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -192,6 +211,8 @@
       <workItem from="1743777850642" duration="156000" />
       <workItem from="1743780893702" duration="274000" />
       <workItem from="1743844394760" duration="7000" />
+      <workItem from="1743937707463" duration="8859000" />
+      <workItem from="1743947283701" duration="19000" />
     </task>
     <servers />
   </component>
