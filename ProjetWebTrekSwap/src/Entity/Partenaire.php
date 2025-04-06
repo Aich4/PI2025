@@ -29,6 +29,20 @@ class Partenaire
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_ajout = null;
 
+    #[ORM\Column]
+    private ?int $id_categorie = null;
+
+    public function getIdCategorie(): ?int
+    {
+        return $this->id_categorie;
+    }
+
+    public function setIdCategorie(int $id_categorie): static
+    {
+        $this->id_categorie = $id_categorie;
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,4 +107,5 @@ class Partenaire
 
         return $this;
     }
+
 }

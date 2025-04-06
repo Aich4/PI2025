@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +17,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class SecurityController extends AbstractController
 {
     #[Route('/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils,CategorieRepository $categorieRepository): Response
     {
+        $categories = $categorieRepository->findAll();
         if ($this->getUser()) {
             // Redirect based on user role
             if ($this->isGranted('ROLE_ADMIN')) {
@@ -34,6 +36,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
+            'categories' => $categories,
         ]);
     }
 

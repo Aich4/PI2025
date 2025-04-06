@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/ShowFront.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/AbonnementController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/AbonnementController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/SecurityController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,7 +22,9 @@
   </component>
   <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/ProjetWebTrekSwap/composer.json</pharConfigPath>
-    <execution />
+    <execution>
+      <executable path="composer" />
+    </execution>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -149,6 +161,8 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/symfony/yaml" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/symfony/expression-language" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-components" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -159,14 +173,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;gestionDestinationEtActivite&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "GestionPartenaire",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -192,6 +210,7 @@
       <workItem from="1743777850642" duration="156000" />
       <workItem from="1743780893702" duration="274000" />
       <workItem from="1743844394760" duration="7000" />
+      <workItem from="1743941536289" duration="7042000" />
     </task>
     <servers />
   </component>
