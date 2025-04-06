@@ -41,7 +41,6 @@ class Activite
     #[Assert\NotBlank(message: "Le statut de l'activité ne peut pas être vide.")]
     #[Assert\Choice(choices: ['active', 'inactive','completed'], message: "Le statut doit être 'active' ou 'inactive' ou 'Completed' .")]
     private ?string $statut = null;
-
     public function getId(): ?int
     {
         return $this->id;
