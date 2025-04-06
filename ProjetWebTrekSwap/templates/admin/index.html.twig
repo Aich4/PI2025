@@ -1,0 +1,304 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Admin Dashboard - TrekSwap{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .user-stats {
+            margin-bottom: 2rem;
+        }
+        .stats-card {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .stats-card h3 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        .stats-card p {
+            margin: 0;
+            color: #6c757d;
+        }
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-name {
+            margin: 0;
+            font-weight: 600;
+        }
+        .user-email {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        .alert {
+            margin-bottom: 1rem;
+        }
+        .delete-modal .modal-header {
+            background-color: #dc3545;
+            color: white;
+        }
+        .delete-modal .modal-body {
+            padding: 2rem;
+            text-align: center;
+        }
+        .delete-modal .warning-icon {
+            font-size: 4rem;
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+        .delete-modal .user-to-delete {
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+        }
+        .delete-modal .btn-delete {
+            min-width: 120px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade delete-modal" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Confirm User Deletion
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="warning-icon">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                    <h4>Delete User Account</h4>
+                    <p class="text-muted">You are about to delete the following user account:</p>
+                    <div class="user-to-delete">
+                        <p class="user-to-delete-info mb-0"></p>
+                    </div>
+                    <div class="alert alert-danger mt-3">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        This action cannot be undone. All user data will be permanently deleted.
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="#" class="btn btn-danger btn-delete" id="confirmDeleteBtn">
+                        <i class="bi bi-trash me-2"></i>Delete User
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Admin Dashboard</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Home</a></li>
+                    <li class="breadcrumb-item active">Admin Dashboard</li>
+                </ol>
+            </nav>
+        </div>
+
+        <section class="section">
+            <!-- Flash Messages -->
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <!-- User Statistics -->
+            <div class="row user-stats">
+                <div class="col-lg-4">
+                    <div class="card stats-card bg-primary text-white">
+                        <h3>{{ stats.total }}</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card stats-card bg-success text-white">
+                        <h3>{{ stats.active }}</h3>
+                        <p>Active Users</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card stats-card bg-warning text-white">
+                        <h3>{{ stats.inactive }}</h3>
+                        <p>Inactive Users</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Users Management</h5>
+
+                            <!-- Search Box -->
+                            <div class="search-box">
+                                <form method="get" class="d-flex">
+                                    <input type="search" name="q" class="form-control" placeholder="Search users..." value="{{ query }}">
+                                    <button type="submit" class="btn btn-primary ms-2">Search</button>
+                                    {% if query %}
+                                        <a href="{{ path('app_admin') }}" class="btn btn-secondary ms-2">Clear</a>
+                                    {% endif %}
+                                </form>
+                            </div>
+
+                            <!-- Users Table -->
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Created</th>
+                                            <th>Last Login</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user in pagination %}
+                                            <tr>
+                                                <td>
+                                                    <div class="user-info">
+                                                        {% if user.photoProfile %}
+                                                            <img src="{{ asset('uploads/profile_pictures/' ~ user.photoProfile) }}" alt="Profile" class="user-avatar">
+                                                        {% else %}
+                                                            <img src="{{ asset('backTemp/img/profile-img.jpg') }}" alt="Default Profile" class="user-avatar">
+                                                        {% endif %}
+                                                        <div>
+                                                            <p class="user-name">{{ user.prenom }} {{ user.nom }}</p>
+                                                            <p class="user-email">{{ user.email }}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-{{ user.typeUser == 'Admin' ? 'primary' : 'success' }}">
+                                                        {{ user.typeUser }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('app_admin_toggle_user_status', {'id': user.id}) }}" 
+                                                       class="badge bg-{{ user.isActive ? 'success' : 'warning' }}"
+                                                       onclick="return confirm('Are you sure you want to {{ user.isActive ? 'deactivate' : 'activate' }} this user?')">
+                                                        {{ user.isActive ? 'Active' : 'Inactive' }}
+                                                    </a>
+                                                </td>
+                                                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i') : 'N/A' }}</td>
+                                                <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i') : 'Never' }}</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-sm btn-info me-2" data-bs-toggle="modal" data-bs-target="#userModal{{ user.id }}">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        {% if user != app.user %}
+                                                            <button type="button" 
+                                                                    class="btn btn-sm btn-danger delete-user"
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#deleteConfirmModal"
+                                                                    data-user-id="{{ user.id }}"
+                                                                    data-user-name="{{ user.prenom }} {{ user.nom }}"
+                                                                    data-user-email="{{ user.email }}"
+                                                                    data-delete-url="{{ path('app_admin_delete_user', {'id': user.id}) }}">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <!-- User Details Modal -->
+                                                    <div class="modal fade" id="userModal{{ user.id }}" tabindex="-1">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">User Details</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center mb-3">
+                                                                        {% if user.photoProfile %}
+                                                                            <img src="{{ asset('uploads/profile_pictures/' ~ user.photoProfile) }}" alt="Profile" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                                                        {% else %}
+                                                                            <img src="{{ asset('backTemp/img/profile-img.jpg') }}" alt="Default Profile" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="user-details">
+                                                                        <p><strong>Name:</strong> {{ user.prenom }} {{ user.nom }}</p>
+                                                                        <p><strong>Email:</strong> {{ user.email }}</p>
+                                                                        <p><strong>Type:</strong> {{ user.typeUser }}</p>
+                                                                        <p><strong>Status:</strong> {{ user.isActive ? 'Active' : 'Inactive' }}</p>
+                                                                        <p><strong>Created:</strong> {{ user.createdAt ? user.createdAt|date('Y-m-d H:i') : 'N/A' }}</p>
+                                                                        <p><strong>Last Login:</strong> {{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i') : 'Never' }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="navigation">
+                                {{ knp_pagination_render(pagination) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle delete button clicks
+            document.querySelectorAll('.delete-user').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userName = this.dataset.userName;
+                    const userEmail = this.dataset.userEmail;
+                    const deleteUrl = this.dataset.deleteUrl;
+                    
+                    // Update modal content
+                    document.querySelector('.user-to-delete-info').innerHTML = `
+                        <strong>${userName}</strong><br>
+                        <small class="text-muted">${userEmail}</small>
+                    `;
+                    
+                    // Update delete button href
+                    document.getElementById('confirmDeleteBtn').href = deleteUrl;
+                });
+            });
+        });
+    </script>
+{% endblock %} 

@@ -1,0 +1,60 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %} Liste des Catégories {% endblock %}
+
+{% block body %}
+
+    <main id="main" class="main">
+        <div class="container mt-5">
+            <h1 class="text-center mb-4 text-warning">Liste des Catégories</h1>
+
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID Catégorie</th>
+                    <th>Nom Catégorie</th>
+                    <th>Description</th>
+                    <th>Logo</th>
+                    <th>Nombre de Partenaires</th>
+                    <th>Actions</th>  <!-- Ajout de la colonne d'actions pour éditer -->
+                </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.getId() }}</td>
+                        <td>{{ category.getNom() }}</td>
+                        <td>{{ category.getDescription() }}</td>
+                        <td>
+                            {% if category.getLogo() %}
+                                <img src="{{ asset('uploads/logos/' ~ category.getLogo()) }}" alt="Logo" width="100">
+                            {% else %}
+                                <span>Pas d'image</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ category.getNbrPartenaire() }}</td>
+                        <td>
+                            <!-- Modification du lien pour utiliser la bonne route edit_category -->
+                            <a href="{{ path('edit_category', { id: category.getId() }) }}" class="btn btn-info btn-sm">
+                                Modifier
+                            </a>
+
+                            <a href="{{ path('delete_category', { id: category.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
+                                Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Aucune catégorie trouvée.</td> <!-- Ajout de 6 colonnes car tu as 6 colonnes au total maintenant -->
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="text-center mt-4">
+                <a href="{{ path('add_category') }}" class="btn btn-success">Ajouter une Catégorie</a>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

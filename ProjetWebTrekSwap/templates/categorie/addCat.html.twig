@@ -1,0 +1,66 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %} Ajouter une Catégorie {% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Ajouter une Catégorie</h1>
+
+                {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+                <div class="form-group">
+                    {{ form_label(form.nom, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group mt-3">
+                    {{ form_label(form.description, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group mt-3">
+                    {{ form_label(form.logo, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.logo, {'attr': {'class': 'form-control-file', 'accept': 'image/*', 'onchange': 'previewLogo(event)'}}) }}
+
+                    {# Prévisualisation de l'image #}
+                    <div id="logo-preview" style="margin-top: 15px;">
+                        <img id="logo-image" src="#" alt="Prévisualisation du logo" style="display: none; width: 100px;">
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    {{ form_label(form.nbrPartenaire, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ path('list_category') }}" class="btn btn-secondary">Retour</a>
+                    <button type="submit" class="btn btn-success">Ajouter</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction de prévisualisation de l'image du logo avant envoi du formulaire
+        function previewLogo(event) {
+            const file = event.target.files[0];  // Récupérer le fichier sélectionné
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const image = document.getElementById('logo-image');
+                image.src = e.target.result;  // Assigner l'image à la source du lecteur
+                image.style.display = 'block';  // Afficher l'image
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);  // Lire le fichier sélectionné
+            }
+        }
+    </script>
+
+{% endblock %}
