@@ -1,16 +1,10 @@
 package Controllers;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import services.SmsService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
 
 public class SmsSender {
 
@@ -21,34 +15,7 @@ public class SmsSender {
     private TextField num;  // TextField for the recipient's phone number
 
     @FXML
-    private Label statusLabel;
-    // Label to show success/error status
-
-
-    @FXML
-    private Button Return;
-
-    @FXML
-    void goToListPart(ActionEvent event) {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichagePartenaire.fxml")); // Path to your affichagePartenaire.fxml
-        try {
-            Parent root = loader.load();  // Load the affichagePartenaire FXML
-            // Get the current scene and set the root to the new scene
-            Return.getScene().setRoot(root);
-        } catch (IOException e) {
-            // Handle exception if loading fails
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page affichagePartenaire.");
-        }
-
-    }
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+    private Label statusLabel;  // Label to show success/error status
 
 
     @FXML
