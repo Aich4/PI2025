@@ -29,6 +29,19 @@
 
   <!-- Template Main CSS File -->
   <link href="{{asset('backTemp/css/style.css')}}" rel="stylesheet">
+  
+  <style>
+    .main.no-sidebar {
+      margin-left: 0;
+      padding: 20px 30px;
+      transition: all 0.3s;
+    }
+    @media (max-width: 1199px) {
+      .main.no-sidebar {
+        padding: 20px;
+      }
+    }
+  </style>
   {% endblock %}
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -45,8 +58,8 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="{{asset('backTemp/img/TWlogo.png')}}" alt="">
+      <a href="{{ path('app_Abonnement') }}" class="logo d-flex align-items-center">
+        <img src="{{ asset('backTemp/img/logo.png') }}" alt="">
         <span class="d-none d-lg-block">TrekSwap</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -270,6 +283,7 @@
   </header><!-- End Header -->
 {% endblock %}
 {% block sidebar %}
+  {% if not (app.request.get('_route') == 'app_profile' and app.user.typeUser != 'Admin') %}
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
 
@@ -375,7 +389,7 @@
         </a>
         <ul id="charts-navvvv" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="charts-chartjs.html">
+            <a href="/reclamation/back">
               <i class="bi bi-circle"></i><span>Reclamation</span>
             </a>
           </li>
@@ -389,9 +403,10 @@
       </li><!-- End Profile Page Nav -->
 
   </aside><!-- End Sidebar-->
-  {% endblock %}
-  {% block body %}
-  <main id="main" class="main">
+  {% endif %}
+{% endblock %}
+{% block body %}
+  <main id="main" class="main {% if app.request.get('_route') == 'app_profile' and app.user.typeUser != 'Admin' %}no-sidebar{% endif %}">
 
     <div class="pagetitle">
       <h1>Dashboard</h1>
