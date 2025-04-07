@@ -1,19 +1,36 @@
+{% extends 'base.html.twig' %}
 
+{% block title %}Partenaires - {{ categorie.nom }}{% endblock %}
 
-<h2>Partenaires de la catégorie "{{ categorie.nom }}"</h2>
+{% block welcome %}
+    <section class="welcome-banner" style="padding: 3rem 1rem; text-align: center; background: transparent; border-bottom: none;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #ffffff;">🤝 Nos Partenaires</h1>
+        <p style="font-size: 1.2rem; color: #ffffff;">Découvrez les partenaires associés à la catégorie <strong>{{ categorie.nom }}</strong></p>
+    </section>
+{% endblock %}
 
-{% if partenaires is not empty %}
-    <ul>
-        {% for partenaire in partenaires %}
-            <li>
-                <strong>{{ partenaire.nom }}</strong><br>
-                Email : {{ partenaire.email }}<br>
-                Adresse : {{ partenaire.adresse }}<br>
-                Description : {{ partenaire.description }}<br>
-                Date d'ajout : {{ partenaire.dateAjout|date('d/m/Y') }}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>Aucun partenaire trouvé pour cette catégorie.</p>
-{% endif %}
+{% block body %}
+    <div class="container" style="padding: 2rem 1rem;">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.75rem; color: #0056b3;">Partenaires de la catégorie "{{ categorie.nom }}"</h2>
+
+        {% if partenaires is not empty %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                {% for partenaire in partenaires %}
+                    <div class="partner-card" style="border-radius: 12px; border: 1px solid #e0e0e0; padding: 1.5rem; background: transparent; transition: transform 0.2s;">
+                        <h5 style="color: #0056b3; margin-bottom: 0.8rem;">{{ partenaire.nom }}</h5>
+                        <p style="margin: 0.3rem 0;"><strong>📧 Email:</strong> {{ partenaire.email }}</p>
+                        <p style="margin: 0.3rem 0;"><strong>📍 Adresse:</strong> {{ partenaire.adresse }}</p>
+                        <p style="margin: 0.3rem 0;"><strong>📝 Description:</strong> {{ partenaire.description }}</p>
+                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #6c757d;">
+                            Ajouté le {{ partenaire.dateAjout|date('d/m/Y') }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="margin-top: 2rem; padding: 1rem 1.5rem; background-color: #fff3cd; color: #856404; border-radius: 8px; border: 1px solid #ffeeba;">
+                Aucun partenaire trouvé pour cette catégorie.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

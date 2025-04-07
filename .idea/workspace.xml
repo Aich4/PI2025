@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/phpunit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/_delete_form.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/_form.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/back.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/edit.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/index.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/new.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/reclamation/show.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/ShowFront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/ShowFront.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,18 +166,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "GestionPartenaire",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -213,6 +205,7 @@
       <workItem from="1743844394760" duration="7000" />
       <workItem from="1743937707463" duration="8859000" />
       <workItem from="1743947283701" duration="19000" />
+      <workItem from="1744030968903" duration="1633000" />
     </task>
     <servers />
   </component>

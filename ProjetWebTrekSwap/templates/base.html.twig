@@ -44,7 +44,7 @@
   <header id="header" class="fixed-top header-transparent">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo"><a href="index.html">TrekSwap</a></h1>
+      <h1 class="logo"><a href="/frontA">TrekSwap</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
     <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
 
@@ -61,18 +61,23 @@
           <li class="dropdown">
             <a href="#"><span>Catégories</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              {% for categorie in categories %}
-                <li>
-                  <a href="{{ path('categorie_partenaires', {'id': categorie.id}) }}">
-                    <img src="{{ asset('uploads/logos/' ~ categorie.logo) }}"
-                         alt="{{ categorie.nom }}"
-                         style="height: 35px; width: 35px; object-fit: cover; margin-right: 8px; vertical-align: middle;">
-                    {{ categorie.nom }}
-                  </a>
-                </li>
+              {% if categories is defined and categories is not empty %}
+                {% for categorie in categories %}
+                  <li>
+                    <a href="{{ path('categorie_partenaires', {'id': categorie.id}) }}">
+                      <img src="{{ asset('uploads/logos/' ~ categorie.logo) }}"
+                           alt="{{ categorie.nom }}"
+                           style="height: 35px; width: 35px; object-fit: cover; margin-right: 8px; vertical-align: middle;">
+                      {{ categorie.nom }}
+                    </a>
+                  </li>
+                {% else %}
+                  <li><a href="#">Aucune catégorie disponible</a></li>
+                {% endfor %}
               {% else %}
                 <li><a href="#">Aucune catégorie disponible</a></li>
-              {% endfor %}
+              {% endif %}
+
             </ul>
           </li>
 
