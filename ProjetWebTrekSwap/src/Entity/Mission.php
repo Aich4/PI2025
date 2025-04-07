@@ -67,4 +67,16 @@ class Mission
 
         return $this;
     }
+    public function getIdRecompense(): ?int
+    {
+        return $this->id_recompense;
+    }
+
+    public function setIdRecompense(?int $id_recompense): static
+    {
+        $this->id_recompense = $id_recompense;
+
+        return $this;
+    }
+
 }

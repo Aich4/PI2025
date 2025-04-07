@@ -6,6 +6,7 @@ use App\Entity\Mission;
 use App\Form\MissionType;
 use App\Repository\MissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,14 +69,21 @@ final class MissionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_mission_delete', methods: ['POST'])]
-    public function delete(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
+    #[Route('/mission/delete/{id}', name: 'app_mission_delete', methods: ['GET'])]
+    public function delete(int $id, MissionRepository $missionRepository, ManagerRegistry $managerRegistry): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$mission->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($mission);
-            $entityManager->flush();
+        $em = $managerRegistry->getManager();
+
+        $mission = $missionRepository->find($id);
+
+        if (!$mission) {
+            throw $this->createNotFoundException('Mission non trouvée');
         }
 
-        return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
+        $em->remove($mission);
+        $em->flush();
+
+        return $this->redirectToRoute('app_mission_index');
     }
+
 }
