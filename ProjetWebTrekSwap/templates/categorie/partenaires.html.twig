@@ -16,7 +16,7 @@
         {% if partenaires is not empty %}
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
                 {% for partenaire in partenaires %}
-                    <div class="partner-card" style="border-radius: 12px; border: 1px solid #e0e0e0; padding: 1.5rem; background: transparent; transition: transform 0.2s;">
+                    <article class="partner-card" style="border-radius: 12px; border: 1px solid #e0e0e0; padding: 1.5rem; background: transparent; transition: transform 0.2s; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                         <h5 style="color: #0056b3; margin-bottom: 0.8rem;">{{ partenaire.nom }}</h5>
                         <p style="margin: 0.3rem 0;"><strong>📧 Email:</strong> {{ partenaire.email }}</p>
                         <p style="margin: 0.3rem 0;"><strong>📍 Adresse:</strong> {{ partenaire.adresse }}</p>
@@ -24,7 +24,7 @@
                         <p style="margin-top: 1rem; font-size: 0.9rem; color: #6c757d;">
                             Ajouté le {{ partenaire.dateAjout|date('d/m/Y') }}
                         </p>
-                    </div>
+                    </article>
                 {% endfor %}
             </div>
         {% else %}

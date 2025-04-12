@@ -16,7 +16,8 @@
                     <th>Adresse</th>
                     <th>Description</th>
                     <th>Date d'ajout</th>
-                    <th>Actions</th>  <!-- Ajout de la colonne d'actions pour éditer -->
+                    <th>Catégorie</th> <!-- ✅ Nouvelle colonne -->
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,12 +29,11 @@
                         <td>{{ partenaire.adresse }}</td>
                         <td>{{ partenaire.description }}</td>
                         <td>{{ partenaire.dateAjout ? partenaire.dateAjout|date('d/m/Y') : 'N/A' }}</td>
+                        <td>{{ categorieMap[partenaire.idCategorie] ?? 'Inconnue' }}</td> <!-- ✅ Affiche le nom de la catégorie -->
                         <td>
-                            <!-- Modification du lien pour utiliser la bonne route edit_partenaire -->
                             <a href="{{ path('edit_partenaire', { id: partenaire.id }) }}" class="btn btn-info btn-sm">
                                 Modifier
                             </a>
-
                             <a href="{{ path('delete_partenaire', { id: partenaire.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce partenaire ?');">
                                 Supprimer
                             </a>
@@ -41,7 +41,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="7" class="text-center">Aucun partenaire trouvé.</td> <!-- Ajout de 7 colonnes car tu as 7 colonnes au total maintenant -->
+                        <td colspan="8" class="text-center">Aucun partenaire trouvé.</td>
                     </tr>
                 {% endfor %}
                 </tbody>

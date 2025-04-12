@@ -1,66 +1,88 @@
 {% extends 'base-back.html.twig' %}
 
-{% block title %} Ajouter une Catégorie {% endblock %}
+{% block title %}Ajouter une Catégorie{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1 class="text-center mb-4">Ajouter une Catégorie</h1>
+    <main id="main" class="main">
+        <div class="container mt-5">
+            <h1 class="text-center mb-4 text-warning">Ajouter une Catégorie</h1>
 
-                {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-                <div class="form-group">
-                    {{ form_label(form.nom, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
-                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
-                </div>
+                    <div class="mb-3">
+                        {{ form_label(form.nom) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nom) }}
+                    </div>
 
-                <div class="form-group mt-3">
-                    {{ form_label(form.description, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
-                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-                </div>
+                    <div class="mb-3">
+                        {{ form_label(form.description) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.description) }}
+                    </div>
 
-                <div class="form-group mt-3">
-                    {{ form_label(form.logo, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
-                    {{ form_widget(form.logo, {'attr': {'class': 'form-control-file', 'accept': 'image/*', 'onchange': 'previewLogo(event)'}}) }}
+                    <div class="mb-3">
+                        {{ form_label(form.logo) }}
+                        {{ form_widget(form.logo, {
+                            'attr': {
+                                'class': 'form-control',
+                                'onchange': 'previewImage(event)'
+                            }
+                        }) }}
+                        {{ form_errors(form.logo) }}
 
-                    {# Prévisualisation de l'image #}
-                    <div id="logo-preview" style="margin-top: 15px;">
-                        <img id="logo-image" src="#" alt="Prévisualisation du logo" style="display: none; width: 100px;">
+                        <div class="mt-3 text-center">
+                            <img id="imagePreview" src="#" alt="Aperçu du logo" style="max-width: 100%; height: auto; display: none;" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.nbrPartenaire) }}
+                        {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nbrPartenaire) }}
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success">Ajouter la Catégorie</button>
+                    </div>
+
+                    {{ form_end(form) }}
+
+                    <div class="text-center mt-4">
+                        <a href="{{ path('list_category') }}" class="btn btn-secondary">Retour à la liste</a>
                     </div>
                 </div>
-
-                <div class="form-group mt-3">
-                    {{ form_label(form.nbrPartenaire, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
-                    {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
-                </div>
-
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ path('list_category') }}" class="btn btn-secondary">Retour</a>
-                    <button type="submit" class="btn btn-success">Ajouter</button>
-                </div>
-
-                {{ form_end(form) }}
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
-        // Fonction de prévisualisation de l'image du logo avant envoi du formulaire
-        function previewLogo(event) {
-            const file = event.target.files[0];  // Récupérer le fichier sélectionné
-            const reader = new FileReader();
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
 
-            reader.onload = function(e) {
-                const image = document.getElementById('logo-image');
-                image.src = e.target.result;  // Assigner l'image à la source du lecteur
-                image.style.display = 'block';  // Afficher l'image
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);  // Lire le fichier sélectionné
+            // Vérifier si un fichier est sélectionné et si c'est une image valide
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                if (validImageTypes.includes(file.type)) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Si l'image n'est pas valide, masquer l'aperçu et afficher une erreur
+                    preview.style.display = 'none';
+                    alert('Veuillez télécharger une image valide (JPEG, PNG, WebP).');
+                }
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
             }
         }
     </script>
-
 {% endblock %}
