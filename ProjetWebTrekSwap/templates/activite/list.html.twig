@@ -4,73 +4,86 @@
 
 {% block body %}
     <main id="main" class="main">
-        <div class="container py-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-primary">Liste des Activités</h1>
-                <a href="{{ path('add_activite') }}" class="btn btn-outline-primary">+ Ajouter une Activité</a>
-            </div>
+        <div class="container mt-5">
+            <h1 class="text-center mb-4 text-primary">Liste des Activités</h1>
 
+            <!-- Barre de recherche -->
             <div class="mb-3">
                 <input type="text" id="search-input" class="form-control" placeholder="Rechercher une activité...">
             </div>
 
-            {% if activites|length > 0 %}
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                        <tr>
-                            <th>Id</th>
-                            <th>Nom</th>
-                            <th>Date</th>
-                            <th>Heure</th>
-                            <th>Statut</th>
-                            <th>Destination</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for activite in activites %}
-                            <tr>
-                                <td>{{ activite.id }}</td>
-                                <td>{{ activite.nomActivite }}</td>
-                                <td>{{ activite.date ? activite.date|date('Y-m-d') : 'N/A' }}</td>
-                                <td>{{ activite.heure }}</td>
-                                <td>
-                                    {% set statut = activite.statut %}
-                                    {% if statut == 'active' %}
-                                        <span class="badge bg-success text-uppercase">{{ statut }}</span>
-                                    {% elseif statut == 'inactive' %}
-                                        <span class="badge bg-danger text-uppercase">{{ statut }}</span>
-                                    {% elseif statut == 'completed' %}
-                                        <span class="badge bg-primary text-uppercase">{{ statut }}</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">{{ statut }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {{ activite.idDestination ? 'Destination #' ~ activite.idDestination : 'N/A' }}
-                                </td>
-                                <td>
-                                    <a href="{{ path('edit_activite', {'id': activite.id}) }}" class="btn btn-sm btn-outline-success">Modifier</a>
-                                    <a href="{{ path('delete_activite', {'id': activite.id}) }}"
-                                       class="btn btn-sm btn-outline-danger"
-                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette activité ?');">Supprimer</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+            <!-- Card contenant le tableau -->
+            <div class="card shadow-lg p-4 rounded-lg custom-bg-light">
+                <div class="card-body">
+                    {% if activites|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped text-center align-middle custom-table-bg">
+                                <thead class="bg-info text-white">
+                                <tr>
+                                    <th class="custom-th">ID</th>
+                                    <th class="custom-th">Nom</th>
+                                    <th class="custom-th">Date</th>
+                                    <th class="custom-th">Heure</th>
+                                    <th class="custom-th">Statut</th>
+                                    <th class="custom-th">Destination</th>
+                                    <th class="custom-th">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for activite in activites %}
+                                    <tr>
+                                        <td class="text-muted">{{ activite.id }}</td>
+                                        <td>{{ activite.nomActivite }}</td>
+                                        <td>{{ activite.date ? activite.date|date('Y-m-d') : 'N/A' }}</td>
+                                        <td>{{ activite.heure }}</td>
+                                        <td>
+                                            {% set statut = activite.statut %}
+                                            <span class="badge
+                                                {% if statut == 'active' %}bg-success
+                                                {% elseif statut == 'inactive' %}bg-danger
+                                                {% elseif statut == 'completed' %}bg-primary
+                                                {% else %}bg-secondary
+                                                {% endif %}
+                                            text-uppercase">
+                                                {{ statut }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ activite.idDestination ? 'Destination #' ~ activite.idDestination : 'N/A' }}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ path('edit_activite', {'id': activite.id}) }}" class="btn btn-outline-success btn-sm" title="Modifier">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                                <a href="{{ path('delete_activite', {'id': activite.id}) }}" class="btn btn-outline-danger btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette activité ?');">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info mt-4 text-center">
+                            Aucune activité trouvée.
+                        </div>
+                    {% endif %}
+
+                    <!-- Bouton pour ajouter -->
+                    <div class="text-center mt-4">
+                        <a href="{{ path('add_activite') }}" class="btn btn-success px-4 py-2">
+                            <i class="bi bi-plus-circle-dotted"></i> Ajouter une Activité
+                        </a>
+                    </div>
                 </div>
-            {% else %}
-                <div class="alert alert-info mt-4">
-                    Aucune activité trouvée.
-                </div>
-            {% endif %}
+            </div>
         </div>
     </main>
 
     <script>
-        // Recherche simple côté client
         document.getElementById('search-input').addEventListener('input', function () {
             const value = this.value.toLowerCase();
             document.querySelectorAll('tbody tr').forEach(row => {
@@ -78,4 +91,30 @@
             });
         });
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .custom-bg-light {
+            background-color: #e9ecef !important;
+        }
+
+        .custom-table-bg {
+            background-color: #f4f6f9 !important;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-th {
+            background-color: #cce5ff;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1 !important;
+        }
+    </style>
 {% endblock %}
