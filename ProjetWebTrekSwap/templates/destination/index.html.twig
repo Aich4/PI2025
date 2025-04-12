@@ -4,66 +4,82 @@
 
 {% block body %}
     <main id="main" class="main">
-        <div class="container py-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-primary">Liste des Destinations</h1>
-                <a href="{{ path('addDestination') }}" class="btn btn-outline-primary">+ Ajouter une Destination</a>
-            </div>
+        <div class="container mt-5">
+            <h1 class="text-center mb-4 text-primary">Liste des Destinations</h1>
 
-            <div class="mb-3">
+            <!-- Search bar -->
+            <div class="mb-4">
                 <input type="text" id="search-input" class="form-control" placeholder="Rechercher une destination...">
             </div>
 
-            {% if destinations|length > 0 %}
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                        <tr>
-                            <th>Id</th>
-                            <th>Nom</th>
-                            <th>Description</th>
-                            <th>Image</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Température</th>
-                            <th>Note</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for destination in destinations %}
+            <!-- Container card -->
+            <div class="card shadow-lg p-4 rounded-lg custom-bg-light">
+                <div class="card-body">
+                    <!-- Table structure -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-striped text-center align-middle custom-table-bg">
+                            <thead class="bg-info text-white">
                             <tr>
-                                <td>{{ destination.id }}</td>
-                                <td>{{ destination.nomDestination }}</td>
-                                <td>{{ destination.description|length > 50 ? destination.description|slice(0, 50) ~ '...' : destination.description }}</td>
-                                <td>
-                                    <img src="{{ destination.imageDestination }}" alt="Image" class="img-thumbnail" style="max-width: 100px;">
-                                </td>
-                                <td>{{ destination.latitude }}</td>
-                                <td>{{ destination.longitude }}</td>
-                                <td>{{ destination.temperature }}°C</td>
-                                <td>{{ destination.rate }}/5</td>
-                                <td>
-                                    <a href="{{ path('editDest', {'id': destination.id}) }}" class="btn btn-sm btn-outline-success">Modifier</a>
-                                    <a href="{{ path('deleteDest', {'id': destination.id}) }}"
-                                       class="btn btn-sm btn-outline-danger"
-                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette destination ?');">Supprimer</a>
-                                </td>
+                                <th class="custom-th">ID</th>
+                                <th class="custom-th">Nom</th>
+                                <th class="custom-th">Description</th>
+                                <th class="custom-th">Image</th>
+                                <th class="custom-th">Latitude</th>
+                                <th class="custom-th">Longitude</th>
+                                <th class="custom-th">Température</th>
+                                <th class="custom-th">Note</th>
+                                <th class="custom-th">Actions</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {% for destination in destinations %}
+                                <tr>
+                                    <td class="text-muted">{{ destination.id }}</td>
+                                    <td>{{ destination.nomDestination }}</td>
+                                    <td>
+                                        {{ destination.description|length > 50
+                                        ? destination.description|slice(0, 50) ~ '...'
+                                        : destination.description }}
+                                    </td>
+                                    <td>
+                                        <img src="{{ destination.imageDestination }}" alt="Image" class="img-thumbnail" style="max-width: 100px;">
+                                    </td>
+                                    <td>{{ destination.latitude }}</td>
+                                    <td>{{ destination.longitude }}</td>
+                                    <td>{{ destination.temperature }}°C</td>
+                                    <td>{{ destination.rate }}/5</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ path('editDest', {'id': destination.id}) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <a href="{{ path('deleteDest', {'id': destination.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette destination ?');" title="Supprimer">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="9" class="text-center text-muted">Aucune destination trouvée.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Add button -->
+                    <div class="text-center mt-4">
+                        <a href="{{ path('addDestination') }}" class="btn btn-success px-4 py-2">
+                            <i class="bi bi-plus-circle-dotted"></i> Ajouter une Destination
+                        </a>
+                    </div>
                 </div>
-            {% else %}
-                <div class="alert alert-info mt-4">
-                    Aucun destination trouvée.
-                </div>
-            {% endif %}
+            </div>
         </div>
     </main>
 
     <script>
-        // Optional: client-side search filter (basic)
         document.getElementById('search-input').addEventListener('input', function () {
             const searchValue = this.value.toLowerCase();
             const rows = document.querySelectorAll('tbody tr');
@@ -73,4 +89,35 @@
             });
         });
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Applique une couleur de fond gris clair à la carte */
+        .custom-bg-light {
+            background-color: #e9ecef !important;
+        }
+
+        /* Applique une couleur gris clair au fond du tableau */
+        .custom-table-bg {
+            background-color: #f4f6f9 !important;
+        }
+
+        /* Amélioration de l'ombre de la carte pour un effet plus moderne */
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Applique une couleur personnalisée pour les titres des colonnes */
+        .custom-th {
+            background-color: #cce5ff;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        /* Applique un effet de survol pour les lignes du tableau */
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1 !important;
+        }
+    </style>
 {% endblock %}
