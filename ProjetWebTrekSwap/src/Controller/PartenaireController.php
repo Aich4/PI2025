@@ -11,7 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Repository\CategorieRepository; // Correct importation du repository
+use App\Entity\Categorie; // Assure-toi d'importer Categorie depuis App\Entity, pas App\Controller
 
 class PartenaireController extends AbstractController
 {
@@ -24,12 +25,22 @@ class PartenaireController extends AbstractController
     }
 
     #[Route('/Partenaires', name: 'list_partenaire', methods: ['GET'])]
-    public function listPartenaires(PartenaireRepository $partenaireRepository): Response
-    {
+    public function listPartenaires(
+        PartenaireRepository $partenaireRepository,
+        CategorieRepository $categorieRepository
+    ): Response {
         $partenaires = $partenaireRepository->findAll();
+        $categories = $categorieRepository->findAll();
+
+        // On crée une map ID => Nom
+        $categorieMap = [];
+        foreach ($categories as $categorie) {
+            $categorieMap[$categorie->getId()] = $categorie->getNom();
+        }
 
         return $this->render('partenaire/index.html.twig', [
             'partenaires' => $partenaires,
+            'categorieMap' => $categorieMap,
         ]);
     }
 
@@ -37,17 +48,33 @@ class PartenaireController extends AbstractController
     public function addPartenaire(Request $request, EntityManagerInterface $entityManager): Response
     {
         $partenaire = new Partenaire();
-        $form = $this->createForm(PartenaireType::class, $partenaire);
+        $partenaire->setDateAjout(new \DateTime());
+
+        // Récupérer les catégories depuis la base
+        $conn = $entityManager->getConnection();
+        $sql = 'SELECT id, nom FROM categorie';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $rows = $resultSet->fetchAllAssociative();
+
+        // Transformer pour l’option 'choices'
+        $categories = [];
+        foreach ($rows as $row) {
+            $categories[$row['nom']] = $row['id']; // "nom" affiché, "id" stocké
+        }
+
+        $form = $this->createForm(PartenaireType::class, $partenaire, [
+            'categories' => $categories, // on passe les catégories au formulaire
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Définir la date d'ajout
-            $partenaire->setDateAjout(new \DateTime());
-
             $entityManager->persist($partenaire);
             $entityManager->flush();
 
             $this->addFlash('success', 'Partenaire ajouté avec succès !');
+
             return $this->redirectToRoute('list_partenaire');
         }
 
@@ -59,25 +86,35 @@ class PartenaireController extends AbstractController
     #[Route('/partenaire/edit/{id}', name: 'edit_partenaire', methods: ['GET', 'POST'])]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer le partenaire à éditer par son ID
         $partenaire = $entityManager->getRepository(Partenaire::class)->find($id);
 
         if (!$partenaire) {
             throw $this->createNotFoundException('Partenaire non trouvé');
         }
 
-        // Créer le formulaire de modification
-        $form = $this->createForm(PartenaireType::class, $partenaire);
+        // Get all categories from DB
+        $categoriesEntities = $entityManager->getRepository(Categorie::class)->findAll();
+
+        // Build array for the form (key => label, value => id)
+        $categories = [];
+        foreach ($categoriesEntities as $categorie) {
+            $categories[$categorie->getNom()] = $categorie->getId();
+        }
+
+        // Create form and pass categories
+        $form = $this->createForm(PartenaireType::class, $partenaire, [
+            'categories' => $categories,
+        ]);
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarder les modifications dans la base de données
-            $entityManager->flush();
-
-            // Afficher un message de succès et rediriger vers la liste des partenaires
-            $this->addFlash('success', 'Partenaire mis à jour avec succès!');
-            return $this->redirectToRoute('list_partenaire');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $entityManager->flush();
+                $this->addFlash('success', 'Partenaire mis à jour avec succès!');
+                return $this->redirectToRoute('list_partenaire');
+            } else {
+                $this->addFlash('error', 'Veuillez corriger les erreurs de saisie.');
+            }
         }
 
         return $this->render('partenaire/editPartenaire.html.twig', [

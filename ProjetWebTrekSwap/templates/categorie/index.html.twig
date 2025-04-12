@@ -3,7 +3,6 @@
 {% block title %} Liste des Catégories {% endblock %}
 
 {% block body %}
-
     <main id="main" class="main">
         <div class="container mt-5">
             <h1 class="text-center mb-4 text-warning">Liste des Catégories</h1>
@@ -16,7 +15,7 @@
                     <th>Description</th>
                     <th>Logo</th>
                     <th>Nombre de Partenaires</th>
-                    <th>Actions</th>  <!-- Ajout de la colonne d'actions pour éditer -->
+                    <th>Actions</th>  <!-- Colonne d'actions pour éditer et supprimer -->
                 </tr>
                 </thead>
                 <tbody>
@@ -35,26 +34,27 @@
                         <td>{{ category.getNbrPartenaire() }}</td>
                         <td>
                             <!-- Modification du lien pour utiliser la bonne route edit_category -->
-                            <a href="{{ path('edit_category', { id: category.getId() }) }}" class="btn btn-info btn-sm">
+                            <a href="{{ path('edit_category', { id: category.getId() }) }}" class="btn btn-info btn-sm" role="button" aria-label="Modifier cette catégorie">
                                 Modifier
                             </a>
 
-                            <a href="{{ path('delete_category', { id: category.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
+                            <a href="{{ path('delete_category', { id: category.getId() }) }}" class="btn btn-danger btn-sm" role="button" aria-label="Supprimer cette catégorie" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
                                 Supprimer
                             </a>
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="6" class="text-center">Aucune catégorie trouvée.</td> <!-- Ajout de 6 colonnes car tu as 6 colonnes au total maintenant -->
+                        <td colspan="6" class="text-center">Aucune catégorie trouvée.</td> <!-- Ajustement du colspan -->
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
             <div class="text-center mt-4">
-                <a href="{{ path('add_category') }}" class="btn btn-success">Ajouter une Catégorie</a>
+                <a href="{{ path('add_category') }}" class="btn btn-success" role="button" aria-label="Ajouter une catégorie">
+                    Ajouter une Catégorie
+                </a>
             </div>
         </div>
     </main>
-
 {% endblock %}

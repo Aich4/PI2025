@@ -7,37 +7,47 @@
         <div class="container mt-5">
             <h1 class="text-center mb-4 text-warning">Ajouter un Partenaire</h1>
 
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+
 
             <div class="mb-3">
                 {{ form_label(form.nom) }}
                 {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.nom) }} {# Afficher les erreurs pour le champ nom #}
+                {{ form_errors(form.nom) }}
             </div>
 
             <div class="mb-3">
                 {{ form_label(form.email) }}
                 {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.email) }} {# Afficher les erreurs pour le champ email #}
+                {{ form_errors(form.email) }}
             </div>
 
             <div class="mb-3">
                 {{ form_label(form.adresse) }}
                 {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.adresse) }} {# Afficher les erreurs pour le champ adresse #}
+                {{ form_errors(form.adresse) }}
             </div>
 
             <div class="mb-3">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.description) }} {# Afficher les erreurs pour le champ description #}
+                {{ form_errors(form.description) }}
             </div>
 
             <div class="mb-3">
                 {{ form_label(form.date_ajout) }}
                 {{ form_widget(form.date_ajout, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.date_ajout) }} {# Afficher les erreurs pour le champ date_ajout #}
+                {{ form_errors(form.date_ajout) }}
             </div>
+
+            {% if form.id_categorie is defined %}
+                <div class="mb-3">
+                    {{ form_label(form.id_categorie) }}
+                    {{ form_widget(form.id_categorie, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.id_categorie) }}
+                </div>
+            {% endif %}
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success">Ajouter le Partenaire</button>
