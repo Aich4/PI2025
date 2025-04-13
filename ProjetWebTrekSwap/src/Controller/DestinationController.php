@@ -38,7 +38,7 @@ final class DestinationController extends AbstractController
     }
 
     #[Route('/addDestination', name: 'addDestination', methods: ['GET', 'POST'])]
-    public function add(Request $request, EntityManagerInterface $manager, ValidatorInterface $validator): Response
+    public function add(Request $request, EntityManagerInterface $manager): Response
     {
         $destination = new Destination();
         $form = $this->createForm(DestinationType::class, $destination);
@@ -49,41 +49,27 @@ final class DestinationController extends AbstractController
             $imageFile = $form->get('imageDestination')->getData();
 
             if ($imageFile) {
-                // Generate a unique filename
                 $newFilename = uniqid().'.'.$imageFile->guessExtension();
 
-                // Move the file to the uploads directory
                 $imageFile->move(
-                    $this->getParameter('uploads_directory'), // Defined in services.yaml
+                    $this->getParameter('uploads_directory'),
                     $newFilename
                 );
 
-                // Store the file path in the entity
                 $destination->setImageDestination('/uploads/'.$newFilename);
             }
 
-            // Validate the entity
-            $errors = $validator->validate($destination);
-
-            if (count($errors) > 0) {
-                // If there are validation errors, display them to the user
-                return $this->render('destination/addDest.html.twig', [
-                    'form' => $form->createView(),
-                    'errors' => $errors
-                ]);
-            }
-
-            // If no errors, persist and flush the entity
             $manager->persist($destination);
             $manager->flush();
 
-            return $this->redirectToRoute('addDestination');
+            return $this->redirectToRoute('list_destination');
         }
 
         return $this->render('destination/addDest.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/editDestination/{id}', name: 'editDest', methods: ['GET', 'POST'])]
     public function edit(int $id, Request $request, EntityManagerInterface $manager, ValidatorInterface $validator): Response
@@ -114,20 +100,6 @@ final class DestinationController extends AbstractController
                 // Store the file path in the entity
                 $destination->setImageDestination('/uploads/'.$newFilename);
             }
-
-            // Validate the entity
-            $errors = $validator->validate($destination);
-
-            if (count($errors) > 0) {
-                // If there are validation errors, display them to the user
-                return $this->render('destination/editDest.html.twig', [
-                    'form' => $form->createView(),
-                    'destination' => $destination,
-                    'errors' => $errors
-                ]);
-            }
-
-            // If no errors, flush the entity
             $manager->flush();
 
             return $this->redirectToRoute('list_destination'); // Redirect to the list after edit

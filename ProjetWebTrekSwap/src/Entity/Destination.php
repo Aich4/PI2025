@@ -72,7 +72,7 @@ class Destination
         return $this->nom_destination;
     }
 
-    public function setNomDestination(string $nom_destination): static
+    public function setNomDestination(?string $nom_destination): static
     {
         $this->nom_destination = $nom_destination;
 
@@ -84,7 +84,7 @@ class Destination
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -108,7 +108,7 @@ class Destination
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude): static
+    public function setLatitude(?float $latitude): static
     {
         $this->latitude = $latitude;
 
@@ -120,7 +120,7 @@ class Destination
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude): static
+    public function setLongitude(?float $longitude): static
     {
         $this->longitude = $longitude;
 
@@ -132,7 +132,7 @@ class Destination
         return $this->temperature;
     }
 
-    public function setTemperature(float $temperature): static
+    public function setTemperature(?float $temperature): static
     {
         $this->temperature = $temperature;
 
@@ -144,7 +144,7 @@ class Destination
         return $this->rate;
     }
 
-    public function setRate(float $rate): static
+    public function setRate(?float $rate): static
     {
         $this->rate = $rate;
 
