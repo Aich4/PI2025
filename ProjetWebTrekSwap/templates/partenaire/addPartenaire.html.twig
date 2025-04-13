@@ -5,11 +5,9 @@
 {% block body %}
     <main id="main" class="main">
         <div class="container mt-5">
-            <h1 class="text-center mb-4 text-warning">Ajouter un Partenaire</h1>
+            <h1 class="text-center mb-4 text-primary">Ajouter un Partenaire</h1> <!-- Changed text-warning to text-primary -->
 
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-
-
 
             <div class="mb-3">
                 {{ form_label(form.nom) }}
@@ -50,14 +48,17 @@
             {% endif %}
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success">Ajouter le Partenaire</button>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success w-100 py-3 me-2">
+                        ✅ Ajouter le Partenaire
+                    </button>
+                    <a href="{{ path('list_partenaire') }}" class="btn btn-secondary w-100 py-3 ms-2">
+                        ↩️ Retour à la liste
+                    </a>
+                </div>
             </div>
 
             {{ form_end(form) }}
-
-            <div class="text-center mt-4">
-                <a href="{{ path('list_partenaire') }}" class="btn btn-secondary">Retour à la liste</a>
-            </div>
         </div>
     </main>
 {% endblock %}

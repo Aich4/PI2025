@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CategorieType extends AbstractType
@@ -51,7 +52,11 @@ class CategorieType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner un nombre de partenaire.',
-                    ])
+                    ]),
+                    new GreaterThanOrEqual([
+                        'value' => 0,
+                        'message' => 'Le nombre de partenaires ne peut pas être négatif.',
+                    ]),
                 ]
             ]);
     }

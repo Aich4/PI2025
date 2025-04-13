@@ -117,7 +117,7 @@ final class CategorieController extends AbstractController
             if ($logoFile) {
                 $newFilename = uniqid().'.'.$logoFile->guessExtension();
                 $logoFile->move(
-                    $this->getParameter('logo_directory'),
+                    $this->getParameter('logos_directory'),
                     $newFilename
                 );
                 $categorie->setLogo($newFilename);
