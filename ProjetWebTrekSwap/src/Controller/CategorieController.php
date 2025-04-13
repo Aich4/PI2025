@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Repository\PartenaireRepository;
-
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 final class CategorieController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
@@ -100,48 +102,41 @@ final class CategorieController extends AbstractController
     }
 
 
-        #[Route('/Categorie/edit/{id}', name: 'edit_category', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/categorie/{id}/edit', name: 'edit_categorie', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Categorie $categorie, EntityManagerInterface $em): Response
     {
-        // Récupérer la catégorie à éditer par son ID
-        $category = $entityManager->getRepository(Categorie::class)->find($id);
-
-        if (!$category) {
-            throw $this->createNotFoundException('Catégorie non trouvée');
-        }
-
-        // Créer le formulaire de modification
-        $form = $this->createForm(CategorieType::class, $category);
+        $form = $this->createForm(CategorieType::class, $categorie);
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload du logo
+            if ($form->get('nbrPartenaire')->getData() === null) {
+                $categorie->setNbrPartenaire(0); // Valeur par défaut
+            }
+            // Gestion du fichier logo
             $logoFile = $form->get('logo')->getData();
-
             if ($logoFile) {
                 $newFilename = uniqid().'.'.$logoFile->guessExtension();
-                try {
-                    $logoFile->move($this->getParameter('logos_directory'), $newFilename);
-                    $category->setLogo($newFilename); // Remplacer le logo
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Erreur lors de l\'upload du fichier: '.$e->getMessage());
-                }
+                $logoFile->move(
+                    $this->getParameter('logo_directory'),
+                    $newFilename
+                );
+                $categorie->setLogo($newFilename);
             }
 
-            // Sauvegarder les modifications dans la base de données
-            $entityManager->flush();
+            $em->flush();
 
-            // Afficher un message de succès et rediriger vers la liste des catégories
-            $this->addFlash('success', 'Catégorie mise à jour avec succès!');
-            return $this->redirectToRoute('list_category');
+            $this->addFlash('success', 'Catégorie modifiée avec succès.');
+            return $this->redirectToRoute('list_category'); // Corrigez le nom de la route
         }
 
         return $this->render('categorie/editCat.html.twig', [
-            'category' => $category,
             'form' => $form->createView(),
+            'categorie' => $categorie
         ]);
     }
+
+
+
 
     #[Route('/Categorie/delete/{id}', name: 'delete_category', methods: ['GET'])]
     public function delete(int $id, CategorieRepository $categorieRepository, ManagerRegistry $managerRegistry): Response

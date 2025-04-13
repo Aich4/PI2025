@@ -1,11 +1,11 @@
 {% extends 'base-back.html.twig' %}
 
-{% block title %}Modifier un Partenaire{% endblock %}
+{% block title %}Modifier une Catégorie{% endblock %}
 
 {% block body %}
     <main id="main" class="main">
         <div class="container mt-5">
-            <h1 class="text-center mb-4 text-warning">Modifier un Partenaire</h1>
+            <h1 class="text-center mb-4 text-warning">Modifier une Catégorie</h1>
 
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
@@ -13,60 +13,50 @@
                 {{ form_label(form.nom) }}
                 {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
                 <div class="text-danger">
-                    {{ form_errors(form.nom) }}
-                </div>
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.email) }}
-                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                <div class="text-danger">
-                    {{ form_errors(form.email) }}
-                </div>
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.adresse) }}
-                {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
-                <div class="text-danger">
-                    {{ form_errors(form.adresse) }}
+                    {{ form_errors(form.nom) }} <!-- Affichage des erreurs pour 'nom' -->
                 </div>
             </div>
 
             <div class="mb-3">
                 {{ form_label(form.description) }}
-                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'required': 'required'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
                 <div class="text-danger">
-                    {{ form_errors(form.description) }}
+                    {{ form_errors(form.description) }} <!-- Affichage des erreurs pour 'description' -->
                 </div>
             </div>
 
             <div class="mb-3">
-                {{ form_label(form.date_ajout) }}
-                {{ form_widget(form.date_ajout, {'attr': {'class': 'form-control'}}) }}
+                {{ form_label(form.logo) }}
+                {% if categorie.getLogo() %}
+                    <div class="mb-3">
+                        <label>Logo actuel :</label>
+                        <img src="{{ asset('uploads/logos/' ~ categorie.getLogo()) }}" alt="Logo actuel" width="100">
+                    </div>
+                {% else %}
+                    <p>Aucun logo actuel.</p>
+                {% endif %}
+                {{ form_widget(form.logo, {'attr': {'class': 'form-control'}}) }}
                 <div class="text-danger">
-                    {{ form_errors(form.date_ajout) }}
+                    {{ form_errors(form.logo) }} <!-- Affichage des erreurs pour 'logo' -->
                 </div>
             </div>
 
-            {% if form.id_categorie is defined %}
-                <div class="mb-3">
-                    {{ form_label(form.id_categorie) }}
-                    {{ form_widget(form.id_categorie, {'attr': {'class': 'form-control'}}) }}
-                    <div class="text-danger">
-                        {{ form_errors(form.id_categorie) }}
-                    </div>
+            <div class="mb-3">
+                {{ form_label(form.nbrPartenaire) }}
+                {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(form.nbrPartenaire) }} <!-- Affichage des erreurs pour 'nbrPartenaire' -->
                 </div>
-            {% endif %}
+            </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                <button type="submit" class="btn btn-success">Mettre à jour</button>
             </div>
 
             {{ form_end(form) }}
 
             <div class="text-center mt-4">
-                <a href="{{ path('list_partenaire') }}" class="btn btn-secondary">Retour à la liste</a>
+                <a href="{{ path('category_list') }}" class="btn btn-secondary">Retour à la liste</a>
             </div>
         </div>
     </main>
