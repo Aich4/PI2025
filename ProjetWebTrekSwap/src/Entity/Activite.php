@@ -25,7 +25,7 @@ class Activite
     private ?string $nom_activite = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\NotNull(message: "La date de l'activité ne peut pas être nulle.")]
+    #[Assert\NotBlank(message: "la date ne peut pas être vide.")]
     #[Assert\Range(
         min: "today",
         minMessage: "La date de l'activité doit être après aujourd'hui.",
@@ -34,7 +34,6 @@ class Activite
     private ?\DateTimeInterface $date = null;
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "L'heure ne peut pas être vide.")]
-    #[Assert\Length(max: 255, maxMessage: "L'heure ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $heure = null;
 
     #[ORM\Column(length: 255)]
@@ -61,7 +60,7 @@ class Activite
         return $this->nom_activite;
     }
 
-    public function setNomActivite(string $nom_activite): static
+    public function setNomActivite(?string $nom_activite): static
     {
         $this->nom_activite = $nom_activite;
 
@@ -73,7 +72,7 @@ class Activite
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(?\DateTimeInterface $date): static
     {
         $this->date = $date;
 
@@ -85,7 +84,7 @@ class Activite
         return $this->heure;
     }
 
-    public function setHeure(string $heure): static
+    public function setHeure(?string $heure): static
     {
         $this->heure = $heure;
 
@@ -97,7 +96,7 @@ class Activite
         return $this->statut;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
 

@@ -69,6 +69,7 @@ class ActiviteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Activite::class,
+            'attr' => ['novalidate' => 'novalidate'],
             'destinations' => [],  // Define the 'destinations' option
         ]);
     }
