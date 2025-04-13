@@ -15,42 +15,43 @@ class Categorie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le nom ne doit pas être vide.")]
+    #[Assert\NotBlank(message: "Le nom de la catégorie est obligatoire.")]
+    #[Assert\Length(
+        min: 3,
+        max: 100,
+        minMessage: "Le nom doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    )]
     #[Assert\Regex(
-        pattern: "/^(?!\d+$).*$/", // Le nom ne peut pas être uniquement composé de chiffres
+        pattern: "/^(?!\d+$).*$/",
         message: "Le nom ne peut pas être composé uniquement de chiffres."
     )]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "La description ne doit pas être vide.")]
-    #[Assert\Regex(
-        pattern: "/^(?!\d+$).*$/", // La description ne peut pas être uniquement composée de chiffres
-        message: "La description ne peut pas être uniquement composée de chiffres."
-    )]
+    #[ORM\Column(length: 500)]
+    #[Assert\NotBlank(message: "La description est obligatoire.")]
     #[Assert\Length(
-        min: 4,
+        min: 10,
         max: 500,
         minMessage: "La description doit comporter au moins {{ limit }} caractères.",
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Assert\Regex(
+        pattern: "/^(?!\d+$).*$/",
+        message: "La description ne peut pas être uniquement composée de chiffres."
+    )]
     private ?string $description = null;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    #[Assert\NotBlank(message: "Le logo ne doit pas être vide.")]
-    #[Assert\File(
-        mimeTypes: ["image/jpeg", "image/png", "image/webp"],
-        mimeTypesMessage: "Veuillez télécharger un fichier image valide (JPEG, PNG, WebP)."
-    )]
+
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: "Le nombre de partenaires ne doit pas être vide.")]
-    #[Assert\GreaterThanOrEqual(
-        value: 0,
-        message: "Le nombre de partenaires doit être un nombre positif ou zéro."
-    )]
+    #[ORM\Column(nullable: true)]
+    #[Assert\NotBlank(message: "Le nombre de partenaires est obligatoire.")]
+    #[Assert\PositiveOrZero(message: "Le nombre de partenaires doit être positif ou zéro.")]
     private ?int $nbr_partenaire = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -94,7 +95,7 @@ class Categorie
         return $this->nbr_partenaire;
     }
 
-    public function setNbrPartenaire(int $nbr_partenaire): static
+    public function setNbrPartenaire(?int $nbr_partenaire): static
     {
         $this->nbr_partenaire = $nbr_partenaire;
         return $this;

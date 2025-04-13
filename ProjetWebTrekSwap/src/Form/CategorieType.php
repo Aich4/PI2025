@@ -9,11 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\File;
-
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Type;
 
 class CategorieType extends AbstractType
 {
@@ -22,31 +19,38 @@ class CategorieType extends AbstractType
         $builder
             ->add('nom', TextType::class, [
                 'label' => 'Nom de la catégorie',
-                'attr' => ['class' => 'form-control'], // Pas d'autres attributs HTML
+                'attr' => ['class' => 'form-control'],
+                'empty_data' => ''
+                // Supprimer les contraintes ici
             ])
             ->add('description', TextType::class, [
                 'label' => 'Description',
-                'attr' => ['class' => 'form-control'], // Pas d'autres attributs HTML
+                'attr' => ['class' => 'form-control'],
+                'empty_data' => ''
+                // Supprimer les contraintes ici
             ])
-            // Ajout d'une logique pour conserver l'état du fichier
             ->add('logo', FileType::class, [
-                'label' => 'Logo de la catégorie',
-                'mapped' => true, // Supprimer 'mapped' => false
+                'label' => 'Logo',
                 'required' => false,
-                'attr' => ['accept' => 'image/*'],
+                'mapped' => true,
+                'data_class' => null,
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
+                        'mimeTypesMessage' => 'Veuillez télécharger un fichier image valide (JPEG, PNG, WebP).',
+                    ]),
+                    new NotBlank([
+                        'message' => 'Pas de logo '
+                    ])
+                ]
             ])
-
-            // Ajout de la contrainte de validation pour le champ nbrPartenaire
             ->add('nbrPartenaire', IntegerType::class, [
                 'label' => 'Nombre de partenaires',
                 'attr' => ['class' => 'form-control'],
+                'required' => false, // Rend le champ facultatif
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Le nombre de partenaires est obligatoire.'
-                    ]),
-                    new Type([
-                        'type' => 'integer',
-                        'message' => 'Veuillez entrer un nombre valide.'
+                        'message' => 'Veuillez renseigner un nombre de partenaire.',
                     ])
                 ]
             ]);
@@ -55,7 +59,9 @@ class CategorieType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Categorie::class, // Assurez-vous que le formulaire est lié à l'entité Categorie
+            'data_class' => Categorie::class,
+            'allow_extra_fields' => true,
+            'validation_groups' => ['Default'] // Ajout important
         ]);
     }
 }

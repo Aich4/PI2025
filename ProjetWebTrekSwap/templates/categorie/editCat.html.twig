@@ -3,47 +3,48 @@
 {% block title %}Modifier une Catégorie{% endblock %}
 
 {% block body %}
-    <main id="main" class="main">
-        <div class="container mt-5">
-            <h1 class="text-center mb-4 text-warning">Modifier la Catégorie</h1>
+    <div class="container mt-5">
+        <h1 class="text-center text-warning">Modifier une Catégorie</h1>
 
-            {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
 
-            <div class="form-group">
-                {{ form_label(form.nom) }}
-                {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.nom) }}
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-group mb-3">
+                    {{ form_label(form.nom) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_label(form.logo) }}
+                    {{ form_widget(form.logo, {'attr': {'class': 'form-control'}}) }}
+                    {% if categorie.logo %}
+                        <div class="mt-2">
+                            <img src="{{ asset('uploads/logos/' ~ categorie.logo) }}" alt="Logo actuel" style="max-width: 200px;">
+                        </div>
+                    {% endif %}
+                    {{ form_errors(form.logo) }}
+                </div>
+
+                <div class="form-group mb-4">
+                    {{ form_label(form.nbrPartenaire) }}
+                    {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nbrPartenaire) }}
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-warning">Modifier</button>
+                </div>
             </div>
-
-            <div class="form-group">
-                {{ form_label(form.description) }}
-                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.description) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.logo) }}
-                {% if category.getLogo() %}
-                    <div class="mb-3">
-                        <label>Logo actuel :</label>
-                        <img src="{{ asset('uploads/logos/' ~ category.getLogo()) }}" alt="Logo actuel" width="100">
-                    </div>
-                {% else %}
-                    <p>Aucun logo actuel.</p>
-                {% endif %}
-                {{ form_widget(form.logo, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.logo) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.nbrPartenaire) }}
-                {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.nbrPartenaire) }}
-            </div>
-
-            <button type="submit" class="btn btn-success mt-3">Mettre à jour</button>
-
-            {{ form_end(form) }}
         </div>
-    </main>
+
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
