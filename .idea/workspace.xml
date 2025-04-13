@@ -7,15 +7,10 @@
     <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Categorie.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Categorie.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/CategorieType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/CategorieType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/addCat.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/addCat.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/editCat.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/editCat.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/addPartenaire.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/addPartenaire.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/editPartenaire.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/editPartenaire.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" afterDir="false" />
@@ -217,6 +212,10 @@
       <workItem from="1743947283701" duration="19000" />
       <workItem from="1744030968903" duration="1633000" />
       <workItem from="1744118335229" duration="22667000" />
+      <workItem from="1744472728560" duration="10884000" />
+      <workItem from="1744533868622" duration="367000" />
+      <workItem from="1744534739583" duration="9123000" />
+      <workItem from="1744544684138" duration="4086000" />
     </task>
     <servers />
   </component>

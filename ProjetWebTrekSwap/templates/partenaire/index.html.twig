@@ -5,51 +5,91 @@
 {% block body %}
     <main id="main" class="main">
         <div class="container mt-5">
-            <h1 class="text-center mb-4 text-warning">Liste des Partenaires</h1>
+            <h1 class="text-center mb-4 text-primary">Liste des Partenaires</h1> <!-- Change text-warning to text-primary -->
 
-            <table class="table table-bordered">
-                <thead class="table-dark">
-                <tr>
-                    <th>ID Partenaire</th>
-                    <th>Nom</th>
-                    <th>Email</th>
-                    <th>Adresse</th>
-                    <th>Description</th>
-                    <th>Date d'ajout</th>
-                    <th>Catégorie</th> <!-- ✅ Nouvelle colonne -->
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for partenaire in partenaires %}
-                    <tr>
-                        <td>{{ partenaire.id }}</td>
-                        <td>{{ partenaire.nom }}</td>
-                        <td>{{ partenaire.email }}</td>
-                        <td>{{ partenaire.adresse }}</td>
-                        <td>{{ partenaire.description }}</td>
-                        <td>{{ partenaire.dateAjout ? partenaire.dateAjout|date('d/m/Y') : 'N/A' }}</td>
-                        <td>{{ categorieMap[partenaire.idCategorie] ?? 'Inconnue' }}</td> <!-- ✅ Affiche le nom de la catégorie -->
-                        <td>
-                            <a href="{{ path('edit_partenaire', { id: partenaire.id }) }}" class="btn btn-info btn-sm">
-                                Modifier
-                            </a>
-                            <a href="{{ path('delete_partenaire', { id: partenaire.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce partenaire ?');">
-                                Supprimer
-                            </a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="8" class="text-center">Aucun partenaire trouvé.</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <!-- Container for better layout -->
+            <div class="card shadow-lg p-4 rounded-lg custom-bg-light">
+                <div class="card-body">
+                    <!-- Table with improved colors and layout -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-striped text-center align-middle custom-table-bg">
+                            <thead class="bg-info text-white">
+                            <tr>
+                                <th class="custom-th">ID Partenaire</th>
+                                <th class="custom-th">Nom</th>
+                                <th class="custom-th">Email</th>
+                                <th class="custom-th">Adresse</th>
+                                <th class="custom-th">Description</th>
+                                <th class="custom-th">Date d'ajout</th>
+                                <th class="custom-th">Catégorie</th>
+                                <th class="custom-th">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for partenaire in partenaires %}
+                                <tr>
+                                    <td class="text-muted">{{ partenaire.id }}</td>
+                                    <td>{{ partenaire.nom }}</td>
+                                    <td>{{ partenaire.email }}</td>
+                                    <td>{{ partenaire.adresse }}</td>
+                                    <td>{{ partenaire.description }}</td>
+                                    <td>{{ partenaire.dateAjout ? partenaire.dateAjout|date('d/m/Y') : 'N/A' }}</td>
+                                    <td>{{ categorieMap[partenaire.idCategorie] ?? 'Inconnue' }}</td>
+                                    <td>
+                                        <!-- Button group with icons -->
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ path('edit_partenaire', { id: partenaire.id }) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <a href="{{ path('delete_partenaire', { id: partenaire.id }) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce partenaire ?');" title="Supprimer">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">Aucun partenaire trouvé.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-            <div class="text-center mt-4">
-                <a href="{{ path('add_partenaire') }}" class="btn btn-success">Ajouter un Partenaire</a>
+                    <!-- Button to add a new partner -->
+                    <div class="text-center mt-4">
+                        <a href="{{ path('add_partenaire') }}" class="btn btn-success px-4 py-2">
+                            <i class="bi bi-plus-circle-dotted"></i> Ajouter un Partenaire
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .custom-bg-light {
+            background-color: #e9ecef !important;
+        }
+
+        .custom-table-bg {
+            background-color: #f4f6f9 !important;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-th {
+            background-color: #cce5ff;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1 !important;
+        }
+    </style>
 {% endblock %}

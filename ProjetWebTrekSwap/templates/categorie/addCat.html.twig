@@ -5,7 +5,7 @@
 {% block body %}
     <main id="main" class="main">
         <div class="container mt-5">
-            <h1 class="text-center mb-4 text-warning">Ajouter une Catégorie</h1>
+            <h1 class="text-center mb-4 text-primary">Ajouter une Catégorie</h1>
 
             <div class="row justify-content-center">
                 <div class="col-md-6">
@@ -45,13 +45,17 @@
                     </div>
 
                     <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-success">Ajouter la Catégorie</button>
+                        <button type="submit" class="btn btn-success">
+                            ✅ Ajouter la Catégorie
+                        </button>
                     </div>
 
                     {{ form_end(form) }}
 
                     <div class="text-center mt-4">
-                        <a href="{{ path('list_category') }}" class="btn btn-secondary">Retour à la liste</a>
+                        <a href="{{ path('list_category') }}" class="btn btn-secondary">
+                            ↩️ Retour à la liste
+                        </a>
                     </div>
                 </div>
             </div>
@@ -63,7 +67,6 @@
             const input = event.target;
             const preview = document.getElementById('imagePreview');
 
-            // Vérifier si un fichier est sélectionné et si c'est une image valide
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
@@ -75,7 +78,6 @@
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    // Si l'image n'est pas valide, masquer l'aperçu et afficher une erreur
                     preview.style.display = 'none';
                     alert('Veuillez télécharger une image valide (JPEG, PNG, WebP).');
                 }
