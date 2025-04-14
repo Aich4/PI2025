@@ -44,9 +44,11 @@
   <header id="header" class="fixed-top header-transparent">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo"><a href="/frontA">TrekSwap</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-    <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
+     <!-- Logo with text -->
+      <a href="/frontA" class="logo d-flex align-items-center">
+        <img src="{{ asset('frontTemp/img/favicon.png') }}" alt="TrekSwap Logo" style="height: 30px; margin-right: 8px;">
+        <h1 style="margin: 0; font-size: 24px;">TrekSwap</h1>
+      </a>
 
       <nav id="navbar" class="navbar">
         <ul>
@@ -55,7 +57,7 @@
           <li><a class="nav-link scrollto" href="/hotel/hotels/">Hotels</a></li>
           <li><a class="nav-link scrollto " href="#portfolio">Activities</a></li>
           <li><a class="nav-link scrollto" href="#team">Partners</a></li>
-          <li><a class="nav-link scrollto" href="#pricing">Pricing</a></li>
+          <li><a class="nav-link scrollto" href="#pricingA">Pricing</a></li>
           <li><a class="nav-link" href="/DestinationFrontShow">Destinations</a></li>
           <li><a class="nav-link scrollto" href="/reclamation/new">Reclamation</a></li>
           <li class="dropdown">
@@ -636,91 +638,77 @@
 
       </div>
     </section><!-- End Team Section -->
-
-    <!-- ======= Pricing Section ======= -->
-    <section id="pricing" class="pricing">
-      <div class="container">
-
+{% block pricing %}
+<!-- ======= Pricing Section ======= -->
+<section id="pricingA" class="pricing">
+    <div class="container">
         <div class="section-title">
-          <h2>Pricing</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+            <h2>Pricing</h2>
+            <p>If you need more information contact us</p>
         </div>
 
         <div class="row">
+            {% for abonnement in abonnements %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="box">
+                        <h3>Subscription Details</h3>
+                        <h4>{{ packRepository.getPriceById(abonnement.getIdPack()) }}<sup> DT </sup><span> / month</span></h4>
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0);" onclick="togglePackDetails({{ abonnement.getIdPack() }})">
+                                    {{ packRepository.getNomById(abonnement.getIdPack()) }}
+                                </a>
+                            </li> {# Pack Name Clickable #}
+                            <li>Start date: {{ abonnement.getDateSouscription()|date('d/m/Y') }}</li>
+                            <li>Expiration date: {{ abonnement.getDateExpiration()|date('d/m/Y') }}</li>
+                            <li>{{ abonnement.getStatut() }}</li>
+                        </ul>
+                        <div class="btn-wrap">
+                        <a href="{{ path('checkout', { id: abonnement. getIdAbonnement() }) }}" class="btn-buy">Buy Now</a>
+                        </div>
 
-          <div class="col-lg-3 col-md-6">
-            <div class="box">
-              <h3>Free</h3>
-              <h4><sup>$</sup>0<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li class="na">Pharetra massa</li>
-                <li class="na">Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
-              </div>
-            </div>
-          </div>
+                        <!-- Hidden Pack Details -->
+                        <div id="pack-details-{{ abonnement.getIdPack() }}" class="pack-details hidden">
+                            <h4>Pack Details</h4>
+                            <p><strong>Name:</strong> {{ packRepository.getNomById(abonnement.getIdPack()) }}</p>
+                            <p><strong>Description:</strong> {{ packRepository.getDescriptionById(abonnement.getIdPack()) }}</p>
+                            <p><strong>Advantages:</strong> {{ packRepository.getAvantagesById(abonnement.getIdPack()) }}</p>
+                            <p><strong>Duree:</strong> {{ packRepository.getDureeById(abonnement.getIdPack()) }}</p>
 
-          <div class="col-lg-3 col-md-6 mt-4 mt-md-0">
-            <div class="box featured">
-              <h3>Business</h3>
-              <h4><sup>$</sup>19<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li>Pharetra massa</li>
-                <li class="na">Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 mt-4 mt-lg-0">
-            <div class="box">
-              <h3>Developer</h3>
-              <h4><sup>$</sup>29<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li>Pharetra massa</li>
-                <li>Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 mt-4 mt-lg-0">
-            <div class="box">
-              <span class="advanced">Advanced</span>
-              <h3>Ultimate</h3>
-              <h4><sup>$</sup>49<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li>Pharetra massa</li>
-                <li>Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
-              </div>
-            </div>
-          </div>
-
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
+    </div>
+</section>
 
-      </div>
-    </section><!-- End Pricing Section -->
+<!-- JavaScript for Toggle -->
+<script>
+    function togglePackDetails(packId) {
+        let detailsDiv = document.getElementById('pack-details-' + packId);
+        if (detailsDiv.classList.contains('hidden')) {
+            detailsDiv.classList.remove('hidden');
+        } else {
+            detailsDiv.classList.add('hidden');
+        }
+    }
+</script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+    .pack-details {
+        background: #f8f9fa;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+</style>
+
+{% endblock %}
+
 
     <!-- ======= Frequently Asked Questions Section ======= -->
     <section id="faq" class="faq section-bg">

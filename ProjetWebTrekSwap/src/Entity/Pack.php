@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\PackRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PackRepository::class)]
@@ -34,12 +33,12 @@ class Pack
     private ?string $description = null;
 
     #[ORM\Column(type: 'float')]
-    #[Assert\NotNull(message: "Le prix est obligatoire.")]
+    #[Assert\NotBlank(message: "Le prix est obligatoire.")]
     #[Assert\GreaterThanOrEqual(value: 0, message: "Le prix ne peut pas être négatif.")]
     private ?float $prix = null;
 
     #[ORM\Column(type: 'integer')]
-    #[Assert\NotNull(message: "La durée est obligatoire.")]
+    #[Assert\NotBlank(message: "La durée est obligatoire.")]
     #[Assert\GreaterThanOrEqual(value: 0, message: "La durée ne peut pas être négative.")]
     private ?int $duree = null;
 
@@ -80,7 +79,7 @@ class Pack
         return $this->nom_pack;
     }
 
-    public function setNomPack(string $nom_pack): static
+    public function setNomPack(?string $nom_pack): static
     {
         $this->nom_pack = $nom_pack;
         return $this;
@@ -91,7 +90,7 @@ class Pack
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
         return $this;
@@ -102,7 +101,7 @@ class Pack
         return $this->prix;
     }
 
-    public function setPrix(float $prix): static
+    public function setPrix(?float $prix): static
     {
         $this->prix = $prix;
         return $this;
@@ -113,7 +112,7 @@ class Pack
         return $this->duree;
     }
 
-    public function setDuree(int $duree): static
+    public function setDuree(?int $duree): static
     {
         $this->duree = $duree;
         return $this;
@@ -124,7 +123,7 @@ class Pack
         return $this->avantages;
     }
 
-    public function setAvantages(string $avantages): static
+    public function setAvantages(?string $avantages): static
     {
         $this->avantages = $avantages;
         return $this;
@@ -135,7 +134,7 @@ class Pack
         return $this->statut;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
         return $this;
