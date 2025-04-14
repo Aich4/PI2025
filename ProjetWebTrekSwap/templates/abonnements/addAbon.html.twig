@@ -7,7 +7,7 @@
         <h2 class="mb-4">Ajouter un Abonnement</h2>
 
         <div id="form-container" class="form-container">
-            {{ form_start(form) }}
+                {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
 
                 <div class="form-group">
                     {{ form_label(form.id_pack, 'Sélectionner un Pack') }}
@@ -17,13 +17,13 @@
 
                 <div class="form-group">
                     {{ form_label(form.date_Souscription, 'Date de souscription') }}
-                    {{ form_widget(form.date_Souscription, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.date_Souscription, {'attr': {'class': 'form-control datepicker'}}) }}
                     {{ form_errors(form.date_Souscription) }}
                 </div>
 
                 <div class="form-group">
                     {{ form_label(form.date_Expiration, 'Date d\'expiration') }}
-                    {{ form_widget(form.date_Expiration, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.date_Expiration, {'attr': {'class': 'form-control datepicker'}}) }}
                     {{ form_errors(form.date_Expiration) }}
                 </div>
 
@@ -42,6 +42,9 @@
                 </div>
 
             {{ form_end(form) }}
+
         </div>
     </div>
+
+    
 {% endblock %}

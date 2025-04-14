@@ -61,7 +61,7 @@ class Abonnement
         return $this->id_Pack;
     }
 
-    public function setIdPack(int $id_Pack): static
+    public function setIdPack(?int $id_Pack): static
     {
         $this->id_Pack = $id_Pack;
 
@@ -73,7 +73,7 @@ class Abonnement
         return $this->date_Souscription;
     }
 
-    public function setDateSouscription(\DateTimeInterface $date_Souscription): static
+    public function setDateSouscription(?\DateTimeInterface $date_Souscription): static
     {
         $this->date_Souscription = $date_Souscription;
 
@@ -85,7 +85,7 @@ class Abonnement
         return $this->date_Expiration;
     }
 
-    public function setDateExpiration(\DateTimeInterface $date_Expiration): static
+    public function setDateExpiration(?\DateTimeInterface $date_Expiration): static
     {
         $this->date_Expiration = $date_Expiration;
 
@@ -97,7 +97,7 @@ class Abonnement
         return $this->statut;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
 
