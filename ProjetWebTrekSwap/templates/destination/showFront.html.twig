@@ -78,7 +78,7 @@
         }
     </style>
 
-    <main class="container py-5">
+    <main class="container py-5" id="destination-list">
         <h1 class="text-center mb-4">Nos Destinations</h1>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
@@ -136,6 +136,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Scroll to the destinations section on load
+            window.scrollTo({
+                top: document.getElementById('destination-list').offsetTop,
+                behavior: 'smooth'
+            });
+
             const modal = new bootstrap.Modal(document.getElementById('activitiesModal'));
             const modalTitle = document.getElementById('activitiesModalLabel');
             const modalBody = document.getElementById('activitiesModalBody');
