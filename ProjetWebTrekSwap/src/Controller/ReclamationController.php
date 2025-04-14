@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Reclamation;
 use App\Form\ReclamationType;
+use App\Repository\CategorieRepository;
 use App\Repository\ReclamationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,11 +25,12 @@ final class ReclamationController extends AbstractController {
 
     // Front office routes
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,CategorieRepository $categorieRepository): Response
     {
         $reclamation = new Reclamation();
         $form = $this->createForm(ReclamationType::class, $reclamation);
         $form->handleRequest($request);
+        $categories = $categorieRepository->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reclamation);
@@ -41,6 +43,7 @@ final class ReclamationController extends AbstractController {
         return $this->render('reclamation/new.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
+            'categories' => $categories,
         ]);
     }
 

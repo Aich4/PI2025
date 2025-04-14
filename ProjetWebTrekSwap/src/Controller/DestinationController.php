@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Destination;
 use App\Form\DestinationType;
+use App\Repository\CategorieRepository;
 use App\Repository\DestinationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,10 +31,12 @@ final class DestinationController extends AbstractController
         ]);
     }
     #[Route('/DestinationFrontShow', name: 'listFrontDestination', methods: ['GET'])]
-    public function listDestination(DestinationRepository $destinationRepository): Response
+    public function listDestination(DestinationRepository $destinationRepository,CategorieRepository $categorieRepository): Response
     {
+        $categories = $categorieRepository->findAll();
         return $this->render('destination/showFront.html.twig', [
             'destinations' => $destinationRepository->findAll(),
+            'categories' => $categories,
         ]);
     }
 
