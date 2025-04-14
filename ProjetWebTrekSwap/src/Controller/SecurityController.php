@@ -17,7 +17,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class SecurityController extends AbstractController
 {
     #[Route('/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils,CategorieRepository $categorieRepository): Response
+    public function login(AuthenticationUtils $authenticationUtils, CategorieRepository $categorieRepository): Response
     {
         $categories = $categorieRepository->findAll();
         if ($this->getUser()) {
@@ -45,7 +45,8 @@ class SecurityController extends AbstractController
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher, 
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        CategorieRepository $categorieRepository
     ): Response
     {
         if ($this->getUser()) {
@@ -71,7 +72,8 @@ class SecurityController extends AbstractController
                     );
                     $user->setPhotoProfile($newFilename);
                 } catch (\Exception $e) {
-                    // Handle file upload error
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de la photo de profil.');
+                    return $this->redirectToRoute('app_register');
                 }
             }
 
@@ -86,14 +88,21 @@ class SecurityController extends AbstractController
                 )
             );
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            try {
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_login');
+                $this->addFlash('success', 'Votre compte a été créé avec succès !');
+                return $this->redirectToRoute('app_login');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la création du compte.');
+                return $this->redirectToRoute('app_register');
+            }
         }
 
         return $this->render('security/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'categories' => $categorieRepository->findAll(),
         ]);
     }
 
