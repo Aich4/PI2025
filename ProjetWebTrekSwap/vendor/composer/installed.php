@@ -3,7 +3,7 @@
         'name' => 'symfony/skeleton',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '92e7870a42708b39fe1c96d475bdb9de7c00ee33',
+        'reference' => '49f8ce7f73f4a850469bf16b7892f4563b9d2119',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -151,6 +151,24 @@
             'reference' => 'd42c8731f0624ad6bdc8d3e5e9a4524f68801cfa',
             'type' => 'library',
             'install_path' => __DIR__ . '/../egulias/email-validator',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'knplabs/knp-components' => array(
+            'pretty_version' => 'v5.2.0',
+            'version' => '5.2.0.0',
+            'reference' => 'eabf39263fff305c0024820c3736e5b03e7edf50',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../knplabs/knp-components',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'knplabs/knp-paginator-bundle' => array(
+            'pretty_version' => 'v6.7.0',
+            'version' => '6.7.0.0',
+            'reference' => 'a346431b9f0cddac8cd03d63e70911b6bf70ffde',
+            'type' => 'symfony-bundle',
+            'install_path' => __DIR__ . '/../knplabs/knp-paginator-bundle',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -403,8 +421,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache-implementation' => array(
@@ -1148,7 +1166,7 @@
         'symfony/skeleton' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '92e7870a42708b39fe1c96d475bdb9de7c00ee33',
+            'reference' => '49f8ce7f73f4a850469bf16b7892f4563b9d2119',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

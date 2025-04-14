@@ -1,0 +1,54 @@
+{% extends 'base-back.html.twig' %}
+
+{% block body %}
+<main id="main" class="main">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 text-warning">Liste des Packs</h1>
+        
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom Pack</th>
+                    <th>Description</th>
+                    <th>Prix</th>
+                    <th>Durée</th>
+                    <th>Avantages</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pack in packs %}
+                    <tr>
+                        <td>{{ pack.getIdPack() }}</td>  {# Access ID using getter method #}
+                        <td>{{ pack.getNomPack() }}</td>  {# Access nom_pack using getter method #}
+                        <td>{{ pack.getDescription() }}</td>  {# Access description using getter method #}
+                        <td>{{ pack.getPrix() }} dt</td>  {# Access prix using getter method #}
+                        <td>{{ pack.getDuree() }}</td>  {# Access duree using getter method #}
+                        <td>{{ pack.getAvantages() }}</td>  {# Access avantages using getter method #}
+                        <td>{{ pack.getStatut() }}</td>  {# Access statut using getter method #}
+                        <td>
+                            <a href="{{ path('edit_pack', { id_pack: pack.getIdPack() }) }}" class="btn btn-info btn-sm">
+                               Modifier 
+                            </a>
+                             <a href="{{ path('delete_pack', { id_pack: pack.getIdPack() }) }}" class="btn btn-info btn-sm">
+                              Supprimer
+                            </a>
+                        </td>
+                         
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">Aucun pack trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="text-center mt-4">
+            <a href="{{ path('add_pack') }}" class="btn btn-success">Ajouter un Pack</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

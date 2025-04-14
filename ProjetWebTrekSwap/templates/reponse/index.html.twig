@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reponse index{% endblock %}
+
+{% block body %}
+    <h1>Reponse index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id_rep</th>
+                <th>Id_rec</th>
+                <th>Date_rep</th>
+                <th>Contenu_rep</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reponse in reponses %}
+            <tr>
+                <td>{{ reponse.idRep }}</td>
+                <td>{{ reponse.idRec }}</td>
+                <td>{{ reponse.dateRep ? reponse.dateRep|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reponse.contenuRep }}</td>
+                <td>
+                    <a href="{{ path('app_reponse_show', {'id_rep': reponse.id_rep}) }}">show</a>
+                    <a href="{{ path('app_reponse_edit', {'id_rep': reponse.id_rep}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reponse_new') }}">Create new</a>
+{% endblock %}

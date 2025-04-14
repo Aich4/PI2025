@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la réponse{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Détails de la réponse</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Réclamation : {{ reponse.reclamation.descriptionRec }}</h5>
+                <p class="card-text">
+                    <strong>Date :</strong> {{ reponse.dateRep ? reponse.dateRep|date('Y-m-d H:i:s') : '' }}<br>
+                    <strong>Contenu :</strong><br>
+                    {{ reponse.contenu }}
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a href="{{ path('app_reponse_back') }}" class="btn btn-secondary">Retour à la liste</a>
+            <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning">Modifier</a>
+        </div>
+    </div>
+{% endblock %}

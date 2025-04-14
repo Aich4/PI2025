@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register - TrekSwap{% endblock %}
+
+{% block body %}
+<section class="vh-100" style="padding-top: 100px;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-lg" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        {{ form_start(registrationForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
+                            <h3 class="mb-5">Create Account</h3>
+
+                            <div class="form-outline mb-4">
+                                {{ form_widget(registrationForm.nom) }}
+                                {{ form_errors(registrationForm.nom) }}
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                {{ form_widget(registrationForm.prenom) }}
+                                {{ form_errors(registrationForm.prenom) }}
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                {{ form_widget(registrationForm.email) }}
+                                {{ form_errors(registrationForm.email) }}
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                {{ form_widget(registrationForm.plainPassword) }}
+                                {{ form_errors(registrationForm.plainPassword) }}
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Profile Picture (Optional)</label>
+                                {{ form_widget(registrationForm.photo_profil) }}
+                                {{ form_errors(registrationForm.photo_profil) }}
+                            </div>
+
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+
+                            <hr class="my-4">
+
+                            <div>
+                                <p class="mb-0">Already have an account? <a href="{{ path('app_login') }}" class="text-primary fw-bold">Sign In</a></p>
+                            </div>
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 
