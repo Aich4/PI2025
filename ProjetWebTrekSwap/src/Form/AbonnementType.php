@@ -3,13 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Abonnement;
-use App\Entity\Pack;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AbonnementType extends AbstractType
 {
@@ -25,15 +24,23 @@ class AbonnementType extends AbstractType
             ])
             ->add('date_Souscription', DateType::class, [
                 'widget' => 'single_text',
-                'attr' => ['class' => 'form-control'],
-                'html5' => false,  // Optional, if you want to use a custom date picker
-                'label' => 'Date de souscription'
+                'required' => true,
+                'label' => 'Date de souscription',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Obligatoire',
+                    ]),
+                ],
             ])
             ->add('date_Expiration', DateType::class, [
                 'widget' => 'single_text',
-                'attr' => ['class' => 'form-control'],
-                'html5' => false,  // Optional, if you want to use a custom date picker
-                'label' => 'Date d\'expiration'
+                'required' => true,
+                'label' => 'Date d\'expiration',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Obligatoire',
+                    ]),
+                ],
             ])
             ->add('statut', ChoiceType::class, [
                 'choices' => [
@@ -46,13 +53,12 @@ class AbonnementType extends AbstractType
             ]);
     }
 
-
-public function configureOptions(OptionsResolver $resolver): void
-{
-    $resolver->setDefaults([
-        'data_class' => Abonnement::class,
-        'pack_ids' => [] // Expect an array of integer pack IDs
-    ]);
-}
-
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Abonnement::class,
+            'attr' => ['novalidate' => 'novalidate'],
+            'pack_ids' => [] // Expect an array of integer pack IDs
+        ]);
+    }
 }
