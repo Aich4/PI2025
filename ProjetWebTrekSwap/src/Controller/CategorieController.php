@@ -168,7 +168,7 @@ final class CategorieController extends AbstractController
     public function partenairesParCategorie(int $id, PartenaireRepository $partenaireRepository, CategorieRepository $categorieRepository): Response
     {
         $categorie = $categorieRepository->find($id);
-
+        $categories = $categorieRepository->findAll();
         // Vérifier si la catégorie existe
         if (!$categorie) {
             throw $this->createNotFoundException('La catégorie n\'existe pas.');
@@ -180,6 +180,7 @@ final class CategorieController extends AbstractController
         return $this->render('categorie/partenaires.html.twig', [
             'categorie' => $categorie,
             'partenaires' => $partenaires,
+            'categories' => $categories,
         ]);
     }
 }

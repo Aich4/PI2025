@@ -10,7 +10,7 @@
                     <div class="card-header">
                         <h2 class="text-center">Nouvelle Réclamation</h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" >
                         {{ form_start(form) }}
                             <div class="mb-3">
                                 {{ form_label(form.typeRec, 'Type de réclamation', {'label_attr': {'class': 'form-label'}}) }}
@@ -24,7 +24,7 @@
                                 {{ form_errors(form.descriptionRec) }}
                             </div>
 
-                            <div class="text-center">
+                            <div class="text-center" id="rec">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-paper-plane"></i> Envoyer la réclamation
                                 </button>
@@ -35,4 +35,15 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll to the destinations section on load
+            window.scrollTo({
+                top: document.getElementById('rec').offsetTop,
+                behavior: 'smooth'
+            });
+        });
+
+    </script>
+
 {% endblock %}
