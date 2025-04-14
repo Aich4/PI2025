@@ -13,7 +13,7 @@ class Reclamation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'id_rec')]
     private ?int $idRec = null;
 
     #[ORM\Column(length: 255)]
