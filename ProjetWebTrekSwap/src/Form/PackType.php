@@ -85,6 +85,7 @@ class PackType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Pack::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 }
