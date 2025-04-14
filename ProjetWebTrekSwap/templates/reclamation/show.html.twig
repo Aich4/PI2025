@@ -55,9 +55,12 @@
                                 <a href="{{ path('reclamationBack') }}" class="btn btn-secondary">
                                     <i class="bi bi-arrow-left"></i> Retour à la liste
                                 </a>
-                                <a href="{{ path('app_reclamation_edit', {'id_rec': reclamation.idRec}) }}" class="btn btn-primary">
-                                    <i class="bi bi-pencil"></i> Modifier
-                                </a>
+                                <form method="post" action="{{ path('app_reclamation_delete', {'id_rec': reclamation.idRec}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');" style="display: inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reclamation.idRec) }}">
+                                    <button class="btn btn-danger">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

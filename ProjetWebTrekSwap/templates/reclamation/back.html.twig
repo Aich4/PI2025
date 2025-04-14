@@ -33,9 +33,9 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Description</th>
                                             <th>Date</th>
                                             <th>Type</th>
-                                            <th>Description</th>
                                             <th>État</th>
                                             <th>Actions</th>
                                         </tr>
@@ -44,9 +44,9 @@
                                         {% for reclamation in reclamations %}
                                             <tr>
                                                 <td>{{ reclamation.idRec }}</td>
-                                                <td>{{ reclamation.dateRec ? reclamation.dateRec|date('d/m/Y H:i') : '' }}</td>
-                                                <td>{{ reclamation.typeRec }}</td>
                                                 <td>{{ reclamation.descriptionRec }}</td>
+                                                <td>{{ reclamation.dateRec ? reclamation.dateRec|date('Y-m-d H:i:s') : '' }}</td>
+                                                <td>{{ reclamation.typeRec }}</td>
                                                 <td>
                                                     <span class="badge bg-{{ reclamation.etatRec == 'En cours' ? 'warning' : (reclamation.etatRec == 'Résolue' ? 'success' : 'danger') }}">
                                                         {{ reclamation.etatRec }}
@@ -54,18 +54,9 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group">
-                                                        <a href="{{ path('app_reclamation_show', {'id_rec': reclamation.idRec}) }}" class="btn btn-info btn-sm">
+                                                        <a href="{{ path('app_reclamation_show', {'id_rec': reclamation.idRec}) }}" class="btn btn-sm btn-info">
                                                             <i class="bi bi-eye"></i>
                                                         </a>
-                                                        <a href="{{ path('app_reclamation_edit', {'id_rec': reclamation.idRec}) }}" class="btn btn-warning btn-sm">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-                                                        <form method="post" action="{{ path('app_reclamation_delete', {'id_rec': reclamation.idRec}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');" style="display: inline;">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reclamation.idRec) }}">
-                                                            <button class="btn btn-danger btn-sm">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>

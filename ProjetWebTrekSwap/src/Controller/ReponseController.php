@@ -36,7 +36,11 @@ final class ReponseController extends AbstractController{
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reponse);
-            $reclamation->setEtatRec('Résolue');
+            
+            // Récupérer le nouvel état choisi dans le formulaire
+            $nouvelEtat = $form->get('nouvelEtat')->getData();
+            $reclamation->setEtatRec($nouvelEtat);
+            
             $entityManager->flush();
 
             $this->addFlash('success', 'La réponse a été ajoutée avec succès.');
@@ -51,8 +55,14 @@ final class ReponseController extends AbstractController{
     }
 
     #[Route('/{id}', name: 'app_reponse_show', methods: ['GET'])]
-    public function show(Reponse $reponse): Response
+    public function show(ReponseRepository $reponseRepository, int $id): Response
     {
+        $reponse = $reponseRepository->find($id);
+        
+        if (!$reponse) {
+            throw $this->createNotFoundException('La réponse n\'existe pas');
+        }
+
         return $this->render('reponse/show.html.twig', [
             'reponse' => $reponse,
         ]);
