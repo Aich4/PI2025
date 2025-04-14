@@ -6,18 +6,20 @@ use App\Entity\Reponse;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ReponseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id_rec')
-            ->add('date_rep', null, [
-                'widget' => 'single_text'
-            ])
-            ->add('contenu_rep')
-        ;
+            ->add('contenu', TextareaType::class, [
+                'label' => 'Contenu de la réponse',
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 5
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
