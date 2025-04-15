@@ -3,11 +3,11 @@
 {% block title %}Inscription - TrekSwap{% endblock %}
 
 {% block body %}
-<section class="vh-100" style="padding-top: 100px;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+<section class="vh-70">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card shadow-lg" style="border-radius: 1rem;">
+                <div class="card shadow-lg" style="border-radius: 1rem;" id="registration-form">
                     <div class="card-body p-5 text-center">
                         {% for label, messages in app.flashes %}
                             {% for message in messages %}
@@ -71,4 +71,24 @@
         </div>
     </div>
 </section>
+
+<script>
+// Fonction pour faire défiler la page
+function scrollToForm() {
+    const formElement = document.getElementById('registration-form');
+    if (formElement) {
+        const offset = 100; // Ajustez cette valeur selon votre barre de navigation
+        const elementPosition = formElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Exécuter après un court délai pour s'assurer que la page est chargée
+setTimeout(scrollToForm, 500);
+</script>
 {% endblock %} 
