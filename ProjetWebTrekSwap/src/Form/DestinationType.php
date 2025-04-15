@@ -29,6 +29,9 @@ class DestinationType extends AbstractType
                 'mapped' => false, // Important: This means it won't be mapped to the entity automatically
                 'required' => false,
                 'constraints' => [
+                    new NotBlank([
+                        'message' => 'cette champ ne peut pas être vide.',
+                    ]),
                     new File([
                         'maxSize' => '2M', // Limit file size to 2MB
                         'mimeTypes' => [
