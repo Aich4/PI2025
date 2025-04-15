@@ -7,53 +7,17 @@
     <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/RecompenseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/RecompenseController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Mission.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Mission.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Recompense.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Recompense.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/MissionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/MissionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/RecompenseType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/RecompenseType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/edit.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/mission.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/recompense.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/showmission.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/showrec.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/updateMission.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/updateRec.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Mission.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Recompense.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/CrudInterface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/MissionService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/OCRService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/RecompenseService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/WhatsAppSender.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tests/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tests/MainFx.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/MyDb.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/BACKGROUND@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/BLUE.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/LOGO.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/ShowMission.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/ShowRecompense.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/UpdateMission.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/UpdateRecompense.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/back.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/bg.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/bg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/bleu.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/boucle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/cat.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/categories.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/liv.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/logo pi white@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/mission.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/recompense.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/stat.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/webbb.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/show.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/recompense/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/recompense/edit.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/recompense/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/recompense/new.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,18 +175,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "GestionMission",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;GestionMission&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -251,6 +215,11 @@
       <workItem from="1743937707463" duration="8859000" />
       <workItem from="1743947283701" duration="19000" />
       <workItem from="1744051983504" duration="7295000" />
+      <workItem from="1744275962291" duration="5445000" />
+      <workItem from="1744562047237" duration="6855000" />
+      <workItem from="1744666003278" duration="5317000" />
+      <workItem from="1744676720620" duration="1153000" />
+      <workItem from="1744709791227" duration="1677000" />
     </task>
     <servers />
   </component>

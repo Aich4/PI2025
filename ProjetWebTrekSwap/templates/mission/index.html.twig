@@ -25,7 +25,7 @@
                             {% for mission in missions %}
                                 <tr>
                                     <td class="text-muted">{{ mission.id }}</td>
-                                    <td>{{ mission.idRecompense ?? 'N/A' }}</td>
+                                    <td>{{ mission.idRecompense ? mission.idRecompense.description : 'N/A' }}</td>
                                     <td>{{ mission.description }}</td>
                                     <td>{{ mission.pointsRecompense }}</td>
                                     <td>

@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Mission;
+use App\Entity\Recompense;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +15,12 @@ class MissionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id_recompense')
+            ->add('id_recompense', EntityType::class, [
+                'class' => Recompense::class,
+                'choice_label' => 'description',
+                'placeholder' => 'Sélectionner une récompense',
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('description')
             ->add('points_recompense')
             ->add('statut', ChoiceType::class, [
@@ -22,6 +29,8 @@ class MissionType extends AbstractType
                     'Valide' => 'valide',
                 ],
                 'placeholder' => 'Choisissez un statut',
+                'required' =>true,
+                'attr' => ['class' => 'form-control']
             ])
         ;
     }

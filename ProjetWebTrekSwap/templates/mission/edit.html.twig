@@ -15,7 +15,13 @@
 
             <div class="collapse show" id="modifierForm">
                 <div class="card card-body shadow-sm">
-                    {{ form_start(form) }}
+                    {{ form_start(form,{'attr':{'novalidate':'novalidate'}})}}
+                    {% for error in form.vars.errors %}
+                        <div class="alert alert-danger">
+                            {{ error.message }}
+                        </div>
+                    {% endfor %}
+
 
                     <div class="mb-3">
                         {{ form_label(form.id_recompense) }}
