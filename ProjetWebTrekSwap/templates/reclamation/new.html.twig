@@ -15,39 +15,23 @@
             </div>
             <div class="card-body">
                 {{ form_start(form) }}
-                    <div class="mb-4">
-                        {{ form_label(form.typeRec, 'Type de réclamation', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                        {{ form_widget(form.typeRec, {'attr': {'class': 'form-control form-control-lg'}}) }}
-                        {{ form_errors(form.typeRec) }}
-                    </div>
+                <div class="mb-4">
+                    {{ form_label(form.typeRec, 'Type de réclamation', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.typeRec, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                    {{ form_errors(form.typeRec) }}
+                </div>
 
-                    <div class="mb-4">
-                        {{ form_label(form.descriptionRec, 'Description', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                        {{ form_widget(form.descriptionRec, {'attr': {'class': 'form-control form-control-lg', 'rows': '5', 'placeholder': 'Décrivez votre réclamation en détail...'}}) }}
-                        {{ form_errors(form.descriptionRec) }}
-                    </div>
+                <div class="mb-4">
+                    {{ form_label(form.descriptionRec, 'Description', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.descriptionRec, {'attr': {'class': 'form-control form-control-lg', 'rows': '5', 'placeholder': 'Décrivez votre réclamation en détail...'}}) }}
+                    {{ form_errors(form.descriptionRec) }}
+                </div>
 
-                    <div class="card-body" >
-                        {{ form_start(form) }}
-                            <div class="mb-3">
-                                {{ form_label(form.typeRec, 'Type de réclamation', {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.typeRec, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(form.typeRec) }}
-                            </div>
-
-                            <div class="mb-3">
-                                {{ form_label(form.descriptionRec, 'Description', {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.descriptionRec, {'attr': {'class': 'form-control', 'rows': '5'}}) }}
-                                {{ form_errors(form.descriptionRec) }}
-                            </div>
-
-                            <div class="text-center" id="rec">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-paper-plane"></i> Envoyer la réclamation
-                                </button>
-                            </div>
-                        {{ form_end(form) }}
-                    </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5" style="background-color: #012970; border-color: #012970;">
+                        <i class="fas fa-paper-plane me-2"></i>Envoyer la réclamation
+                    </button>
+                </div>
                 {{ form_end(form) }}
             </div>
         </div>
@@ -70,88 +54,77 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead class="table-light">
-                            <tr>
-                                <th><i class="fas fa-tag me-2"></i>Type</th>
-                                <th><i class="fas fa-align-left me-2"></i>Description</th>
-                                <th><i class="fas fa-calendar me-2"></i>Date</th>
-                                <th><i class="fas fa-info-circle me-2"></i>État</th>
-                                <th><i class="fas fa-reply me-2"></i>Réponses</th>
-                            </tr>
+                        <tr>
+                            <th><i class="fas fa-tag me-2"></i>Type</th>
+                            <th><i class="fas fa-align-left me-2"></i>Description</th>
+                            <th><i class="fas fa-calendar me-2"></i>Date</th>
+                            <th><i class="fas fa-info-circle me-2"></i>État</th>
+                            <th><i class="fas fa-reply me-2"></i>Réponses</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for reclamation in reclamations %}
-                                <tr>
-                                    <td class="fw-bold">{{ reclamation.typeRec }}</td>
-                                    <td class="text-truncate" style="max-width: 200px;" title="{{ reclamation.descriptionRec }}">
-                                        {{ reclamation.descriptionRec }}
-                                    </td>
-                                    <td>{{ reclamation.dateRec ? reclamation.dateRec|date('d/m/Y H:i') : '' }}</td>
-                                    <td>
+                        {% for reclamation in reclamations %}
+                            <tr>
+                                <td class="fw-bold">{{ reclamation.typeRec }}</td>
+                                <td class="text-truncate" style="max-width: 200px;" title="{{ reclamation.descriptionRec }}">
+                                    {{ reclamation.descriptionRec }}
+                                </td>
+                                <td>{{ reclamation.dateRec ? reclamation.dateRec|date('d/m/Y H:i') : '' }}</td>
+                                <td>
                                         <span class="badge rounded-pill" style="background-color: {{ reclamation.etatRec == 'En cours' ? '#ffc107' : (reclamation.etatRec == 'Résolue' ? '#198754' : '#dc3545') }}; color: white;">
                                             <i class="fas fa-{{ reclamation.etatRec == 'En cours' ? 'clock' : (reclamation.etatRec == 'Résolue' ? 'check' : 'times') }} me-1"></i>
                                             {{ reclamation.etatRec }}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info toggle-responses" data-reclamation-id="{{ reclamation.idRec }}">
-                                            <i class="fas fa-comments me-1"></i>
-                                            {{ reclamation.reponses|length }} réponse(s)
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="responses-row" data-reclamation-id="{{ reclamation.idRec }}" style="display: none;">
-                                    <td colspan="5">
-                                        <div class="responses-container">
-                                            {% if reclamation.reponses|length > 0 %}
-                                                {% for reponse in reclamation.reponses %}
-                                                    <div class="response-item mb-3">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                                                    <small class="text-muted">
-                                                                        <i class="fas fa-clock me-1"></i>
-                                                                        {{ reponse.dateRep|date('d/m/Y H:i') }}
-                                                                    </small>
-                                                                </div>
-                                                                <p class="mb-0">{{ reponse.contenu }}</p>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info toggle-responses" data-reclamation-id="{{ reclamation.idRec }}">
+                                        <i class="fas fa-comments me-1"></i>
+                                        {{ reclamation.reponses|length }} réponse(s)
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="responses-row" data-reclamation-id="{{ reclamation.idRec }}" style="display: none;">
+                                <td colspan="5">
+                                    <div class="responses-container">
+                                        {% if reclamation.reponses|length > 0 %}
+                                            {% for reponse in reclamation.reponses %}
+                                                <div class="response-item mb-3">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                <small class="text-muted">
+                                                                    <i class="fas fa-clock me-1"></i>
+                                                                    {{ reponse.dateRep|date('d/m/Y H:i') }}
+                                                                </small>
                                                             </div>
+                                                            <p class="mb-0">{{ reponse.contenu }}</p>
                                                         </div>
                                                     </div>
-                                                {% endfor %}
-                                            {% else %}
-                                                <div class="alert alert-info mb-0">
-                                                    <i class="fas fa-info-circle me-2"></i>Aucune réponse pour cette réclamation
                                                 </div>
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="5" class="text-center py-4">
-                                        <div class="alert alert-info mb-0" style="background-color: #e7f1ff; color: #012970; border-color: #b8daff;">
-                                            <i class="fas fa-info-circle me-2"></i>Aucune réclamation trouvée
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="alert alert-info mb-0">
+                                                <i class="fas fa-info-circle me-2"></i>Aucune réponse pour cette réclamation
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4">
+                                    <div class="alert alert-info mb-0" style="background-color: #e7f1ff; color: #012970; border-color: #b8daff;">
+                                        <i class="fas fa-info-circle me-2"></i>Aucune réclamation trouvée
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Scroll to the destinations section on load
-            window.scrollTo({
-                top: document.getElementById('rec').offsetTop,
-                behavior: 'smooth'
-            });
-        });
-
-    </script>
 
     <style>
         .card {
@@ -243,7 +216,7 @@
                 button.addEventListener('click', function() {
                     const reclamationId = this.getAttribute('data-reclamation-id');
                     const responsesRow = document.querySelector(`.responses-row[data-reclamation-id="${reclamationId}"]`);
-                    
+
                     if (responsesRow.style.display === 'none') {
                         responsesRow.style.display = 'table-row';
                         this.innerHTML = '<i class="fas fa-times me-1"></i>Masquer les réponses';
