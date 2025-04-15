@@ -25,7 +25,7 @@ final class ReclamationController extends AbstractController {
 
     // Front office routes
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,CategorieRepository $categorieRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,CategorieRepository $categorieRepository, ReclamationRepository $reclamationRepository): Response
     {
         $reclamation = new Reclamation();
         $form = $this->createForm(ReclamationType::class, $reclamation);
@@ -43,6 +43,8 @@ final class ReclamationController extends AbstractController {
         return $this->render('reclamation/new.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
+            'reclamations' => $reclamationRepository->findAll(),
+
             'categories' => $categories,
         ]);
     }
@@ -59,8 +61,14 @@ final class ReclamationController extends AbstractController {
 
     #[Route('/back/{id_rec}', name: 'app_reclamation_show', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function show(Reclamation $reclamation): Response
+    public function show(ReclamationRepository $reclamationRepository, int $id_rec): Response
     {
+        $reclamation = $reclamationRepository->findOneBy(['idRec' => $id_rec]);
+        
+        if (!$reclamation) {
+            throw $this->createNotFoundException('La réclamation n\'existe pas');
+        }
+
         return $this->render('reclamation/show.html.twig', [
             'reclamation' => $reclamation,
         ]);
@@ -68,8 +76,14 @@ final class ReclamationController extends AbstractController {
 
     #[Route('/back/{id_rec}/edit', name: 'app_reclamation_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, ReclamationRepository $reclamationRepository, int $id_rec, EntityManagerInterface $entityManager): Response
     {
+        $reclamation = $reclamationRepository->findOneBy(['idRec' => $id_rec]);
+        
+        if (!$reclamation) {
+            throw $this->createNotFoundException('La réclamation n\'existe pas');
+        }
+
         $form = $this->createForm(ReclamationType::class, $reclamation);
         $form->handleRequest($request);
 
@@ -88,8 +102,14 @@ final class ReclamationController extends AbstractController {
 
     #[Route('/back/{id_rec}', name: 'app_reclamation_delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, ReclamationRepository $reclamationRepository, int $id_rec, EntityManagerInterface $entityManager): Response
     {
+        $reclamation = $reclamationRepository->findOneBy(['idRec' => $id_rec]);
+        
+        if (!$reclamation) {
+            throw $this->createNotFoundException('La réclamation n\'existe pas');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$reclamation->getIdRec(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($reclamation);
             $entityManager->flush();

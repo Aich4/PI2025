@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register - TrekSwap{% endblock %}
+{% block title %}Inscription - TrekSwap{% endblock %}
 
 {% block body %}
 <section class="vh-100" style="padding-top: 100px;">
@@ -9,41 +9,60 @@
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card shadow-lg" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
-                        {{ form_start(registrationForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
-                            <h3 class="mb-5">Create Account</h3>
+                        {% for label, messages in app.flashes %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        {{ form_start(registrationForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+                            <h3 class="mb-5">Créer un compte</h3>
 
                             <div class="form-outline mb-4">
                                 {{ form_widget(registrationForm.nom) }}
-                                {{ form_errors(registrationForm.nom) }}
+                                <div class="invalid-feedback {% if not registrationForm.nom.vars.valid %}d-block{% endif %}">
+                                    {{ form_errors(registrationForm.nom) }}
+                                </div>
                             </div>
 
                             <div class="form-outline mb-4">
                                 {{ form_widget(registrationForm.prenom) }}
-                                {{ form_errors(registrationForm.prenom) }}
+                                <div class="invalid-feedback {% if not registrationForm.prenom.vars.valid %}d-block{% endif %}">
+                                    {{ form_errors(registrationForm.prenom) }}
+                                </div>
                             </div>
 
                             <div class="form-outline mb-4">
                                 {{ form_widget(registrationForm.email) }}
-                                {{ form_errors(registrationForm.email) }}
+                                <div class="invalid-feedback {% if not registrationForm.email.vars.valid %}d-block{% endif %}">
+                                    {{ form_errors(registrationForm.email) }}
+                                </div>
                             </div>
 
                             <div class="form-outline mb-4">
                                 {{ form_widget(registrationForm.plainPassword) }}
-                                {{ form_errors(registrationForm.plainPassword) }}
+                                <div class="invalid-feedback {% if not registrationForm.plainPassword.vars.valid %}d-block{% endif %}">
+                                    {{ form_errors(registrationForm.plainPassword) }}
+                                </div>
                             </div>
 
                             <div class="form-outline mb-4">
-                                <label class="form-label">Profile Picture (Optional)</label>
+                                <label class="form-label">Photo de profil (Optionnel)</label>
                                 {{ form_widget(registrationForm.photo_profil) }}
-                                {{ form_errors(registrationForm.photo_profil) }}
+                                <div class="invalid-feedback {% if not registrationForm.photo_profil.vars.valid %}d-block{% endif %}">
+                                    {{ form_errors(registrationForm.photo_profil) }}
+                                </div>
                             </div>
 
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">S'inscrire</button>
 
                             <hr class="my-4">
 
                             <div>
-                                <p class="mb-0">Already have an account? <a href="{{ path('app_login') }}" class="text-primary fw-bold">Sign In</a></p>
+                                <p class="mb-0">Vous avez déjà un compte ? <a href="{{ path('app_login') }}" class="text-primary fw-bold">Se connecter</a></p>
                             </div>
                         {{ form_end(registrationForm) }}
                     </div>

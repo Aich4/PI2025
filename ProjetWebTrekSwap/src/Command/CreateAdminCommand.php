@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 class CreateAdminCommand extends Command
 {
@@ -25,17 +26,26 @@ class CreateAdminCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Creates a new admin user');
+        $this
+            ->setDescription('Creates a new admin user')
+            ->addOption('non-interactive', 'ni', InputOption::VALUE_NONE, 'Create default admin user');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $email = $io->ask('Enter admin email');
-        $firstName = $io->ask('Enter admin first name');
-        $lastName = $io->ask('Enter admin last name');
-        $password = $io->askHidden('Enter admin password');
+        if ($input->getOption('non-interactive')) {
+            $email = 'admin@trekswap.com';
+            $firstName = 'Admin';
+            $lastName = 'Admin';
+            $password = 'admin';
+        } else {
+            $email = $io->ask('Enter admin email');
+            $firstName = $io->ask('Enter admin first name');
+            $lastName = $io->ask('Enter admin last name');
+            $password = $io->askHidden('Enter admin password');
+        }
 
         $user = new User();
         $user->setEmail($email);
