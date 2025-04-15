@@ -22,38 +22,92 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le nom est requis')]
-    #[Assert\Length(min: 2, max: 50, 
+    #[Assert\Length(
+        min: 2,
+        max: 50,
         minMessage: 'Le nom doit contenir au moins {{ limit }} caractères',
         maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-ZÀ-ÿ\s\'-]+$/',
+        message: 'Le nom ne peut contenir que des lettres, espaces, apostrophes et tirets'
     )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le prénom est requis')]
-    #[Assert\Length(min: 2, max: 50,
+    #[Assert\Length(
+        min: 2,
+        max: 50,
         minMessage: 'Le prénom doit contenir au moins {{ limit }} caractères',
         maxMessage: 'Le prénom ne peut pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-ZÀ-ÿ\s\'-]+$/',
+        message: 'Le prénom ne peut contenir que des lettres, espaces, apostrophes et tirets'
     )]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'L\'email est requis')]
-    #[Assert\Email(message: 'L\'email {{ value }} n\'est pas valide')]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas une adresse email valide',
+        mode: 'strict'
+    )]
+    #[Assert\Length(
+        max: 180,
+        maxMessage: 'L\'email ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, name: 'mot_de_passe')]
+    #[Assert\NotCompromisedPassword(message: 'Ce mot de passe a été compromis. Veuillez en choisir un autre.')]
+    #[Assert\NotBlank(message: 'Le mot de passe est requis')]
+    #[Assert\Length(
+        min: 8,
+        max: 50,
+        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le mot de passe ne peut pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\Regex(
+        pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+        message: 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial'
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        mimeTypesMessage: 'Veuillez télécharger une image valide (JPEG, PNG ou WEBP)',
+        maxSizeMessage: 'L\'image ne doit pas dépasser 2Mo'
+    )]
     private ?string $photo_profil = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le type d\'utilisateur est requis')]
+    #[Assert\Choice(
+        choices: ['Admin', 'Touriste'],
+        message: 'Choisissez un type d\'utilisateur valide : Admin ou Touriste'
+    )]
     private ?string $type_user = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        mimeTypesMessage: 'Veuillez télécharger une image valide (JPEG, PNG ou WEBP)',
+        maxSizeMessage: 'L\'image ne doit pas dépasser 2Mo'
+    )]
     private ?string $photo_carte_f1 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        mimeTypesMessage: 'Veuillez télécharger une image valide (JPEG, PNG ou WEBP)',
+        maxSizeMessage: 'L\'image ne doit pas dépasser 2Mo'
+    )]
     private ?string $photo_carte_f2 = null;
 
     #[ORM\Column(type: 'boolean', name: 'is_active')]
