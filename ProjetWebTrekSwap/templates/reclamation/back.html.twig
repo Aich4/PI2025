@@ -1,0 +1,89 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Gestion des Réclamations{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Gestion des Réclamations</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Réclamations</li>
+                </ol>
+            </nav>
+        </div>
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Liste des Réclamations</h5>
+
+                            {% for message in app.flashes('success') %}
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+
+                            <div class="table-responsive">
+                                <table class="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Description</th>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>État</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for reclamation in reclamations %}
+                                            <tr>
+                                                <td>{{ reclamation.idRec }}</td>
+                                                <td>{{ reclamation.descriptionRec }}</td>
+                                                <td>{{ reclamation.dateRec ? reclamation.dateRec|date('Y-m-d H:i:s') : '' }}</td>
+                                                <td>{{ reclamation.typeRec }}</td>
+                                                <td>
+                                                    <span class="badge bg-{{ reclamation.etatRec == 'En cours' ? 'warning' : (reclamation.etatRec == 'Résolue' ? 'success' : 'danger') }}">
+                                                        {{ reclamation.etatRec }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="{{ path('app_reclamation_show', {'id_rec': reclamation.idRec}) }}" class="btn btn-sm btn-info">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="6" class="text-center">Aucune réclamation trouvée</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('backTemp/vendor/simple-datatables/simple-datatables.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const datatables = document.querySelectorAll('.datatable');
+            datatables.forEach(function(datatable) {
+                new simpleDatatables.DataTable(datatable);
+            });
+        });
+    </script>
+{% endblock %}

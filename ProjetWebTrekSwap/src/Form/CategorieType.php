@@ -6,12 +6,12 @@ use App\Entity\Categorie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CategorieType extends AbstractType
 {
@@ -21,38 +21,41 @@ class CategorieType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'Nom de la catégorie',
                 'attr' => ['class' => 'form-control'],
+                'empty_data' => ''
+                // Supprimer les contraintes ici
             ])
             ->add('description', TextType::class, [
                 'label' => 'Description',
                 'attr' => ['class' => 'form-control'],
-                'constraints' => [
-                    // La description ne doit pas être uniquement composée de chiffres
-                    new Regex([
-                        'pattern' => '/[^0-9]+/',
-                        'message' => 'La description ne peut pas être composée uniquement de chiffres.',
-                    ]),
-                ]
+                'empty_data' => ''
+                // Supprimer les contraintes ici
             ])
             ->add('logo', FileType::class, [
-                'label' => 'Logo (image)',
-                'mapped' => false,
+                'label' => 'Logo',
                 'required' => false,
+                'mapped' => true,
+                'data_class' => null,
                 'constraints' => [
                     new File([
-                        'maxSize' => '2M',
                         'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
-                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG, WebP)',
+                        'mimeTypesMessage' => 'Veuillez télécharger un fichier image valide (JPEG, PNG, WebP).',
+                    ]),
+                    new NotBlank([
+                        'message' => 'Pas de logo '
                     ])
-                ],
-                'attr' => ['class' => 'form-control'],
+                ]
             ])
             ->add('nbrPartenaire', IntegerType::class, [
                 'label' => 'Nombre de partenaires',
                 'attr' => ['class' => 'form-control'],
+                'required' => false, // Rend le champ facultatif
                 'constraints' => [
-                    new Type([
-                        'type' => 'integer',
-                        'message' => 'Le nombre de partenaires doit être un entier.',
+                    new NotBlank([
+                        'message' => 'Veuillez renseigner un nombre de partenaire.',
+                    ]),
+                    new GreaterThanOrEqual([
+                        'value' => 0,
+                        'message' => 'Le nombre de partenaires ne peut pas être négatif.',
                     ]),
                 ]
             ]);
@@ -62,6 +65,8 @@ class CategorieType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Categorie::class,
+            'allow_extra_fields' => true,
+            'validation_groups' => ['Default'] // Ajout important
         ]);
     }
 }

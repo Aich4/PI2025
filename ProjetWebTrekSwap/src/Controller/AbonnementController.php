@@ -5,6 +5,8 @@ use App\Entity\Pack;
 use App\Entity\Abonnement;
 use App\Form\AbonnementType;
 use App\Repository\AbonnementRepository;
+use App\Repository\PackRepository;
+use App\Repository\CategorieRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,33 +16,37 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class AbonnementController extends AbstractController
 {
-    #[Route('/', name: 'homepage')]
-    public function home(): Response
+    #[Route('/', name: 'index')]
+    public function index(AbonnementRepository $abonnementRepository, PackRepository $packRepository, CategorieRepository $categorieRepository): Response
     {
-        return $this->redirectToRoute('app_Abonnement');
+        $abonnements = $abonnementRepository->findAll();
+        $categories = $categorieRepository->findAll();
+        return $this->render('base.html.twig', [
+            'abonnements' => $abonnements,
+            'packRepository' => $packRepository,
+            'categories' => $categories,
+        ]);
     }
-
-    #[Route('/frontA', name: 'app_Abonnement')]
+    #[Route('/pricing', name: 'app_Abonnement')]
     public function indexA(): Response
     {
+        return $this->redirectToRoute('pricing');
+    }
+    #[Route('/frontA', name: 'pricing')]
+    public function pricing(AbonnementRepository $abonnementRepository, PackRepository $packRepository, CategorieRepository $categorieRepository): Response
+    {
+        $abonnements = $abonnementRepository->findAll();
+        $categories = $categorieRepository->findAll();
         return $this->render('base.html.twig', [
-            'controller_name' => 'AbonnementController',
+            'abonnements' => $abonnements,
+            'packRepository' => $packRepository,
+            'categories' => $categories,
         ]);
     }
 
     #[Route('/backA', name: 'app_Abonnements')]
     public function indexBA(AbonnementRepository $abonnementRepository): Response
     {
-        // Check if user is authenticated and has proper role
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        // Check if user has either ROLE_USER or ROLE_ADMIN
-        if (!$this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException('Access Denied.');
-        }
-
         return $this->render('base-back.html.twig', [
             'Abonnements' => $abonnementRepository->findAll(),
         ]);
@@ -52,6 +58,15 @@ final class AbonnementController extends AbstractController
         $abonnements = $abonnementRepository->findAll();
 
         return $this->render('abonnements/showAbon.html.twig', [
+            'abonnements' => $abonnements,
+        ]);
+    }
+    #[Route('/AbonshowF', name: 'list_AbonnementF', methods: ['GET'])]
+    public function listAbonnementF(AbonnementRepository $abonnementRepository): Response
+    {
+        $abonnements = $abonnementRepository->findAll();
+
+        return $this->render('abonnements/showfrontA.html.twig', [
             'abonnements' => $abonnements,
         ]);
     }
@@ -75,7 +90,7 @@ final class AbonnementController extends AbstractController
         $managerRegistry->persist($abonnement);
         $managerRegistry->flush();
 
-        return $this->redirectToRoute('add_Abonnement');
+        return $this->redirectToRoute('list_Abonnement');
     }
 
     return $this->render('abonnements/addAbon.html.twig', [

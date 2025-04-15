@@ -4,44 +4,117 @@
 
 {% block body %}
     <main id="main" class="main">
-        <div class="container">
-            <h1 class="mb-4">Liste des Activités</h1>
-            <input type="text" id="search-input" placeholder="Search...">
-            <a href="{{ path('add_activite') }}" class="btn btn-info btn-sm">Ajouter</a>
+        <div class="container mt-5">
+            <h1 class="text-center mb-4 text-primary">Liste des Activités</h1>
 
-            {% if activites|length > 0 %}
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Nom Activité</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Heure</th>
-                        <th scope="col">Statut</th>
-                        <th scope="col">Destination</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for activite in activites %}
-                        <tr>
-                            <td>{{ activite.id }}</td>
-                            <td>{{ activite.nomActivite }}</td>
-                            <td>{{ activite.date ? activite.date|date('Y-m-d') : 'N/A' }}</td>
-                            <td>{{ activite.heure }}</td>
-                            <td>{{ activite.statut }}</td>
-                            <td>{{ activite.idDestination ? 'Destination #' ~ activite.idDestination : 'N/A' }}</td>
-                            <td>
-                                <a href="{{ path('edit_activite', {'id': activite.id}) }}" class="btn btn-success btn-sm">Modifier</a>
-                                <a href="{{ path('delete_activite', {'id': activite.id}) }}" class="btn btn-warning btn-sm">Supprimer</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p class="text-muted">Aucune activité trouvée.</p>
-            {% endif %}
+            <!-- Barre de recherche -->
+            <div class="mb-3">
+                <input type="text" id="search-input" class="form-control" placeholder="Rechercher une activité...">
+            </div>
+
+            <!-- Card contenant le tableau -->
+            <div class="card shadow-lg p-4 rounded-lg custom-bg-light">
+                <div class="card-body">
+                    {% if activites|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped text-center align-middle custom-table-bg">
+                                <thead class="bg-info text-white">
+                                <tr>
+                                    <th class="custom-th">ID</th>
+                                    <th class="custom-th">Nom</th>
+                                    <th class="custom-th">Date</th>
+                                    <th class="custom-th">Heure</th>
+                                    <th class="custom-th">Statut</th>
+                                    <th class="custom-th">Destination</th>
+                                    <th class="custom-th">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for activite in activites %}
+                                    <tr>
+                                        <td class="text-muted">{{ activite.id }}</td>
+                                        <td>{{ activite.nomActivite }}</td>
+                                        <td>{{ activite.date ? activite.date|date('Y-m-d') : 'N/A' }}</td>
+                                        <td>{{ activite.heure }}</td>
+                                        <td>
+                                            {% set statut = activite.statut %}
+                                            <span class="badge
+                                                {% if statut == 'active' %}bg-success
+                                                {% elseif statut == 'inactive' %}bg-danger
+                                                {% elseif statut == 'completed' %}bg-primary
+                                                {% else %}bg-secondary
+                                                {% endif %}
+                                            text-uppercase">
+                                                {{ statut }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ activite.idDestination ? 'Destination #' ~ activite.idDestination : 'N/A' }}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ path('edit_activite', {'id': activite.id}) }}" class="btn btn-outline-success btn-sm" title="Modifier">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                                <a href="{{ path('delete_activite', {'id': activite.id}) }}" class="btn btn-outline-danger btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette activité ?');">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info mt-4 text-center">
+                            Aucune activité trouvée.
+                        </div>
+                    {% endif %}
+
+                    <!-- Bouton pour ajouter -->
+                    <div class="text-center mt-4">
+                        <a href="{{ path('add_activite') }}" class="btn btn-success px-4 py-2">
+                            <i class="bi bi-plus-circle-dotted"></i> Ajouter une Activité
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
+
+    <script>
+        document.getElementById('search-input').addEventListener('input', function () {
+            const value = this.value.toLowerCase();
+            document.querySelectorAll('tbody tr').forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .custom-bg-light {
+            background-color: #e9ecef !important;
+        }
+
+        .custom-table-bg {
+            background-color: #f4f6f9 !important;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-th {
+            background-color: #cce5ff;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1 !important;
+        }
+    </style>
 {% endblock %}

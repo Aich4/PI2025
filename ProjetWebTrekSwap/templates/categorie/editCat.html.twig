@@ -3,47 +3,92 @@
 {% block title %}Modifier une Catégorie{% endblock %}
 
 {% block body %}
-    <main id="main" class="main">
-        <div class="container mt-5">
-            <h1 class="text-center mb-4 text-warning">Modifier la Catégorie</h1>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="row w-100">
+            <!-- Centered Form Container -->
+            <div class="col-md-8 col-lg-6 mx-auto">
+                <h1 class="text-center text-primary mb-4">Modifier une Catégorie</h1>
 
-            {{ form_start(form) }}
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
 
-            <div class="form-group">
-                {{ form_label(form.nom) }}
-                {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.nom) }} {# Afficher les erreurs pour le champ nom #}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form_label(form.nom) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
 
-            <div class="form-group">
-                {{ form_label(form.description) }}
-                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.description) }} {# Afficher les erreurs pour la description #}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
 
-            <div class="form-group">
-                {{ form_label(form.logo) }}
-                {% if category.getLogo() %}
-                    <div class="mb-3">
-                        <label>Logo actuel :</label>
-                        <img src="{{ asset('uploads/logos/' ~ category.getLogo()) }}" alt="Logo actuel" width="100">
+                <div class="form-group mb-3">
+                    {{ form_label(form.logo) }}
+                    {{ form_widget(form.logo, {
+                        'attr': {
+                            'class': 'form-control',
+                            'onchange': 'previewImage(event)'
+                        }
+                    }) }}
+
+                    {# Existing logo preview #}
+                    <div class="mt-2 text-center">
+                        {% if categorie.logo %}
+                            <img id="imagePreview" src="{{ asset('uploads/logos/' ~ categorie.logo) }}" alt="Logo actuel" style="max-width: 200px;">
+                        {% else %}
+                            <img id="imagePreview" src="#" alt="Aperçu du logo" style="max-width: 200px; display: none;">
+                        {% endif %}
                     </div>
-                {% else %}
-                    <p>Aucun logo actuel.</p>
-                {% endif %}
-                {{ form_widget(form.logo, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.logo) }} {# Afficher les erreurs pour le logo #}
+
+                    {{ form_errors(form.logo) }}
+                </div>
+
+                <div class="form-group mb-4">
+                    {{ form_label(form.nbrPartenaire) }}
+                    {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nbrPartenaire) }}
+                </div>
+
+                <!-- Buttons centered below the form -->
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-success">
+                        ✅ Modifier
+                    </button>
+                    <a href="{{ path('list_category') }}" class="btn btn-secondary">
+                        ↩️ Retour à la liste
+                    </a>
+                </div>
+
+                {{ form_end(form) }}
             </div>
-
-            <div class="form-group">
-                {{ form_label(form.nbrPartenaire) }}
-                {{ form_widget(form.nbrPartenaire, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.nbrPartenaire) }} {# Afficher les erreurs pour le nombre de partenaires #}
-            </div>
-
-            <button type="submit" class="btn btn-success mt-3">Mettre à jour</button>
-
-            {{ form_end(form) }}
         </div>
-    </main>
+    </div>
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+                if (validImageTypes.includes(file.type)) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.style.display = 'none';
+                    alert('Veuillez télécharger une image valide (JPEG, PNG, WebP).');
+                }
+            }
+            else {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+        }
+    </script>
 {% endblock %}

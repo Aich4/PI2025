@@ -8,13 +8,21 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DestinationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nomDestination')
+            ->add('nomDestination', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le nom de la destination ne peut pas être vide.',
+                    ]),
+                ],
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('description')
             ->add('imageDestination', FileType::class, [
                 'label' => 'Image (JPEG, PNG, GIF)',
@@ -29,7 +37,7 @@ class DestinationType extends AbstractType
                             'image/gif',
                         ],
                         'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG, GIF)',
-                    ])
+                    ]),
                 ],
                 'attr' => ['class' => 'form-control'],
             ])
@@ -43,6 +51,7 @@ class DestinationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Destination::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 }

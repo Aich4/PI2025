@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PartenaireRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PartenaireRepository::class)]
 class Partenaire
@@ -15,19 +16,43 @@ class Partenaire
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom ne doit pas être vide.")]
+    #[Assert\Regex(
+        pattern: "/\D/",
+        message: "Le nom ne peut pas être composé uniquement de chiffres."
+    )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'email ne doit pas être vide.")]
+    #[Assert\Email(message: "L'adresse email '{{ value }}' n'est pas valide.")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'adresse ne doit pas être vide.")]
+    #[Assert\Regex(
+        pattern: "/\D/",
+        message: "L'adresse ne peut pas être composée uniquement de chiffres."
+    )]
     private ?string $adresse = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La description ne doit pas être vide.")]
+    #[Assert\Regex(
+        pattern: "/\D/",
+        message: "La description ne peut pas être composée uniquement de chiffres."
+    )]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotNull(message: "La date d'ajout est obligatoire.")]
+    #[Assert\GreaterThanOrEqual("today", message: "La date d'ajout ne peut pas être dans le passé.")]
     private ?\DateTimeInterface $date_ajout = null;
+
+    #[ORM\Column]
+    #[Assert\NotNull(message: "La catégorie est obligatoire.")]
+    #[Assert\Positive(message: "L'identifiant de la catégorie doit être un nombre positif.")]
+    private ?int $id_categorie = null;
 
     public function getId(): ?int
     {
@@ -39,10 +64,9 @@ class Partenaire
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
+    public function setNom(?string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -51,10 +75,9 @@ class Partenaire
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -63,10 +86,9 @@ class Partenaire
         return $this->adresse;
     }
 
-    public function setAdresse(string $adresse): static
+    public function setAdresse(?string $adresse): static
     {
         $this->adresse = $adresse;
-
         return $this;
     }
 
@@ -75,10 +97,9 @@ class Partenaire
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -87,10 +108,20 @@ class Partenaire
         return $this->date_ajout;
     }
 
-    public function setDateAjout(\DateTimeInterface $date_ajout): static
+    public function setDateAjout(?\DateTimeInterface $date_ajout): static
     {
         $this->date_ajout = $date_ajout;
+        return $this;
+    }
 
+    public function getIdCategorie(): ?int
+    {
+        return $this->id_categorie;
+    }
+
+    public function setIdCategorie(?int $id_categorie): static
+    {
+        $this->id_categorie = $id_categorie;
         return $this;
     }
 }

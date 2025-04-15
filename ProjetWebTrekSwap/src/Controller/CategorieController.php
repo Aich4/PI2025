@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Controller;
-use Doctrine\Persistence\ManagerRegistry;
 
+use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Categorie;
 use App\Form\CategorieType;
 use App\Repository\CategorieRepository;
@@ -10,11 +10,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-
+use App\Repository\PartenaireRepository;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 final class CategorieController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
+    // Inject the EntityManagerInterface in the controller's constructor
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     #[Route('/categorie', name: 'app_categorie')]
     public function index(): Response
     {
@@ -27,78 +37,104 @@ final class CategorieController extends AbstractController
     public function listCategories(CategorieRepository $categorieRepository): Response
     {
         $categories = $categorieRepository->findAll();
-
         return $this->render('categorie/index.html.twig', [
             'categories' => $categories,
         ]);
     }
 
+    #[Route('/CatshowFront', name: 'list_categoryFront', methods: ['GET'])]
+    public function listCategoriesFront(CategorieRepository $categorieRepository): Response
+    {
+        $categories = $categorieRepository->findAll();
+        return $this->render('categorie/ShowFront.html.twig', [
+            'categories' => $categories,
+        ]);
+    }
+
     #[Route('/categorie/add', name: 'add_category', methods: ['GET', 'POST'])]
-    public function addCategory(Request $request, EntityManagerInterface $entityManager): Response
+    public function addCategory(Request $request): Response
     {
         $category = new Categorie();
-        $form = $this->createForm(CategorieType::class, $category);
+
+        // Créer et gérer le formulaire
+        $form = $this->createForm(CategorieType::class, $category, [
+            'attr' => ['novalidate' => 'novalidate'],
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload du logo
             $logoFile = $form->get('logo')->getData();
 
+            // Gérer l'upload du fichier logo
             if ($logoFile) {
-                $newFilename = uniqid().'.'.$logoFile->guessExtension();
                 try {
-                    $logoFile->move($this->getParameter('logos_directory'), $newFilename);
-                    $category->setLogo($newFilename); // Stocker le nom du fichier dans la BDD
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Erreur lors de l\'upload du fichier.');
+                    // Vérifier l'extension du fichier
+                    $logoFileName = uniqid().'.'.$logoFile->guessExtension();
+
+                    // Déplacer le fichier dans le répertoire de destination
+                    $logoFile->move(
+                        $this->getParameter('logos_directory'), // Assurez-vous que ce paramètre existe dans votre config
+                        $logoFileName
+                    );
+
+                    // Mettre à jour la propriété logo dans l'entité
+                    $category->setLogo($logoFileName);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement du logo.');
+                    return $this->render('categorie/addCat.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
                 }
             }
 
-            $entityManager->persist($category);
-            $entityManager->flush();
+            // Sauvegarder la catégorie en base de données
+            $this->entityManager->persist($category);
+            $this->entityManager->flush();
 
-            $this->addFlash('success', 'Catégorie ajoutée avec succès !');
+            // Rediriger après ajout réussi
             return $this->redirectToRoute('list_category');
         }
 
+        // Afficher le formulaire dans la vue
         return $this->render('categorie/addCat.html.twig', [
-            'category' => $category,
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/Categorie/edit/{id}', name: 'edit_category', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+
+    #[Route('/categorie/{id}/edit', name: 'edit_categorie', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Categorie $categorie, EntityManagerInterface $em): Response
     {
-        // Récupérer la catégorie à éditer par son ID
-        $category = $entityManager->getRepository(Categorie::class)->find($id);
-
-        if (!$category) {
-            throw $this->createNotFoundException('Catégorie non trouvée');
-        }
-
-        // Créer le formulaire de modification
-        $form = $this->createForm(CategorieType::class, $category);
+        $form = $this->createForm(CategorieType::class, $categorie);
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarder les modifications dans la base de données
-            $entityManager->flush();
+            if ($form->get('nbrPartenaire')->getData() === null) {
+                $categorie->setNbrPartenaire(0); // Valeur par défaut
+            }
+            // Gestion du fichier logo
+            $logoFile = $form->get('logo')->getData();
+            if ($logoFile) {
+                $newFilename = uniqid().'.'.$logoFile->guessExtension();
+                $logoFile->move(
+                    $this->getParameter('logos_directory'),
+                    $newFilename
+                );
+                $categorie->setLogo($newFilename);
+            }
 
-            // Afficher un message de succès et rediriger vers la liste des catégories
-            $this->addFlash('success', 'Catégorie mise à jour avec succès!');
-            return $this->redirectToRoute('list_category');
+            $em->flush();
+
+            $this->addFlash('success', 'Catégorie modifiée avec succès.');
+            return $this->redirectToRoute('list_category'); // Corrigez le nom de la route
         }
 
-        // Si le formulaire n'est pas valide, afficher les erreurs
-        $this->addFlash('error', 'Veuillez corriger les erreurs avant de soumettre.');
-
         return $this->render('categorie/editCat.html.twig', [
-            'category' => $category,
             'form' => $form->createView(),
+            'categorie' => $categorie
         ]);
     }
+
 
 
 
@@ -116,12 +152,35 @@ final class CategorieController extends AbstractController
             throw $this->createNotFoundException('Catégorie non trouvée');
         }
 
+        // Vérifier si la catégorie est utilisée par d'autres entités avant de la supprimer
+
+
         // Supprimer la catégorie
         $em->remove($category);
         $em->flush();
 
         // Rediriger vers la liste des catégories
+        $this->addFlash('success', 'Catégorie supprimée avec succès !');
         return $this->redirectToRoute('list_category');
     }
 
+    #[Route('/categorie/{id}', name: 'categorie_partenaires')]
+    public function partenairesParCategorie(int $id, PartenaireRepository $partenaireRepository, CategorieRepository $categorieRepository): Response
+    {
+        $categorie = $categorieRepository->find($id);
+        $categories = $categorieRepository->findAll();
+        // Vérifier si la catégorie existe
+        if (!$categorie) {
+            throw $this->createNotFoundException('La catégorie n\'existe pas.');
+        }
+
+        // Récupérer tous les partenaires liés à cette catégorie
+        $partenaires = $partenaireRepository->findBy(['id_categorie' => $id]);
+
+        return $this->render('categorie/partenaires.html.twig', [
+            'categorie' => $categorie,
+            'partenaires' => $partenaires,
+            'categories' => $categories,
+        ]);
+    }
 }

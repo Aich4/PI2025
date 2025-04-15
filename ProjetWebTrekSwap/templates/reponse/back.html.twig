@@ -1,0 +1,136 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Gestion des réponses{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Gestion des réponses</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Réponses</li>
+                </ol>
+            </nav>
+        </div>
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title">Liste des réponses</h5>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reclamationsModal">
+                                    <i class="bi bi-plus-circle"></i> Répondre à une réclamation
+                                </button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>Réclamation</th>
+                                            <th>Date</th>
+                                            <th>Contenu</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for reponse in reponses %}
+                                            <tr>
+                                                <td>{{ reponse.reclamation.descriptionRec }}</td>
+                                                <td>{{ reponse.dateRep ? reponse.dateRep|date('Y-m-d H:i:s') : '' }}</td>
+                                                <td>{{ reponse.contenu }}</td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-info btn-sm" title="Voir">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <form method="post" action="{{ path('app_reponse_delete', {'id': reponse.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');" style="display: inline;">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reponse.id) }}">
+                                                            <button class="btn btn-danger btn-sm" title="Supprimer">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="4" class="text-center">Aucune réponse trouvée</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal pour la liste des réclamations -->
+    <div class="modal fade" id="reclamationsModal" tabindex="-1" aria-labelledby="reclamationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reclamationsModalLabel">Sélectionner une réclamation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>État</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reclamation in reclamations %}
+                                    <tr>
+                                        <td>{{ reclamation.descriptionRec }}</td>
+                                        <td>{{ reclamation.dateRec ? reclamation.dateRec|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ reclamation.etatRec == 'En cours' ? 'warning' : (reclamation.etatRec == 'Résolue' ? 'success' : 'danger') }}">
+                                                {{ reclamation.etatRec }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('app_reponse_new', {'id': reclamation.idRec}) }}" class="btn btn-primary btn-sm">
+                                                <i class="bi bi-reply"></i> Répondre
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center">Aucune réclamation trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('backTemp/vendor/simple-datatables/simple-datatables.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const datatables = document.querySelectorAll('.datatable');
+            datatables.forEach(function(datatable) {
+                new simpleDatatables.DataTable(datatable);
+            });
+        });
+    </script>
+{% endblock %} 
