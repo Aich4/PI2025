@@ -1,119 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}Nos Missions{% endblock %}
 
 {% block welcome %}
-    <h1 class="text-center mt-4"s>Nos Missions</h1>
+    <h1 class="text-center mt-5 mb-4 fw-bold">🌟 Nos Missions</h1>
 {% endblock %}
 
 {% block body %}
     <style>
+        body {
+            background-color: #f4f6fa;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
         .mission-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
+            background: linear-gradient(135deg, #ffffff, #f1f3f8);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            border: 1px solid #e0e5ee;
         }
 
         .mission-card:hover {
-            transform: scale(1.02);
-        }
-
-        .mission-card-content {
-            padding: 20px;
-            background: white;
-            text-align: center;
-            border-radius: 15px;
+            transform: translateY(-5px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15);
         }
 
         .mission-card h5 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 18px;
         }
 
         .mission-card .details {
-            font-size: 14px;
-            color: #555;
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .btn-validate {
+            align-self: center;
+            background: linear-gradient(to right, #4a90e2, #357edd);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 12px rgba(53, 126, 221, 0.3);
+        }
+
+        .btn-validate:hover {
+            background: linear-gradient(to right, #357edd, #2663c6);
+            box-shadow: 0 6px 18px rgba(53, 126, 221, 0.4);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            font-size: 18px;
+            margin-top: 40px;
         }
     </style>
 
     <main class="container py-5">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="mission-grid">
             {% for mission in missions %}
-                <div class="col">
-                    <div class="mission-card">
-                        <div class="mission-card-content">
-                            <h5>{{ mission.description }}</h5>
-                            <p class="details">
-                                <strong>Statut:</strong> {{ mission.statut }}<br>
-                                <strong>Points:</strong> {{ mission.pointsRecompense }} pts<br>
-                                <strong>Récompense:</strong> {{ mission.idRecompense.nomRecompense ?? 'Aucune' }}
-                            </p>
-
-                            <button
-                                    class="btn btn-outline-primary mt-2 show-mission-details"
-                                    data-mission-id="{{ mission.id }}"
-                            >
-                                Voir plus
-                            </button>
-                        </div>
+                <div class="mission-card">
+                    <div>
+                        <h5>{{ mission.description }}</h5>
+                        <p class="details">
+                            <strong>Statut :</strong> {{ mission.statut }}<br>
+                            <strong>Points :</strong> {{ mission.pointsRecompense }} pts<br>
+                            <strong>Récompense :</strong> {{ mission.idRecompense.description ?? 'Aucune' }}
+                        </p>
                     </div>
+                    <form method="post" action="">
+                        <button type="submit" class="btn btn-validate" disabled>
+                            ✅ Valider
+                        </button>
+                    </form>
                 </div>
             {% else %}
-                <div class="col-12">
-                    <p class="text-center text-muted">Aucune mission disponible pour le moment.</p>
-                </div>
+                <p class="empty-message">Aucune mission disponible pour le moment.</p>
             {% endfor %}
         </div>
     </main>
-
-    <!-- Modal -->
-    <div class="modal fade" id="missionModal" tabindex="-1" aria-labelledby="missionModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="missionModalLabel">Détails de la mission</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                </div>
-                <div class="modal-body" id="missionModalBody">
-                    <p class="text-center">Chargement...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal = new bootstrap.Modal(document.getElementById('missionModal'));
-            const modalBody = document.getElementById('missionModalBody');
-
-            document.querySelectorAll('.show-mission-details').forEach(button => {
-                button.addEventListener('click', () => {
-                    const missionId = button.dataset.missionId;
-
-                    // Vérifier que missionId existe avant de l'utiliser
-                    if (!missionId) {
-                        console.error('Mission ID non trouvé');
-                        modalBody.innerHTML = '<p class="text-danger text-center">Erreur de chargement des détails. Mission ID manquant.</p>';
-                        return;
-                    }
-
-                    modalBody.innerHTML = '<p class="text-center">Chargement...</p>';
-
-                    fetch('/mission/details/' + missionId)
-                        .then(response => response.text())
-                        .then(html => {
-                            modalBody.innerHTML = html;
-                        })
-                        .catch(() => {
-                            modalBody.innerHTML = '<p class="text-danger text-center">Erreur de chargement des détails.</p>';
-                        });
-
-                    modal.show();
-                });
-            });
-        });
-    </script>
 {% endblock %}
