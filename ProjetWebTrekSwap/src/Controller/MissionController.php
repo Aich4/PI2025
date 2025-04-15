@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Mission;
 use App\Form\MissionType;
+use App\Repository\CategorieRepository;
 use App\Repository\MissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -44,7 +45,7 @@ final class MissionController extends AbstractController
         ]);
     }
 
-  /*  #[Route('/{id}', name: 'app_mission_show', methods: ['GET'])]
+    #[Route('/details/{id}', name: 'app_mission_show', methods: ['GET'])]
     public function show(?Mission $mission): Response
     {
         if (!$mission) {
@@ -54,7 +55,7 @@ final class MissionController extends AbstractController
         return $this->render('mission/show.html.twig', [
             'mission' => $mission
         ]);
-    }*/
+    }
 
     #[Route('/{id}/edit', name: 'app_mission_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
@@ -96,10 +97,12 @@ final class MissionController extends AbstractController
     }
 
     #[Route('/missions-front', name: 'app_mission_front', methods: ['GET'])]
-    public function frontShow(MissionRepository $repo): Response
+    public function frontShow(MissionRepository $repo, CategorieRepository $categorieRepository): Response
     {
+        $categories = $categorieRepository->findAll();
         return $this->render('mission/missionFront.html.twig', [
-            'missions' => $repo->findAll()
+            'missions' => $repo->findAll(),
+            'categories' => $categories,
         ]);
     }
 

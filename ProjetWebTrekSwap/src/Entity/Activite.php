@@ -16,7 +16,7 @@ class Activite
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\NotNull(message: "L'ID de la destination ne peut pas être nul.")]
+    #[Assert\NotNull(message: "tu dois choisir une destination")]
     private ?int $id_destination = 0;
 
     #[ORM\Column(length: 255)]
