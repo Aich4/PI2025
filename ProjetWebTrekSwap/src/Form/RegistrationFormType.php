@@ -36,6 +36,14 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Votre email'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'L\'adresse email est requise'
+                    ]),
+                    new Email([
+                        'message' => 'L\'adresse email "{{ value }}" n\'est pas valide'
+                    ])
                 ]
             ])
             ->add('plainPassword', PasswordType::class, [
