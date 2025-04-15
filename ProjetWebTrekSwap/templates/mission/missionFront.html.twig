@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Missions{% endblock %}
+
+{% block welcome %}
+    <h1 class="text-center mt-4">Nos Missions</h1>
+{% endblock %}
+
+{% block body %}
+    <style>
+        .mission-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mission-card:hover {
+            transform: scale(1.02);
+        }
+
+        .mission-card-content {
+            padding: 20px;
+            background: white;
+            text-align: center;
+            border-radius: 15px;
+        }
+
+        .mission-card h5 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .mission-card .details {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+
+    <main class="container py-5">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for mission in missions %}
+                <div class="col">
+                    <div class="mission-card">
+                        <div class="mission-card-content">
+                            <h5>{{ mission.description }}</h5>
+                            <p class="details">
+                                <strong>Statut:</strong> {{ mission.statut }}<br>
+                                <strong>Points:</strong> {{ mission.pointsRecompense }} pts<br>
+                                <strong>Récompense:</strong> {{ mission.idRecompense.nomRecompense ?? 'Aucune' }}
+                            </p>
+
+                            <button
+                                    class="btn btn-outline-primary mt-2 show-mission-details"
+                                    data-mission-id="{{ mission.id }}"
+                            >
+                                Voir plus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center text-muted">Aucune mission disponible pour le moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="missionModal" tabindex="-1" aria-labelledby="missionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="missionModalLabel">Détails de la mission</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body" id="missionModalBody">
+                    <p class="text-center">Chargement...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = new bootstrap.Modal(document.getElementById('missionModal'));
+            const modalBody = document.getElementById('missionModalBody');
+
+            document.querySelectorAll('.show-mission-details').forEach(button => {
+                button.addEventListener('click', () => {
+                    const missionId = button.dataset.missionId;
+
+                    // Vérifier que missionId existe avant de l'utiliser
+                    if (!missionId) {
+                        console.error('Mission ID non trouvé');
+                        modalBody.innerHTML = '<p class="text-danger text-center">Erreur de chargement des détails. Mission ID manquant.</p>';
+                        return;
+                    }
+
+                    modalBody.innerHTML = '<p class="text-center">Chargement...</p>';
+
+                    fetch('/mission/' + missionId)
+                        .then(response => response.text())
+                        .then(html => {
+                            modalBody.innerHTML = html;
+                        })
+                        .catch(() => {
+                            modalBody.innerHTML = '<p class="text-danger text-center">Erreur de chargement des détails.</p>';
+                        });
+
+                    modal.show();
+                });
+            });
+        });
+    </script>
+{% endblock %}
