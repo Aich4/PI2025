@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Form\ProfileFormType;
+use App\Repository\AbonnementRepository;
+use App\Repository\PackRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +20,9 @@ class ProfileController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        AbonnementRepository $abonnementRepository,
+        PackRepository $packRepository
     ): Response {
         $user = $this->getUser();
         if (!$user) {
@@ -55,12 +59,17 @@ class ProfileController extends AbstractController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'Profile updated successfully!');
+            $this->addFlash('success', 'Profil mis à jour avec succès !');
             return $this->redirectToRoute('app_profile');
         }
 
+        // Récupérer les abonnements de l'utilisateur
+        $abonnements = $abonnementRepository->findBy(['id_utilisateur' => $user->getId()]);
+
         return $this->render('profile/edit.html.twig', [
             'profileForm' => $form->createView(),
+            'abonnements' => $abonnements,
+            'packRepository' => $packRepository,
         ]);
     }
 
@@ -74,7 +83,7 @@ class ProfileController extends AbstractController
 
         // Prevent admin account deletion
         if ($user->getTypeUser() === 'Admin') {
-            $this->addFlash('error', 'Admin accounts cannot be deleted.');
+            $this->addFlash('error', 'Les comptes administrateurs ne peuvent pas être supprimés.');
             return $this->redirectToRoute('app_profile');
         }
 
@@ -96,11 +105,11 @@ class ProfileController extends AbstractController
             $entityManager->remove($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Your account has been successfully deleted.');
+            $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
             return $this->redirectToRoute('app_login');
         }
 
-        $this->addFlash('error', 'Invalid token.');
+        $this->addFlash('error', 'Token invalide.');
         return $this->redirectToRoute('app_profile');
     }
 } 

@@ -28,6 +28,28 @@
                         <h3>{{ app.user.typeUser }}</h3>
                     </div>
                 </div>
+
+                <!-- Section Abonnements -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Mes Abonnements</h5>
+                        {% if abonnements is defined and abonnements|length > 0 %}
+                            {% for abonnement in abonnements %}
+                                <div class="abonnement-item mb-3 p-3 border rounded">
+                                    <h6 class="text-primary">Pack : {{ packRepository.getNomById(abonnement.getIdPack()) }}</h6>
+                                    <p class="mb-1"><small>Souscription : {{ abonnement.getDateSouscription()|date('d/m/Y') }}</small></p>
+                                    <p class="mb-1"><small>Expiration : {{ abonnement.getDateExpiration()|date('d/m/Y') }}</small></p>
+                                    <span class="badge {% if abonnement.getStatut() == 'actif' %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ abonnement.getStatut()|capitalize }}
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">Aucun abonnement actif</p>
+                            <a href="{{ path('pricing') }}" class="btn btn-primary btn-sm">Découvrir nos offres</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
 
             <div class="col-xl-8">
