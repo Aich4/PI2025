@@ -3,11 +3,11 @@
 {% block title %}Inscription - TrekSwap{% endblock %}
 
 {% block body %}
-<section class="vh-100" style="padding-top: 100px;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+<section class="vh-70">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card shadow-lg" style="border-radius: 1rem;">
+                <div class="card shadow-lg" style="border-radius: 1rem;" id="registration-form">
                     <div class="card-body p-5 text-center">
                         {% for label, messages in app.flashes %}
                             {% for message in messages %}
@@ -21,40 +21,54 @@
                         {{ form_start(registrationForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
                             <h3 class="mb-5">Créer un compte</h3>
 
-                            <div class="form-outline mb-4">
-                                {{ form_widget(registrationForm.nom) }}
-                                <div class="invalid-feedback {% if not registrationForm.nom.vars.valid %}d-block{% endif %}">
-                                    {{ form_errors(registrationForm.nom) }}
-                                </div>
+                            <div class="form-group mb-3">
+                                {{ form_label(registrationForm.nom, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control', 'required': true}}) }}
+                                {% if registrationForm.nom.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form_errors(registrationForm.nom) }}
+                                    </div>
+                                {% endif %}
                             </div>
 
-                            <div class="form-outline mb-4">
-                                {{ form_widget(registrationForm.prenom) }}
-                                <div class="invalid-feedback {% if not registrationForm.prenom.vars.valid %}d-block{% endif %}">
-                                    {{ form_errors(registrationForm.prenom) }}
-                                </div>
+                            <div class="form-group mb-3">
+                                {{ form_label(registrationForm.prenom, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control', 'required': true}}) }}
+                                {% if registrationForm.prenom.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form_errors(registrationForm.prenom) }}
+                                    </div>
+                                {% endif %}
                             </div>
 
-                            <div class="form-outline mb-4">
-                                {{ form_widget(registrationForm.email) }}
-                                <div class="invalid-feedback {% if not registrationForm.email.vars.valid %}d-block{% endif %}">
-                                    {{ form_errors(registrationForm.email) }}
-                                </div>
+                            <div class="form-group mb-3">
+                                {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'required': true}}) }}
+                                {% if registrationForm.email.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form_errors(registrationForm.email) }}
+                                    </div>
+                                {% endif %}
                             </div>
 
-                            <div class="form-outline mb-4">
-                                {{ form_widget(registrationForm.plainPassword) }}
-                                <div class="invalid-feedback {% if not registrationForm.plainPassword.vars.valid %}d-block{% endif %}">
-                                    {{ form_errors(registrationForm.plainPassword) }}
-                                </div>
+                            <div class="form-group mb-3">
+                                {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'required': true}}) }}
+                                {% if registrationForm.plainPassword.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form_errors(registrationForm.plainPassword) }}
+                                    </div>
+                                {% endif %}
                             </div>
 
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Photo de profil (Optionnel)</label>
-                                {{ form_widget(registrationForm.photo_profil) }}
-                                <div class="invalid-feedback {% if not registrationForm.photo_profil.vars.valid %}d-block{% endif %}">
-                                    {{ form_errors(registrationForm.photo_profil) }}
-                                </div>
+                            <div class="form-group mb-4">
+                                {{ form_label(registrationForm.photo_profil, 'Photo de profil (Optionnel)', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(registrationForm.photo_profil, {'attr': {'class': 'form-control'}}) }}
+                                {% if registrationForm.photo_profil.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form_errors(registrationForm.photo_profil) }}
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <button class="btn btn-primary btn-lg btn-block" type="submit">S'inscrire</button>
@@ -71,4 +85,39 @@
         </div>
     </div>
 </section>
+
+<script>
+// Fonction pour faire défiler la page
+function scrollToForm() {
+    const formElement = document.getElementById('registration-form');
+    if (formElement) {
+        const offset = 100; // Ajustez cette valeur selon votre barre de navigation
+        const elementPosition = formElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Exécuter après un court délai pour s'assurer que la page est chargée
+setTimeout(scrollToForm, 500);
+
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+</script>
 {% endblock %} 

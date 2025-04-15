@@ -6,10 +6,12 @@ use App\Entity\Mission;
 use App\Form\MissionType;
 use App\Repository\MissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 #[Route('/mission')]
 final class MissionController extends AbstractController
@@ -42,13 +44,17 @@ final class MissionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_mission_show', methods: ['GET'])]
-    public function show(Mission $mission): Response
+  /*  #[Route('/{id}', name: 'app_mission_show', methods: ['GET'])]
+    public function show(?Mission $mission): Response
     {
+        if (!$mission) {
+            throw $this->createNotFoundException('La mission demandée est introuvable.');
+        }
+
         return $this->render('mission/show.html.twig', [
-            'mission' => $mission,
+            'mission' => $mission
         ]);
-    }
+    }*/
 
     #[Route('/{id}/edit', name: 'app_mission_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
@@ -56,11 +62,15 @@ final class MissionController extends AbstractController
         $form = $this->createForm(MissionType::class, $mission);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted() && !$form->isValid()) {
+            // Affiche les erreurs
+            $errors = $form->getErrors(true);
+            foreach ($errors as $error) {
+                // Afficher ou enregistrer les erreurs pour débogage
+                dump($error->getMessage());
+            }
         }
+
 
         return $this->render('mission/edit.html.twig', [
             'mission' => $mission,
@@ -68,14 +78,43 @@ final class MissionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_mission_delete', methods: ['POST'])]
-    public function delete(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
+    #[Route('/mission/delete/{id}', name: 'app_mission_delete', methods: ['GET'])]
+    public function delete(int $id, MissionRepository $missionRepository, ManagerRegistry $managerRegistry): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$mission->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($mission);
-            $entityManager->flush();
+        $em = $managerRegistry->getManager();
+
+        $mission = $missionRepository->find($id);
+
+        if (!$mission) {
+            throw $this->createNotFoundException('Mission non trouvée');
         }
 
-        return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
+        $em->remove($mission);
+        $em->flush();
+
+        return $this->redirectToRoute('app_mission_index');
     }
+
+    #[Route('/missions-front', name: 'app_mission_front', methods: ['GET'])]
+    public function frontShow(MissionRepository $repo): Response
+    {
+        return $this->render('mission/missionFront.html.twig', [
+            'missions' => $repo->findAll()
+        ]);
+    }
+
+    #[Route('/mission/{id}', name: 'app_mission_details', methods: ['GET'])]
+    public function details(?Mission $mission): Response
+    {
+        if (!$mission) {
+            throw $this->createNotFoundException('La mission demandée est introuvable.');
+        }
+
+        return $this->render('mission/show.html.twig', [
+            'mission' => $mission
+        ]);
+    }
+
+
+
 }
