@@ -64,13 +64,11 @@ final class MissionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && !$form->isValid()) {
-            // Affiche les erreurs
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                // Afficher ou enregistrer les erreurs pour débogage
-                dump($error->getMessage());
+            $entityManager->flush();
+            return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
+
             }
-        }
+
 
 
         return $this->render('mission/edit.html.twig', [

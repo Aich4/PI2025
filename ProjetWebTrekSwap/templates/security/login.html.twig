@@ -9,7 +9,7 @@
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card shadow-lg" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
-                        <form method="post" class="needs-validation" novalidate>
+                        <form method="post" class="needs-validation" novalidate id="loginForm">
                             <h3 class="mb-5">Connexion</h3>
 
                             {% if error %}
@@ -24,17 +24,21 @@
 
                             <div class="form-outline mb-4">
                                 <input type="email" value="{{ last_username }}" name="email" id="inputEmail" 
-                                    class="form-control" placeholder="Votre email" required autofocus>
+                                    class="form-control" placeholder="Votre email" 
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                    required autofocus>
                                 <div class="invalid-feedback">
-                                    Veuillez saisir une adresse email valide
+                                    Veuillez saisir une adresse email valide (exemple: nom@domaine.com)
                                 </div>
                             </div>
 
                             <div class="form-outline mb-4">
                                 <input type="password" name="password" id="inputPassword" 
-                                    class="form-control" placeholder="Votre mot de passe" required>
+                                    class="form-control" placeholder="Votre mot de passe" 
+                                    minlength="8"
+                                    required>
                                 <div class="invalid-feedback">
-                                    Veuillez saisir votre mot de passe
+                                    Le mot de passe doit contenir au moins 8 caractères
                                 </div>
                             </div>
 
@@ -67,16 +71,61 @@
 // Validation des formulaires Bootstrap
 (function () {
     'use strict'
-    var forms = document.querySelectorAll('.needs-validation')
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
+    
+    // Récupération du formulaire
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('inputEmail');
+    const passwordInput = document.getElementById('inputPassword');
+
+    // Fonction de validation personnalisée
+    function validateForm(event) {
+        let isValid = true;
+
+        // Validation de l'email
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(emailInput.value)) {
+            emailInput.setCustomValidity('Veuillez entrer une adresse email valide');
+            isValid = false;
+        } else {
+            emailInput.setCustomValidity('');
+        }
+
+        // Validation du mot de passe
+        if (passwordInput.value.length < 8) {
+            passwordInput.setCustomValidity('Le mot de passe doit contenir au moins 8 caractères');
+            isValid = false;
+        } else {
+            passwordInput.setCustomValidity('');
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        loginForm.classList.add('was-validated');
+    }
+
+    // Ajout des écouteurs d'événements
+    loginForm.addEventListener('submit', validateForm);
+
+    // Validation en temps réel
+    emailInput.addEventListener('input', function() {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(this.value)) {
+            this.setCustomValidity('Veuillez entrer une adresse email valide');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    passwordInput.addEventListener('input', function() {
+        if (this.value.length < 8) {
+            this.setCustomValidity('Le mot de passe doit contenir au moins 8 caractères');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
 })()
 </script>
 {% endblock %} 
