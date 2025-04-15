@@ -30,6 +30,7 @@
                 </div>
 
                 <!-- Section Abonnements -->
+                {% if app.user.typeUser != 'Admin' %}
                 <div class="card mt-3">
                     <div class="card-body">
                         <h5 class="card-title">Mes Abonnements</h5>
@@ -50,6 +51,7 @@
                         {% endif %}
                     </div>
                 </div>
+                {% endif %}
             </div>
 
             <div class="col-xl-8">
