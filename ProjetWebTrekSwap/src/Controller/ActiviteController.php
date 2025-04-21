@@ -7,12 +7,14 @@ use App\Form\ActiviteType;
 use App\Repository\ActiviteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Destination;
 use App\Repository\DestinationRepository;
 use App\Controller\SecurityController;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 
 final class ActiviteController extends AbstractController
@@ -29,6 +31,14 @@ final class ActiviteController extends AbstractController
         return $this->render('activite/index.html.twig', [
             'controller_name' => 'ActiviteController',
         ]);
+    }
+    #[Route('/activite/search', name: 'search_activite', methods: ['GET'])]
+    public function search(Request $request, ActiviteRepository $repo, NormalizerInterface $normalizer): JsonResponse
+    {
+        $val = $request->get('searchValue');
+        $activites = $repo->findActiviteByNom($val);
+        $json = $normalizer->normalize($activites, null, ['groups' => 'activites']);
+        return new JsonResponse($json);
     }
 
     #[Route('/activite/show', name: 'list_activite', methods: ['GET'])]
