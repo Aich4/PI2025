@@ -63,13 +63,10 @@ final class MissionController extends AbstractController
         $form = $this->createForm(MissionType::class, $mission);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && !$form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             return $this->redirectToRoute('app_mission_index', [], Response::HTTP_SEE_OTHER);
-
-            }
-
-
+        }
 
         return $this->render('mission/edit.html.twig', [
             'mission' => $mission,
