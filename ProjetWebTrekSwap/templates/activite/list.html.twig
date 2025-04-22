@@ -9,7 +9,11 @@
 
             <!-- Barre de recherche -->
             <div class="mb-3">
-                <input type="text" id="search-input" class="form-control" placeholder="Rechercher une activité...">
+                <input type="text" id="search-activite" class="form-control" placeholder="Rechercher une activité...">
+                <div id="loader" style="display:none;" class="text-center mt-2">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+
             </div>
 
             <!-- Card contenant le tableau -->
@@ -17,62 +21,47 @@
                 <div class="card-body">
                     {% if activites|length > 0 %}
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-striped text-center align-middle custom-table-bg">
+                            <table class="table table-hover table-bordered table-striped text-center align-middle custom-table-bg" id="activite-table">
                                 <thead class="bg-info text-white">
                                 <tr>
-                                    <th class="custom-th">ID</th>
-                                    <th class="custom-th">Nom</th>
-                                    <th class="custom-th">Date</th>
-                                    <th class="custom-th">Heure</th>
-                                    <th class="custom-th">Statut</th>
-                                    <th class="custom-th">Destination</th>
-                                    <th class="custom-th">Actions</th>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Date</th>
+                                    <th>Heure</th>
+                                    <th>Statut</th>
+                                    <th>Nom Destination</th>
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="all-activites">
                                 {% for activite in activites %}
                                     <tr>
-                                        <td class="text-muted">{{ activite.id }}</td>
+                                        <td>{{ activite.id }}</td>
                                         <td>{{ activite.nomActivite }}</td>
                                         <td>{{ activite.date ? activite.date|date('Y-m-d') : 'N/A' }}</td>
                                         <td>{{ activite.heure }}</td>
                                         <td>
-                                            {% set statut = activite.statut %}
-                                            <span class="badge
-                                                {% if statut == 'active' %}bg-success
-                                                {% elseif statut == 'inactive' %}bg-danger
-                                                {% elseif statut == 'completed' %}bg-primary
-                                                {% else %}bg-secondary
-                                                {% endif %}
-                                            text-uppercase">
-                                                {{ statut }}
-                                            </span>
+                                        <span class="badge text-uppercase {% if activite.statut == 'active' %}bg-success{% elseif activite.statut == 'inactive' %}bg-danger{% elseif activite.statut == 'completed' %}bg-primary{% else %}bg-secondary{% endif %}">
+                                            {{ activite.statut }}
+                                        </span>
                                         </td>
-                                        <td>
-                                            {{ activite.idDestination ? 'Destination #' ~ activite.idDestination : 'N/A' }}
-                                        </td>
+                                        <td>{{ activite.idDestination ? activite.idDestination.nomDestination : 'N/A' }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ path('edit_activite', {'id': activite.id}) }}" class="btn btn-outline-success btn-sm" title="Modifier">
-                                                    <i class="bi bi-pencil-fill"></i>
-                                                </a>
-                                                <a href="{{ path('delete_activite', {'id': activite.id}) }}" class="btn btn-outline-danger btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette activité ?');">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </a>
+                                                <a href="{{ path('edit_activite', {'id': activite.id}) }}" class="btn btn-outline-success btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                                                <a href="{{ path('delete_activite', {'id': activite.id}) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette activité ?');"><i class="bi bi-trash-fill"></i></a>
                                             </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
+                                <tbody id="search-result"></tbody>
                             </table>
                         </div>
                     {% else %}
-                        <div class="alert alert-info mt-4 text-center">
-                            Aucune activité trouvée.
-                        </div>
+                        <div class="alert alert-info text-center">Aucune activité trouvée.</div>
                     {% endif %}
 
-                    <!-- Bouton pour ajouter -->
                     <div class="text-center mt-4">
                         <a href="{{ path('add_activite') }}" class="btn btn-success px-4 py-2">
                             <i class="bi bi-plus-circle-dotted"></i> Ajouter une Activité
@@ -82,39 +71,70 @@
             </div>
         </div>
     </main>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        document.getElementById('search-input').addEventListener('input', function () {
-            const value = this.value.toLowerCase();
-            document.querySelectorAll('tbody tr').forEach(row => {
-                row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
+        $(document).ready(function () {
+            let timer;
+
+            $('#search-activite').keyup(function () {
+                clearTimeout(timer); // reset timer à chaque frappe
+
+                let searchValue = $(this).val();
+
+                timer = setTimeout(function () {
+                    if (searchValue.trim() === '') {
+                        $('#all-activites').show();
+                        $('#search-result').empty();
+                        return;
+                    }
+
+                    // loader facultatif
+                    $('#loader').show();
+
+                    $.ajax({
+                        url: "{{ path('search_activite') }}",
+                        type: 'GET',
+                        data: { searchValue: searchValue },
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#loader').hide();
+                            $('#search-result').empty();
+                            $('#all-activites').hide();
+
+                            if (data.length === 0) {
+                                $('#search-result').append('<tr><td colspan="7">Aucune activité trouvée.</td></tr>');
+                            } else {
+                                data.forEach(function (a) {
+                                    let row = `<tr>
+                                    <td>${a.id}</td>
+                                    <td>${a.nom_activite}</td>
+                                    <td>${a.date ? a.date.split('T')[0] : 'N/A'}</td>
+                                    <td>${a.heure}</td>
+                                    <td><span class="badge text-uppercase">${a.statut}</span></td>
+                                    <td>N/A</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="/activite/edit/${a.id}" class="btn btn-outline-success btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                                            <a href="/activite/delete/${a.id}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr ?');"><i class="bi bi-trash-fill"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                                    $('#search-result').append(row);
+                                });
+                            }
+                        },
+                        error: function () {
+                            $('#loader').hide();
+                            alert('Erreur AJAX');
+                        }
+                    });
+                }, 300); // délai de 300 ms
             });
         });
     </script>
+
+
 {% endblock %}
 
-{% block stylesheets %}
-    <style>
-        .custom-bg-light {
-            background-color: #e9ecef !important;
-        }
 
-        .custom-table-bg {
-            background-color: #f4f6f9 !important;
-        }
 
-        .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .custom-th {
-            background-color: #cce5ff;
-            color: #0056b3;
-            font-weight: bold;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #f1f1f1 !important;
-        }
-    </style>
-{% endblock %}

@@ -27,7 +27,7 @@ class Destination
     private ?string $image_destination = null;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "La latitude ne peut pas être nulle.")]
+    #[Assert\NotBlank(message: "La latitude ne peut pas être nulle.")]
     #[Assert\Range(
         min: -90,
         max: 90,
@@ -36,7 +36,7 @@ class Destination
     private ?float $latitude = null;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "La longitude ne peut pas être nulle.")]
+    #[Assert\NotBlank(message: "La longitude ne peut pas être nulle.")]
     #[Assert\Range(
         min: -180,
         max: 180,
@@ -45,7 +45,7 @@ class Destination
     private ?float $longitude = null;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "La température ne peut pas être nulle.")]
+    #[Assert\NotBlank(message: "La température ne peut pas être nulle.")]
     #[Assert\Range(
         min: -100,
         max: 100,
@@ -54,7 +54,7 @@ class Destination
     private ?float $temperature = null;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "Le taux ne peut pas être nul.")]
+    #[Assert\NotBlank(message: "Le taux ne peut pas être nul.")]
     #[Assert\Range(
         min: 0,
         max: 5,
@@ -72,7 +72,7 @@ class Destination
         return $this->nom_destination;
     }
 
-    public function setNomDestination(string $nom_destination): static
+    public function setNomDestination(?string $nom_destination): static
     {
         $this->nom_destination = $nom_destination;
 
@@ -84,7 +84,7 @@ class Destination
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -108,7 +108,7 @@ class Destination
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude): static
+    public function setLatitude(?float $latitude): static
     {
         $this->latitude = $latitude;
 
@@ -120,7 +120,7 @@ class Destination
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude): static
+    public function setLongitude(?float $longitude): static
     {
         $this->longitude = $longitude;
 
@@ -132,7 +132,7 @@ class Destination
         return $this->temperature;
     }
 
-    public function setTemperature(float $temperature): static
+    public function setTemperature(?float $temperature): static
     {
         $this->temperature = $temperature;
 
@@ -144,7 +144,7 @@ class Destination
         return $this->rate;
     }
 
-    public function setRate(float $rate): static
+    public function setRate(?float $rate): static
     {
         $this->rate = $rate;
 

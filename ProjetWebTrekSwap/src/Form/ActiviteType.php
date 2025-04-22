@@ -3,6 +3,7 @@ namespace App\Form;
 
 use App\Entity\Activite;
 use App\Entity\Destination;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -18,11 +19,12 @@ class ActiviteType extends AbstractType
         $destinations = $options['destinations'];  // Get the destinations passed from the controller
 
         $builder
-            ->add('id_destination', ChoiceType::class, [
-                'choices' => $this->getDestinationChoices($destinations),
-                'placeholder' => 'Select a Destination', // Add a placeholder option
-                'label' => 'Destination', // Add a label for the dropdown
-                'attr' => ['class' => 'form-control'], // Styling the field
+            ->add('id_destination', EntityType::class, [
+                'class' => Destination::class,
+                'choice_label' => 'nomDestination',
+                'label' => 'Destination',
+                'placeholder' => 'Choisir une destination',
+                'required' => true,
             ])
             ->add('nom_activite', null, [
                 'label' => 'Nom de l\'Activité', // Custom label
@@ -69,6 +71,7 @@ class ActiviteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Activite::class,
+            'attr' => ['novalidate' => 'novalidate'],
             'destinations' => [],  // Define the 'destinations' option
         ]);
     }

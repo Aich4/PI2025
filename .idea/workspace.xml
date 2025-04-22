@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -163,18 +161,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;GestionPartenaire&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "gestionDestinationEtActivite",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -192,7 +190,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ff5aebf2-5068-479c-8319-13919cc29359" name="Changes" comment="" />
+      <changelist id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="" />
       <created>1743777849292</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -208,10 +206,15 @@
       <workItem from="1744533868622" duration="367000" />
       <workItem from="1744534739583" duration="9123000" />
       <workItem from="1744544684138" duration="4086000" />
-      <workItem from="1744549109347" duration="420000" />
-      <workItem from="1744698284531" duration="5807000" />
-      <workItem from="1745246391139" duration="148000" />
-      <workItem from="1745246577802" duration="219000" />
+      <workItem from="1744654574740" duration="1983000" />
+      <workItem from="1744051983504" duration="7295000" />
+      <workItem from="1744275962291" duration="5445000" />
+      <workItem from="1744562047237" duration="6855000" />
+      <workItem from="1744666003278" duration="5317000" />
+      <workItem from="1744676720620" duration="1153000" />
+      <workItem from="1744709791227" duration="1677000" />
+      <workItem from="1744717806386" duration="1732000" />
+      <workItem from="1745246683620" duration="6000" />
     </task>
     <servers />
   </component>

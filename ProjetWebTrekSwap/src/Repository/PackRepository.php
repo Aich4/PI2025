@@ -24,6 +24,31 @@ class PackRepository extends ServiceEntityRepository
         ->getSingleColumnResult(); 
 }
 
+public function getPriceById(int $id): ?float
+{
+    $pack = $this->find($id);
+    return $pack ? $pack->getPrix() : null;
+}
+public function getNomById(int $id): ?string
+{
+    $pack = $this->find($id);
+    return $pack ? $pack->getNomPack() : null;
+}
+public function getDescriptionById(int $id): ?string
+{
+    $pack = $this->find($id);
+    return $pack ? $pack->getDescription() : null;
+}
+public function getAvantagesById(int $id): ?string
+{
+    $pack = $this->find($id);
+    return $pack ? $pack->getAvantages() : null;
+}
+public function getDureeById(int $id): ?string
+{
+    $pack = $this->find($id);
+    return $pack ? $pack->getDuree() : null;
+}
     //    /**
     //     * @return Pack[] Returns an array of Pack objects
     //     */

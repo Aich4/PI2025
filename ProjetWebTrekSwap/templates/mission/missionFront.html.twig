@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Missions{% endblock %}
+
+{% block welcome %}
+    <h1 class="text-center mt-5 mb-4 fw-bold">🌟 Nos Missions</h1>
+{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            background-color: #f4f6fa;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .mission-card {
+            background: linear-gradient(135deg, #ffffff, #f1f3f8);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            border: 1px solid #e0e5ee;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        .mission-card h5 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 18px;
+        }
+
+        .mission-card .details {
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .btn-validate {
+            align-self: center;
+            background: linear-gradient(to right, #4a90e2, #357edd);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 12px rgba(53, 126, 221, 0.3);
+        }
+
+        .btn-validate:hover {
+            background: linear-gradient(to right, #357edd, #2663c6);
+            box-shadow: 0 6px 18px rgba(53, 126, 221, 0.4);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            font-size: 18px;
+            margin-top: 40px;
+        }
+    </style>
+
+    <main class="container py-5">
+        <div class="mission-grid">
+            {% for mission in missions %}
+                <div class="mission-card">
+                    <div>
+                        <h5>{{ mission.description }}</h5>
+                        <p class="details">
+                            <strong>Statut :</strong> {{ mission.statut }}<br>
+                            <strong>Points :</strong> {{ mission.pointsRecompense }} pts<br>
+                            <strong>Récompense :</strong> {{ mission.idRecompense.description ?? 'Aucune' }}
+                        </p>
+                    </div>
+                    <form method="post" action="">
+                        <button type="submit" class="btn btn-validate" disabled>
+                            ✅ Valider
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <p class="empty-message">Aucune mission disponible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}
