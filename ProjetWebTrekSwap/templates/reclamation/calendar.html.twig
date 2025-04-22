@@ -1,0 +1,107 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Calendrier des Réclamations{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/main.min.css' rel='stylesheet' />
+    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/main.min.css' rel='stylesheet' />
+    <style>
+        .fc-event {
+            cursor: pointer;
+        }
+        .fc-event-title {
+            white-space: normal;
+            overflow: visible;
+        }
+        .event-tooltip {
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            max-width: 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Calendrier des Réclamations</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('reclamationBack') }}">Réclamations</a></li>
+                    <li class="breadcrumb-item active">Calendrier</li>
+                </ol>
+            </nav>
+        </div>
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Vue Calendrier</h5>
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/main.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var tooltip = null;
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'fr',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay'
+                },
+                events: "{{ path('app_reclamation_calendar_events') }}",
+                eventDidMount: function(info) {
+                    info.el.addEventListener('mouseover', function() {
+                        if (tooltip) {
+                            tooltip.remove();
+                        }
+                        tooltip = document.createElement('div');
+                        tooltip.className = 'event-tooltip';
+                        tooltip.innerHTML = `
+                            <strong>Description:</strong> ${info.event.extendedProps.description}<br>
+                            <strong>Type:</strong> ${info.event.extendedProps.type}<br>
+                            <strong>État:</strong> ${info.event.extendedProps.etat}
+                        `;
+                        document.body.appendChild(tooltip);
+                        
+                        const rect = info.el.getBoundingClientRect();
+                        tooltip.style.top = rect.bottom + window.scrollY + 5 + 'px';
+                        tooltip.style.left = rect.left + window.scrollX + 'px';
+                    });
+
+                    info.el.addEventListener('mouseout', function() {
+                        if (tooltip) {
+                            tooltip.remove();
+                            tooltip = null;
+                        }
+                    });
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+{% endblock %} 
