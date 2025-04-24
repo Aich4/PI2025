@@ -6,6 +6,7 @@
     {{ parent() }}
     <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/main.min.css' rel='stylesheet' />
     <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/main.min.css' rel='stylesheet' />
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.min.css" rel="stylesheet">
     <style>
         .fc {
             max-width: 100%;
@@ -32,6 +33,12 @@
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             max-width: 300px;
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            margin-bottom: 20px;
         }
         #calendar {
             background: white;
@@ -76,14 +83,8 @@
                     <div class="card info-card">
                         <div class="card-body">
                             <h5 class="card-title">Total Réclamations</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-list-check"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>{{ stats.total }}</h6>
-                                    <span class="text-muted small pt-1">Ce mois: {{ stats.moisActuel }}</span>
-                                </div>
+                            <div class="chart-container">
+                                <canvas id="totalChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -92,49 +93,20 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="card info-card">
                         <div class="card-body">
-                            <h5 class="card-title">En cours</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-warning">
-                                    <i class="bi bi-hourglass-split text-white"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>{{ stats.enCours }}</h6>
-                                    <span class="text-warning small pt-1">{{ stats.total > 0 ? (stats.enCours / stats.total * 100)|round : 0 }}% du total</span>
-                                </div>
+                            <h5 class="card-title">État des Réclamations</h5>
+                            <div class="chart-container">
+                                <canvas id="etatChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6">
-                    <div class="card info-card">
+                <div class="col-lg-6">
+                    <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Résolues</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-success">
-                                    <i class="bi bi-check-circle text-white"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>{{ stats.resolues }}</h6>
-                                    <span class="text-success small pt-1">{{ stats.total > 0 ? (stats.resolues / stats.total * 100)|round : 0 }}% du total</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="card info-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Rejetées</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-danger">
-                                    <i class="bi bi-x-circle text-white"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>{{ stats.rejetees }}</h6>
-                                    <span class="text-danger small pt-1">{{ stats.total > 0 ? (stats.rejetees / stats.total * 100)|round : 0 }}% du total</span>
-                                </div>
+                            <h5 class="card-title">Réclamations par type</h5>
+                            <div class="chart-container">
+                                <canvas id="typeChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -142,90 +114,12 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Réclamations par type</h5>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Type</th>
-                                            <th>Nombre</th>
-                                            <th>Pourcentage</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% if stats.total > 0 %}
-                                            {% for type, nombre in stats.parType %}
-                                                <tr>
-                                                    <td>{{ type }}</td>
-                                                    <td>{{ nombre }}</td>
-                                                    <td>{{ (nombre / stats.total * 100)|round }}%</td>
-                                                </tr>
-                                            {% endfor %}
-                                        {% else %}
-                                            <tr>
-                                                <td colspan="3" class="text-center">Aucune donnée disponible</td>
-                                            </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Évolution mensuelle</h5>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Mois</th>
-                                            <th>Nombre</th>
-                                            <th>Évolution</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% if stats.parMois|length > 0 %}
-                                            {% set previousValue = null %}
-                                            {% for mois, nombre in stats.parMois %}
-                                                <tr>
-                                                    <td>{{ mois }}</td>
-                                                    <td>{{ nombre }}</td>
-                                                    <td>
-                                                        {% if previousValue != 0 %}
-                                                            {% set evolution = ((nombre - previousValue) / previousValue * 100)|round(2) %}
-                                                            {% if evolution > 0 %}
-                                                                <span class="text-success">+{{ evolution }}%</span>
-                                                            {% elseif evolution < 0 %}
-                                                                <span class="text-danger">{{ evolution }}%</span>
-                                                            {% else %}
-                                                                <span class="text-muted">{{ evolution }}%</span>
-                                                            {% endif %}
-                                                        {% else %}
-                                                            {% if nombre > 0 %}
-                                                                <span class="text-success">+∞%</span>
-                                                            {% elseif nombre < 0 %}
-                                                                <span class="text-danger">-∞%</span>
-                                                            {% else %}
-                                                                <span class="text-muted">0%</span>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                                {% set previousValue = nombre %}
-                                            {% endfor %}
-                                        {% else %}
-                                            <tr>
-                                                <td colspan="3" class="text-center">Aucune donnée disponible</td>
-                                            </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
+                            <div class="chart-container">
+                                <canvas id="evolutionChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -399,9 +293,158 @@
     {{ parent() }}
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/main.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/main.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialisation du calendrier
+            // Total Réclamations Chart
+            new Chart(document.getElementById('totalChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ce mois', 'Autres mois'],
+                    datasets: [{
+                        data: [{{ stats.moisActuel }}, {{ stats.total - stats.moisActuel }}],
+                        backgroundColor: ['#4e73df', '#1cc88a']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // État des Réclamations Chart
+            new Chart(document.getElementById('etatChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['En cours', 'Résolues', 'Rejetées'],
+                    datasets: [{
+                        data: [{{ stats.enCours }}, {{ stats.resolues }}, {{ stats.rejetees }}],
+                        backgroundColor: ['#f6c23e', '#1cc88a', '#e74a3b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Réclamations par type Chart
+            const typeData = {
+                labels: [],
+                values: []
+            };
+            {% for type, nombre in stats.parType %}
+                typeData.labels.push("{{ type }}");
+                typeData.values.push({{ nombre }});
+            {% endfor %}
+
+            new Chart(document.getElementById('typeChart'), {
+                type: 'bar',
+                data: {
+                    labels: typeData.labels,
+                    datasets: [{
+                        label: 'Nombre de réclamations',
+                        data: typeData.values,
+                        backgroundColor: '#36b9cc',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Évolution mensuelle Chart
+            const evolutionData = {
+                labels: [],
+                values: [],
+                previousValues: []
+            };
+            {% set prevValue = null %}
+            {% for mois, nombre in stats.parMois %}
+                evolutionData.labels.push("{{ mois }}");
+                evolutionData.values.push({{ nombre }});
+                {% if prevValue is not null %}
+                    {% set evolution = ((nombre - prevValue) / prevValue * 100)|round(2) %}
+                    evolutionData.previousValues.push({{ evolution }});
+                {% else %}
+                    evolutionData.previousValues.push(0);
+                {% endif %}
+                {% set prevValue = nombre %}
+            {% endfor %}
+
+            new Chart(document.getElementById('evolutionChart'), {
+                type: 'line',
+                data: {
+                    labels: evolutionData.labels,
+                    datasets: [{
+                        label: 'Nombre de réclamations',
+                        data: evolutionData.values,
+                        borderColor: '#4e73df',
+                        backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                        tension: 0.1,
+                        fill: true
+                    }, {
+                        label: 'Évolution (%)',
+                        data: evolutionData.previousValues,
+                        borderColor: '#1cc88a',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        yAxisID: 'percentage'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        },
+                        percentage: {
+                            position: 'right',
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize calendar
             var calendarEl = document.getElementById('calendar');
             if (!calendarEl) {
                 console.error('Élément calendrier non trouvé');

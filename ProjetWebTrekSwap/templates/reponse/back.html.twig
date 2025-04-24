@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.min.css" rel="stylesheet">
     <style>
         .sort-link {
             color: inherit;
@@ -20,6 +21,11 @@
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 4px;
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
         }
     </style>
 {% endblock %}
@@ -104,48 +110,49 @@
             </div>
 
             <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total des Réponses</h5>
+                            <div class="chart-container">
+                                <canvas id="totalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Moyenne par réclamation</h5>
+                            <div class="chart-container">
+                                <canvas id="moyenneChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Temps de réponse moyen par état (heures)</h5>
+                            <div class="chart-container" style="height: 300px;">
+                                <canvas id="tempsReponseChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Évolution mensuelle des réponses</h5>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Mois</th>
-                                            <th>Nombre</th>
-                                            <th>Évolution</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% if stats.parMois|length > 0 %}
-                                            {% set previousValue = null %}
-                                            {% for mois, nombre in stats.parMois %}
-                                                <tr>
-                                                    <td>{{ mois }}</td>
-                                                    <td>{{ nombre }}</td>
-                                                    <td>
-                                                        {% if previousValue is not null and previousValue > 0 %}
-                                                            {% set evolution = ((nombre - previousValue) / previousValue * 100)|round %}
-                                                            {% if evolution > 0 %}
-                                                                <span class="text-danger">+{{ evolution }}% <i class="bi bi-arrow-up"></i></span>
-                                                            {% elseif evolution < 0 %}
-                                                                <span class="text-success">{{ evolution }}% <i class="bi bi-arrow-down"></i></span>
-                                                            {% else %}
-                                                                <span class="text-muted">0% <i class="bi bi-arrow-right"></i></span>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                                {% set previousValue = nombre %}
-                                            {% endfor %}
-                                        {% else %}
-                                            <tr>
-                                                <td colspan="3" class="text-center">Aucune donnée disponible</td>
-                                            </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
+                            <div class="chart-container" style="height: 300px;">
+                                <canvas id="evolutionChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -338,11 +345,130 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('backTemp/vendor/simple-datatables/simple-datatables.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Total des réponses
+            new Chart(document.getElementById('totalChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ce mois', 'Autres mois'],
+                    datasets: [{
+                        data: [{{ stats.moisActuel }}, {{ stats.total - stats.moisActuel }}],
+                        backgroundColor: ['#4e73df', '#1cc88a']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Moyenne par réclamation
+            new Chart(document.getElementById('moyenneChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Moyenne de réponses par réclamation'],
+                    datasets: [{
+                        label: 'Nombre moyen',
+                        data: [{{ stats.moyenneReponseParReclamation }}],
+                        backgroundColor: '#ff6384',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: Math.max(5, Math.ceil({{ stats.moyenneReponseParReclamation }}))
+                        }
+                    }
+                }
+            });
+
+            // Temps de réponse par état
+            const tempsReponseData = {
+                labels: [],
+                values: []
+            };
+            {% for etat, temps in stats.tempsReponseParEtat %}
+                tempsReponseData.labels.push("{{ etat }}");
+                tempsReponseData.values.push({{ temps }});
+            {% endfor %}
+
+            new Chart(document.getElementById('tempsReponseChart'), {
+                type: 'bar',
+                data: {
+                    labels: tempsReponseData.labels,
+                    datasets: [{
+                        label: 'Temps moyen (heures)',
+                        data: tempsReponseData.values,
+                        backgroundColor: ['#36b9cc', '#1cc88a', '#e74a3b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Évolution mensuelle
+            const evolutionData = {
+                labels: [],
+                values: []
+            };
+            {% for mois, nombre in stats.parMois %}
+                evolutionData.labels.push("{{ mois }}");
+                evolutionData.values.push({{ nombre }});
+            {% endfor %}
+
+            new Chart(document.getElementById('evolutionChart'), {
+                type: 'line',
+                data: {
+                    labels: evolutionData.labels,
+                    datasets: [{
+                        label: 'Nombre de réponses',
+                        data: evolutionData.values,
+                        borderColor: '#4e73df',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize datatables
             const datatables = document.querySelectorAll('.datatable');
             datatables.forEach(function(datatable) {
-                new DataTable(datatable); // Utilisation directe de la classe DataTable
+                new DataTable(datatable);
             });
         });
     </script>
