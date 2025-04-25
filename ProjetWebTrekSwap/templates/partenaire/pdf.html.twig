@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; line-height: 1.6; padding: 20px; }
+        h1 { text-align: center; color: #333; }
+        p { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<!-- Embed the logo as base64 -->
+<img src="data:image/png;base64,{{ logo_base64 }}" alt="Logo">
+
+<h1>Contrat de Partenariat</h1>
+
+<p>Date d'ajout : {{ partenaire.dateAjout|date('d/m/Y') }}</p>
+
+<p>
+    Ce contrat est établi entre notre organisation et <strong>{{ partenaire.nom }}</strong>,
+    situé à <strong>{{ partenaire.adresse }}</strong>, dont l’adresse email est
+    <strong>{{ partenaire.email }}</strong>.
+</p>
+
+<p>
+    Description du partenariat : {{ partenaire.description }}
+</p>
+
+<p>
+    Catégorie : {{ partenaire.getIdCategorie.nom }}
+</p>
+
+<p>
+    Ce partenariat prendra effet à compter de la date mentionnée ci-dessus.
+</p>
+
+<p>
+    Fait à Tunis, le {{ "now"|date("d/m/Y") }}
+</p>
+
+<p>Signature :</p>
+</body>
+</html>
