@@ -49,10 +49,11 @@ class Partenaire
     #[Assert\GreaterThanOrEqual("today", message: "La date d'ajout ne peut pas être dans le passé.")]
     private ?\DateTimeInterface $date_ajout = null;
 
-    #[ORM\Column]
+
     #[Assert\NotNull(message: "La catégorie est obligatoire.")]
-    #[Assert\Positive(message: "L'identifiant de la catégorie doit être un nombre positif.")]
-    private ?int $id_categorie = null;
+    #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'Partenaires')]
+    #[ORM\JoinColumn(name: 'id_categorie', referencedColumnName: 'id', nullable: false)]
+    private ?Categorie $id_categorie = null;
 
     public function getId(): ?int
     {
@@ -114,14 +115,13 @@ class Partenaire
         return $this;
     }
 
-    public function getIdCategorie(): ?int
+    public function getIdCategorie(): ?Categorie
     {
         return $this->id_categorie;
     }
 
-    public function setIdCategorie(?int $id_categorie): static
+    public function setIdCategorie(?Categorie $id_categorie): void
     {
         $this->id_categorie = $id_categorie;
-        return $this;
     }
 }

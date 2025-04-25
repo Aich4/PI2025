@@ -34,7 +34,8 @@
                                     <td>{{ partenaire.adresse }}</td>
                                     <td>{{ partenaire.description }}</td>
                                     <td>{{ partenaire.dateAjout ? partenaire.dateAjout|date('d/m/Y') : 'N/A' }}</td>
-                                    <td>{{ categorieMap[partenaire.idCategorie] ?? 'Inconnue' }}</td>
+                                    <td>{{ partenaire.getIdCategorie ? partenaire.getIdCategorie.Nom : 'N/A' }}</td>
+
                                     <td>
                                         <!-- Button group with icons -->
                                         <div class="btn-group" role="group">

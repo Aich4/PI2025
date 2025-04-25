@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="" />
+    <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/assets/controllers.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/assets/controllers.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Categorie.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Categorie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/CategorieRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/CategorieRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -151,6 +168,8 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-components" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -161,18 +180,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "gestionDestinationEtActivite",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;GestionPartenaire&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -215,6 +234,9 @@
       <workItem from="1744709791227" duration="1677000" />
       <workItem from="1744717806386" duration="1732000" />
       <workItem from="1745246683620" duration="6000" />
+      <workItem from="1745328080987" duration="3061000" />
+      <workItem from="1745499380813" duration="811000" />
+      <workItem from="1745590019274" duration="4619000" />
     </task>
     <servers />
   </component>

@@ -8,12 +8,14 @@ use App\Form\CategorieType;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Repository\PartenaireRepository;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 final class CategorieController extends AbstractController
@@ -182,5 +184,16 @@ final class CategorieController extends AbstractController
             'partenaires' => $partenaires,
             'categories' => $categories,
         ]);
+    }
+
+    #[Route('/categoriesearch', name: 'categorie_search')]
+    public function searchCategorie(Request $request, NormalizerInterface $normalizer, CategorieRepository $repository): JsonResponse
+    {
+        $searchValue = $request->get('searchValue');
+        $categories = $repository->findCategorieByNom($searchValue);
+
+        $jsonContent = $normalizer->normalize($categories, 'json', ['groups' => 'categories']);
+
+        return new JsonResponse($jsonContent);
     }
 }

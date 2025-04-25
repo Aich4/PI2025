@@ -45,26 +45,17 @@ class PartenaireController extends AbstractController
     }
 
     #[Route('/partenaire/add', name: 'add_partenaire', methods: ['GET', 'POST'])]
-    public function addPartenaire(Request $request, EntityManagerInterface $entityManager): Response
+    public function addPartenaire(Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): Response
     {
         $partenaire = new Partenaire();
         $partenaire->setDateAjout(new \DateTime());
 
-        // Récupérer les catégories depuis la base
-        $conn = $entityManager->getConnection();
-        $sql = 'SELECT id, nom FROM categorie';
-        $stmt = $conn->prepare($sql);
-        $resultSet = $stmt->executeQuery();
-        $rows = $resultSet->fetchAllAssociative();
+        // Récupérer les catégories via le repository
+        $categories = $categorieRepository->findAll();
 
-        // Transformer pour l’option 'choices'
-        $categories = [];
-        foreach ($rows as $row) {
-            $categories[$row['nom']] = $row['id']; // "nom" affiché, "id" stocké
-        }
-
+        // Créer le formulaire et passer les catégories en option
         $form = $this->createForm(PartenaireType::class, $partenaire, [
-            'categories' => $categories, // on passe les catégories au formulaire
+            'categories' => $categories,
         ]);
 
         $form->handleRequest($request);
@@ -83,8 +74,9 @@ class PartenaireController extends AbstractController
         ]);
     }
 
+
     #[Route('/partenaire/edit/{id}', name: 'edit_partenaire', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(int $id, Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): Response
     {
         $partenaire = $entityManager->getRepository(Partenaire::class)->find($id);
 
@@ -92,29 +84,21 @@ class PartenaireController extends AbstractController
             throw $this->createNotFoundException('Partenaire non trouvé');
         }
 
-        // Get all categories from DB
-        $categoriesEntities = $entityManager->getRepository(Categorie::class)->findAll();
+        // Get all categories as entities (like in the add function)
+        $categories = $categorieRepository->findAll();
 
-        // Build array for the form (key => label, value => id)
-        $categories = [];
-        foreach ($categoriesEntities as $categorie) {
-            $categories[$categorie->getNom()] = $categorie->getId();
-        }
-
-        // Create form and pass categories
+        // Pass them as options
         $form = $this->createForm(PartenaireType::class, $partenaire, [
             'categories' => $categories,
         ]);
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $entityManager->flush();
-                $this->addFlash('success', 'Partenaire mis à jour avec succès!');
-                return $this->redirectToRoute('list_partenaire');
-            } else {
-                $this->addFlash('error', 'Veuillez corriger les erreurs de saisie.');
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Partenaire mis à jour avec succès!');
+            return $this->redirectToRoute('list_partenaire');
         }
 
         return $this->render('partenaire/editPartenaire.html.twig', [
