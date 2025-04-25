@@ -5,10 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/phpunit.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/assets/controllers.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/assets/controllers.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Mission.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Mission.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Recompense.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Recompense.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/MissionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/MissionType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/MissionRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/MissionRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/edit.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/new.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,6 +172,11 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-components" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/thiagoalessio/tesseract_ocr" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/vich/uploader-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/google/recaptcha" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/excelwebzone/recaptcha-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -219,6 +240,21 @@
       <workItem from="1744676720620" duration="1153000" />
       <workItem from="1744709791227" duration="1677000" />
       <workItem from="1744717806386" duration="1732000" />
+      <workItem from="1744719694446" duration="724000" />
+      <workItem from="1744979130181" duration="8220000" />
+      <workItem from="1745161558653" duration="402000" />
+      <workItem from="1745163548167" duration="470000" />
+      <workItem from="1745164036935" duration="641000" />
+      <workItem from="1745164831063" duration="129000" />
+      <workItem from="1745165120498" duration="368000" />
+      <workItem from="1745172787309" duration="8801000" />
+      <workItem from="1745246652107" duration="3275000" />
+      <workItem from="1745325956390" duration="5655000" />
+      <workItem from="1745433775155" duration="1572000" />
+      <workItem from="1745503794765" duration="1418000" />
+      <workItem from="1745506452118" duration="18903000" />
+      <workItem from="1745589532801" duration="3758000" />
+      <workItem from="1745593938247" duration="5101000" />
     </task>
     <servers />
   </component>

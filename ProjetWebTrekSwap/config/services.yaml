@@ -7,6 +7,9 @@ parameters:
     uploads_directory: '%kernel.project_dir%/public/uploads'
     profile_pictures_directory: '%kernel.project_dir%/public/uploads/profile_pictures'
     logos_directory: '%kernel.project_dir%/public/uploads/logos'
+    karser_recaptcha3.site_key: '%env(RECAPTCHA3_KEY)%'
+    karser_recaptcha3.secret_key: '%env(RECAPTCHA3_SECRET)%'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -35,3 +38,6 @@ services:
     App\EventListener\LogoutSuccessListener:
         tags:
             - { name: kernel.event_listener, event: Symfony\Component\Security\Http\Event\LogoutEvent, method: onLogoutSuccess }
+
+
+
