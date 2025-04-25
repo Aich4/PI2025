@@ -1,10 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
-{% block welcome %}
+{% block title %}Nos Destinations{% endblock %}
 
+{% block welcome %}
+    <h1 class="text-center mt-5 mb-4 fw-bold">🌟 Nos Destinations</h1>
 {% endblock %}
+
+
 {% block body %}
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
     <style>
         .destination-card {
             position: relative;
@@ -51,7 +57,7 @@
             transition: opacity 0.4s ease-in-out;
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
-            pointer-events: none; /* ensures the hover area doesn't block buttons */
+            pointer-events: none;
         }
 
         .image-wrapper:hover .description-overlay {
@@ -75,6 +81,11 @@
         .destination-card .details {
             font-size: 14px;
             color: #555;
+        }
+
+        #leafletMap {
+            height: 600px;
+            width: 100%;
         }
     </style>
 
@@ -100,13 +111,17 @@
                                 <strong>Note:</strong> {{ destination.rate }}/5
                             </p>
 
-                            <!-- Activities Button -->
-                            <button
-                                    class="btn btn-outline-primary mt-2 show-activities-btn"
+                            <button class="btn btn-outline-primary mt-2 show-activities-btn"
                                     data-destination-id="{{ destination.id }}"
-                                    data-destination-name="{{ destination.nomDestination }}"
-                            >
+                                    data-destination-name="{{ destination.nomDestination }}">
                                 Voir les activités
+                            </button>
+
+                            <button class="btn btn-outline-warning mt-2 mark-on-map-btn"
+                                    data-lat="{{ destination.latitude }}"
+                                    data-lon="{{ destination.longitude }}"
+                                    data-name="{{ destination.nomDestination }}">
+                                Marquer sur la carte
                             </button>
                         </div>
                     </div>
@@ -117,9 +132,13 @@
                 </div>
             {% endfor %}
         </div>
+
+        <div class="text-center mt-5">
+            <button id="showMapBtn" class="btn btn-primary">Afficher la carte</button>
+        </div>
     </main>
 
-    <!-- Modal -->
+    <!-- Activities Modal -->
     <div class="modal fade" id="activitiesModal" tabindex="-1" aria-labelledby="activitiesModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -134,14 +153,25 @@
         </div>
     </div>
 
+    <!-- Map Modal -->
+    <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="mapModalLabel">Carte des destinations marquées</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="leafletMap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet & JS Scripts -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Scroll to the destinations section on load
-            window.scrollTo({
-                top: document.getElementById('destination-list').offsetTop,
-                behavior: 'smooth'
-            });
-
             const modal = new bootstrap.Modal(document.getElementById('activitiesModal'));
             const modalTitle = document.getElementById('activitiesModalLabel');
             const modalBody = document.getElementById('activitiesModalBody');
@@ -165,6 +195,47 @@
 
                     modal.show();
                 });
+            });
+
+            const markedDestinations = [];
+
+            document.querySelectorAll('.mark-on-map-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const lat = parseFloat(button.dataset.lat);
+                    const lon = parseFloat(button.dataset.lon);
+                    const name = button.dataset.name;
+
+                    if (!markedDestinations.some(dest => dest.lat === lat && dest.lon === lon)) {
+                        markedDestinations.push({ lat, lon, name });
+                        alert(`Destination "${name}" marquée sur la carte !`);
+                    } else {
+                        alert(`"${name}" est déjà marquée.`);
+                    }
+                });
+            });
+
+            document.getElementById('showMapBtn').addEventListener('click', () => {
+                const mapModal = new bootstrap.Modal(document.getElementById('mapModal'));
+                mapModal.show();
+
+                setTimeout(() => {
+                    const map = L.map('leafletMap').setView([36.8, 10.18], 6);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(map);
+
+                    const bounds = [];
+
+                    markedDestinations.forEach(dest => {
+                        const marker = L.marker([dest.lat, dest.lon]).addTo(map);
+                        marker.bindPopup(`<strong>${dest.name}</strong>`);
+                        bounds.push([dest.lat, dest.lon]);
+                    });
+
+                    if (bounds.length > 0) {
+                        map.fitBounds(bounds);
+                    }
+                }, 500);
             });
         });
     </script>
