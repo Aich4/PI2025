@@ -16,11 +16,23 @@ class Task
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $description = null;
+
     #[ORM\Column(length: 50)]
     private ?string $status = 'pending';
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $priority = 'medium';
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $category = null;
+
+    #[ORM\Column]
+    private ?bool $isArchived = false;
 
     public function __construct()
     {
@@ -43,6 +55,17 @@ class Task
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+        return $this;
+    }
+
     public function getStatus(): ?string
     {
         return $this->status;
@@ -62,6 +85,39 @@ class Task
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getPriority(): ?string
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(string $priority): static
+    {
+        $this->priority = $priority;
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?string $category): static
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): static
+    {
+        $this->isArchived = $isArchived;
         return $this;
     }
 } 
