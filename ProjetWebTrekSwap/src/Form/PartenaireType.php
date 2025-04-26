@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class PartenaireType extends AbstractType
 {
@@ -33,7 +34,14 @@ class PartenaireType extends AbstractType
                 'choice_label' => 'nom',
                 'placeholder' => 'Choisir une catégorie',
                 'required' => true,
+            ])
+
+            ->add('montant', IntegerType::class, [
+                'label' => 'Montant',
+                'attr' => ['class' => 'form-control'],
+                'required' => true,
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

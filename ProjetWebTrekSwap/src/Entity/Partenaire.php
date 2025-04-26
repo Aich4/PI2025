@@ -55,6 +55,13 @@ class Partenaire
     #[ORM\JoinColumn(name: 'id_categorie', referencedColumnName: 'id', nullable: false)]
     private ?Categorie $id_categorie = null;
 
+
+    #[ORM\Column(type: Types::INTEGER)]
+    #[Assert\NotNull(message: "Le montant est obligatoire.")]
+    #[Assert\PositiveOrZero(message: "Le montant doit être positif ou nul.")]
+    private ?int $montant = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -124,4 +131,16 @@ class Partenaire
     {
         $this->id_categorie = $id_categorie;
     }
+
+    public function getMontant(): ?int
+    {
+        return $this->montant;
+    }
+
+    public function setMontant(?int $montant): static
+    {
+        $this->montant = $montant;
+        return $this;
+    }
+
 }

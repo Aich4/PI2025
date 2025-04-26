@@ -45,6 +45,12 @@
                     {{ form_widget(form.id_categorie, {'attr': {'class': 'form-control'}}) }}
                     <div class="text-danger">{{ form_errors(form.id_categorie) }}</div>
                 </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.montant) }}
+                    {{ form_widget(form.montant, {'attr': {'class': 'form-control'}}) }}
+                    <div class="text-danger">{{ form_errors(form.montant) }}</div>
+                </div>
             {% endif %}
 
             <div class="text-center mt-4 d-flex justify-content-center gap-3">
