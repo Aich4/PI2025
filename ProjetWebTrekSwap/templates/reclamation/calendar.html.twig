@@ -4,15 +4,32 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/main.min.css' rel='stylesheet' />
-    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/main.min.css' rel='stylesheet' />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet">
     <style>
+        #calendar {
+            height: 650px;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
         .fc-event {
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .fc-event-title {
-            white-space: normal;
-            overflow: visible;
+        .fc-event:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .fc-toolbar-title {
+            font-size: 1.5em !important;
+        }
+        .fc-button {
+            background-color: #4e73df !important;
+            border-color: #4e73df !important;
+        }
+        .fc-button-active {
+            background-color: #2e59d9 !important;
+            border-color: #2e59d9 !important;
         }
         .event-tooltip {
             position: absolute;
@@ -23,6 +40,12 @@
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             max-width: 300px;
+        }
+        .calendar-filters {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
         }
     </style>
 {% endblock %}
@@ -46,6 +69,25 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Vue Calendrier</h5>
+                            
+                            <div class="calendar-filters">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input filter-state" type="checkbox" id="filter-en-cours" value="En cours" checked>
+                                    <label class="form-check-label" for="filter-en-cours">En cours</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input filter-state" type="checkbox" id="filter-resolue" value="Résolue" checked>
+                                    <label class="form-check-label" for="filter-resolue">Résolue</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input filter-state" type="checkbox" id="filter-rejetee" value="Rejetée" checked>
+                                    <label class="form-check-label" for="filter-rejetee">Rejetée</label>
+                                </div>
+                                <button id="refresh-calendar" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-sync-alt"></i> Actualiser
+                                </button>
+                            </div>
+                            
                             <div id="calendar"></div>
                         </div>
                     </div>
@@ -57,51 +99,76 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/main.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/main.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/locales/fr.global.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var tooltip = null;
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            let allEvents = [];
+            let filteredEvents = [];
+            let calendar = null;
+            
+            // Function to filter events based on selected states
+            function filterEvents() {
+                const selectedStates = Array.from(document.querySelectorAll('.filter-state:checked'))
+                    .map(checkbox => checkbox.value);
+                
+                filteredEvents = allEvents.filter(event => selectedStates.includes(event.extendedProps.etat));
+                if (calendar) {
+                    calendar.removeAllEvents();
+                    calendar.addEventSource(filteredEvents);
+                }
+            }
+            
+            // Initialize calendar
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'fr',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,dayGridWeek,dayGridDay'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                 },
-                events: "{{ path('app_reclamation_calendar_events') }}",
+                events: function(info, successCallback, failureCallback) {
+                    fetch("{{ path('app_reclamation_calendar_events') }}")
+                        .then(response => response.json())
+                        .then(data => {
+                            allEvents = data;
+                            filterEvents();
+                            successCallback(filteredEvents);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching events:', error);
+                            failureCallback(error);
+                        });
+                },
                 eventDidMount: function(info) {
-                    info.el.addEventListener('mouseover', function() {
-                        if (tooltip) {
-                            tooltip.remove();
-                        }
-                        tooltip = document.createElement('div');
-                        tooltip.className = 'event-tooltip';
-                        tooltip.innerHTML = `
-                            <strong>Description:</strong> ${info.event.extendedProps.description}<br>
-                            <strong>Type:</strong> ${info.event.extendedProps.type}<br>
-                            <strong>État:</strong> ${info.event.extendedProps.etat}
-                        `;
-                        document.body.appendChild(tooltip);
-                        
-                        const rect = info.el.getBoundingClientRect();
-                        tooltip.style.top = rect.bottom + window.scrollY + 5 + 'px';
-                        tooltip.style.left = rect.left + window.scrollX + 'px';
-                    });
-
-                    info.el.addEventListener('mouseout', function() {
-                        if (tooltip) {
-                            tooltip.remove();
-                            tooltip = null;
-                        }
-                    });
-                }
+                    // Add tooltip
+                    info.el.title = `Type: ${info.event.extendedProps.type}
+Description: ${info.event.extendedProps.description}
+État: ${info.event.extendedProps.etat}`;
+                },
+                eventClick: function(info) {
+                    if (info.event.url) {
+                        window.location.href = info.event.url;
+                        return false;
+                    }
+                },
+                firstDay: 1,
+                height: 'auto'
             });
-
+            
             calendar.render();
+            
+            // Add event listeners for filters
+            document.querySelectorAll('.filter-state').forEach(checkbox => {
+                checkbox.addEventListener('change', filterEvents);
+            });
+            
+            // Add event listener for refresh button
+            document.getElementById('refresh-calendar').addEventListener('click', function() {
+                calendar.refetchEvents();
+            });
         });
     </script>
 {% endblock %} 
