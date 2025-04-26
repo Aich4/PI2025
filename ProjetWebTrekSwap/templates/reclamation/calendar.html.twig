@@ -83,9 +83,7 @@
                                     <input class="form-check-input filter-state" type="checkbox" id="filter-rejetee" value="Rejetée" checked>
                                     <label class="form-check-label" for="filter-rejetee">Rejetée</label>
                                 </div>
-                                <button id="refresh-calendar" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-sync-alt"></i> Actualiser
-                                </button>
+
                             </div>
                             
                             <div id="calendar"></div>
@@ -109,39 +107,50 @@
             
             // Function to filter events based on selected states
             function filterEvents() {
-                const selectedStates = Array.from(document.querySelectorAll('.filter-state:checked'))
-                    .map(checkbox => checkbox.value);
-                
-                filteredEvents = allEvents.filter(event => selectedStates.includes(event.extendedProps.etat));
-                if (calendar) {
-                    calendar.removeAllEvents();
-                    calendar.addEventSource(filteredEvents);
-                }
-            }
+    const selectedStates = Array.from(document.querySelectorAll('.filter-state:checked'))
+        .map(checkbox => checkbox.value);
+    
+    filteredEvents = allEvents.filter(event => selectedStates.includes(event.extendedProps.etat));
+    
+    if (calendar) {
+        // Supprimer toutes les sources existantes (très important)
+        calendar.getEventSources().forEach(source => source.remove());
+        
+        // Ajouter les événements filtrés en tant que nouvelle source
+        calendar.addEventSource(filteredEvents);
+    }
+}
+
             
             // Initialize calendar
-            const calendarEl = document.getElementById('calendar');
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                locale: 'fr',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                },
-                events: function(info, successCallback, failureCallback) {
-                    fetch("{{ path('app_reclamation_calendar_events') }}")
-                        .then(response => response.json())
-                        .then(data => {
-                            allEvents = data;
-                            filterEvents();
-                            successCallback(filteredEvents);
-                        })
-                        .catch(error => {
-                            console.error('Error fetching events:', error);
-                            failureCallback(error);
-                        });
-                },
+const calendarEl = document.getElementById('calendar');
+calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'fr',
+    headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+    },
+    events: function(info, successCallback, failureCallback) {
+        fetch("{{ path('app_reclamation_calendar_events') }}")
+            .then(response => response.json())
+            .then(data => {
+                allEvents = data;
+                const selectedStates = Array.from(document.querySelectorAll('.filter-state:checked'))
+                    .map(checkbox => checkbox.value);
+                const initialFilteredEvents = allEvents.filter(event => selectedStates.includes(event.extendedProps.etat));
+                successCallback(initialFilteredEvents);
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+                failureCallback(error);
+            });
+    } // ← cette accolade manquait pour fermer 'events: function()'
+});
+
+}
+
                 eventDidMount: function(info) {
                     // Add tooltip
                     info.el.title = `Type: ${info.event.extendedProps.type}
@@ -167,8 +176,27 @@ Description: ${info.event.extendedProps.description}
             
             // Add event listener for refresh button
             document.getElementById('refresh-calendar').addEventListener('click', function() {
-                calendar.refetchEvents();
+    fetch("{{ path('app_reclamation_calendar_events') }}")
+        .then(response => response.json())
+        .then(data => {
+            allEvents = data;
+            filteredEvents = allEvents.filter(event => {
+                const selectedStates = Array.from(document.querySelectorAll('.filter-state:checked'))
+                    .map(checkbox => checkbox.value);
+                return selectedStates.includes(event.extendedProps.etat);
             });
+
+            // Supprimer toutes les anciennes sources AVANT d'ajouter
+            calendar.getEventSources().forEach(source => source.remove());
+
+            // Ajouter proprement les événements filtrés
+            calendar.addEventSource(filteredEvents);
+        })
+        .catch(error => {
+            console.error('Erreur lors du rafraîchissement des événements:', error);
+        });
+});
+
         });
     </script>
 {% endblock %} 

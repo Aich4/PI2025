@@ -312,9 +312,6 @@
                                     <input class="form-check-input filter-state" type="checkbox" id="filter-rejetee" value="Rejetée" checked>
                                     <label class="form-check-label" for="filter-rejetee">Rejetée</label>
                                 </div>
-                                <button id="refresh-calendar" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-sync-alt"></i> Actualiser
-                                </button>
                             </div>
                             
                             <div id="calendar-container"></div>
@@ -708,19 +705,6 @@ Description: ${info.event.extendedProps.description}
                 document.querySelectorAll('.filter-state').forEach(checkbox => {
                     checkbox.addEventListener('change', filterEvents);
                 });
-                
-                // Add event listener for refresh button
-                document.getElementById('refresh-calendar').addEventListener('click', function() {
-                    calendar.refetchEvents();
-                });
-                
-                // Add legend
-                const legendContainer = document.createElement('div');
-                legendContainer.className = 'calendar-legend';
-                legendContainer.innerHTML = `
-                    
-                `;
-                calendarEl.parentNode.appendChild(legendContainer);
             }
         });
     </script>
