@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/reclamation')]
 final class ReclamationController extends AbstractController {
@@ -267,5 +267,32 @@ final class ReclamationController extends AbstractController {
             'Rejetée' => '#dc3545',
             default => '#6c757d'
         };
+    }
+
+    #[Route('/reclamations/by-date', name: 'reclamation_by_date', methods: ['GET'])]
+    public function reclamationsByDate(Request $request, ReclamationRepository $repo): JsonResponse
+    {
+        $dateString = $request->query->get('date'); // format: YYYY-MM-DD
+
+        if (!$dateString) {
+            return new JsonResponse(['error' => 'Missing date'], 400);
+        }
+
+        $date = \DateTime::createFromFormat('Y-m-d', $dateString);
+
+        if (!$date) {
+            return new JsonResponse(['error' => 'Invalid date'], 400);
+        }
+
+        $reclamations = $repo->findByDate($date);
+
+        $data = array_map(fn($rec) => [
+            'id' => $rec->getIdRec(),
+            'description' => $rec->getDescriptionRec(),
+            'type' => $rec->getTypeRec(),
+            'date' => $rec->getDateRec()->format('Y-m-d H:i:s'),
+        ], $reclamations);
+
+        return new JsonResponse($data);
     }
 }
