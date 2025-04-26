@@ -7,6 +7,9 @@
         <div class="container mt-5">
             <h1 class="text-center mb-4 text-primary">Liste des Catégories</h1>
 
+            <!-- 🔍 Search Input Field -->
+            <input type="text" id="search" class="form-control mb-4" placeholder="Rechercher une catégorie par nom...">
+
             <!-- Container for better layout -->
             <div class="card shadow-lg p-4 rounded-lg custom-bg-light">
                 <div class="card-body">
@@ -23,7 +26,7 @@
                                 <th class="custom-th">Actions</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="all">
                             {% for category in categories %}
                                 <tr>
                                     <td class="text-muted">{{ category.getId() }}</td>
@@ -54,6 +57,7 @@
                                 </tr>
                             {% endfor %}
                             </tbody>
+                            <tbody id="searchResults"></tbody>
                         </table>
                     </div>
 
@@ -83,8 +87,8 @@
         }
 
         .custom-th {
-            background-color: #ffeeba; /* Jaune clair */
-            color: #856404; /* Brun foncé */
+            background-color: #ffeeba;
+            color: #856404;
             font-weight: bold;
         }
 
@@ -92,4 +96,52 @@
             background-color: #f1f1f1 !important;
         }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#search').keyup(function () {
+                let value = $(this).val();
+
+                if (value.trim() === '') {
+                    $('#all').show();
+                    $('#searchResults').empty();
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ path('categorie_search') }}",
+                    type: "GET",
+                    data: { searchValue: value },
+                    dataType: "json",
+                    success: function (data) {
+                        $('#searchResults').empty();
+                        $('#all').hide();
+
+                        if (data.length > 0) {
+                            $.each(data, function (i, category) {
+                                $('#searchResults').append(`
+                                    <tr>
+                                        <td>${category.id}</td>
+                                        <td>${category.nom}</td>
+                                        <td>${category.description}</td>
+                                        <td>${category.logo ? `<img src="/uploads/logos/${category.logo}" width="100">` : 'Pas d\'image'}</td>
+                                        <td>${category.nbr_partenaire}</td>
+                                        <td>Actions ici</td>
+                                    </tr>
+                                `);
+                            });
+                        } else {
+                            $('#searchResults').append('<tr><td colspan="6">Aucune catégorie trouvée.</td></tr>');
+                        }
+                    },
+                    error: function () {
+                        alert('Erreur lors de la récupération des données.');
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
