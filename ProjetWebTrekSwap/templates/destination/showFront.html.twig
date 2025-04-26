@@ -6,7 +6,6 @@
     <h1 class="text-center mt-5 mb-4 fw-bold">🌟 Nos Destinations</h1>
 {% endblock %}
 
-
 {% block body %}
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
@@ -87,11 +86,18 @@
             height: 600px;
             width: 100%;
         }
+
+        .rounded-circle {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            font-size: 20px;
+            text-align: center;
+            line-height: 36px;
+        }
     </style>
 
     <main class="container py-5" id="destination-list">
-        <h1 class="text-center mb-4">Nos Destinations</h1>
-
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             {% for destination in destinations %}
                 <div class="col">
@@ -108,28 +114,48 @@
                             <h5>{{ destination.nomDestination }}</h5>
                             <p class="details">
                                 <strong>Température:</strong> {{ destination.temperature }}°C<br>
-                                <strong>Note:</strong> {{ destination.rate }}/5
+                                <strong class="avg-rating">
+                                    {% if destination.avgRating %}
+                                        ⭐ {{ destination.avgRating }}/5 ({{ destination.voteCount }})
+                                    {% else %}
+                                        Pas encore notée
+                                    {% endif %}
+                                </strong>
                             </p>
 
-                            <button class="btn btn-outline-primary mt-2 show-activities-btn"
-                                    data-destination-id="{{ destination.id }}"
-                                    data-destination-name="{{ destination.nomDestination }}">
-                                Voir les activités
-                            </button>
+                            <div class="rating" data-destination-id="{{ destination.id }}">
+                                {% for i in 1..5 %}
+                                    <i class="fa-solid fa-star {% if i <= (destination.userRating ?? 0) %}text-warning{% else %}text-secondary{% endif %}"
+                                       style="cursor:pointer;"
+                                       data-value="{{ i }}"></i>
+                                {% endfor %}
+                            </div>
 
-                            <button class="btn btn-outline-warning mt-2 mark-on-map-btn"
-                                    data-lat="{{ destination.latitude }}"
-                                    data-lon="{{ destination.longitude }}"
-                                    data-name="{{ destination.nomDestination }}">
-                                Marquer sur la carte
-                            </button>
-                            {% if app.user and not is_granted('ROLE_ADMIN') %}
-                                <form method="post" action="{{ path('add_to_whishlist', {'id': destination.id}) }}">
-                                    <button type="submit" class="btn btn-link text-danger mt-2" style="font-size: 24px;">
+                            <div class="d-flex flex-wrap justify-content-center gap-2 mt-2">
+                                <button class="btn btn-outline-primary show-activities-btn"
+                                        data-destination-id="{{ destination.id }}"
+                                        data-destination-name="{{ destination.nomDestination }}">
+                                    Voir les activités
+                                </button>
+
+                                <button class="btn btn-outline-warning mark-on-map-btn"
+                                        data-lat="{{ destination.latitude }}"
+                                        data-lon="{{ destination.longitude }}"
+                                        data-name="{{ destination.nomDestination }}">
+                                    Marquer sur la carte
+                                </button>
+
+                                {% if app.user and not is_granted('ROLE_ADMIN') %}
+                                    <button type="button"
+                                            class="btn {% if destination.id in wishlist %}btn-danger{% else %}btn-outline-danger{% endif %} btn-sm rounded-circle toggle-whishlist-btn"
+                                            data-id="{{ destination.id }}"
+                                            title="Ajouter aux favoris">
                                         ♥
                                     </button>
-                                </form>
-                            {% endif %}
+                                {% endif %}
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -178,11 +204,17 @@
     <!-- Leaflet & JS Scripts -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
+        // Global variables
+        const markedDestinations = [];
+        let map;
+        let mapInitialized = false;
+
         document.addEventListener('DOMContentLoaded', () => {
             const modal = new bootstrap.Modal(document.getElementById('activitiesModal'));
             const modalTitle = document.getElementById('activitiesModalLabel');
             const modalBody = document.getElementById('activitiesModalBody');
 
+            // Show Activities
             document.querySelectorAll('.show-activities-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const destinationId = button.dataset.destinationId;
@@ -204,8 +236,7 @@
                 });
             });
 
-            const markedDestinations = [];
-
+            // Mark destinations on map
             document.querySelectorAll('.mark-on-map-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const lat = parseFloat(button.dataset.lat);
@@ -221,15 +252,26 @@
                 });
             });
 
+            // Show map
             document.getElementById('showMapBtn').addEventListener('click', () => {
                 const mapModal = new bootstrap.Modal(document.getElementById('mapModal'));
                 mapModal.show();
 
                 setTimeout(() => {
-                    const map = L.map('leafletMap').setView([36.8, 10.18], 6);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }).addTo(map);
+                    if (!mapInitialized) {
+                        map = L.map('leafletMap').setView([36.8, 10.18], 6);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors'
+                        }).addTo(map);
+                        mapInitialized = true;
+                    }
+
+                    // Clear old markers
+                    map.eachLayer(layer => {
+                        if (layer instanceof L.Marker) {
+                            map.removeLayer(layer);
+                        }
+                    });
 
                     const bounds = [];
 
@@ -244,6 +286,98 @@
                     }
                 }, 500);
             });
+
+            // Rating (vote stars)
+            document.querySelectorAll('.rating').forEach(ratingDiv => {
+                const destinationId = ratingDiv.dataset.destinationId;
+
+                ratingDiv.querySelectorAll('i').forEach(star => {
+                    star.addEventListener('click', () => {
+                        const score = star.dataset.value;
+
+                        fetch(`/vote/${destinationId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ score: score })
+                        })
+                            .then(response => {
+                                if (response.status === 403) {
+                                    window.location.href = '/login';
+                                    return Promise.reject('Not logged in');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    // Update stars colors
+                                    ratingDiv.querySelectorAll('i').forEach((s, index) => {
+                                        if (index < score) {
+                                            s.classList.remove('text-secondary');
+                                            s.classList.add('text-warning');
+                                        } else {
+                                            s.classList.remove('text-warning');
+                                            s.classList.add('text-secondary');
+                                        }
+                                    });
+
+                                    // Update average rating and vote count
+                                    fetch(`/destination-average/${destinationId}`, {
+                                        method: 'GET',
+                                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                                    })
+                                        .then(response => response.json())
+                                        .then(avgData => {
+                                            const avgElement = ratingDiv.closest('.destination-card-content').querySelector('.avg-rating');
+                                            if (avgData.success) {
+                                                avgElement.innerHTML = `⭐ ${avgData.avgRating}/5 (${avgData.voteCount})`;
+                                            }
+                                        });
+
+                                    // Show thank you toast
+                                    const voteToast = new bootstrap.Toast(document.getElementById('voteToast'));
+                                    voteToast.show();
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors du vote:', error);
+                            });
+                    });
+                });
+            });
+
+            // Toggle wishlist
+            document.querySelectorAll('.toggle-whishlist-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const destinationId = button.dataset.id;
+
+                    fetch('/toggle-whishlist/' + destinationId, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'added') {
+                                button.classList.remove('btn-outline-danger');
+                                button.classList.add('btn-danger');
+                            } else if (data.status === 'removed') {
+                                button.classList.remove('btn-danger');
+                                button.classList.add('btn-outline-danger');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors du changement de favoris:', error);
+                        });
+                });
+            });
+
         });
     </script>
+
+
 {% endblock %}

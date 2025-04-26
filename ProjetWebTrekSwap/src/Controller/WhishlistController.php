@@ -2,13 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Destination;
 use App\Entity\Whishlist;
 use App\Repository\DestinationRepository;
+use App\Service\MarkdownService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\GeminiService;
+use Symfony\Component\HttpFoundation\Request;
+
 final class WhishlistController extends AbstractController
 {
     #[Route('/wishlist', name: 'app_whishlist')]
@@ -78,7 +82,7 @@ final class WhishlistController extends AbstractController
         return $this->redirectToRoute('app_whishlist');
     }
     #[Route('/generate-plan', name: 'generate_plan', methods: ['POST'])]
-    public function generatePlan(EntityManagerInterface $em, GeminiService $geminiService): Response
+    public function generatePlan(EntityManagerInterface $em, GeminiService $geminiService, MarkdownService $markdownService, Request $request): Response
     {
         $user = $this->getUser();
 
@@ -87,7 +91,6 @@ final class WhishlistController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Fetch all wishlist entries for the user
         $whishlists = $em->getRepository(\App\Entity\Whishlist::class)->findBy([
             'user' => $user,
         ]);
@@ -97,20 +100,69 @@ final class WhishlistController extends AbstractController
             return $this->redirectToRoute('app_whishlist');
         }
 
-        // Build a prompt from the list of destination names
+        $days = $request->request->get('days', 5);
+        $language = $request->request->get('language', 'fr'); // default to French
+
         $destinationsList = array_map(function($w) {
             return $w->getDestination()->getNomDestination();
         }, $whishlists);
 
-        $prompt = "Je veux visiter la Tunisie. Voici mes destinations : " . implode(', ', $destinationsList) . ". Peux-tu me proposer un plan de voyage détaillé de plusieurs jours, en expliquant quoi visiter dans chaque endroit ?";
+        // ✨ Build a multi-language prompt
+        if ($language === 'fr') {
+            $prompt = "Je veux visiter la Tunisie pendant $days jours. Voici mes destinations : " . implode(', ', $destinationsList) . ". 
+Peux-tu me proposer un plan de voyage détaillé, jour par jour, en français ?";
+        } elseif ($language === 'en') {
+            $prompt = "I want to visit Tunisia for $days days. Here are my destinations: " . implode(', ', $destinationsList) . ". 
+Can you create a detailed travel plan day by day in English?";
+        } elseif ($language === 'ar') {
+            $prompt = "أريد زيارة تونس لمدة $days أيام. هذه هي الوجهات: " . implode(', ', $destinationsList) . ". 
+هل يمكنك إعداد خطة سفر مفصلة لكل يوم باللغة العربية؟";
+        } else {
+            $prompt = "Je veux visiter la Tunisie pendant $days jours. Voici mes destinations : " . implode(', ', $destinationsList) . ".";
+        }
 
-        // Ask Gemini to generate the travel plan
         $plan = $geminiService->generateContent($prompt);
 
-        // Render the plan in a new template
+        $planHtml = $markdownService->toHtml($plan);
+
         return $this->render('whishlist/plan.html.twig', [
-            'plan' => $plan,
+            'plan' => $planHtml,
         ]);
     }
+
+    #[Route('/toggle-whishlist/{id}', name: 'toggle_whishlist', methods: ['POST'])]
+    public function toggleWhishlist(
+        Destination $destination,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $wishlistRepo = $entityManager->getRepository(Whishlist::class);
+
+        $existing = $wishlistRepo->findOneBy([
+            'user' => $user,
+            'destination' => $destination,
+        ]);
+
+        if ($existing) {
+            // Already exists → remove it
+            $entityManager->remove($existing);
+            $entityManager->flush();
+            return $this->json(['status' => 'removed']);
+        } else {
+            // Not exists → add it
+            $whishlist = new Whishlist();
+            $whishlist->setUser($user);
+            $whishlist->setDestination($destination);
+            $entityManager->persist($whishlist);
+            $entityManager->flush();
+            return $this->json(['status' => 'added']);
+        }
+    }
+
 
 }
