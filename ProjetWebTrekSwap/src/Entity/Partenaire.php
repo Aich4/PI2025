@@ -61,6 +61,15 @@ class Partenaire
     #[Assert\PositiveOrZero(message: "Le montant doit être positif ou nul.")]
     private ?int $montant = null;
 
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: "2M",
+        mimeTypes: ["image/jpeg", "image/png", "image/jpg"],
+        mimeTypesMessage: "Veuillez uploader une image valide (JPEG ou PNG)."
+    )]
+    private ?string $logo = null;
+
+
 
     public function getId(): ?int
     {
@@ -142,5 +151,18 @@ class Partenaire
         $this->montant = $montant;
         return $this;
     }
+
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): self
+    {
+        $this->logo = $logo;
+        return $this;
+    }
+
 
 }

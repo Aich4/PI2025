@@ -13,12 +13,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File as AssertFile;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PartenaireType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $categories = $options['categories']; // récupérées depuis le contrôleur
+        $isEdit = $options['is_edit']; // 👈 option ajoutée
+        $categories = $options['categories'];
 
         $builder
             ->add('nom', TextType::class)
@@ -30,25 +34,36 @@ class PartenaireType extends AbstractType
             ])
             ->add('id_categorie', EntityType::class, [
                 'class' => Categorie::class,
-                'choices' => $categories, // 👈 on injecte les objets ici
+                'choices' => $categories,
                 'choice_label' => 'nom',
                 'placeholder' => 'Choisir une catégorie',
                 'required' => true,
             ])
-
-            ->add('montant', IntegerType::class, [
-                'label' => 'Montant',
-                'attr' => ['class' => 'form-control'],
-                'required' => true,
+            ->add('montant', IntegerType::class)
+            ->add('logo', FileType::class, [
+                'label' => 'Logo du Partenaire (JPEG, PNG)',
+                'mapped' => false, // ⭐ Ne jamais mapper car c'est un FileType !
+                'required' => false, // ⭐ Pas obligatoire même en ajout ou édition
+                'constraints' => [
+                    new AssertFile([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/jpg',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG).',
+                    ])
+                ],
             ]);
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Partenaire::class,
-            'categories' => [], // 👈 définir l’option personnalisée
+            'categories' => [],
+            'is_edit' => false, // 👈 par défaut ce n'est pas une édition
         ]);
     }
 }

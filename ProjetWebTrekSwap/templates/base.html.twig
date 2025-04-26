@@ -188,6 +188,130 @@
             <img src="{{asset('frontTemp/img/clients/client-5.png')}}" class="img-fluid" alt="">
           </div>
 
+          <section id="partenaires" class="section-bg py-2">
+            <div class="container">
+
+              <div class="section-title text-center mb-3">
+                <h2 class="text-primary fw-bold">🏆 Nos Meilleurs Partenaires</h2>
+                <div class="divider mx-auto mb-2" style="width: 60px; height: 3px; background: #ffd700;"></div>
+                <p class="text-muted mb-1">Les plus grands investisseurs mis à l'honneur</p>
+              </div>
+
+              {% if best_partenaires|length > 0 %}
+                <div class="podium-container">
+
+                  {% if best_partenaires|length > 1 %}
+                    <div class="podium-place second floating">
+                      <img src="{{ asset('badges/silver.png') }}" alt="Argent" class="badge-on-top">
+                      <img src="{{ asset('uploads/partenaires/' ~ best_partenaires[1].logo) }}" alt="{{ best_partenaires[1].nom }}" class="partner-img">
+                      <h5 class="mt-2">{{ best_partenaires[1].nom }}</h5>
+                      <div class="points">{{ best_partenaires[1].montant }} TND</div>
+                    </div>
+                  {% endif %}
+
+                  <div class="podium-place first floating">
+                    <img src="{{ asset('badges/crown.png') }}" alt="Couronne" class="badge-on-top">
+                    <img src="{{ asset('uploads/partenaires/' ~ best_partenaires[0].logo) }}" alt="{{ best_partenaires[0].nom }}" class="partner-img">
+                    <h5 class="mt-2">{{ best_partenaires[0].nom }}</h5>
+                    <div class="points">{{ best_partenaires[0].montant }} TND</div>
+                  </div>
+
+                  {% if best_partenaires|length > 2 %}
+                    <div class="podium-place third floating">
+                      <img src="{{ asset('badges/bronze.png') }}" alt="Bronze" class="badge-on-top">
+                      <img src="{{ asset('uploads/partenaires/' ~ best_partenaires[2].logo) }}" alt="{{ best_partenaires[2].nom }}" class="partner-img">
+                      <h5 class="mt-2">{{ best_partenaires[2].nom }}</h5>
+                      <div class="points">{{ best_partenaires[2].montant }} TND</div>
+                    </div>
+                  {% endif %}
+
+                </div>
+              {% endif %}
+
+            </div>
+          </section>
+
+          <style>
+            /* 🏆 Podium Layout */
+            .podium-container {
+              display: flex;
+              justify-content: center;
+              align-items: flex-end;
+              gap: 50px;
+              margin-top: 40px;
+              margin-bottom: 60px;
+            }
+
+            .podium-place {
+              background: #fff;
+              border-radius: 20px;
+              padding: 20px 15px 15px 15px;
+              width: 250px;
+              text-align: center;
+              box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+              position: relative;
+              transition: 0.4s all ease;
+            }
+
+            .first {
+              margin-bottom: 0;
+              transform: translateY(-30px);
+            }
+
+            .second, .third {
+              margin-bottom: 30px;
+            }
+
+            /* 🎖️ Badge (medal / crown) */
+            .badge-on-top {
+              width: 50px;
+              position: absolute;
+              top: -30px;
+              left: 50%;
+              transform: translateX(-50%);
+              filter: none !important;
+              -webkit-filter: none !important;
+            }
+
+            /* 🖼️ Big Partner Image directly */
+            .partner-img {
+              width: 90%;
+              height: 180px;
+              object-fit: contain;
+              margin-top: 20px;
+              filter: none !important;
+              -webkit-filter: none !important;
+            }
+
+            /* 📄 Partner Name and Points */
+            .podium-place h5 {
+              font-size: 18px;
+              margin-top: 15px;
+              color: #333;
+            }
+
+            .points {
+              font-weight: bold;
+              color: #28a745;
+              font-size: 16px;
+              margin-top: 5px;
+            }
+
+            /* ✨ Floating Animation */
+            @keyframes floating {
+              0% { transform: translateY(0px); }
+              50% { transform: translateY(-6px); }
+              100% { transform: translateY(0px); }
+            }
+            .floating {
+              animation: floating 4s ease-in-out infinite;
+            }
+          </style>
+
+
+
+
+
           <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
             <img src="{{asset('frontTemp/img/clients/client-6.png')}}" class="img-fluid" alt="">
           </div>

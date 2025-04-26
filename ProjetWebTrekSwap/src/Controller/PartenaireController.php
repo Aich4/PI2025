@@ -8,11 +8,12 @@ use App\Form\PartenaireType;
 use App\Repository\PartenaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\CategorieRepository; // Correct importation du repository
-use App\Entity\Categorie; // Assure-toi d'importer Categorie depuis App\Entity, pas App\Controller
+use App\Repository\CategorieRepository;
+use App\Entity\Categorie;
 
 class PartenaireController extends AbstractController
 {
@@ -43,7 +44,6 @@ class PartenaireController extends AbstractController
         ]);
     }
 
-
     #[Route('/partenaire/add', name: 'add_partenaire', methods: ['GET', 'POST'])]
     public function addPartenaire(Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): Response
     {
@@ -54,11 +54,24 @@ class PartenaireController extends AbstractController
 
         $form = $this->createForm(PartenaireType::class, $partenaire, [
             'categories' => $categories,
+            'is_edit' => false, // Ajout donc pas édition
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $logoFile */
+            $logoFile = $form->get('logo')->getData();
+
+            if ($logoFile) {
+                $newFilename = uniqid().'.'.$logoFile->guessExtension();
+                $logoFile->move(
+                    $this->getParameter('part_directory'),
+                    $newFilename
+                );
+                $partenaire->setLogo($newFilename);
+            }
+
             $entityManager->persist($partenaire);
             $entityManager->flush();
 
@@ -71,9 +84,6 @@ class PartenaireController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-
-
     #[Route('/partenaire/edit/{id}', name: 'edit_partenaire', methods: ['GET', 'POST'])]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): Response
     {
@@ -87,14 +97,41 @@ class PartenaireController extends AbstractController
 
         $form = $this->createForm(PartenaireType::class, $partenaire, [
             'categories' => $categories,
+            'is_edit' => true,
         ]);
 
+        $originalLogo = $partenaire->getLogo(); // ⭐ On sauvegarde l'ancien logo
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+            /** @var UploadedFile $logoFile */
+            $logoFile = $form->get('logo')->getData();
+            if ($logoFile) {
+                // Supprimer l'ancien fichier si existe
+                if ($originalLogo) {
+                    $oldLogoPath = $this->getParameter('part_directory') . '/' . $originalLogo;
+                    if (is_file($oldLogoPath)) {
+                        @unlink($oldLogoPath);
+                    }
+                }
+
+                // Upload du nouveau logo
+                $newFilename = uniqid().'.'.$logoFile->guessExtension();
+                $logoFile->move(
+                    $this->getParameter('part_directory'),
+                    $newFilename
+                );
+                $partenaire->setLogo($newFilename);
+            } else {
+                // ⭐ Aucun nouveau logo => on remet l'ancien
+                $partenaire->setLogo($originalLogo);
+            }
+
             $entityManager->flush();
 
-            $this->addFlash('success', 'Partenaire mis à jour avec succès!');
+            $this->addFlash('success', 'Partenaire mis à jour avec succès !');
             return $this->redirectToRoute('list_partenaire');
         }
 
@@ -104,6 +141,10 @@ class PartenaireController extends AbstractController
         ]);
     }
 
+
+
+
+
     #[Route('/partenaire/delete/{id}', name: 'delete_partenaire', methods: ['GET'])]
     public function delete(int $id, PartenaireRepository $partenaireRepository, ManagerRegistry $managerRegistry): Response
     {
@@ -112,6 +153,14 @@ class PartenaireController extends AbstractController
 
         if (!$partenaire) {
             throw $this->createNotFoundException('Partenaire non trouvé');
+        }
+
+        $logo = $partenaire->getLogo();
+        if ($logo) {
+            $logoPath = $this->getParameter('part_directory').'/'.$logo;
+            if (file_exists($logoPath) && is_file($logoPath)) {
+                unlink($logoPath);
+            }
         }
 
         $em->remove($partenaire);
