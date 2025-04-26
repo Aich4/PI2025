@@ -123,6 +123,13 @@
                                     data-name="{{ destination.nomDestination }}">
                                 Marquer sur la carte
                             </button>
+                            {% if app.user and not is_granted('ROLE_ADMIN') %}
+                                <form method="post" action="{{ path('add_to_whishlist', {'id': destination.id}) }}">
+                                    <button type="submit" class="btn btn-link text-danger mt-2" style="font-size: 24px;">
+                                        ♥
+                                    </button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

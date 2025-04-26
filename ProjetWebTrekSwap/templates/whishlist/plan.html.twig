@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plan de Voyage{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">🗺️ Votre Plan de Voyage</h1>
+        <div class="card">
+            <div class="card-body">
+                <p>{{ plan|nl2br }}</p>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ path('app_whishlist') }}" class="btn btn-primary">Retour aux favoris</a>
+        </div>
+    </div>
+{% endblock %}
