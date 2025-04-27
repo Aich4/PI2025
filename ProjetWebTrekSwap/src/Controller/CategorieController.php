@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\Component\Pager\PaginatorInterface;
+
 final class CategorieController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
@@ -167,21 +169,38 @@ final class CategorieController extends AbstractController
     }
 
     #[Route('/categorie/{id}', name: 'categorie_partenaires')]
-    public function partenairesParCategorie(int $id, PartenaireRepository $partenaireRepository, CategorieRepository $categorieRepository): Response
+    public function partenairesParCategorie(
+        int $id,
+        PartenaireRepository $partenaireRepository,
+        CategorieRepository $categorieRepository,
+        Request $request,                  // 👈 tu ajoutes Request ici
+        PaginatorInterface $paginator      // 👈 tu ajoutes Paginator ici
+    ): Response
     {
         $categorie = $categorieRepository->find($id);
         $categories = $categorieRepository->findAll();
-        // Vérifier si la catégorie existe
+
         if (!$categorie) {
             throw $this->createNotFoundException('La catégorie n\'existe pas.');
         }
 
-        // Récupérer tous les partenaires liés à cette catégorie
-        $partenaires = $partenaireRepository->findBy(['id_categorie' => $id]);
+        // 🔥 Correction : utiliser QueryBuilder au lieu de findBy
+        $query = $partenaireRepository->createQueryBuilder('p')
+            ->where('p.id_categorie = :id')
+            ->setParameter('id', $id)
+            ->orderBy('p.id', 'DESC')
+            ->getQuery();
+
+        // 🔥 Appliquer la pagination
+        $partenaires = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            2 // Combien de partenaires par page
+        );
 
         return $this->render('categorie/partenaires.html.twig', [
             'categorie' => $categorie,
-            'partenaires' => $partenaires,
+            'partenaires' => $partenaires,   // 👈 reste ton même nom
             'categories' => $categories,
         ]);
     }

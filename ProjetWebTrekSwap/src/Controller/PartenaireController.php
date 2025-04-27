@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CategorieRepository;
 use App\Entity\Categorie;
+use Knp\Component\Pager\PaginatorInterface;
 
 class PartenaireController extends AbstractController
 {

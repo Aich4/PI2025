@@ -27,6 +27,10 @@
                     </article>
                 {% endfor %}
             </div>
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(partenaires) }}
+            </div>
+
         {% else %}
             <div style="margin-top: 2rem; padding: 1rem 1.5rem; background-color: #fff3cd; color: #856404; border-radius: 8px; border: 1px solid #ffeeba;">
                 Aucun partenaire trouvé pour cette catégorie.

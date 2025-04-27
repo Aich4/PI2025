@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Service/GeminiPart.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Service/GeminiPart.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/generate_partners.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/generate_partners.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,6 +161,11 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy-bundle" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/commonmark" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/config" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/schema" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dflydev/dot-access-data" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
