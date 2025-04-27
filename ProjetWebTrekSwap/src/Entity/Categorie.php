@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
@@ -12,10 +13,12 @@ class Categorie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['categories'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom de la catégorie est obligatoire.")]
+    #[Groups(['categories'])]
     #[Assert\Length(
         min: 3,
         max: 100,
@@ -30,6 +33,7 @@ class Categorie
 
     #[ORM\Column(length: 500)]
     #[Assert\NotBlank(message: "La description est obligatoire.")]
+    #[Groups(['categories'])]
     #[Assert\Length(
         min: 10,
         max: 500,
@@ -44,11 +48,13 @@ class Categorie
 
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['categories'])]
     private ?string $logo = null;
 
     #[ORM\Column(nullable: true)]
     #[Assert\NotBlank(message: "Le nombre de partenaires est obligatoire.")]
     #[Assert\PositiveOrZero(message: "Le nombre de partenaires doit être positif ou zéro.")]
+    #[Groups(['categories'])]
     private ?int $nbr_partenaire = null;
 
 
@@ -100,4 +106,5 @@ class Categorie
         $this->nbr_partenaire = $nbr_partenaire;
         return $this;
     }
+
 }

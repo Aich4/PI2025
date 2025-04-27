@@ -15,6 +15,8 @@
         "doctrine/orm": "^3.3",
         "knplabs/knp-paginator-bundle": "^6.7",
         "league/commonmark": "^2.6",
+        "knplabs/knp-snappy-bundle": "^1.10",
+
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.1",
         "symfony/asset": "6.4.*",
@@ -94,7 +96,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "6.4.*"
         }
     },

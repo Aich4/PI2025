@@ -49,10 +49,27 @@ class Partenaire
     #[Assert\GreaterThanOrEqual("today", message: "La date d'ajout ne peut pas être dans le passé.")]
     private ?\DateTimeInterface $date_ajout = null;
 
-    #[ORM\Column]
+
     #[Assert\NotNull(message: "La catégorie est obligatoire.")]
-    #[Assert\Positive(message: "L'identifiant de la catégorie doit être un nombre positif.")]
-    private ?int $id_categorie = null;
+    #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'Partenaires')]
+    #[ORM\JoinColumn(name: 'id_categorie', referencedColumnName: 'id', nullable: false)]
+    private ?Categorie $id_categorie = null;
+
+
+    #[ORM\Column(type: Types::INTEGER)]
+    #[Assert\NotNull(message: "Le montant est obligatoire.")]
+    #[Assert\PositiveOrZero(message: "Le montant doit être positif ou nul.")]
+    private ?int $montant = null;
+
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: "2M",
+        mimeTypes: ["image/jpeg", "image/png", "image/jpg"],
+        mimeTypesMessage: "Veuillez uploader une image valide (JPEG ou PNG)."
+    )]
+    private ?string $logo = null;
+
+
 
     public function getId(): ?int
     {
@@ -114,14 +131,38 @@ class Partenaire
         return $this;
     }
 
-    public function getIdCategorie(): ?int
+    public function getIdCategorie(): ?Categorie
     {
         return $this->id_categorie;
     }
 
-    public function setIdCategorie(?int $id_categorie): static
+    public function setIdCategorie(?Categorie $id_categorie): void
     {
         $this->id_categorie = $id_categorie;
+    }
+
+    public function getMontant(): ?int
+    {
+        return $this->montant;
+    }
+
+    public function setMontant(?int $montant): static
+    {
+        $this->montant = $montant;
         return $this;
     }
+
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): self
+    {
+        $this->logo = $logo;
+        return $this;
+    }
+
+
 }

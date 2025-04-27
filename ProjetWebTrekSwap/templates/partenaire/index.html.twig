@@ -5,23 +5,23 @@
 {% block body %}
     <main id="main" class="main">
         <div class="container mt-5">
-            <h1 class="text-center mb-4 text-primary">Liste des Partenaires</h1> <!-- Change text-warning to text-primary -->
+            <h1 class="text-center mb-4 text-primary">Liste des Partenaires</h1>
 
-            <!-- Container for better layout -->
             <div class="card shadow-lg p-4 rounded-lg custom-bg-light">
                 <div class="card-body">
-                    <!-- Table with improved colors and layout -->
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered table-striped text-center align-middle custom-table-bg">
                             <thead class="bg-info text-white">
                             <tr>
-                                <th class="custom-th">ID Partenaire</th>
+                                <th class="custom-th">ID</th>
                                 <th class="custom-th">Nom</th>
                                 <th class="custom-th">Email</th>
                                 <th class="custom-th">Adresse</th>
                                 <th class="custom-th">Description</th>
                                 <th class="custom-th">Date d'ajout</th>
                                 <th class="custom-th">Catégorie</th>
+                                <th class="custom-th">Montant</th>
+                                <th class="custom-th">Logo</th> {# nouvelle colonne #}
                                 <th class="custom-th">Actions</th>
                             </tr>
                             </thead>
@@ -34,9 +34,16 @@
                                     <td>{{ partenaire.adresse }}</td>
                                     <td>{{ partenaire.description }}</td>
                                     <td>{{ partenaire.dateAjout ? partenaire.dateAjout|date('d/m/Y') : 'N/A' }}</td>
-                                    <td>{{ categorieMap[partenaire.idCategorie] ?? 'Inconnue' }}</td>
+                                    <td>{{ partenaire.getIdCategorie ? partenaire.getIdCategorie.nom : 'N/A' }}</td>
+                                    <td>{{ partenaire.montant }}</td>
                                     <td>
-                                        <!-- Button group with icons -->
+                                        {% if partenaire.logo %}
+                                            <img src="{{ asset('uploads/partenaires/' ~ partenaire.logo) }}" alt="Logo" style="width: 60px; height: auto;">
+                                        {% else %}
+                                            <span class="text-muted">Pas de logo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
                                         <div class="btn-group" role="group">
                                             <a href="{{ path('edit_partenaire', { id: partenaire.id }) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
                                                 <i class="bi bi-pencil-fill"></i>
@@ -49,17 +56,20 @@
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="8" class="text-center text-muted">Aucun partenaire trouvé.</td>
+                                    <td colspan="10" class="text-center text-muted">Aucun partenaire trouvé.</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- Button to add a new partner -->
-                    <div class="text-center mt-4">
+                    <div class="text-center mt-4 d-flex flex-column gap-2 align-items-center">
                         <a href="{{ path('add_partenaire') }}" class="btn btn-success px-4 py-2">
                             <i class="bi bi-plus-circle-dotted"></i> Ajouter un Partenaire
+                        </a>
+
+                        <a id="export-pdf-btn" class="btn btn-danger disabled">
+                            <i class="bi bi-file-earmark-pdf-fill"></i> Exporter le contrat PDF
                         </a>
                     </div>
                 </div>
@@ -73,23 +83,41 @@
         .custom-bg-light {
             background-color: #e9ecef !important;
         }
-
         .custom-table-bg {
             background-color: #f4f6f9 !important;
         }
-
         .card {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         .custom-th {
             background-color: #cce5ff;
             color: #0056b3;
             font-weight: bold;
         }
-
         .table-hover tbody tr:hover {
             background-color: #f1f1f1 !important;
         }
+        .table-primary {
+            background-color: #d1ecf1 !important;
+        }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let selectedPartenaireId = null;
+
+        document.querySelectorAll("tbody tr").forEach(row => {
+            row.addEventListener("dblclick", () => {
+                document.querySelectorAll("tbody tr").forEach(r => r.classList.remove("table-primary"));
+                row.classList.add("table-primary");
+
+                selectedPartenaireId = row.querySelector("td").textContent.trim();
+
+                const exportBtn = document.getElementById("export-pdf-btn");
+                exportBtn.classList.remove("disabled");
+                exportBtn.href = "/partenaire/" + selectedPartenaireId + "/contrat";
+            });
+        });
+    </script>
 {% endblock %}

@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="" />
+    <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/public/badges/bronze.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/public/badges/crown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/public/badges/gold.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/public/badges/silver.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/PartenaireRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/PartenaireRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/addPartenaire.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/addPartenaire.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/editPartenaire.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/editPartenaire.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -151,6 +166,8 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-components" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -164,7 +181,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "gestionDestinationEtActivite",
+    "git-widget-placeholder": "GestionPartenaire",
+    "last_opened_file_path": "C:/Users/abdgh/OneDrive/Bureau/ghaliaabdk/PI2025/ProjetWebTrekSwap/public/badges",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -173,6 +191,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\abdgh\OneDrive\Bureau\ghaliaabdk\PI2025\ProjetWebTrekSwap\public\badges" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -215,6 +238,11 @@
       <workItem from="1744709791227" duration="1677000" />
       <workItem from="1744717806386" duration="1732000" />
       <workItem from="1745246683620" duration="6000" />
+      <workItem from="1745328080987" duration="3061000" />
+      <workItem from="1745499380813" duration="811000" />
+      <workItem from="1745590019274" duration="9100000" />
+      <workItem from="1745661194943" duration="12633000" />
+      <workItem from="1745674696544" duration="7966000" />
     </task>
     <servers />
   </component>
