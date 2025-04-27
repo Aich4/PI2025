@@ -13,6 +13,8 @@
   <!-- Favicons -->
   <link href="{{asset('frontTemp/img/favicon.png')}}" rel="icon">
   <link href="{{asset('frontTemp/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -50,33 +52,39 @@
       <h1 style="margin: 0; font-size: 24px;">TrekSwap</h1>
     </a>
 
-    <nav id="navbar" class="navbar">
-      <ul>
-        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-        <li><a class="nav-link scrollto" href="#about">About</a></li>
-        <li><a class="nav-link scrollto" href="{{ path('index') }}#pricingA">Pricing</a></li>
-        <li><a class="nav-link" href="/DestinationFrontShow">Destinations</a></li>
-        <li><a class="nav-link scrollto" href="/reclamation/new">Reclamation</a></li>
-        <li><a class="nav-link scrollto" href="/mission/missions-front">Missions</a></li>
-        <li class="dropdown">
-          <a href="#"><span>Catégories</span> <i class="bi bi-chevron-down"></i></a>
-          <ul>
-            {% if categories is defined and categories is not empty %}
-              {% for categorie in categories %}
-                <li>
-                  <a href="{{ path('categorie_partenaires', {'id': categorie.id}) }}">
-                    <img src="{{ asset('uploads/logos/' ~ categorie.logo) }}"
-                         alt="{{ categorie.nom }}"
-                         style="height: 35px; width: 35px; object-fit: cover; margin-right: 8px; vertical-align: middle;">
-                    {{ categorie.nom }}
-                  </a>
-                </li>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">About</a></li>
+          <li><a class="nav-link scrollto" href="{{ path('index') }}#pricingA">Pricing</a></li>
+          <li><a class="nav-link" href="/DestinationFrontShow">Destinations</a></li>
+          <li><a class="nav-link scrollto" href="/reclamation/new">Reclamation</a></li>
+            <li><a class="nav-link scrollto" href="/mission/missions-front">Missions</a></li>
+          <li>
+            <a class="nav-link" href="/wishlist">
+              <i class="bi bi-heart-fill" style="color: red;"></i> Favoris
+            </a>
+          </li>
+
+          <li class="dropdown">
+            <a href="#"><span>Catégories</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              {% if categories is defined and categories is not empty %}
+                {% for categorie in categories %}
+                  <li>
+                    <a href="{{ path('categorie_partenaires', {'id': categorie.id}) }}">
+                      <img src="{{ asset('uploads/logos/' ~ categorie.logo) }}"
+                           alt="{{ categorie.nom }}"
+                           style="height: 35px; width: 35px; object-fit: cover; margin-right: 8px; vertical-align: middle;">
+                      {{ categorie.nom }}
+                    </a>
+                  </li>
+                {% else %}
+                  <li><a href="#">Aucune catégorie disponible</a></li>
+                {% endfor %}
               {% else %}
                 <li><a href="#">Aucune catégorie disponible</a></li>
-              {% endfor %}
-            {% else %}
-              <li><a href="#">Aucune catégorie disponible</a></li>
-            {% endif %}
+              {% endif %}
 
           </ul>
         </li>
@@ -307,459 +315,459 @@
     </div>
   </div>
 
-  <!-- ======= About Section ======= -->
-  <section id="about" class="about">
-    <div class="container">
-
-      <div class="row">
-        <div class="col-lg-6">
-          <img src="{{asset('frontTemp/img/about.jpg')}}" class="img-fluid" alt="">
-        </div>
-        <div class="col-lg-6 pt-4 pt-lg-0">
-          <h3>Voluptatem dignissimos provident quasi</h3>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit
-          </p>
-          <div class="row">
-            <div class="col-md-6">
-              <i class="bx bx-receipt"></i>
-              <h4>Corporis voluptates sit</h4>
-              <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut aliquip</p>
-            </div>
-            <div class="col-md-6">
-              <i class="bx bx-cube-alt"></i>
-              <h4>Ullamco laboris nisi</h4>
-              <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section><!-- End About Section -->
-
-  <!-- ======= Counts Section ======= -->
-  <section id="counts" class="counts section-bg">
-    <div class="container">
-
-      <div class="row counters">
-
-        <div class="col-lg-3 col-6 text-center">
-          <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
-          <p>Clients</p>
-        </div>
-
-        <div class="col-lg-3 col-6 text-center">
-          <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
-          <p>Projects</p>
-        </div>
-
-        <div class="col-lg-3 col-6 text-center">
-          <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
-          <p>Hours Of Support</p>
-        </div>
-
-        <div class="col-lg-3 col-6 text-center">
-          <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
-          <p>Hard Workers</p>
-        </div>
-
-      </div>
-
-    </div>
-  </section><!-- End Counts Section -->
-
-  <!-- ======= Services Section ======= -->
-  <section id="services" class="services">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Hotels</h2>
-        <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-      </div>
-
-      <div class="row">
-
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-          <div class="icon-box iconbox-blue">
-            <div class="icon">
-              <i class="bx bxl-dribbble"></i>
-            </div>
-            <h4><a href="">Lorem Ipsum</a></h4>
-            <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
-          <div class="icon-box iconbox-orange ">
-            <div class="icon">
-              <i class="bx bx-file"></i>
-            </div>
-            <h4><a href="">Sed Perspiciatis</a></h4>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
-          <div class="icon-box iconbox-pink">
-            <div class="icon">
-              <i class="bx bx-tachometer"></i>
-            </div>
-            <h4><a href="">Magni Dolores</a></h4>
-            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
-          <div class="icon-box iconbox-yellow">
-            <div class="icon">
-              <i class="bx bx-layer"></i>
-            </div>
-            <h4><a href="">Nemo Enim</a></h4>
-            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-          <div class="icon-box iconbox-red">
-            <div class="icon">
-              <i class="bx bx-slideshow"></i>
-            </div>
-            <h4><a href="">Dele Cardo</a></h4>
-            <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
-          <div class="icon-box iconbox-teal">
-            <div class="icon">
-              <i class="bx bx-arch"></i>
-            </div>
-            <h4><a href="">Divera Don</a></h4>
-            <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section><!-- End Services Section -->
-
-  <!-- ======= Cta Section ======= -->
-  <section id="cta" class="cta">
-    <div class="container">
-
-      <div class="text-center">
-        <h3>Call To Action</h3>
-        <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <a class="cta-btn" href="#">Call To Action</a>
-      </div>
-
-    </div>
-  </section><!-- End Cta Section -->
-
-
-
-  <!-- ======= Team Section ======= -->
-  <section id="team" class="team section-bg">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Team</h2>
-        <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-      </div>
-
-      <div class="row">
-
-        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-          <div class="member">
-            <div class="member-img">
-              <img src="{{asset('frontTemp/img/team/team-1.jpg')}}" class="img-fluid" alt="">
-              <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-            <div class="member-info">
-              <h4>Walter White</h4>
-              <span>Chief Executive Officer</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-          <div class="member">
-            <div class="member-img">
-              <img src="{{asset('frontTemp/img/team/team-2.jpg')}}" class="img-fluid" alt="">
-              <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-            <div class="member-info">
-              <h4>Sarah Jhonson</h4>
-              <span>Product Manager</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-          <div class="member">
-            <div class="member-img">
-              <img src="{{asset('frontTemp/img/team/team-3.jpg')}}" class="img-fluid" alt="">
-              <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-            <div class="member-info">
-              <h4>William Anderson</h4>
-              <span>CTO</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-          <div class="member">
-            <div class="member-img">
-              <img src="{{asset('frontTemp/img/team/team-4.jpg')}}" class="img-fluid" alt="">
-              <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-            <div class="member-info">
-              <h4>Amanda Jepson</h4>
-              <span>Accountant</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section><!-- End Team Section -->
-  {% block pricing %}
-    <!-- ======= Pricing Section ======= -->
-    <section id="pricingA" class="pricing">
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
       <div class="container">
+
+        <div class="row">
+          <div class="col-lg-6">
+            <img src="{{asset('frontTemp/img/about.jpg')}}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0">
+            <h3>Voluptatem dignissimos provident quasi</h3>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit
+            </p>
+            <div class="row">
+              <div class="col-md-6">
+                <i class="bx bx-receipt"></i>
+                <h4>Corporis voluptates sit</h4>
+                <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut aliquip</p>
+              </div>
+              <div class="col-md-6">
+                <i class="bx bx-cube-alt"></i>
+                <h4>Ullamco laboris nisi</h4>
+                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts section-bg">
+      <div class="container">
+
+        <div class="row counters">
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+            <p>Clients</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+            <p>Projects</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
+            <p>Hours Of Support</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
+            <p>Hard Workers</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Counts Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container">
+
         <div class="section-title">
-          <h2>Pricing</h2>
-          <p>If you need more information contact us</p>
+          <h2>Hotels</h2>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
 
         <div class="row">
-          {% for abonnement in abonnements %}
-            <div class="col-lg-3 col-md-6">
-              <div class="box">
-                <h3>Subscription Details</h3>
-                <h4>{{ packRepository.getPriceById(abonnement.getIdPack()) }}<sup> DT </sup><span> / month</span></h4>
-                <ul>
-                  <li>
-                    <a href="javascript:void(0);" onclick="togglePackDetails({{ abonnement.getIdPack() }})">
-                      {{ packRepository.getNomById(abonnement.getIdPack()) }}
-                    </a>
-                  </li> {# Pack Name Clickable #}
-                  <li>Start date: {{ abonnement.getDateSouscription()|date('d/m/Y') }}</li>
-                  <li>Expiration date: {{ abonnement.getDateExpiration()|date('d/m/Y') }}</li>
-                  <li>{{ abonnement.getStatut() }}</li>
-                </ul>
-                <div class="btn-wrap">
-                  <a href="{{ path('checkout', { id: abonnement. getIdAbonnement() }) }}" class="btn-buy">Buy Now</a>
-                </div>
 
-                <!-- Hidden Pack Details -->
-                <div id="pack-details-{{ abonnement.getIdPack() }}" class="pack-details hidden">
-                  <h4>Pack Details</h4>
-                  <p><strong>Name:</strong> {{ packRepository.getNomById(abonnement.getIdPack()) }}</p>
-                  <p><strong>Description:</strong> {{ packRepository.getDescriptionById(abonnement.getIdPack()) }}</p>
-                  <p><strong>Advantages:</strong> {{ packRepository.getAvantagesById(abonnement.getIdPack()) }}</p>
-                  <p><strong>Duree:</strong> {{ packRepository.getDureeById(abonnement.getIdPack()) }}</p>
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box iconbox-blue">
+              <div class="icon">
+                <i class="bx bxl-dribbble"></i>
+              </div>
+              <h4><a href="">Lorem Ipsum</a></h4>
+              <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+            </div>
+          </div>
 
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+            <div class="icon-box iconbox-orange ">
+              <div class="icon">
+                <i class="bx bx-file"></i>
+              </div>
+              <h4><a href="">Sed Perspiciatis</a></h4>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-box iconbox-pink">
+              <div class="icon">
+                <i class="bx bx-tachometer"></i>
+              </div>
+              <h4><a href="">Magni Dolores</a></h4>
+              <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box iconbox-yellow">
+              <div class="icon">
+                <i class="bx bx-layer"></i>
+              </div>
+              <h4><a href="">Nemo Enim</a></h4>
+              <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+            <div class="icon-box iconbox-red">
+              <div class="icon">
+                <i class="bx bx-slideshow"></i>
+              </div>
+              <h4><a href="">Dele Cardo</a></h4>
+              <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-box iconbox-teal">
+              <div class="icon">
+                <i class="bx bx-arch"></i>
+              </div>
+              <h4><a href="">Divera Don</a></h4>
+              <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Cta Section ======= -->
+    <section id="cta" class="cta">
+      <div class="container">
+
+        <div class="text-center">
+          <h3>Call To Action</h3>
+          <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <a class="cta-btn" href="#">Call To Action</a>
+        </div>
+
+      </div>
+    </section><!-- End Cta Section -->
+
+
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team section-bg">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Team</h2>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member">
+              <div class="member-img">
+                <img src="{{asset('frontTemp/img/team/team-1.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
                 </div>
               </div>
+              <div class="member-info">
+                <h4>Walter White</h4>
+                <span>Chief Executive Officer</span>
+              </div>
             </div>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
+          </div>
 
-    <!-- JavaScript for Toggle -->
-    <script>
-      function togglePackDetails(packId) {
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member">
+              <div class="member-img">
+                <img src="{{asset('frontTemp/img/team/team-2.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Sarah Jhonson</h4>
+                <span>Product Manager</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member">
+              <div class="member-img">
+                <img src="{{asset('frontTemp/img/team/team-3.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>William Anderson</h4>
+                <span>CTO</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member">
+              <div class="member-img">
+                <img src="{{asset('frontTemp/img/team/team-4.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Amanda Jepson</h4>
+                <span>Accountant</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+{% block pricing %}
+<!-- ======= Pricing Section ======= -->
+<section id="pricingA" class="pricing">
+    <div class="container">
+        <div class="section-title">
+            <h2>Pricing</h2>
+            <p>If you need more information contact us</p>
+        </div>
+
+        <div class="row">
+            {% for abonnement in abonnements %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="box">
+                        <h3>Subscription Details</h3>
+                        <h4>{{ packRepository.getPriceById(abonnement.getIdPack()) }}<sup> DT </sup><span> / month</span></h4>
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0);" onclick="togglePackDetails({{ abonnement.getIdPack() }})">
+                                    {{ packRepository.getNomById(abonnement.getIdPack()) }}
+                                </a>
+                            </li> {# Pack Name Clickable #}
+                            <li>Start date: {{ abonnement.getDateSouscription()|date('d/m/Y') }}</li>
+                            <li>Expiration date: {{ abonnement.getDateExpiration()|date('d/m/Y') }}</li>
+                            <li>{{ abonnement.getStatut() }}</li>
+                        </ul>
+                        <div class="btn-wrap">
+                        <a href="{{ path('checkout', { id: abonnement. getIdAbonnement() }) }}" class="btn-buy">Buy Now</a>
+                        </div>
+
+                        <!-- Hidden Pack Details -->
+                        <div id="pack-details-{{ abonnement.getIdPack() }}" class="pack-details hidden">
+                            <h4>Pack Details</h4>
+                            <p><strong>Name:</strong> {{ packRepository.getNomById(abonnement.getIdPack()) }}</p>
+                            <p><strong>Description:</strong> {{ packRepository.getDescriptionById(abonnement.getIdPack()) }}</p>
+                            <p><strong>Advantages:</strong> {{ packRepository.getAvantagesById(abonnement.getIdPack()) }}</p>
+                            <p><strong>Duree:</strong> {{ packRepository.getDureeById(abonnement.getIdPack()) }}</p>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript for Toggle -->
+<script>
+    function togglePackDetails(packId) {
         let detailsDiv = document.getElementById('pack-details-' + packId);
         if (detailsDiv.classList.contains('hidden')) {
-          detailsDiv.classList.remove('hidden');
+            detailsDiv.classList.remove('hidden');
         } else {
-          detailsDiv.classList.add('hidden');
+            detailsDiv.classList.add('hidden');
         }
-      }
-    </script>
+    }
+</script>
 
-    <style>
-      .hidden {
+<style>
+    .hidden {
         display: none;
-      }
-      .pack-details {
+    }
+    .pack-details {
         background: #f8f9fa;
         padding: 10px;
         margin-top: 10px;
         border-radius: 5px;
-      }
-    </style>
+    }
+</style>
 
-  {% endblock %}
+{% endblock %}
 
 
 
-  <!-- ======= Contact Section ======= -->
-  <section id="contact" class="contact">
-    <div class="container">
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
 
-      <div class="section-title">
-        <h2>Contact</h2>
-        <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-      </div>
+        <div class="section-title">
+          <h2>Contact</h2>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        </div>
 
-      <div class="row">
+        <div class="row">
 
-        <div class="col-lg-6">
+          <div class="col-lg-6">
 
-          <div class="row">
-            <div class="col-md-12">
-              <div class="info-box">
-                <i class="bx bx-map"></i>
-                <h3>Our Address</h3>
-                <p>rue el horeya , el ghazela, ariana</p>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="info-box">
+                  <i class="bx bx-map"></i>
+                  <h3>Our Address</h3>
+                  <p>rue el horeya , el ghazela, ariana</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-box mt-4">
+                  <i class="bx bx-envelope"></i>
+                  <h3>Email Us</h3>
+                  <p>info@example.com<br>contact@trekswap.com</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-box mt-4">
+                  <i class="bx bx-phone-call"></i>
+                  <h3>Call Us</h3>
+                  <p>+216 70 012 001<br>+216 70 004 003</p>
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="info-box mt-4">
-                <i class="bx bx-envelope"></i>
-                <h3>Email Us</h3>
-                <p>info@example.com<br>contact@trekswap.com</p>
+
+          </div>
+
+          <div class="col-lg-6">
+            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="info-box mt-4">
-                <i class="bx bx-phone-call"></i>
-                <h3>Call Us</h3>
-                <p>+216 70 012 001<br>+216 70 004 003</p>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
               </div>
-            </div>
+              <div class="form-group mt-3">
+                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+              </div>
+              <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
           </div>
 
         </div>
 
-        <div class="col-lg-6">
-          <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-            <div class="row">
-              <div class="col-md-6 form-group">
-                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-              </div>
-              <div class="col-md-6 form-group mt-3 mt-md-0">
-                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-              </div>
-            </div>
-            <div class="form-group mt-3">
-              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-            </div>
-            <div class="form-group mt-3">
-              <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-            </div>
-            <div class="my-3">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
-            </div>
-            <div class="text-center"><button type="submit">Send Message</button></div>
-          </form>
-        </div>
-
       </div>
+    </section><!-- End Contact Section -->
+{% endblock %}
+  </main><!-- End #main -->
 
-    </div>
-  </section><!-- End Contact Section -->
-  {% endblock %}
-</main><!-- End #main -->
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
 
-<!-- ======= Footer ======= -->
-<footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
 
-  <div class="footer-top">
-    <div class="container">
-      <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>TrekSwap</h3>
+            <p>
+              rue el horeya<br>
+              Ariana , el ghazela<br>
+             Tunisia <br><br>
+              <strong>Phone:</strong> 70 004 003<br>
+              <strong>Email:</strong> contact@trekswap.com<br>
+            </p>
+          </div>
 
-        <div class="col-lg-3 col-md-6 footer-contact">
-          <h3>TrekSwap</h3>
-          <p>
-            rue el horeya<br>
-            Ariana , el ghazela<br>
-            Tunisia <br><br>
-            <strong>Phone:</strong> 70 004 003<br>
-            <strong>Email:</strong> contact@trekswap.com<br>
-          </p>
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Services</h4>
+
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Join Our Newsletter</h4>
+            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+            <form action="" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+          </div>
+
         </div>
-
-        <div class="col-lg-2 col-md-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Services</h4>
-
-        </div>
-
-        <div class="col-lg-4 col-md-6 footer-newsletter">
-          <h4>Join Our Newsletter</h4>
-          <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-          <form action="" method="post">
-            <input type="email" name="email"><input type="submit" value="Subscribe">
-          </form>
-        </div>
-
       </div>
     </div>
-  </div>
 
-  <div class="container d-md-flex py-4">
+    <div class="container d-md-flex py-4">
 
-    <div class="me-md-auto text-center text-md-start">
-      <div class="copyright">
-        &copy; Copyright <strong><span>TrekSwap</span></strong>. All Rights Reserved
+      <div class="me-md-auto text-center text-md-start">
+        <div class="copyright">
+          &copy; Copyright <strong><span>TrekSwap</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/baker-free-onepage-bootstrap-theme/ -->
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
       </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/baker-free-onepage-bootstrap-theme/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      <div class="social-links text-center text-md-right pt-3 pt-md-0">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
       </div>
-    </div>
-    <div class="social-links text-center text-md-right pt-3 pt-md-0">
-      <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-      <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-      <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-      <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-      <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-    </div>
-  </div>@
-</footer><!-- End Footer -->
+    </div>@
+  </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 {% block js %}
