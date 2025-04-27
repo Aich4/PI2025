@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -231,7 +233,7 @@
       <workItem from="1745590019274" duration="9100000" />
       <workItem from="1745661194943" duration="12633000" />
       <workItem from="1745674696544" duration="7966000" />
-      <workItem from="1745699784392" duration="4348000" />
+      <workItem from="1745699784392" duration="12731000" />
     </task>
     <servers />
   </component>

@@ -1,0 +1,57 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Generate Partners{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">🛠️ Generate Partners</h1>
+
+        {{ form_start(form) }}
+        {{ form_row(form.place) }}
+        {{ form_row(form.number) }}
+        <button type="submit" class="btn btn-primary w-100">🚀 Generate</button>
+        {{ form_end(form) }}
+
+        {% if partners is defined and partners|length > 0 %}
+            <h2 class="text-center mt-5">🎯 Suggested Partners:</h2>
+            <div class="row mt-4">
+                {% for partner in partners %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-sm p-3">
+                            <h5><strong>{{ partner.name }}</strong></h5>
+                            <p>📍 {{ partner.address }}</p>
+                            <p>✉️ {{ partner.email }}</p>
+                            <p>🏷️ {{ partner.type|capitalize }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[name="generate_partners"]');
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            form.addEventListener('submit', function() {
+                // Disable button and show spinner
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+            });
+
+            {% for message in app.flashes('success') %}
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ message }}',
+                confirmButtonColor: '#3085d6'
+            });
+            {% endfor %}
+        });
+    </script>
+{% endblock %}
