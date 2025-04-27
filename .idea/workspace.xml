@@ -5,24 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/public/uploads/profile_pictures/hotel-680caf9112043.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/public/uploads/profile_pictures/restaurant-680cc5c642de4.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/WhishlistController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/AvisDestination.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Whishlist.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/AvisDestinationRepository.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/WhishlistRepository.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Service/GeminiService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Service/MarkdownService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/whishlist/index.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/whishlist/plan.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/ActiviteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/DestinationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/DestinationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/destination/showFront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/destination/showFront.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Service/GeminiPart.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Service/GeminiPart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/generate_partners.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/generate_partners.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +170,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging GestionPartenaire",
+    "git-widget-placeholder": "GestionPartenaire",
     "last_opened_file_path": "C:/Users/abdgh/OneDrive/Bureau/ghaliaabdk/PI2025/ProjetWebTrekSwap/public/badges",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
