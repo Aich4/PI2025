@@ -54,4 +54,12 @@ public function findByDate(\DateTimeInterface $date): array
         ->getQuery()
         ->getResult();
 }
+public function findReclamationByDescriptionRec(string $description): array
+{
+    return $this->createQueryBuilder('r')
+        ->where('r.descriptionRec LIKE :description')
+        ->setParameter('description', '%' . $description . '%')
+        ->getQuery()
+        ->getResult();
+}
 }

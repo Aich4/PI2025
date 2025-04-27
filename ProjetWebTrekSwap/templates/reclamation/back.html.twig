@@ -352,7 +352,8 @@
                                     <div class="col-md-4">
                                         <label for="search" class="form-label">Recherche</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="search" name="search" value="{{ searchQuery }}" placeholder="Rechercher dans tous les champs...">
+                                           <input type="text" id="search" class="form-control" placeholder="Rechercher par description...">
+
                                             <button class="btn btn-outline-secondary" type="submit">
                                                 <i class="bi bi-search"></i>
                                             </button>
@@ -436,32 +437,33 @@
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {% for reclamation in reclamations %}
-                                            <tr>
-                                                <td>{{ reclamation.idRec }}</td>
-                                                <td>{{ reclamation.descriptionRec }}</td>
-                                                <td>{{ reclamation.dateRec ? reclamation.dateRec|date('Y-m-d H:i:s') : '' }}</td>
-                                                <td>{{ reclamation.typeRec }}</td>
-                                                <td>
-                                                    <span class="badge bg-{{ reclamation.etatRec == 'En cours' ? 'warning' : (reclamation.etatRec == 'Résolue' ? 'success' : 'danger') }}">
-                                                        {{ reclamation.etatRec }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group" role="group">
-                                                        <a href="{{ path('app_reclamation_show', {'id_rec': reclamation.idRec}) }}" class="btn btn-sm btn-info">
-                                                            <i class="bi bi-eye"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {% else %}
-                                            <tr>
-                                                <td colspan="6" class="text-center">Aucune réclamation trouvée</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
+                                    <tbody id="all">
+    {% for reclamation in reclamations %}
+        <tr>
+            <td>{{ reclamation.idRec }}</td>
+            <td>{{ reclamation.descriptionRec }}</td>
+            <td>{{ reclamation.dateRec ? reclamation.dateRec|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ reclamation.typeRec }}</td>
+            <td>
+                <span class="badge bg-{{ reclamation.etatRec == 'En cours' ? 'warning' : (reclamation.etatRec == 'Résolue' ? 'success' : 'danger') }}">
+                    {{ reclamation.etatRec }}
+                </span>
+            </td>
+            <td>
+                <a href="{{ path('app_reclamation_show', {'id_rec': reclamation.idRec}) }}" class="btn btn-sm btn-info">
+                    <i class="bi bi-eye"></i>
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6" class="text-center">Aucune réclamation trouvée</td>
+        </tr>
+    {% endfor %}
+</tbody>
+
+<tbody id="searchtab"></tbody>
+
                                 </table>
                             </div>
                             <div class="col-12 mt-3">
@@ -482,6 +484,65 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/locales/fr.global.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    let typingTimer; // Variable to hold the timeout
+    const delay = 300; // Delay in milliseconds (0.3 seconds)
+
+    $("#search").keyup(function() {
+        clearTimeout(typingTimer); // Clear the previous timer
+
+        var value = $(this).val();
+
+        typingTimer = setTimeout(function() {
+            if (value.trim() === '') {
+                $('#all').show();
+                $('#searchtab').empty();
+                return;
+            }
+
+            $.ajax({
+                url: "{{ path('reclamation_search') }}",
+                type: 'GET',
+                data: { 'searchValue': value },
+                dataType: 'json',
+                success: function(data) {
+                    $('#searchtab').empty();
+                    $('#all').hide();
+
+                    if (data.length > 0) {
+                        $.each(data, function(i, reclamation) {
+                            $('#searchtab').append(
+                                '<tr>' +
+                                    '<td>' + reclamation.idRec + '</td>' +
+                                    '<td>' + reclamation.descriptionRec + '</td>' +
+                                    '<td>' + (reclamation.dateRec ? reclamation.dateRec : '') + '</td>' +
+                                    '<td>' + reclamation.typeRec + '</td>' +
+                                    '<td><span class="badge bg-' + 
+                                        (reclamation.etatRec === 'En cours' ? 'warning' : (reclamation.etatRec === 'Résolue' ? 'success' : 'danger')) + '">' +
+                                        reclamation.etatRec +
+                                    '</span></td>' +
+                                    '<td><a href="/reclamation/show/' + reclamation.idRec + '" class="btn btn-sm btn-info"><i class="bi bi-eye"></i></a></td>' +
+                                '</tr>'
+                            );
+                        });
+                    } else {
+                        $('#searchtab').html('<tr><td colspan="6" class="text-center">Aucune réclamation trouvée</td></tr>');
+                    }
+                },
+                error: function() {
+                    alert('Erreur lors de la récupération des données.');
+                }
+            });
+        }, delay); // Execute after delay
+    });
+});
+
+
+</script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Total Réclamations Chart

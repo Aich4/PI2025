@@ -35,7 +35,63 @@
                 {{ form_end(form) }}
             </div>
         </div>
+{% if debug_info is defined and debug_info.sms_status is defined %}
+<div class="sms-debug-container mt-4 p-3 border rounded 
+    {% if debug_info.sms_status == 'success' %}border-success
+    {% elseif debug_info.sms_status == 'failed' %}border-warning
+    {% elseif debug_info.sms_status == 'error' %}border-danger
+    {% else %}border-secondary{% endif %}">
+    
+    <h5 class="mb-3">
+        <i class="fas fa-sms me-2"></i>SMS Debug Information
+        {% if debug_info.timestamp %}
+        <small class="text-muted float-right">{{ debug_info.timestamp }}</small>
+        {% endif %}
+    </h5>
 
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Status:</strong>
+                <span class="badge 
+                    {% if debug_info.sms_status == 'success' %}bg-success
+                    {% elseif debug_info.sms_status == 'failed' %}bg-warning text-dark
+                    {% elseif debug_info.sms_status == 'error' %}bg-danger
+                    {% else %}bg-secondary{% endif %}">
+                    {{ debug_info.sms_status|upper }}
+                </span>
+            </p>
+            
+            {% if debug_info.message_id %}
+            <p><strong>Message ID:</strong> <code>{{ debug_info.message_id }}</code></p>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-6">
+            {% if debug_info.phone_number %}
+            <p><strong>Phone Number:</strong> {{ debug_info.phone_number }}</p>
+            {% endif %}
+            
+            {% if debug_info.message_content %}
+            <p><strong>Message:</strong> {{ debug_info.message_content }}</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if debug_info.error %}
+    <div class="alert alert-danger mt-3 mb-0">
+        <strong>Error:</strong> {{ debug_info.error }}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .sms-debug-container {
+        background-color: #f8f9fa;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+</style>
+{% endif %}
         <!-- Bouton pour afficher/masquer les réclamations -->
         <div class="text-center mb-3">
             <button id="toggleReclamations" class="btn btn-primary" style="background-color: #012970; border-color: #012970;">

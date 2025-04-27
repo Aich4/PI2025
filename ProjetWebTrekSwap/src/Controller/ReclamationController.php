@@ -13,6 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Notifier\Message\SmsMessage;
+use Symfony\Component\Notifier\TexterInterface;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\NumberParseException;
 
 #[Route('/reclamation')]
 final class ReclamationController extends AbstractController {
@@ -25,28 +31,94 @@ final class ReclamationController extends AbstractController {
     }
 
     // Front office routes
-    #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,CategorieRepository $categorieRepository, ReclamationRepository $reclamationRepository): Response
-    {
-        $reclamation = new Reclamation();
-        $form = $this->createForm(ReclamationType::class, $reclamation);
-        $form->handleRequest($request);
-        $categories = $categorieRepository->findAll();
+#[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
+public function new(
+    Request $request,
+    EntityManagerInterface $entityManager,
+    CategorieRepository $categorieRepository,
+    ReclamationRepository $reclamationRepository,
+    TexterInterface $texter
+): Response {
+    $reclamation = new Reclamation();
+    $form = $this->createForm(ReclamationType::class, $reclamation);
+    $form->handleRequest($request);
+    $categories = $categorieRepository->findAll();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reclamation);
-            $entityManager->flush();
+    // Initialize debug info with all possible keys
+    $debugInfo = [
+        'sms_status' => 'not_attempted',
+        'phone_number' =>'+17756557047', // or get from form/user
+        'message_content' => null,
+        'error' => null,
+        'message_id' => null,
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
 
-            $this->addFlash('success', 'Votre réclamation a été enregistrée avec succès.');
-            return $this->redirectToRoute('app_reclamation_new');
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($reclamation);
+        $entityManager->flush();
+
+        try {
+            // Prepare SMS
+            $debugInfo['message_content'] = "Votre réclamation (#{$reclamation->getIdRec()}) a été enregistrée.";
+            $sms = new SmsMessage(
+                $debugInfo['phone_number'],
+                $debugInfo['message_content']
+            );
+
+            // Send SMS
+            $sentMessage = $texter->send($sms);
+            
+            if ($sentMessage) {
+                $debugInfo['sms_status'] = 'success';
+                $debugInfo['message_id'] = $sentMessage->getMessageId();
+                $this->addFlash('success', 'Réclamation enregistrée. SMS envoyé!');
+            } else {
+                $debugInfo['sms_status'] = 'failed';
+                $debugInfo['error'] = 'No response from SMS provider';
+                $this->addFlash('warning', 'Réclamation enregistrée, mais pas de confirmation SMS.');
+            }
+        } catch (\Exception $e) {
+            $debugInfo['sms_status'] = 'error';
+            $debugInfo['error'] = $e->getMessage();
+            $this->addFlash('warning', 'Réclamation enregistrée, mais erreur d\'envoi SMS.');
         }
 
+        // Store debug info in session
+        $request->getSession()->set('sms_debug_info', $debugInfo);
+        return $this->redirectToRoute('app_reclamation_new');
+    }
+
+    // Safely get debug info from session
+    $sessionDebugInfo = $request->getSession()->get('sms_debug_info', []);
+    $debugInfo = array_merge([
+        'sms_status' => 'not_attempted',
+        'phone_number' => null,
+        'message_content' => null,
+        'error' => null,
+        'message_id' => null,
+        'timestamp' => null
+    ], $sessionDebugInfo);
+    
+    $request->getSession()->remove('sms_debug_info');
+
+    return $this->render('reclamation/new.html.twig', [
+        'reclamation' => $reclamation,
+        'form' => $form,
+        'reclamations' => $reclamationRepository->findAll(),
+        'categories' => $categories,
+        'debug_info' => $debugInfo
+    ]);
+}
+
+    private function renderWithDebug(array $debugOutput, $reclamation, $form, $reclamationRepository, $categories): Response
+    {
         return $this->render('reclamation/new.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
             'reclamations' => $reclamationRepository->findAll(),
-
             'categories' => $categories,
+            'debug_output' => $debugOutput
         ]);
     }
 
@@ -295,4 +367,16 @@ final class ReclamationController extends AbstractController {
 
         return new JsonResponse($data);
     }
+    #[Route('/search', name: 'reclamation_search')]
+    public function search(Request $request, NormalizerInterface $normalizer, ReclamationRepository $reclamationRepository): JsonResponse
+    {
+        $searchValue = $request->get('searchValue');
+        
+        $reclamations = $reclamationRepository->findReclamationByDescriptionRec($searchValue);
+
+        $jsonContent = $normalizer->normalize($reclamations, 'json', ['groups' => 'reclamations']);
+        
+        return new JsonResponse($jsonContent);
+    }
+
 }

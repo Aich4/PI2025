@@ -26,12 +26,70 @@ final class PdfController extends AbstractController{
     {
         $reclamations = $reclamationRepository->findAll();
         
+        // Calculer les statistiques (repris de ReclamationController)
+        $stats = [
+            'total' => count($reclamations),
+            'enCours' => 0,
+            'resolues' => 0,
+            'rejetees' => 0,
+            'parType' => [],
+            'parMois' => []
+        ];
+
+        $moisActuel = new \DateTime();
+        $moisActuel->modify('first day of this month');
+        $stats['moisActuel'] = 0;
+
+        foreach ($reclamations as $reclamation) {
+            // Compter par état
+            switch ($reclamation->getEtatRec()) {
+                case 'En cours':
+                    $stats['enCours']++;
+                    break;
+                case 'Résolue':
+                    $stats['resolues']++;
+                    break;
+                case 'Rejetée':
+                    $stats['rejetees']++;
+                    break;
+            }
+
+            // Compter par type
+            $type = $reclamation->getTypeRec();
+            if (!isset($stats['parType'][$type])) {
+                $stats['parType'][$type] = 0;
+            }
+            $stats['parType'][$type]++;
+
+            // Compter par mois
+            $moisReclamation = $reclamation->getDateRec()->format('Y-m');
+            if (!isset($stats['parMois'][$moisReclamation])) {
+                $stats['parMois'][$moisReclamation] = 0;
+            }
+            $stats['parMois'][$moisReclamation]++;
+
+            // Compter pour le mois actuel
+            if ($reclamation->getDateRec() >= $moisActuel) {
+                $stats['moisActuel']++;
+            }
+        }
+
+        // Trier les statistiques par mois
+        krsort($stats['parMois']);
+        $stats['parMois'] = array_slice($stats['parMois'], 0, 6, true);
+
+        // Calculer le taux de résolution
+        $stats['resolutionRate'] = $stats['total'] > 0 
+            ? round(($stats['resolues'] / $stats['total']) * 100) 
+            : 0;
+        
         // Get the server URL for the absolute URLs
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $baseUrl = $request->getSchemeAndHttpHost();
         
         $html = $twig->render('pdf/reclamations.html.twig', [
             'reclamations' => $reclamations,
+            'stats' => $stats,
         ]);
 
         // Create the Dompdf instance with proper options
