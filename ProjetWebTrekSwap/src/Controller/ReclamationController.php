@@ -19,9 +19,21 @@ use Symfony\Component\Notifier\TexterInterface;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\NumberParseException;
+use App\Service\TestTwilioCommand;
+
+
 
 #[Route('/reclamation')]
+
 final class ReclamationController extends AbstractController {
+    private $twilioService;
+
+    public function __construct(TestTwilioCommand $twilioService)
+    {
+        $this->twilioService = $twilioService;
+    }
+
+    
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
     public function index(ReclamationRepository $reclamationRepository): Response
     {
@@ -31,85 +43,83 @@ final class ReclamationController extends AbstractController {
     }
 
     // Front office routes
-#[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-public function new(
-    Request $request,
-    EntityManagerInterface $entityManager,
-    CategorieRepository $categorieRepository,
-    ReclamationRepository $reclamationRepository,
-    TexterInterface $texter
-): Response {
-    $reclamation = new Reclamation();
-    $form = $this->createForm(ReclamationType::class, $reclamation);
-    $form->handleRequest($request);
-    $categories = $categorieRepository->findAll();
+    #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        CategorieRepository $categorieRepository,
+        ReclamationRepository $reclamationRepository,
+        TexterInterface $texter,
+        TestTwilioCommand $twilioService
+    ): Response {
+        $reclamation = new Reclamation();
+        $form = $this->createForm(ReclamationType::class, $reclamation);
+        $form->handleRequest($request);
+        $categories = $categorieRepository->findAll();
 
-    // Initialize debug info with all possible keys
-    $debugInfo = [
-        'sms_status' => 'not_attempted',
-        'phone_number' =>'+17756557047', // or get from form/user
-        'message_content' => null,
-        'error' => null,
-        'message_id' => null,
-        'timestamp' => date('Y-m-d H:i:s')
-    ];
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->persist($reclamation);
-        $entityManager->flush();
-
-        try {
-            // Prepare SMS
-            $debugInfo['message_content'] = "Votre réclamation (#{$reclamation->getIdRec()}) a été enregistrée.";
-            $sms = new SmsMessage(
-                $debugInfo['phone_number'],
-                $debugInfo['message_content']
-            );
-
-            // Send SMS
-            $sentMessage = $texter->send($sms);
-            
-            if ($sentMessage) {
+        $debugInfo = [ 
+            'sms_status' => 'not_attempted',
+            'phone_number' => '+21658664146',
+            'message_content' => null,
+            'error' => null,
+            'message_id' => null,
+            'timestamp' => date('Y-m-d H:i:s')
+        ];
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                // Persister la réclamation d'abord
+                $entityManager->persist($reclamation);
+                $entityManager->flush();
+                
+                // Préparer et envoyer le SMS
+                $debugInfo['message_content'] = sprintf(
+                    "Votre réclamation (#%d) a été enregistrée. Nous la traiterons dans les plus brefs délais.",
+                    $reclamation->getIdRec()
+                );
+                
+                $sent = $twilioService->sendSms($debugInfo['phone_number'], $debugInfo['message_content']);
+                
                 $debugInfo['sms_status'] = 'success';
-                $debugInfo['message_id'] = $sentMessage->getMessageId();
-                $this->addFlash('success', 'Réclamation enregistrée. SMS envoyé!');
-            } else {
-                $debugInfo['sms_status'] = 'failed';
-                $debugInfo['error'] = 'No response from SMS provider';
-                $this->addFlash('warning', 'Réclamation enregistrée, mais pas de confirmation SMS.');
+                $this->addFlash('success', 'Réclamation enregistrée et SMS de confirmation envoyé.');
+                
+            } catch (\Exception $e) {
+                $debugInfo['sms_status'] = 'error';
+                $debugInfo['error'] = $e->getMessage();
+                
+                // La réclamation est enregistrée même si le SMS échoue
+                $this->addFlash('warning', sprintf(
+                    'Réclamation enregistrée, mais erreur lors de l\'envoi du SMS : %s',
+                    $e->getMessage()
+                ));
             }
-        } catch (\Exception $e) {
-            $debugInfo['sms_status'] = 'error';
-            $debugInfo['error'] = $e->getMessage();
-            $this->addFlash('warning', 'Réclamation enregistrée, mais erreur d\'envoi SMS.');
+
+            // Stocker les informations de debug dans la session
+            $request->getSession()->set('sms_debug_info', $debugInfo);
+            return $this->redirectToRoute('app_reclamation_new');
         }
 
-        // Store debug info in session
-        $request->getSession()->set('sms_debug_info', $debugInfo);
-        return $this->redirectToRoute('app_reclamation_new');
+        // Récupérer les informations de debug de la session
+        $sessionDebugInfo = $request->getSession()->get('sms_debug_info', []);
+        $debugInfo = array_merge([
+            'sms_status' => 'not_attempted',
+            'phone_number' => null,
+            'message_content' => null,
+            'error' => null,
+            'message_id' => null,
+            'timestamp' => null
+        ], $sessionDebugInfo);
+        
+        $request->getSession()->remove('sms_debug_info');
+
+        return $this->render('reclamation/new.html.twig', [
+            'reclamation' => $reclamation,
+            'form' => $form,
+            'reclamations' => $reclamationRepository->findAll(),
+            'categories' => $categories,
+            'debug_info' => $debugInfo
+        ]);
     }
-
-    // Safely get debug info from session
-    $sessionDebugInfo = $request->getSession()->get('sms_debug_info', []);
-    $debugInfo = array_merge([
-        'sms_status' => 'not_attempted',
-        'phone_number' => null,
-        'message_content' => null,
-        'error' => null,
-        'message_id' => null,
-        'timestamp' => null
-    ], $sessionDebugInfo);
-    
-    $request->getSession()->remove('sms_debug_info');
-
-    return $this->render('reclamation/new.html.twig', [
-        'reclamation' => $reclamation,
-        'form' => $form,
-        'reclamations' => $reclamationRepository->findAll(),
-        'categories' => $categories,
-        'debug_info' => $debugInfo
-    ]);
-}
 
     private function renderWithDebug(array $debugOutput, $reclamation, $form, $reclamationRepository, $categories): Response
     {

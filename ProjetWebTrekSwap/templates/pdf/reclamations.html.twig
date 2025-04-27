@@ -409,7 +409,6 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 5%">ID</th>
                 <th style="width: 40%">Description</th>
                 <th style="width: 15%">Date</th>
                 <th style="width: 15%">Type</th>
@@ -425,7 +424,6 @@
                     <table>
                     <thead>
                         <tr>
-                            <th style="width: 5%">ID</th>
                             <th style="width: 40%">Description</th>
                             <th style="width: 15%">Date</th>
                             <th style="width: 15%">Type</th>
@@ -435,7 +433,6 @@
                     <tbody>
                 {% endif %}
                 <tr>
-                    <td>{{ reclamation.idRec }}</td>
                     <td>{{ reclamation.descriptionRec }}</td>
                     <td>{{ reclamation.dateRec ? reclamation.dateRec|date('d/m/Y H:i') : '' }}</td>
                     <td>{{ reclamation.typeRec }}</td>
@@ -445,7 +442,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5" style="text-align: center;">Aucune réclamation trouvée</td>
+                    <td colspan="4" style="text-align: center;">Aucune réclamation trouvée</td>
                 </tr>
             {% endfor %}
         </tbody>

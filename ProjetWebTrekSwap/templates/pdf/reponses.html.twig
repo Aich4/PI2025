@@ -208,8 +208,7 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 4%">ID</th>
-                <th style="width: 31%">Réclamation</th>
+                <th style="width: 35%">Réclamation</th>
                 <th style="width: 15%">Date de réponse</th>
                 <th style="width: 50%">Contenu</th>
             </tr>
@@ -217,7 +216,6 @@
         <tbody>
             {% for reponse in reponses %}
                 <tr>
-                    <td>{{ reponse.id }}</td>
                     <td>
                         <div class="reclamation-info">
                             {{ reponse.reclamation ? reponse.reclamation.descriptionRec|slice(0, 30) ~ (reponse.reclamation.descriptionRec|length > 30 ? '...' : '') : 'N/A' }}
@@ -231,7 +229,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4" style="text-align: center;">Aucune réponse trouvée</td>
+                    <td colspan="3" style="text-align: center;">Aucune réponse trouvée</td>
                 </tr>
             {% endfor %}
         </tbody>

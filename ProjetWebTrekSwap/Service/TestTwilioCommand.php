@@ -1,41 +1,36 @@
 <?php
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+namespace App\Service;
+
 use Twilio\Rest\Client;
 
-class TestTwilioCommand extends Command
+class TestTwilioCommand
 {
-    protected static $defaultName = 'app:test-twilio';
-    
-    public function __construct(
-        private string $twilioSid,
-        private string $twilioToken,
-        private string $twilioFrom
-    ) {
-        parent::__construct();
+    private $twilio;
+
+    public function __construct()
+    {
+        // Remplacez ces valeurs par vos identifiants Twilio  
+        $sid = 'UScdebd366bb9ff20b8ba9bd25daea5fa9';
+        $token = '04dcd37eab39d85f4d234736360170a8';
+        $this->twilio = new Client($sid, $token);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+
+    public function sendSms($phoneNumber, $message): bool
     {
         try {
-            $twilio = new Client($this->twilioSid, $this->twilioToken);
-            
-            $message = $twilio->messages->create(
-                '+21658664146', // Your test number
+            $this->twilio->messages->create(
+                $phoneNumber, // Numéro de téléphone
                 [
-                    'from' => $this->twilioFrom,
-                    'body' => 'Test message from Symfony'
+                    'from' => '+17756557047 ', // Numéro Twilio
+                    'body' => $message, // Message SMS
                 ]
             );
-            
-            $output->writeln('Message SID: '.$message->sid);
-            return Command::SUCCESS;
-            
+            return true; // SMS envoyé avec succès
         } catch (\Exception $e) {
-            $output->writeln('<error>Error: '.$e->getMessage().'</error>');
-            return Command::FAILURE;
+            // Logger l'erreur
+            return false; // En cas d'erreur
         }
     }
 }
