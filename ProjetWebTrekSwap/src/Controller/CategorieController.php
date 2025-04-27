@@ -173,8 +173,9 @@ final class CategorieController extends AbstractController
         int $id,
         PartenaireRepository $partenaireRepository,
         CategorieRepository $categorieRepository,
-        Request $request,                  // 👈 tu ajoutes Request ici
-        PaginatorInterface $paginator      // 👈 tu ajoutes Paginator ici
+        Request $request,
+        PaginatorInterface $paginator,
+        EntityManagerInterface $em // 👈 Ajouté pour pouvoir faire flush
     ): Response
     {
         $categorie = $categorieRepository->find($id);
@@ -183,6 +184,10 @@ final class CategorieController extends AbstractController
         if (!$categorie) {
             throw $this->createNotFoundException('La catégorie n\'existe pas.');
         }
+
+        // 👁️ Incrémenter les vues de la catégorie
+        $categorie->setViews($categorie->getViews() + 1);
+        $em->flush(); // très important sinon rien ne sera enregistré !
 
         // 🔥 Correction : utiliser QueryBuilder au lieu de findBy
         $query = $partenaireRepository->createQueryBuilder('p')
@@ -200,7 +205,7 @@ final class CategorieController extends AbstractController
 
         return $this->render('categorie/partenaires.html.twig', [
             'categorie' => $categorie,
-            'partenaires' => $partenaires,   // 👈 reste ton même nom
+            'partenaires' => $partenaires,
             'categories' => $categories,
         ]);
     }
