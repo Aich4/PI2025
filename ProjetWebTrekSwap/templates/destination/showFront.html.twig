@@ -108,12 +108,20 @@
                                 <h5>{{ destination.nomDestination }}</h5>
                                 <p>{{ destination.description }}</p>
                             </div>
+
                         </div>
 
                         <div class="destination-card-content">
                             <h5>{{ destination.nomDestination }}</h5>
                             <p class="details">
                                 <strong>Température:</strong> {{ destination.temperature }}°C<br>
+
+                                {% if destination.weather %}
+                                    <strong>🌡️ {{ destination.weather.main.temp }}°C - {{ destination.weather.weather[0].description|capitalize }}</strong><br>
+                                {% else %}
+                                    <strong>Météo indisponible</strong><br>
+                                {% endif %}
+
                                 <strong class="avg-rating">
                                     {% if destination.avgRating %}
                                         ⭐ {{ destination.avgRating }}/5 ({{ destination.voteCount }})
@@ -122,6 +130,7 @@
                                     {% endif %}
                                 </strong>
                             </p>
+
 
                             <div class="rating" data-destination-id="{{ destination.id }}">
                                 {% for i in 1..5 %}
@@ -169,6 +178,10 @@
         <div class="text-center mt-5">
             <button id="showMapBtn" class="btn btn-primary">Afficher la carte</button>
         </div>
+        <div class="text-center mt-3">
+            <a href="{{ path('fullcalendar_activities') }}" class="btn btn-success">🎯 Voir toutes les activités</a>
+        </div>
+
     </main>
 
     <!-- Activities Modal -->
