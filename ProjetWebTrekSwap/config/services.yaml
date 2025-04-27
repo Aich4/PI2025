@@ -20,6 +20,8 @@ services:
       - '../src/Entity/'
       - '../src/Kernel.php'
 
+  App\Service\GeminiPart: ~ # 👈 your real new service with hardcoded API KEY (correct)
+
   App\EventListener\LoginSuccessListener:
     tags:
       - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
@@ -28,6 +30,5 @@ services:
     tags:
       - { name: kernel.event_listener, event: Symfony\Component\Security\Http\Event\LogoutEvent, method: onLogoutSuccess }
 
-  # AppExtension for Twig globals
   App\Twig\AppExtension:
     tags: [ 'twig.extension' ]
