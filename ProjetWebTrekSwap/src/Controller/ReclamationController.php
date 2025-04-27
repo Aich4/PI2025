@@ -74,7 +74,7 @@ final class ReclamationController extends AbstractController {
                 
                 // Préparer et envoyer le SMS
                 $debugInfo['message_content'] = sprintf(
-                    "Votre réclamation (#%d) a été enregistrée. Nous la traiterons dans les plus brefs délais.",
+                    "Une nouvelle réclamation (#%d) a été enregistrée. Veuillez la traiter dans les plus brefs délais.",
                     $reclamation->getIdRec()
                 );
                 

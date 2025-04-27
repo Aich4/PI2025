@@ -306,46 +306,7 @@
             <h2 style="color: #4e73df; font-size: 28px; margin-bottom: 10px;">Tableau de Bord des Réclamations</h2>
             <p style="color: #858796; font-size: 16px;">Vue d'ensemble et analyse détaillée</p>
         </div>
-        
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="label">Total des Réclamations</div>
-                <div class="number">{{ stats.total }}</div>
-                <div style="color: #858796; font-size: 14px;">Réclamations enregistrées</div>
-            </div>
-            <div class="stat-card warning">
-                <div class="label">En Cours</div>
-                <div class="number">{{ stats.enCours }}</div>
-                <div style="color: #858796; font-size: 14px;">En traitement</div>
-            </div>
-            <div class="stat-card success">
-                <div class="label">Résolues</div>
-                <div class="number">{{ stats.resolues }}</div>
-                <div style="color: #858796; font-size: 14px;">Traitées avec succès</div>
-            </div>
-            <div class="stat-card danger">
-                <div class="label">Rejetées</div>
-                <div class="number">{{ stats.rejetees }}</div>
-                <div style="color: #858796; font-size: 14px;">Non résolues</div>
-            </div>
-        </div>
-
-        <div class="charts-grid">
-            <div class="chart-container large">
-                <canvas id="combinedChart"></canvas>
-            </div>
-            
-            <div class="charts-row">
-                <div class="chart-container medium">
-                    <canvas id="typeChart"></canvas>
-                </div>
-                <div class="chart-container medium">
-                    <canvas id="statusChart"></canvas>
-                </div>
-            </div>
-        </div>
     </div>
-
     <div class="advanced-stats">
         <h2>Statistiques détaillées</h2>
         
