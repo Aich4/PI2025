@@ -10,7 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class TestEmailController extends AbstractController
 {
     private $client;
-    private $apiKey = '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'; // Mets ici ta vraie clé API HTTP Brevo
+    private $apiKey = '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'; // Mets ici ta vraie clé API HTTP Brevo
 
     public function __construct(HttpClientInterface $client)
     {
@@ -28,7 +28,7 @@ class TestEmailController extends AbstractController
             ],
             'json' => [
                 'sender' => ['email' => 'douaabj4@gmail.com'],  // Expéditeur
-                'to' => [['email' => 'abdghalia04@gmail.com']],  // Destinataire
+                'to' => [['email' => 'douaabj4@gmail.com']],  // Destinataire
                 'subject' => 'Bravo 🎉',
                 'htmlContent' => '<p>Félicitations pour ta mission réussie ! 🎯</p>',
             ],
