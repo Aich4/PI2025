@@ -69,6 +69,13 @@ class Partenaire
     )]
     private ?string $logo = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Regex(
+        pattern: "/^\+?[0-9]{8,15}$/",
+        message: "Le numéro de téléphone doit être valide."
+    )]
+    private ?string $num_tel = null;
+
 
 
     public function getId(): ?int
@@ -161,6 +168,17 @@ class Partenaire
     public function setLogo(?string $logo): self
     {
         $this->logo = $logo;
+        return $this;
+    }
+
+    public function getNumTel(): ?string
+    {
+        return $this->num_tel;
+    }
+
+    public function setNumTel(?string $num_tel): static
+    {
+        $this->num_tel = $num_tel;
         return $this;
     }
 

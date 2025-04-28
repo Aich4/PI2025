@@ -57,7 +57,8 @@ class Categorie
     #[Groups(['categories'])]
     private ?int $nbr_partenaire = null;
 
-
+    #[ORM\Column(type: 'integer')]
+    private $views = 0;
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +105,25 @@ class Categorie
     public function setNbrPartenaire(?int $nbr_partenaire): static
     {
         $this->nbr_partenaire = $nbr_partenaire;
+        return $this;
+    }
+
+    public function getViews(): int
+    {
+        return $this->views ?? 0; // 👈 si $this->views est null, retourne 0
+    }
+
+// + un setter
+    public function setViews(int $views): self
+    {
+        $this->views = $views;
+        return $this;
+    }
+
+// + une fonction pour incrémenter facilement
+    public function incrementViews(): self
+    {
+        $this->views++;
         return $this;
     }
 

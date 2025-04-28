@@ -20,7 +20,7 @@ services:
       - '../src/Entity/'
       - '../src/Kernel.php'
 
-  App\Service\GeminiPart: ~ # 👈 your real new service with hardcoded API KEY (correct)
+  App\Service\GeminiPart: ~ # ton service existant Gemini
 
   App\EventListener\LoginSuccessListener:
     tags:
@@ -32,3 +32,9 @@ services:
 
   App\Twig\AppExtension:
     tags: [ 'twig.extension' ]
+
+  App\Service\TwilioService: # 👈 ici j'ajoute correctement Twilio
+    arguments:
+      $sid: '%env(TWILIO_SID)%'
+      $token: '%env(TWILIO_TOKEN)%'
+      $from: '%env(TWILIO_FROM)%'

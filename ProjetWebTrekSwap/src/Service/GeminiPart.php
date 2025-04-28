@@ -17,15 +17,20 @@ class GeminiPart
     public function generatePartners(string $place, int $number): array
     {
         $prompt = "Generate exactly $number fictional companies located in $place. 
-Types must include restaurants, cafés, hotels, travel agencies, sports clubs, or cultural centers.
-For each partner, give a JSON object with:
+The companies should only be fun or leisure places for tourists, like:
+- Restaurants
+- Cafés
+- Hotels
+- Maisons d'hôtes (guest houses)
+
+DO NOT include travel agencies, insurance, or any non-touristic business.
+
+Return ONLY a pure JSON array, without any extra explanation or comments.
+Each partner should have:
 - name
 - address
 - email
-- type
-
-Return ONLY a pure JSON array with NO extra explanation, NO comments.";
-
+- type (either 'restaurant', 'café', 'hotel', or 'maison d'hôte').";
         // ✅ Correct URL using v1
         $url = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=' . $this->apiKey;
 
