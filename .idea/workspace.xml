@@ -5,10 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Categorie.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Categorie.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/PartenaireController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Partenaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/PartenaireType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/addPartenaire.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/addPartenaire.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/editPartenaire.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/editPartenaire.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/partenaire/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +170,7 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/schema" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/utils" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dflydev/dot-access-data" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/twilio/sdk" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{

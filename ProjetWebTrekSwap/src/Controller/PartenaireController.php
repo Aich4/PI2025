@@ -15,6 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CategorieRepository;
 use App\Entity\Categorie;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Service\TwilioService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PartenaireController extends AbstractController
 {
@@ -169,5 +171,26 @@ class PartenaireController extends AbstractController
 
         $this->addFlash('success', 'Partenaire supprimé avec succès !');
         return $this->redirectToRoute('list_partenaire');
+    }
+
+    #[Route('/partenaire/send-sms/{id}', name: 'send_sms_partenaire', methods: ['POST'])]
+    public function sendSmsPartenaire(int $id, Request $request, PartenaireRepository $partenaireRepository, TwilioService $twilioService): JsonResponse
+    {
+        $partenaire = $partenaireRepository->find($id);
+        if (!$partenaire || !$partenaire->getNumTel()) {
+            return new JsonResponse(['error' => 'Partenaire ou numéro non trouvé.'], 404);
+        }
+
+        $message = $request->request->get('message');
+
+        if (!$message) {
+            return new JsonResponse(['error' => 'Message vide.'], 400);
+        }
+
+        $numero = '+216' . preg_replace('/\D/', '', $partenaire->getNumTel());
+
+        $twilioService->sendSms($numero, $message);
+
+        return new JsonResponse(['success' => 'SMS envoyé avec succès.']);
     }
 }
