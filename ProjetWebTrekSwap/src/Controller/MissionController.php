@@ -287,24 +287,34 @@ final class MissionController extends AbstractController
         $entityManager->flush();
 
         // ✅ ENVOI EMAIL PAR API HTTP
-        $apiKey = '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'; // ta vraie clé API
-        $response = $client->request('POST', 'https://api.brevo.com/v3/smtp/email', [
-            'headers' => [
-                'accept' => 'application/json',
-                'api-key' => $apiKey,
-                'content-type' => 'application/json',
-            ],
-            'json' => [
-                'sender' => ['email' => 'douaabj4@gmail.com'],
-                'to' => [['email' => $user->getEmail()]],
-                'subject' => '🎉 Félicitations pour votre mission validée !',
-                'htmlContent' => '
+        // ✅ ENVOI EMAIL PAR API HTTP
+        $apiKey = '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'; // ton API Key (attention à la régénérer)
+        try {
+            $response = $client->request('POST', 'https://api.brevo.com/v3/smtp/email', [
+                'headers' => [
+                    'accept' => 'application/json',
+                    'api-key' => $apiKey,
+                    'content-type' => 'application/json',
+                ],
+                'json' => [
+                    'sender' => ['email' => 'douaabj4@gmail.com'],
+                    'to' => [['email' => $user->getEmail()]],
+                    'subject' => '🎉 Félicitations pour votre mission validée !',
+                    'htmlContent' => '
                 <h2>Bravo ' . htmlspecialchars($user->getPrenom()) . ' 🎯</h2>
                 <p>Vous avez validé la mission : <strong>' . htmlspecialchars($mission->getDescription()) . '</strong> et gagné <strong>' . $mission->getPointsRecompense() . ' points</strong> !</p>
                 <p>Continuez ainsi 🚀</p>
             ',
-            ],
-        ]);
+                ],
+            ]);
+
+            if ($response->getStatusCode() !== 201 && $response->getStatusCode() !== 200) {
+                $this->addFlash('warning', 'Mission validée mais l\'email n\'a pas pu être envoyé (Erreur API).');
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('warning', 'Mission validée mais impossible d\'envoyer l\'email. Réessayez plus tard.');
+        }
+
 
         // Pas besoin de traiter la réponse ici car on suppose que Brevo gère ✅
 
@@ -327,7 +337,7 @@ final class MissionController extends AbstractController
         $pagination = $paginator->paginate(
             $missionsQuery, // La requête
             $request->query->getInt('page', 1), // Le numéro de la page à afficher (par défaut 1)
-            10 // Nombre de missions à afficher par page
+            8 // Nombre de missions à afficher par page
         );
 
         // Retourne la vue avec les missions paginées
