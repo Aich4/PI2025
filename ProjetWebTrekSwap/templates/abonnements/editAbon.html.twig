@@ -10,11 +10,11 @@
         {{ form_start(form) }}
 
         <div class="form-group">
-            {{ form_label(form.id_pack) }}
-            {{ form_widget(form.id_pack, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.id_pack) }}
-        </div>
-
+                {{ form_label(form.pack, 'Sélectionner un Pack') }}
+                {{ form_widget(form.pack, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.pack) }}
+                </div>
+                
         <div class="form-group">
             {{ form_label(form.date_Souscription) }}
             {# Render the date picker field #}

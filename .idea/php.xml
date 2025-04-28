@@ -10,6 +10,11 @@
     <option name="highlightLevel" value="WARNING" />
     <option name="transferred" value="true" />
   </component>
+  <component name="PhpCodeSniffer">
+    <phpcs_settings>
+      <phpcs_by_interpreter interpreter_id="35b7b22c-7763-45ee-8bf5-5e8a232fee07" timeout="30000" />
+    </phpcs_settings>
+  </component>
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/composer" />
@@ -146,9 +151,49 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy-bundle" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/commonmark" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/config" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/schema" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dflydev/dot-access-data" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/twilio/sdk" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-crt-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-sdk-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-sdk-php-symfony" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/php-font-lib" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/php-svg-lib" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nucleos/dompdf-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/symfony/twilio-notifier" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/tattali/calendar-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/mtdowling/jmespath.php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/stripe/stripe-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dasprid/enum" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/endroid/qr-code" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dragonmantank/cron-expression" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/bacon/bacon-qr-code" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/zenstruck/schedule-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/thiagoalessio/tesseract_ocr" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/vich/uploader-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/excelwebzone/recaptcha-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/google/recaptcha" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
+  <component name="PhpStan">
+    <PhpStan_settings>
+      <phpstan_by_interpreter interpreter_id="35b7b22c-7763-45ee-8bf5-5e8a232fee07" timeout="60000" />
+    </PhpStan_settings>
+  </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
@@ -156,6 +201,11 @@
     <phpunit_settings>
       <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/autoload.php" use_configuration_file="true" />
     </phpunit_settings>
+  </component>
+  <component name="Psalm">
+    <Psalm_settings>
+      <psalm_fixer_by_interpreter interpreter_id="35b7b22c-7763-45ee-8bf5-5e8a232fee07" timeout="60000" />
+    </Psalm_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />

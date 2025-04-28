@@ -58,6 +58,7 @@
           <li><a class="nav-link scrollto" href="#about">About</a></li>
           <li><a class="nav-link scrollto" href="{{ path('index') }}#pricingA">Pricing</a></li>
           <li><a class="nav-link" href="/DestinationFrontShow">Destinations</a></li>
+          <li><a class="nav-link scrollto" href="http://localhost:8501/">Chatbot</a></li>
           <li><a class="nav-link scrollto" href="/reclamation/new">Reclamation</a></li>
             <li><a class="nav-link scrollto" href="/mission/missions-front">Missions</a></li>
           <li>
@@ -565,38 +566,46 @@
         </div>
 
         <div class="row">
-            {% for abonnement in abonnements %}
-                <div class="col-lg-3 col-md-6">
-                    <div class="box">
-                        <h3>Subscription Details</h3>
-                        <h4>{{ packRepository.getPriceById(abonnement.getIdPack()) }}<sup> DT </sup><span> / month</span></h4>
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0);" onclick="togglePackDetails({{ abonnement.getIdPack() }})">
-                                    {{ packRepository.getNomById(abonnement.getIdPack()) }}
-                                </a>
-                            </li> {# Pack Name Clickable #}
-                            <li>Start date: {{ abonnement.getDateSouscription()|date('d/m/Y') }}</li>
-                            <li>Expiration date: {{ abonnement.getDateExpiration()|date('d/m/Y') }}</li>
-                            <li>{{ abonnement.getStatut() }}</li>
-                        </ul>
-                        <div class="btn-wrap">
-                        <a href="{{ path('checkout', { id: abonnement. getIdAbonnement() }) }}" class="btn-buy">Buy Now</a>
-                        </div>
+            {% if app.user %}
+                {# User is connected, show abonnements #}
+                {% for abonnement in abonnements %}
+                    <div class="col-lg-3 col-md-6">
+                        <div class="box">
+                            <h3>Subscription Details</h3>
+                            <h4>{{ packRepository.getPriceById(abonnement.getIdPack()) }}<sup> DT </sup><span> / month</span></h4>
+                            <ul>
+                                <li>
+                                    <strong>Pack: </strong>{{ packRepository.getNomById(abonnement.getIdPack()) }}
+                                </li>
+                                <li>Start date: {{ abonnement.getDateSouscription()|date('d/m/Y') }}</li>
+                                <li>Expiration date: {{ abonnement.getDateExpiration()|date('d/m/Y') }}</li>
+                            </ul>
 
-                        <!-- Hidden Pack Details -->
-                        <div id="pack-details-{{ abonnement.getIdPack() }}" class="pack-details hidden">
-                            <h4>Pack Details</h4>
-                            <p><strong>Name:</strong> {{ packRepository.getNomById(abonnement.getIdPack()) }}</p>
-                            <p><strong>Description:</strong> {{ packRepository.getDescriptionById(abonnement.getIdPack()) }}</p>
-                            <p><strong>Advantages:</strong> {{ packRepository.getAvantagesById(abonnement.getIdPack()) }}</p>
-                            <p><strong>Duree:</strong> {{ packRepository.getDureeById(abonnement.getIdPack()) }}</p>
+                            <!-- Buy Now button for Stripe -->
+                            <div class="btn-wrap">
+                                <a href="{{ path('checkout', { id: abonnement.getIdAbonnement() }) }}" class="btn-buy">Buy Now</a>
+                            </div>
 
+                            <!-- Show Pack Details button below Buy Now button, styled the same -->
+                            <div class="btn-wrap">
+                                <button class="btn-buy" onclick="togglePackDetails({{ abonnement.getIdPack() }})">Show Pack Details</button>
+                            </div>
+
+                            <!-- Hidden Pack Details (QR Code) -->
+                            <div id="pack-details-{{ abonnement.getIdPack() }}" class="pack-details hidden">
+                                {{ qrCodes[abonnement.getIdPack()]|raw }}
+                            </div>
                         </div>
                     </div>
+                {% endfor %}
+            {% else %}
+                {# User is NOT connected, show message #}
+                <div class="col-12 text-center">
+                    <p class="text-danger">Veuillez vous connecter pour découvrir les abonnements.</p>
                 </div>
-            {% endfor %}
+            {% endif %}
         </div>
+
     </div>
 </section>
 
@@ -625,6 +634,7 @@
 </style>
 
 {% endblock %}
+
 
 
 

@@ -37,11 +37,11 @@
                         {% if abonnements is defined and abonnements|length > 0 %}
                             {% for abonnement in abonnements %}
                                 <div class="abonnement-item mb-3 p-3 border rounded">
-                                    <h6 class="text-primary">Pack : {{ packRepository.getNomById(abonnement.getIdPack()) }}</h6>
-                                    <p class="mb-1"><small>Souscription : {{ abonnement.getDateSouscription()|date('d/m/Y') }}</small></p>
-                                    <p class="mb-1"><small>Expiration : {{ abonnement.getDateExpiration()|date('d/m/Y') }}</small></p>
-                                    <span class="badge {% if abonnement.getStatut() == 'actif' %}bg-success{% else %}bg-danger{% endif %}">
-                                        {{ abonnement.getStatut()|capitalize }}
+                                    <h6 class="text-primary">Pack : {{ packRepository.getNomById(abonnement.idPack) }}</h6>
+                                    <p class="mb-1"><small>Souscription : {{ abonnement.dateSouscription|date('d/m/Y') }}</small></p>
+                                    <p class="mb-1"><small>Expiration : {{ abonnement.dateExpiration|date('d/m/Y') }}</small></p>
+                                    <span class="badge {% if abonnement.statut == 'actif' %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ abonnement.statut|capitalize }}
                                     </span>
                                 </div>
                             {% endfor %}
@@ -149,4 +149,4 @@
     </div>
     {% endif %}
 </main>
-{% endblock %} 
+{% endblock %}

@@ -21,7 +21,8 @@
                                 <th class="custom-th">Date d'ajout</th>
                                 <th class="custom-th">Catégorie</th>
                                 <th class="custom-th">Montant</th>
-                                <th class="custom-th">Logo</th> {# nouvelle colonne #}
+                                <th class="custom-th">Logo</th>
+                                <th class="custom-th">Téléphone</th>
                                 <th class="custom-th">Actions</th>
                             </tr>
                             </thead>
@@ -43,6 +44,7 @@
                                             <span class="text-muted">Pas de logo</span>
                                         {% endif %}
                                     </td>
+                                    <td>{{ partenaire.numTel ? partenaire.numTel : 'N/A' }}</td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <a href="{{ path('edit_partenaire', { id: partenaire.id }) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
@@ -51,12 +53,15 @@
                                             <a href="{{ path('delete_partenaire', { id: partenaire.id }) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce partenaire ?');" title="Supprimer">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
+                                            <a href="javascript:void(0);" class="btn btn-outline-success btn-sm send-sms-btn" data-id="{{ partenaire.id }}" data-name="{{ partenaire.nom }}" title="Envoyer SMS">
+                                                <i class="bi bi-chat-dots-fill"></i>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="10" class="text-center text-muted">Aucun partenaire trouvé.</td>
+                                    <td colspan="11" class="text-center text-muted">Aucun partenaire trouvé.</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -107,7 +112,9 @@
     </style>
 {% endblock %}
 
-{% block javascripts %}
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         let selectedPartenaireId = null;
 
@@ -121,6 +128,50 @@
                 const exportBtn = document.getElementById("export-pdf-btn");
                 exportBtn.classList.remove("disabled");
                 exportBtn.href = "/partenaire/" + selectedPartenaireId + "/contrat";
+            });
+        });
+
+        // Script pour envoyer SMS
+        document.querySelectorAll('.send-sms-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const partenaireId = this.dataset.id;
+                const partenaireName = this.dataset.name;
+
+                Swal.fire({
+                    title: 'Envoyer un SMS à ' + partenaireName,
+                    input: 'textarea',
+                    inputPlaceholder: 'Tapez votre message...',
+                    showCancelButton: true,
+                    confirmButtonText: 'Envoyer',
+                    cancelButtonText: 'Annuler',
+                    preConfirm: (message) => {
+                        if (!message) {
+                            Swal.showValidationMessage('Vous devez écrire un message.');
+                        }
+                        return message;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('/partenaire/send-sms/' + partenaireId, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'message=' + encodeURIComponent(result.value)
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('✅ Succès', data.success, 'success');
+                                } else {
+                                    Swal.fire('❌ Erreur', data.error || 'Erreur inconnue.', 'error');
+                                }
+                            })
+                            .catch(() => {
+                                Swal.fire('❌ Erreur', 'Erreur lors de l\'envoi du SMS.', 'error');
+                            });
+                    }
+                });
             });
         });
     </script>

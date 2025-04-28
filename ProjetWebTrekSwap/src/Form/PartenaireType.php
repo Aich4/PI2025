@@ -55,6 +55,11 @@ class PartenaireType extends AbstractType
                         'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG).',
                     ])
                 ],
+            ])
+            ->add('num_tel', TextType::class, [
+                'label' => 'Numéro de Téléphone',
+                'required' => false,
+                'attr' => ['class' => 'form-control', 'placeholder' => '+216 12 345 678']
             ]);
     }
 

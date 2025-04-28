@@ -49,6 +49,13 @@ public function getDureeById(int $id): ?string
     $pack = $this->find($id);
     return $pack ? $pack->getDuree() : null;
 }
+
+public function getPrixInUSD(): ?float
+{
+    $exchangeRate = 3.00;
+    return $this->prix / $exchangeRate;
+}
+
     //    /**
     //     * @return Pack[] Returns an array of Pack objects
     //     */

@@ -68,6 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true, name: 'deleted_at')]
     private ?\DateTimeInterface $deletedAt = null;
 
+
     public function __construct()
     {
         $this->isActive = true;
