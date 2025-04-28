@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserMissionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserMissionRepository::class)]
 class UserMission
@@ -21,11 +22,19 @@ class UserMission
     #[ORM\JoinColumn(nullable: false)]
     private ?Mission $mission = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $isValidated = false;
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $validatedAt;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $validatedAt = null;
+    #[ORM\Column(type: 'integer')]
+    #[Assert\PositiveOrZero(message: "Les points gagnés doivent être positifs.")]
+    private int $pointsGagnes = 0;
+
+    public function __construct()
+    {
+        $this->validatedAt = new \DateTime();
+    }
+
+    // ----------- GETTERS & SETTERS -----------
 
     public function getId(): ?int
     {
@@ -37,7 +46,7 @@ class UserMission
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?User $user): self
     {
         $this->user = $user;
         return $this;
@@ -48,31 +57,31 @@ class UserMission
         return $this->mission;
     }
 
-    public function setMission(?Mission $mission): static
+    public function setMission(?Mission $mission): self
     {
         $this->mission = $mission;
         return $this;
     }
 
-    public function isValidated(): bool
-    {
-        return $this->isValidated;
-    }
-
-    public function setIsValidated(bool $isValidated): static
-    {
-        $this->isValidated = $isValidated;
-        return $this;
-    }
-
-    public function getValidatedAt(): ?\DateTimeInterface
+    public function getValidatedAt(): \DateTimeInterface
     {
         return $this->validatedAt;
     }
 
-    public function setValidatedAt(?\DateTimeInterface $validatedAt): static
+    public function setValidatedAt(\DateTimeInterface $validatedAt): self
     {
         $this->validatedAt = $validatedAt;
+        return $this;
+    }
+
+    public function getPointsGagnes(): int
+    {
+        return $this->pointsGagnes;
+    }
+
+    public function setPointsGagnes(int $points): self
+    {
+        $this->pointsGagnes = $points;
         return $this;
     }
 }

@@ -7,10 +7,13 @@ parameters:
     uploads_directory: '%kernel.project_dir%/public/uploads'
     profile_pictures_directory: '%kernel.project_dir%/public/uploads/profile_pictures'
     logos_directory: '%kernel.project_dir%/public/uploads/logos'
-    karser_recaptcha3.site_key: '%env(RECAPTCHA3_KEY)%'
-    karser_recaptcha3.secret_key: '%env(RECAPTCHA3_SECRET)%'
-    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
-
+    #karser_recaptcha3.site_key: '%env(RECAPTCHA3_KEY)%'
+    #karser_recaptcha3.secret_key: '%env(RECAPTCHA3_SECRET)%'
+    #google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    recaptcha_site_key: '%env(EWZ_RECAPTCHA_SITE_KEY)%'
+twig:
+    globals:
+        recaptcha_site_key: '%recaptcha_site_key%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -39,5 +42,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: Symfony\Component\Security\Http\Event\LogoutEvent, method: onLogoutSuccess }
 
+    # config/services.yaml
+    App\Service\StatistiqueMissionService: ~
 
 

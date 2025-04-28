@@ -5,26 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/phpunit.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/assets/controllers.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/assets/controllers.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/bundles.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Mission.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Mission.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Recompense.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/Recompense.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/MissionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Form/MissionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/MissionRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/MissionRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/symfony.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/edit.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/UserMission.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/UserMission.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/UserMissionRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/UserMissionRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/new.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,6 +244,9 @@
       <workItem from="1745506452118" duration="18903000" />
       <workItem from="1745589532801" duration="3758000" />
       <workItem from="1745593938247" duration="5101000" />
+      <workItem from="1745750006244" duration="33742000" />
+      <workItem from="1745832255916" duration="13773000" />
+      <workItem from="1745847424540" duration="1709000" />
     </task>
     <servers />
   </component>
