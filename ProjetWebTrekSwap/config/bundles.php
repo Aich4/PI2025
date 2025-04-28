@@ -19,4 +19,6 @@ return [
     CalendarBundle\CalendarBundle::class => ['all' => true],
 
     Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true],
+    Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+    EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle::class => ['all' => true],
 ];

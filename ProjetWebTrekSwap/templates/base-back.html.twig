@@ -27,6 +27,10 @@
   <link href="{{asset('backTemp/vendor/remixicon/remixicon.css')}}" rel="stylesheet">
   <link href="{{asset('backTemp/vendor/simple-datatables/style.css')}}" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <!-- Template Main CSS File -->
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -73,7 +77,7 @@
     </div><!-- End Logo -->
 
 
-   
+
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -83,6 +87,7 @@
             <i class="bi bi-search"></i>
           </a>
         </li><!-- End Search Icon-->
+
 
         <li class="nav-item dropdown">
 
@@ -287,14 +292,14 @@
 
       </ul>
     </nav><!-- End Icons Navigation -->
-    
+
 
   </header><!-- End Header -->
 {% endblock %}
 {% block sidebar %}
   {% if not (app.request.get('_route') == 'app_profile' and app.user.typeUser != 'Admin') %}
   <!-- ======= Sidebar ======= -->
-  
+
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
@@ -324,7 +329,7 @@
     <a class="nav-link collapsed" href="{{ path('app_task_index') }}">
       <i class="bi bi-menu-button-wide"></i><span>Progress Tracker</span>
     </a>
-  </li> 
+  </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
@@ -349,7 +354,7 @@
           </li>
         </ul>
       </li><!-- End Components Nav -->
-      
+
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
@@ -438,11 +443,11 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
-    
+
 
     <section class="section dashboard">
       <div class="row">
-      
+
 
         <!-- Left side columns -->
         <div class="col-lg-8">
@@ -558,7 +563,7 @@
             <!-- Reports -->
             <div class="col-12">
               <div class="card">
-            
+
                 <div class="filter">
                   <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -1076,7 +1081,7 @@
     </section>
 {% endblock %}
   </main><!-- End #main -->
-  
+
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">

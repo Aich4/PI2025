@@ -8,6 +8,13 @@ parameters:
   profile_pictures_directory: '%kernel.project_dir%/public/uploads/profile_pictures'
   logos_directory: '%kernel.project_dir%/public/uploads/logos'
   part_directory: '%kernel.project_dir%/public/uploads/partenaires'
+  #karser_recaptcha3.site_key: '%env(RECAPTCHA3_KEY)%'
+  #karser_recaptcha3.secret_key: '%env(RECAPTCHA3_SECRET)%'
+  #google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+  recaptcha_site_key: '%env(EWZ_RECAPTCHA_SITE_KEY)%'
+twig:
+  globals:
+    recaptcha_site_key: '%recaptcha_site_key%'
 
   twilio_account_sid: '%env(TWILIO_ACCOUNT_SID)%'
   twilio_auth_token: '%env(TWILIO_AUTH_TOKENN)%'
@@ -70,4 +77,9 @@ services:
 
   App\Service\TestTwilioCommand:
     public: true
+
+
+    # config/services.yaml
+  App\Service\StatistiqueMissionService: ~
+
 
