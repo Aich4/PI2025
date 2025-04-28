@@ -1,11 +1,10 @@
 {% extends 'base.html.twig' %}
 
-
-{% block title %}{% endblock %}
-
+{% block title %}Nouvelle Réclamation{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
+
         <!-- Formulaire de réclamation -->
         <div class="card shadow-sm mb-4">
             <div class="card-header" style="background-color: #012970; color: white;">
@@ -71,15 +70,14 @@
                                 </td>
                                 <td>{{ reclamation.dateRec ? reclamation.dateRec|date('d/m/Y H:i') : '' }}</td>
                                 <td>
-                                        <span class="badge rounded-pill" style="background-color: {{ reclamation.etatRec == 'En cours' ? '#ffc107' : (reclamation.etatRec == 'Résolue' ? '#198754' : '#dc3545') }}; color: white;">
-                                            <i class="fas fa-{{ reclamation.etatRec == 'En cours' ? 'clock' : (reclamation.etatRec == 'Résolue' ? 'check' : 'times') }} me-1"></i>
-                                            {{ reclamation.etatRec }}
-                                        </span>
+                                    <span class="badge rounded-pill" style="background-color: {{ reclamation.etatRec == 'En cours' ? '#ffc107' : (reclamation.etatRec == 'Résolue' ? '#198754' : '#dc3545') }}; color: white;">
+                                        <i class="fas fa-{{ reclamation.etatRec == 'En cours' ? 'clock' : (reclamation.etatRec == 'Résolue' ? 'check' : 'times') }} me-1"></i>
+                                        {{ reclamation.etatRec }}
+                                    </span>
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-info toggle-responses" data-reclamation-id="{{ reclamation.idRec }}">
-                                        <i class="fas fa-comments me-1"></i>
-                                        {{ reclamation.reponses|length }} réponse(s)
+                                    <button class="btn btn-sm btn-info toggle-responses" data-reclamation-id="{{ reclamation.idRec }}" data-count="{{ reclamation.reponses|length }}">
+                                        <i class="fas fa-comments me-1"></i>{{ reclamation.reponses|length }} réponse(s)
                                     </button>
                                 </td>
                             </tr>
@@ -93,8 +91,7 @@
                                                         <div class="card-body">
                                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                                 <small class="text-muted">
-                                                                    <i class="fas fa-clock me-1"></i>
-                                                                    {{ reponse.dateRep|date('d/m/Y H:i') }}
+                                                                    <i class="fas fa-clock me-1"></i>{{ reponse.dateRep|date('d/m/Y H:i') }}
                                                                 </small>
                                                             </div>
                                                             <p class="mb-0">{{ reponse.contenu }}</p>
@@ -126,70 +123,26 @@
         </div>
     </div>
 
+    <!-- CSS Styles -->
     <style>
-        .card {
-            border: none;
-            border-radius: 10px;
-            transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .card-header {
-            border-radius: 10px 10px 0 0 !important;
-        }
-        .table th {
-            font-weight: 600;
-            color: #012970;
-        }
-        .badge {
-            font-size: 0.9em;
-            padding: 0.5em 1em;
-        }
-        .form-control:focus {
-            border-color: #012970;
-            box-shadow: 0 0 0 0.2rem rgba(1, 41, 112, 0.25);
-        }
-        .btn-primary {
-            background-color: #012970;
-            border-color: #012970;
-        }
-        .btn-primary:hover {
-            background-color: #011d57;
-            border-color: #011d57;
-        }
-        #reclamationsList {
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        #reclamationsList.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .responses-container {
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        }
-        .response-item .card {
-            background-color: white;
-            border: 1px solid #e9ecef;
-        }
-        .response-item .card-body {
-            padding: 1rem;
-        }
-        .toggle-responses {
-            background-color: #0dcaf0;
-            border-color: #0dcaf0;
-            color: white;
-        }
-        .toggle-responses:hover {
-            background-color: #0bb6d4;
-            border-color: #0bb6d4;
-        }
+        .card { border: none; border-radius: 10px; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .card-header { border-radius: 10px 10px 0 0 !important; }
+        .table th { font-weight: 600; color: #012970; }
+        .badge { font-size: 0.9em; padding: 0.5em 1em; }
+        .form-control:focus { border-color: #012970; box-shadow: 0 0 0 0.2rem rgba(1, 41, 112, 0.25); }
+        .btn-primary { background-color: #012970; border-color: #012970; }
+        .btn-primary:hover { background-color: #011d57; border-color: #011d57; }
+        #reclamationsList { opacity: 0; transform: translateY(-20px); transition: opacity 0.3s ease, transform 0.3s ease; }
+        #reclamationsList.show { opacity: 1; transform: translateY(0); }
+        .responses-container { padding: 15px; background-color: #f8f9fa; border-radius: 5px; }
+        .response-item .card { background-color: white; border: 1px solid #e9ecef; }
+        .response-item .card-body { padding: 1rem; }
+        .toggle-responses { background-color: #0dcaf0; border-color: #0dcaf0; color: white; }
+        .toggle-responses:hover { background-color: #0bb6d4; border-color: #0bb6d4; }
     </style>
 
+    <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggleButton = document.getElementById('toggleReclamations');
@@ -211,7 +164,6 @@
                 isVisible = !isVisible;
             });
 
-            // Gestion des boutons d'affichage des réponses
             document.querySelectorAll('.toggle-responses').forEach(button => {
                 button.addEventListener('click', function() {
                     const reclamationId = this.getAttribute('data-reclamation-id');
@@ -222,7 +174,8 @@
                         this.innerHTML = '<i class="fas fa-times me-1"></i>Masquer les réponses';
                     } else {
                         responsesRow.style.display = 'none';
-                        this.innerHTML = '<i class="fas fa-comments me-1"></i>' + this.getAttribute('data-count') + ' réponse(s)';
+                        const count = this.getAttribute('data-count') || '0';
+                        this.innerHTML = '<i class="fas fa-comments me-1"></i>' + count + ' réponse(s)';
                     }
                 });
             });
