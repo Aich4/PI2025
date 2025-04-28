@@ -14,27 +14,26 @@ class SubscriptionPredictionService
         $this->em = $em;
     }
 
-    // Predict if subscription will not be renewed
     public function predictNonRenewal(Abonnement $abonnement): string
     {
         $today = new \DateTimeImmutable();
-
-        // Get the expiration date from the abonnement
         $expirationDate = $abonnement->getDateExpiration();
 
-        // Example rules for predicting non-renewal
-
-        // Check if the subscription has expired
         if ($expirationDate < $today) {
-            return 'Non-renewal predicted due to expired subscription.';
+            $interval = $expirationDate->diff($today);
+            $daysSinceExpiration = $interval->days;
+
+            if ($daysSinceExpiration > 7) {
+                return 'Non-renewal predicted: subscription expired more than 7 days ago.';
+            } else {
+                return 'Renewal still possible: subscription expired within the last 7 days.';
+            }
         }
 
-        // Check if the subscription is about to expire soon (e.g., within the next 30 days)
         if ($expirationDate < $today->modify('+3 days')) {
-            return 'Non-renewal predicted due to approaching expiration date.';
+            return 'Non-renewal predicted: subscription is expiring very soon (within 3 days).';
         }
 
-        // If none of the conditions apply, assume renewal is likely
-        return 'Renewal likely.';
+        return 'Renewal likely: subscription active.';
     }
 }

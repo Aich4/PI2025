@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Controller;
-
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\SvgWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\UserAbonnement;
@@ -31,6 +34,69 @@ class PaymentController extends AbstractController
     {
         return $this->render('payment/index.html.twig', [
             'controller_name' => 'PaymentController',
+        ]);
+    }
+
+    #[Route('/checkoutqr/{id}', name: 'checkoutqr')]
+    public function checkoutqr(
+        $id, 
+        string $stripeSK, 
+        AbonnementRepository $AbonRepository, 
+        PackRepository $packRepository, 
+        Request $request, 
+        EntityManagerInterface $em
+    ): Response {
+        // Set Stripe API key
+        Stripe::setApiKey($stripeSK);
+    
+        // Fetch the abonnement (subscription) by ID
+        $Abon = $AbonRepository->find($id);
+        if (!$Abon) {
+            throw $this->createNotFoundException('Abonnement not found.');
+        }
+    
+        // Retrieve the pack price using the repository method
+        $unitAmount = $packRepository->getPriceById($Abon->getIdPack());
+    
+        // Convert to cents
+        $unitAmount = $unitAmount * 100; // Assuming price is in DT, convert to cents
+    
+        // Create a Stripe checkout session
+        $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => 'Payment subscription',
+                    ],
+                    'unit_amount' => $unitAmount,
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => $this->generateUrl('success_url', ['id_abonnement' => $id], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('cancel_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
+        ]);
+    
+        // Get the URL from the session
+        $checkoutUrl = $session->url;
+    
+        // Generate the QR Code for the checkout URL
+        $qrCode = Builder::create()
+        ->writer(new SvgWriter())
+        ->data($checkoutUrl)
+        ->encoding(new Encoding('UTF-8'))
+        ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+        ->size(300)
+        ->margin(10)
+        ->build();
+    
+        // Render the view with the QR Code
+        return $this->render('abonnements/qr_code.html.twig', [
+            'qrCode' => $qrCode->getString(), // get the SVG string
+            'abonnements' => $Abon,
+            'checkoutUrl' => $checkoutUrl, // Pass URL for "Buy Now" button
         ]);
     }
 
@@ -81,7 +147,7 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/success-url', name: 'success_url')]
-    public function successUrl(Request $request, EntityManagerInterface $em): Response
+    public function successUrl(Request $request, EntityManagerInterface $em, WhatsAppService $whatsApp): Response
     {
         // Retrieve the abonnement_id from the query parameter
         $abonnementId = $request->query->get('id_abonnement');
@@ -108,9 +174,9 @@ class PaymentController extends AbstractController
         $em->flush();
 
         // Optionally send WhatsApp message (commented out)
-        //$to = 'whatsapp:+21624354335'; 
-        //$message = "✅ Paiement réussi ! Merci pour votre abonnement.";
-        //$whatsApp->sendMessage($to, $message);
+        $to = 'whatsapp:+21624354335'; 
+        $message = "✅ Paiement réussi ! Merci pour votre abonnement.";
+        $whatsApp->sendMessage($to, $message);
 
         // Render the success page
         return $this->render('payment/success.html.twig');
