@@ -31,6 +31,12 @@
 
 
     <!-- Template Main CSS File -->
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% endblock %}
+
+  <!-- Template Main CSS File -->
   <link href="{{asset('backTemp/css/style.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -56,6 +62,8 @@
 </head>
 
 <body>
+
+
 {% block navbar %}
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -68,7 +76,8 @@
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-   
+
+
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -284,11 +293,13 @@
       </ul>
     </nav><!-- End Icons Navigation -->
 
+
   </header><!-- End Header -->
 {% endblock %}
 {% block sidebar %}
   {% if not (app.request.get('_route') == 'app_profile' and app.user.typeUser != 'Admin') %}
   <!-- ======= Sidebar ======= -->
+
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
@@ -314,6 +325,11 @@
         </a>
       </li>
       {% endif %}
+        <li class="nav-item">
+    <a class="nav-link collapsed" href="{{ path('app_task_index') }}">
+      <i class="bi bi-menu-button-wide"></i><span>Progress Tracker</span>
+    </a>
+  </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
@@ -331,8 +347,14 @@
               <i class="bi bi-circle"></i><span>Abonnements</span>
             </a>
           </li>
+           <li>
+            <a href="/hist">
+              <i class="bi bi-circle"></i><span> Historique </span>
+            </a>
+          </li>
         </ul>
       </li><!-- End Components Nav -->
+
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
@@ -422,8 +444,10 @@
       </nav>
     </div><!-- End Page Title -->
 
+
     <section class="section dashboard">
       <div class="row">
+
 
         <!-- Left side columns -->
         <div class="col-lg-8">
@@ -1058,6 +1082,7 @@
 {% endblock %}
   </main><!-- End #main -->
 
+
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
@@ -1087,6 +1112,9 @@
   <!-- Template Main JS File -->
   <script src="{{asset('backTemp/js/main.js')}}"></script>
 {% endblock %}
+
+
 </body>
 
 </html>
+{% block javascript %}{% endblock %}

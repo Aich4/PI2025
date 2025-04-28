@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block qr %}QR Code{% endblock %}
+
+{% block body %}
+    <h1>QR Code for Abonnement #{{ abonnement.id }}</h1>
+
+    <div>
+        {{ qrCode|raw }}
+    </div>
+
+    <p><strong>Nom Pack:</strong> {{ abonnement.pack.nomPack }}</p>
+    <p><strong>Prix:</strong> {{ abonnement.pack.prix }} DT</p>
+    <p><strong>Durée:</strong> {{ abonnement.pack.duree }} mois</p>
+    <p><strong>Avantages:</strong> {{ abonnement.pack.avantages }}</p>
+{% endblock %}

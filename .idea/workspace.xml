@@ -5,15 +5,62 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/c161fd58-1ab8-4ecc-915b-49c40fa942ce.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/c161fd58-1ab8-4ecc-915b-49c40fa942ce/storage_v2/_src_/schema/pidev.fIdbBg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/Controllers/mission.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/Controllers/recompense.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/Controllers/showmission.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/Controllers/showrec.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/Controllers/updateMission.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/Controllers/updateRec.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/models/Mission.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/models/Recompense.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/services/CrudInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/services/MissionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/services/OCRService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/services/RecompenseService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/services/WhatsAppSender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/tests/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/tests/MainFx.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/java/utils/MyDb.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/LOGO.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/ShowMission.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/ShowRecompense.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/UpdateMission.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/UpdateRecompense.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/back.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/bg.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/bleu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/cat.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/categories.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/liv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/mission.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/recompense.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/stat.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/src/main/resources/css/webbb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pidev.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/UserMission.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Entity/UserMission.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/UserMissionRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Repository/UserMissionRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/base-back.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/pidev.sql" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/pidev.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +74,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="D:/xampp/php/php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/composer" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/clock" />
@@ -161,11 +208,38 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-components" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/thiagoalessio/tesseract_ocr" />
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/jms/metadata" />
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/vich/uploader-bundle" />
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/google/recaptcha" />
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/excelwebzone/recaptcha-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/commonmark" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/config" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/schema" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dflydev/dot-access-data" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/twilio/sdk" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-crt-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-sdk-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-sdk-php-symfony" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/php-font-lib" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/php-svg-lib" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nucleos/dompdf-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/symfony/twilio-notifier" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/tattali/calendar-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/mtdowling/jmespath.php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/stripe/stripe-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dasprid/enum" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/endroid/qr-code" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dragonmantank/cron-expression" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/bacon/bacon-qr-code" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/zenstruck/schedule-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -179,15 +253,24 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;GestionMission&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging GestionAbonnementWeb&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/abdgh/OneDrive/Bureau/ghaliaabdk/PI2025/ProjetWebTrekSwap/public/badges&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\abdgh\OneDrive\Bureau\ghaliaabdk\PI2025\ProjetWebTrekSwap\public\badges" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -197,8 +280,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
-        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-PS-251.23774.466" />
+        <option value="bundled-php-predefined-a98d8de5180a-aaeaa8632555-com.jetbrains.php.sharedIndexes-PS-251.23774.466" />
       </set>
     </attachedChunks>
   </component>
@@ -229,24 +312,19 @@
       <workItem from="1744676720620" duration="1153000" />
       <workItem from="1744709791227" duration="1677000" />
       <workItem from="1744717806386" duration="1732000" />
-      <workItem from="1744719694446" duration="724000" />
-      <workItem from="1744979130181" duration="8220000" />
-      <workItem from="1745161558653" duration="402000" />
-      <workItem from="1745163548167" duration="470000" />
-      <workItem from="1745164036935" duration="641000" />
-      <workItem from="1745164831063" duration="129000" />
-      <workItem from="1745165120498" duration="368000" />
-      <workItem from="1745172787309" duration="8801000" />
-      <workItem from="1745246652107" duration="3275000" />
-      <workItem from="1745325956390" duration="5655000" />
-      <workItem from="1745433775155" duration="1572000" />
-      <workItem from="1745503794765" duration="1418000" />
-      <workItem from="1745506452118" duration="18903000" />
-      <workItem from="1745589532801" duration="3758000" />
-      <workItem from="1745593938247" duration="5101000" />
-      <workItem from="1745750006244" duration="33742000" />
-      <workItem from="1745832255916" duration="13773000" />
-      <workItem from="1745847424540" duration="1709000" />
+      <workItem from="1745246683620" duration="6000" />
+      <workItem from="1745328080987" duration="3061000" />
+      <workItem from="1745499380813" duration="811000" />
+      <workItem from="1745590019274" duration="9100000" />
+      <workItem from="1745661194943" duration="12633000" />
+      <workItem from="1745674696544" duration="7966000" />
+      <workItem from="1745699784392" duration="12731000" />
+      <workItem from="1745827666419" duration="339000" />
+      <workItem from="1745833728560" duration="30000" />
+      <workItem from="1745834169002" duration="2748000" />
+      <workItem from="1745840121991" duration="197000" />
+      <workItem from="1745840361915" duration="29000" />
+      <workItem from="1745840442657" duration="27000" />
     </task>
     <servers />
   </component>

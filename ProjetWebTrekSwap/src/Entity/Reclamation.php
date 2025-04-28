@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
@@ -14,6 +16,7 @@ class Reclamation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id_rec')]
+    #[Groups(['reclamations'])]
     private ?int $idRec = null;
 
     #[ORM\Column(length: 255)]
@@ -24,6 +27,7 @@ class Reclamation
         minMessage: "La description doit contenir au moins {{ limit }} caractères",
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères"
     )]
+    #[Groups(['reclamations'])]
     private ?string $descriptionRec = null;
 
     #[ORM\Column]
