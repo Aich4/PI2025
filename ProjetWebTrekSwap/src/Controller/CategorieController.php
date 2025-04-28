@@ -8,14 +8,18 @@ use App\Form\CategorieType;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Repository\PartenaireRepository;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\Component\Pager\PaginatorInterface;
+
 final class CategorieController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
@@ -165,17 +169,39 @@ final class CategorieController extends AbstractController
     }
 
     #[Route('/categorie/{id}', name: 'categorie_partenaires')]
-    public function partenairesParCategorie(int $id, PartenaireRepository $partenaireRepository, CategorieRepository $categorieRepository): Response
+    public function partenairesParCategorie(
+        int $id,
+        PartenaireRepository $partenaireRepository,
+        CategorieRepository $categorieRepository,
+        Request $request,
+        PaginatorInterface $paginator,
+        EntityManagerInterface $em // 👈 Ajouté pour pouvoir faire flush
+    ): Response
     {
         $categorie = $categorieRepository->find($id);
         $categories = $categorieRepository->findAll();
-        // Vérifier si la catégorie existe
+
         if (!$categorie) {
             throw $this->createNotFoundException('La catégorie n\'existe pas.');
         }
 
-        // Récupérer tous les partenaires liés à cette catégorie
-        $partenaires = $partenaireRepository->findBy(['id_categorie' => $id]);
+        // 👁️ Incrémenter les vues de la catégorie
+        $categorie->setViews($categorie->getViews() + 1);
+        $em->flush(); // très important sinon rien ne sera enregistré !
+
+        // 🔥 Correction : utiliser QueryBuilder au lieu de findBy
+        $query = $partenaireRepository->createQueryBuilder('p')
+            ->where('p.id_categorie = :id')
+            ->setParameter('id', $id)
+            ->orderBy('p.id', 'DESC')
+            ->getQuery();
+
+        // 🔥 Appliquer la pagination
+        $partenaires = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            2 // Combien de partenaires par page
+        );
 
         return $this->render('categorie/partenaires.html.twig', [
             'categorie' => $categorie,
@@ -183,4 +209,25 @@ final class CategorieController extends AbstractController
             'categories' => $categories,
         ]);
     }
+
+    #[Route('/categoriesearch', name: 'categorie_search')]
+    public function searchCategorie(Request $request, NormalizerInterface $normalizer, CategorieRepository $repository): JsonResponse
+    {
+        $searchValue = $request->get('searchValue');
+        $categories = $repository->findCategorieByNom($searchValue);
+
+        $jsonContent = $normalizer->normalize($categories, 'json', ['groups' => 'categories']);
+
+        return new JsonResponse($jsonContent);
+    }
+    /*#[Route('/categoriesearch', name: 'categorie_search')]
+    public function searchCategorie(Request $request, NormalizerInterface $normalizer, CategorieRepository $repository): JsonResponse
+    {
+        $searchValue = $request->get('searchValue');
+        $categories = $repository->findCategorieByNom($searchValue);
+
+        $jsonContent = $normalizer->normalize($categories, 'json', ['groups' => 'categories']);
+
+        return new JsonResponse($jsonContent);
+    }*/
 }

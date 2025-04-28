@@ -7,12 +7,14 @@ use App\Form\ActiviteType;
 use App\Repository\ActiviteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Destination;
 use App\Repository\DestinationRepository;
 use App\Controller\SecurityController;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 
 final class ActiviteController extends AbstractController
@@ -29,6 +31,14 @@ final class ActiviteController extends AbstractController
         return $this->render('activite/index.html.twig', [
             'controller_name' => 'ActiviteController',
         ]);
+    }
+    #[Route('/activite/search', name: 'search_activite', methods: ['GET'])]
+    public function search(Request $request, ActiviteRepository $repo, NormalizerInterface $normalizer): JsonResponse
+    {
+        $val = $request->get('searchValue');
+        $activites = $repo->findActiviteByNom($val);
+        $json = $normalizer->normalize($activites, null, ['groups' => 'activites']);
+        return new JsonResponse($json);
     }
 
     #[Route('/activite/show', name: 'list_activite', methods: ['GET'])]
@@ -110,19 +120,33 @@ final class ActiviteController extends AbstractController
             'activities' => $activities,
         ]);
     }
-    #[Route('/activites/{id}/join', name: 'activite_join')]
-    public function join(Activite $activite, SecurityController $security, EntityManagerInterface $em): Response
+    #[Route('/fullcalendar', name: 'fullcalendar_activities')]
+    public function fullCalendar(): Response
     {
-        $user = $security->getUser();
+        return $this->render('activite/fullcalendar.html.twig');
+    }
 
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
+    #[Route('/api/activities', name: 'api_activities', methods: ['GET'])]
+    public function apiActivities(ActiviteRepository $activiteRepository): JsonResponse
+    {
+        $activites = $activiteRepository->findAll();
+
+        $data = [];
+
+        foreach ($activites as $activite) {
+            $destinationName = $activite->getIdDestination() ? $activite->getIdDestination()->getNomDestination() : 'Aucune destination';
+
+            $data[] = [
+                'id' => $activite->getId(),
+                'title' => $activite->getNomActivite(),  // 👉 Only activity name
+                'start' => $activite->getDate()->format('Y-m-d') . 'T' . $activite->getHeure(),
+                'destination' => $destinationName,        // 👉 Destination separately
+                'status' => $activite->getStatut(),
+            ];
         }
 
-        // TODO: Associate user to activity (e.g. via a "participants" relation)
-
-        $this->addFlash('success', 'Vous avez rejoint l\'activité avec succès.');
-        return $this->redirectToRoute('listFrontDestination');
+        return new JsonResponse($data);
     }
+
 
 }

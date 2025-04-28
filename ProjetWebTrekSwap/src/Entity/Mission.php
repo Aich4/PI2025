@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MissionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MissionRepository::class)]
@@ -12,6 +13,7 @@ class Mission
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['missions'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Recompense::class, inversedBy: 'missions')]
@@ -27,15 +29,18 @@ class Mission
         minMessage: "La description doit contenir au moins {{ limit }} caractères.",
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['missions'])]
     private ?string $description = null;
 
     #[ORM\Column]
     #[Assert\NotNull(message: "Le nombre de points de récompense est obligatoire.")]
     #[Assert\Positive(message: "Le nombre de points de récompense doit être un nombre positif.")]
+    #[Groups(['missions'])]
     private ?int $points_recompense = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le statut est obligatoire.")]
+    #[Groups(['missions'])]
     private ?string $statut = null;
 
     public function getId(): ?int

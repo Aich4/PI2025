@@ -16,6 +16,15 @@ class ActiviteRepository extends ServiceEntityRepository
         parent::__construct($registry, Activite::class);
     }
 
+    public function findActiviteByNom(string $nom): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('LOWER(a.nom_activite) LIKE :nom')
+            ->setParameter('nom', '%' . strtolower($nom) . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Activite[] Returns an array of Activite objects
     //     */

@@ -22,6 +22,7 @@ class Recompense
         minMessage: "La description doit contenir au moins {{ limit }} caractères.",
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
     )]
+    #[Groups(['missions'])]
     private ?string $description = null;
 
     #[ORM\Column]

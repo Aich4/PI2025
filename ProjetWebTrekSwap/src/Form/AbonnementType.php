@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Abonnement;
+use App\Entity\Pack;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,13 +16,11 @@ class AbonnementType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $packIds = $options['pack_ids']; // Get pack IDs from controller
 
         $builder
-            ->add('id_pack', ChoiceType::class, [
-                'choices' => array_combine($packIds, $packIds), 
-                'placeholder' => 'Sélectionnez un Pack',
-                'attr' => ['class' => 'form-control']
+            ->add('pack', EntityType::class, [
+                'class' => Pack::class,
+                'choice_label' => 'nom_pack', 
             ])
             ->add('date_Souscription', DateType::class, [
                 'widget' => 'single_text',
@@ -46,7 +46,7 @@ class AbonnementType extends AbstractType
                 'choices' => [
                     'Actif' => 'actif',
                     'Inactif' => 'inactif',
-                    'Suspendu' => 'suspendu'
+                    'Expire' => 'expire'
                 ],
                 'placeholder' => 'Sélectionnez un Statut',
                 'attr' => ['class' => 'form-control']
