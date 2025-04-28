@@ -19,40 +19,40 @@ class AbonnementRepository extends ServiceEntityRepository
     public function searchByFilters(string $searchTerm, string $statut, string $dateField)
     {
         $queryBuilder = $this->createQueryBuilder('a');
-    
+
         if ($searchTerm) {
             $queryBuilder->andWhere('a.nom LIKE :searchTerm OR a.prenom LIKE :searchTerm')
-                         ->setParameter('searchTerm', '%' . $searchTerm . '%');
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
         }
-    
+
         if ($statut) {
             $queryBuilder->andWhere('a.statut = :statut')
-                         ->setParameter('statut', $statut);
+                ->setParameter('statut', $statut);
         }
-    
+
         if ($dateField) {
             $queryBuilder->andWhere('a.date_Souscription = :dateField')
-                         ->setParameter('dateField', $dateField);
+                ->setParameter('dateField', $dateField);
         }
-    
+
         return $queryBuilder->getQuery()->getResult();
     }
-    
-   
+
+
     public function searchByField(string $field, string $term)
     {
         $qb = $this->createQueryBuilder('a');
-        
+
         // Add conditions based on the field
         if ($field === 'statut') {
             $qb->andWhere('a.statut LIKE :term')
-               ->setParameter('term', '%' . $term . '%');
+                ->setParameter('term', '%' . $term . '%');
         } elseif ($field === 'date_Souscription') {
             $qb->andWhere('a.date_Souscription LIKE :term')
-               ->setParameter('term', '%' . $term . '%');
+                ->setParameter('term', '%' . $term . '%');
         } elseif ($field === 'date_Expiration') {
             $qb->andWhere('a.date_Expiration LIKE :term')
-               ->setParameter('term', '%' . $term . '%');
+                ->setParameter('term', '%' . $term . '%');
         }
 
         return $qb->getQuery()->getResult();
@@ -81,4 +81,16 @@ class AbonnementRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    // src/Repository/AbonnementRepository.php
+
+    public function findByPackName(string $name): array
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.pack', 'p')
+            ->where('p.nom_pack LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
 }
