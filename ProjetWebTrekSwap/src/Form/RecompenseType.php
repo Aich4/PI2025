@@ -21,6 +21,7 @@ class RecompenseType extends AbstractType
                     'Indisponible' => 'indisponible',
                 ],
                 'placeholder' => 'Sélectionner la disponibilité',
+                'required' =>true,
                 'attr' => ['class' => 'form-control']
             ])
         ;

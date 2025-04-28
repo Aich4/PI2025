@@ -6,6 +6,7 @@ use App\Entity\Recompense;
 use App\Form\RecompenseType;
 use App\Repository\RecompenseRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,14 +69,26 @@ final class RecompenseController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_recompense_delete', methods: ['POST'])]
-    public function delete(Request $request, Recompense $recompense, EntityManagerInterface $entityManager): Response
+    #[Route('/recompense/delete/{id}', name: 'app_recompense_delete', methods: ['GET'])]
+    public function delete(int $id, RecompenseRepository $recompenseRepository, ManagerRegistry $managerRegistry): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$recompense->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($recompense);
-            $entityManager->flush();
+        // Récupérer l'EntityManager
+        $em = $managerRegistry->getManager();
+
+        // Trouver la récompense par son ID
+        $recompense = $recompenseRepository->find($id);
+
+        // Si la récompense n'existe pas, afficher une erreur
+        if (!$recompense) {
+            throw $this->createNotFoundException('Récompense non trouvée');
         }
 
-        return $this->redirectToRoute('app_recompense_index', [], Response::HTTP_SEE_OTHER);
+        // Supprimer la récompense
+        $em->remove($recompense);
+        $em->flush();
+
+        // Rediriger vers la liste des récompenses après la suppression
+        return $this->redirectToRoute('app_recompense_index');
     }
+
 }

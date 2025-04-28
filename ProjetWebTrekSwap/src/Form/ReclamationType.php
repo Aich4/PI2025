@@ -36,7 +36,7 @@ class ReclamationType extends AbstractType
                     'novalidate' => 'novalidate'
                 ]
             ])
-            ->add('etatRec', ChoiceType::class, [
+            /*->add('etatRec', ChoiceType::class, [
                 'label' => 'État',
                 'choices' => [
                     'En cours' => 'En cours',
@@ -47,7 +47,7 @@ class ReclamationType extends AbstractType
                     'class' => 'form-control',
                     'novalidate' => 'novalidate'
                 ]
-            ])
+            ])*/
         ;
     }
 

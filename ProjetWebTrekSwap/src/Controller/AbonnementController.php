@@ -26,7 +26,18 @@ use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
 final class AbonnementController extends AbstractController
 {
- // Search 
+    #[Route('/', name: 'index')]
+    public function index(AbonnementRepository $abonnementRepository, PackRepository $packRepository, CategorieRepository $categorieRepository): Response
+    {
+        $abonnements = $abonnementRepository->findAll();
+        $categories = $categorieRepository->findAll();
+        return $this->render('base.html.twig', [
+            'abonnements' => $abonnements,
+            'packRepository' => $packRepository,
+            'categories' => $categories,
+        ]);
+    }
+ // Search
  #[Route('/searchAbonnement', name: 'app_search_abonnement', methods: ['GET'])]
  public function searchAbonnement(Request $request, AbonnementRepository $abonnementRepository): JsonResponse
 {
@@ -49,12 +60,12 @@ final class AbonnementController extends AbstractController
     return new JsonResponse($results);
 }
 
- 
+
 
 
 
     //PREDICTION
-    
+
     private $entityManager;
     private $predictionService;
 
@@ -83,8 +94,8 @@ final class AbonnementController extends AbstractController
         ]);
     }
 
-     
-    // HISTORIQUE 
+
+    // HISTORIQUE
     private function enregistrerHistorique(EntityManagerInterface $em, string $action, Abonnement $abonnement, ?string $details = null)
 {
     $historique = new \App\Entity\HistoriqueAbonnement();
@@ -200,12 +211,12 @@ public function listAbonnements(AbonnementRepository $abonnementRepository, Enti
     if ($form->isSubmitted() && $form->isValid()) {
         $managerRegistry->persist($abonnement);
         $managerRegistry->flush();
-    
+
         $this->enregistrerHistorique($managerRegistry, 'ajout', $abonnement, 'Ajout d\'un nouvel abonnement');
-    
+
         return $this->redirectToRoute('list_Abonnement');
     }
-    
+
 
     return $this->render('abonnements/addAbon.html.twig', [
         'abonnement' => $abonnement,
@@ -232,12 +243,12 @@ public function edit(int $id_abonnement, Request $request, EntityManagerInterfac
 
     if ($form->isSubmitted() && $form->isValid()) {
         $managerRegistry->flush();
-    
+
         $this->enregistrerHistorique($managerRegistry, 'modification', $abonnement, 'Modification d\'un abonnement existant');
-    
+
         return $this->redirectToRoute('list_Abonnement');
     }
-    
+
 
     return $this->render('abonnements/editAbon.html.twig', [
         'abonnement' => $abonnement,
@@ -255,13 +266,13 @@ public function edit(int $id_abonnement, Request $request, EntityManagerInterfac
         if (!$abonnement) {
             throw $this->createNotFoundException('Abonnement non trouvé');
         }
-        
+
         $this->enregistrerHistorique($em, 'suppression', $abonnement, 'Suppression d\'un abonnement');
-        
+
         $em->remove($abonnement);
         $em->flush();
-        
+
         return $this->redirectToRoute('list_Abonnement');
-        
+
     }
 }

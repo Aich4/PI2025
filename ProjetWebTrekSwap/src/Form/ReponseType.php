@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ReponseType extends AbstractType
 {
@@ -19,7 +20,20 @@ class ReponseType extends AbstractType
                     'class' => 'form-control',
                     'rows' => 5
                 ]
-            ]);
+            ])
+            ->add('nouvelEtat', ChoiceType::class, [
+                'label' => 'Nouvel état de la réclamation',
+                'mapped' => false,
+                'choices' => [
+                    'En cours' => 'En cours',
+                    'Résolue' => 'Résolue',
+                    'Rejetée' => 'Rejetée'
+                ],
+                'attr' => [
+                    'class' => 'form-select'
+                ]
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

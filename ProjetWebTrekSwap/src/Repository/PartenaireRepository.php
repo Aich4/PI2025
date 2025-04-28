@@ -40,4 +40,15 @@ class PartenaireRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function findTopThreeByMontant()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.montant', 'DESC')  // Trier par montant décroissant
+            ->setMaxResults(3)              // Prendre seulement les 3 premiers
+            ->getQuery()
+            ->getResult();
+    }
+
 }

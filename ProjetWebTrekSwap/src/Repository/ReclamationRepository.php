@@ -40,4 +40,26 @@ class ReclamationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function findByDate(\DateTimeInterface $date): array
+{
+    $start = (clone $date)->setTime(0, 0, 0);
+    $end = (clone $date)->setTime(23, 59, 59);
+
+    return $this->createQueryBuilder('r')
+        ->where('r.date_rec BETWEEN :start AND :end')
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('r.date_rec', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+public function findReclamationByDescriptionRec(string $description): array
+{
+    return $this->createQueryBuilder('r')
+        ->where('r.descriptionRec LIKE :description')
+        ->setParameter('description', '%' . $description . '%')
+        ->getQuery()
+        ->getResult();
+}
 }

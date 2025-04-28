@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\AvisDestination;
 use App\Entity\Destination;
+use App\Entity\Whishlist;
 use App\Form\DestinationType;
+use App\Repository\CategorieRepository;
 use App\Repository\DestinationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,12 +34,56 @@ final class DestinationController extends AbstractController
         ]);
     }
     #[Route('/DestinationFrontShow', name: 'listFrontDestination', methods: ['GET'])]
-    public function listDestination(DestinationRepository $destinationRepository): Response
-    {
+    public function listDestination(
+        DestinationRepository $destinationRepository,
+        CategorieRepository $categorieRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $categories = $categorieRepository->findAll();
+        $destinations = $destinationRepository->findAll();
+
+        $wishlist = [];
+        if ($this->getUser()) {
+            $wishlistItems = $entityManager->getRepository(Whishlist::class)
+                ->findBy(['user' => $this->getUser()]);
+
+            foreach ($wishlistItems as $item) {
+                $wishlist[] = $item->getDestination()->getId();
+            }
+        }
+
+        $avisRepository = $entityManager->getRepository(\App\Entity\AvisDestination::class);
+
+        foreach ($destinations as $destination) {
+            // ⭐ Get user personal vote
+            $vote = $avisRepository->findOneBy([
+                'user' => $this->getUser(),
+                'destination' => $destination,
+            ]);
+
+            $destination->userRating = $vote ? $vote->getScore() : null;
+
+            // ⭐⭐ Get global average and number of votes
+            $qb = $entityManager->createQueryBuilder()
+                ->select('AVG(a.score) as avgScore, COUNT(a.id) as voteCount')
+                ->from(\App\Entity\AvisDestination::class, 'a')
+                ->where('a.destination = :destination')
+                ->setParameter('destination', $destination);
+
+            $result = $qb->getQuery()->getSingleResult();
+
+            $destination->avgRating = $result['avgScore'] ? round($result['avgScore'], 1) : null;
+            $destination->voteCount = $result['voteCount'] ?? 0;
+        }
+
         return $this->render('destination/showFront.html.twig', [
-            'destinations' => $destinationRepository->findAll(),
+            'destinations' => $destinations,
+            'categories' => $categories,
+            'wishlist' => $wishlist,
         ]);
     }
+
+
 
     #[Route('/addDestination', name: 'addDestination', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $manager): Response
@@ -126,4 +174,59 @@ final class DestinationController extends AbstractController
 
         return $this->redirectToRoute('list_destination'); // Redirect to the list after deletion
     }
+    #[Route('/vote/{destination}', name: 'vote_destination', methods: ['POST'])]
+    public function vote(Request $request, Destination $destination, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['success' => false, 'message' => 'Vous devez être connecté pour voter.'], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $score = $data['score'] ?? null;
+
+        if ($score === null || $score < 0 || $score > 5) {
+            return new JsonResponse(['success' => false, 'message' => 'Score invalide.'], 400);
+        }
+
+        $avisRepository = $entityManager->getRepository(\App\Entity\AvisDestination::class);
+
+        // Find if the user already voted for this destination
+        $vote = $avisRepository->findOneBy([
+            'user' => $user,
+            'destination' => $destination,
+        ]);
+
+        if (!$vote) {
+            $vote = new \App\Entity\AvisDestination();
+            $vote->setUser($user);
+            $vote->setDestination($destination);
+        }
+
+        $vote->setScore($score);
+
+        $entityManager->persist($vote);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true]);
+    }
+    #[Route('/destination-average/{destination}', name: 'destination_average', methods: ['GET'])]
+    public function destinationAverage(Destination $destination, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $qb = $entityManager->createQueryBuilder()
+            ->select('AVG(a.score) as avgScore, COUNT(a.id) as voteCount')
+            ->from(\App\Entity\AvisDestination::class, 'a')
+            ->where('a.destination = :destination')
+            ->setParameter('destination', $destination);
+
+        $result = $qb->getQuery()->getSingleResult();
+
+        return new JsonResponse([
+            'success' => true,
+            'avgRating' => $result['avgScore'] ? round($result['avgScore'], 1) : 0,
+            'voteCount' => $result['voteCount'] ?? 0,
+        ]);
+    }
+
+
 }
