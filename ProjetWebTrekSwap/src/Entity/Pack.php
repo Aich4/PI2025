@@ -139,4 +139,9 @@ class Pack
         $this->statut = $statut;
         return $this;
     }
+    public function getPrixInUSD(): ?float
+{
+    return $this->pack ? $this->pack->getPrixInUSD() : null;
+}
+
 }

@@ -18,8 +18,9 @@ class Abonnement
     #[ORM\Column(nullable: true)]
     private ?int $id_utilisateur = 0;
 
-    #[ORM\Column]
-    private ?int $id_Pack = null;
+    #[ORM\ManyToOne(targetEntity: Pack::class)]
+    #[ORM\JoinColumn(name: "id_pack", referencedColumnName: "id_pack", nullable: false)]
+    private ?Pack $pack = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\GreaterThanOrEqual(value: "today", message: "La date de souscription ne peut pas être dans le passé.")]
@@ -56,17 +57,24 @@ class Abonnement
         return $this;
     }
 
-    public function getIdPack(): ?int
-    {
-        return $this->id_Pack;
-    }
+    public function getPack(): ?Pack
+{
+    return $this->pack;
+}
 
-    public function setIdPack(?int $id_Pack): static
-    {
-        $this->id_Pack = $id_Pack;
+public function setPack(?Pack $pack): static
+{
+    $this->pack = $pack;
 
-        return $this;
-    }
+    return $this;
+}
+
+public function getIdPack(): ?int
+{
+    return $this->pack ? $this->pack-> getIdPack() : null;
+}
+
+
 
     public function getDateSouscription(): ?\DateTimeInterface
     {
