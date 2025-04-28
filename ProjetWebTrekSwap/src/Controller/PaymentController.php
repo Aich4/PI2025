@@ -10,9 +10,24 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Service\WhatsAppService;
 
 class PaymentController extends AbstractController
 {
+    
+    #[Route('/send-whatsapp', name: 'send_whatsapp')]
+public function send(WhatsAppService $whatsApp): Response
+{
+    // Call the sendMessage method with the recipient number and message
+    $whatsApp->sendMessage('whatsapp:+21624354335', 'Hello from Symfony via WhatsApp!');
+
+    return new Response('WhatsApp message sent!');
+}
+
+    
+
+
+
     #[Route('/payment', name: 'payment')]
     public function index(): Response
     {
@@ -62,8 +77,12 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/success-url', name: 'success_url')]
-    public function successUrl(): Response
+    public function successUrl(WhatsAppService $whatsApp): Response
     {
+        $to = 'whatsapp:+21624354335'; 
+        $message = "✅ Paiement réussi ! Merci pour votre abonnement.";
+    
+        $whatsApp->sendMessage($to, $message);
         return $this->render('payment/success.html.twig', []);
     }
 
