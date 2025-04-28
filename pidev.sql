@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : mar. 22 avr. 2025 à 12:24
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Apr 28, 2025 at 04:51 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `pidev`
+-- Database: `pidev`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `abonnement`
+-- Table structure for table `abonnement`
 --
 
 CREATE TABLE `abonnement` (
@@ -37,16 +37,16 @@ CREATE TABLE `abonnement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `abonnement`
+-- Dumping data for table `abonnement`
 --
 
 INSERT INTO `abonnement` (`id_abonnement`, `id_utilisateur`, `statut`, `id_Pack`, `date_Souscription`, `date_Expiration`) VALUES
-(3, 0, 'actif', 2, '2025-04-23', '2025-04-29');
+(3, 0, 'expire', 2, '2025-04-01', '2025-04-22');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `activite`
+-- Table structure for table `activite`
 --
 
 CREATE TABLE `activite` (
@@ -59,7 +59,7 @@ CREATE TABLE `activite` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `activite`
+-- Dumping data for table `activite`
 --
 
 INSERT INTO `activite` (`id`, `nom_activite`, `date`, `heure`, `statut`, `id_destination`) VALUES
@@ -69,7 +69,7 @@ INSERT INTO `activite` (`id`, `nom_activite`, `date`, `heure`, `statut`, `id_des
 -- --------------------------------------------------------
 
 --
--- Structure de la table `avis`
+-- Table structure for table `avis`
 --
 
 CREATE TABLE `avis` (
@@ -81,7 +81,32 @@ CREATE TABLE `avis` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `categorie`
+-- Table structure for table `avis_destination`
+--
+
+CREATE TABLE `avis_destination` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `destination_id` int(11) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `avis_destination`
+--
+
+INSERT INTO `avis_destination` (`id`, `user_id`, `destination_id`, `score`) VALUES
+(1, 5, 13, 3),
+(2, 5, 15, 4),
+(3, 5, 14, 4),
+(4, 5, 16, 2),
+(5, 6, 13, 3),
+(6, 6, 15, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categorie`
 --
 
 CREATE TABLE `categorie` (
@@ -89,21 +114,22 @@ CREATE TABLE `categorie` (
   `nom` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `logo` varchar(255) NOT NULL,
-  `nbr_partenaire` int(11) NOT NULL
+  `nbr_partenaire` int(11) NOT NULL,
+  `views` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `categorie`
+-- Dumping data for table `categorie`
 --
 
-INSERT INTO `categorie` (`id`, `nom`, `description`, `logo`, `nbr_partenaire`) VALUES
-(4, 'Hotel', 'c\'est une categorie consacrée pour les hotels', '680769cd6dadb.png', 2),
-(5, 'Restaurant', 'c\'est une categorie consacrée pour les restaurants', '680769f0c0834.jpg', 2);
+INSERT INTO `categorie` (`id`, `nom`, `description`, `logo`, `nbr_partenaire`, `views`) VALUES
+(4, 'Hotel', 'c\'est une categorie consacrée pour les hotels', '680769cd6dadb.png', 2, 3),
+(5, 'Restaurant', 'c\'est une categorie consacrée pour les restaurants', '680769f0c0834.jpg', 2, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `destination`
+-- Table structure for table `destination`
 --
 
 CREATE TABLE `destination` (
@@ -118,7 +144,7 @@ CREATE TABLE `destination` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `destination`
+-- Dumping data for table `destination`
 --
 
 INSERT INTO `destination` (`id`, `nom_destination`, `description`, `image_destination`, `latitude`, `longitude`, `temperature`, `rate`) VALUES
@@ -130,18 +156,7 @@ INSERT INTO `destination` (`id`, `nom_destination`, `description`, `image_destin
 -- --------------------------------------------------------
 
 --
--- Structure de la table `destination_activite`
---
-
-CREATE TABLE `destination_activite` (
-  `id_destination` int(11) NOT NULL,
-  `id_activite` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `doctrine_migration_versions`
+-- Table structure for table `doctrine_migration_versions`
 --
 
 CREATE TABLE `doctrine_migration_versions` (
@@ -151,7 +166,7 @@ CREATE TABLE `doctrine_migration_versions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Déchargement des données de la table `doctrine_migration_versions`
+-- Dumping data for table `doctrine_migration_versions`
 --
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
@@ -160,7 +175,33 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 -- --------------------------------------------------------
 
 --
--- Structure de la table `messenger_messages`
+-- Table structure for table `historique_abonnement`
+--
+
+CREATE TABLE `historique_abonnement` (
+  `id` int(11) NOT NULL,
+  `abonnement_id` int(11) DEFAULT NULL,
+  `action` varchar(255) NOT NULL,
+  `date_action` datetime NOT NULL,
+  `details` longtext DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `historique_abonnement`
+--
+
+INSERT INTO `historique_abonnement` (`id`, `abonnement_id`, `action`, `date_action`, `details`) VALUES
+(2, 8, 'modification', '2025-04-27 16:26:15', 'Modification d\'un abonnement existant'),
+(3, 8, 'suppression', '2025-04-27 16:26:20', 'Suppression d\'un abonnement'),
+(4, 9, 'ajout', '2025-04-27 16:35:04', 'Ajout d\'un nouvel abonnement'),
+(5, 10, 'ajout', '2025-04-27 18:20:18', 'Ajout d\'un nouvel abonnement'),
+(6, 10, 'modification', '2025-04-27 18:24:29', 'Modification d\'un abonnement existant'),
+(7, 3, 'modification', '2025-04-28 14:07:25', 'Modification d\'un abonnement existant');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messenger_messages`
 --
 
 CREATE TABLE `messenger_messages` (
@@ -176,7 +217,7 @@ CREATE TABLE `messenger_messages` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `mission`
+-- Table structure for table `mission`
 --
 
 CREATE TABLE `mission` (
@@ -188,7 +229,7 @@ CREATE TABLE `mission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `mission`
+-- Dumping data for table `mission`
 --
 
 INSERT INTO `mission` (`id`, `description`, `points_recompense`, `statut`, `id_recompense`) VALUES
@@ -205,7 +246,7 @@ INSERT INTO `mission` (`id`, `description`, `points_recompense`, `statut`, `id_r
 -- --------------------------------------------------------
 
 --
--- Structure de la table `pack`
+-- Table structure for table `pack`
 --
 
 CREATE TABLE `pack` (
@@ -220,7 +261,7 @@ CREATE TABLE `pack` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `pack`
+-- Dumping data for table `pack`
 --
 
 INSERT INTO `pack` (`id_pack`, `id_utilisateur`, `nom_pack`, `description`, `prix`, `duree`, `avantages`, `statut`) VALUES
@@ -229,7 +270,7 @@ INSERT INTO `pack` (`id_pack`, `id_utilisateur`, `nom_pack`, `description`, `pri
 -- --------------------------------------------------------
 
 --
--- Structure de la table `partenaire`
+-- Table structure for table `partenaire`
 --
 
 CREATE TABLE `partenaire` (
@@ -239,21 +280,25 @@ CREATE TABLE `partenaire` (
   `adresse` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `date_ajout` date NOT NULL,
-  `id_categorie` int(11) DEFAULT NULL
+  `id_categorie` int(11) DEFAULT NULL,
+  `montant` int(11) NOT NULL,
+  `logo` varchar(255) NOT NULL,
+  `num_tel` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `partenaire`
+-- Dumping data for table `partenaire`
 --
 
-INSERT INTO `partenaire` (`id`, `nom`, `email`, `adresse`, `description`, `date_ajout`, `id_categorie`) VALUES
-(4, 'el mouradi', 'elmouradi@gmail.com', '8 rue el ward , sousse', 'c\'est un hotel luxe', '2025-04-22', 4),
-(5, 'ha food', 'hafood@gmail.com', '8 rue lkhadhra , el ghazela', 'c\'est un restaurant traditionnel', '2025-04-22', 5);
+INSERT INTO `partenaire` (`id`, `nom`, `email`, `adresse`, `description`, `date_ajout`, `id_categorie`, `montant`, `logo`, `num_tel`) VALUES
+(4, 'el mouradi', 'elmouradi@gmail.com', '8 rue el ward , sousse', 'c\'est un hotel luxe', '2025-04-22', 4, 0, '', ''),
+(5, 'ha food', 'hafood@gmail.com', '8 rue lkhadhra , el ghazela', 'c\'est un restaurant traditionnel', '2025-04-22', 5, 0, '', ''),
+(6, 'ahahah', 'ajahbahd@gmail.com', 'jhdbahjbdabjda', 'hjdavdhvahdvahjd', '2025-04-28', 4, 1000, '680f73ddb2e8b.png', '56440274');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `password_reset`
+-- Table structure for table `password_reset`
 --
 
 CREATE TABLE `password_reset` (
@@ -266,28 +311,28 @@ CREATE TABLE `password_reset` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `reclamation`
+-- Table structure for table `reclamation`
 --
 
 CREATE TABLE `reclamation` (
   `id_rec` int(11) NOT NULL,
   `description_rec` varchar(255) NOT NULL,
-  `date_rec` date NOT NULL,
+  `date_rec` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
   `type_rec` varchar(255) NOT NULL,
-  `etat_rec` tinyint(4) DEFAULT NULL
+  `etat_rec` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `reclamation`
+-- Dumping data for table `reclamation`
 --
 
 INSERT INTO `reclamation` (`id_rec`, `description_rec`, `date_rec`, `type_rec`, `etat_rec`) VALUES
-(6, 'il ya un probleme au niveau d\'affichage', '2025-04-22', 'Problème technique', 0);
+(6, 'il ya un probleme au niveau d\'affichage', '2025-04-22 00:00:00', 'Problème technique', '0');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `recompense`
+-- Table structure for table `recompense`
 --
 
 CREATE TABLE `recompense` (
@@ -298,7 +343,7 @@ CREATE TABLE `recompense` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `recompense`
+-- Dumping data for table `recompense`
 --
 
 INSERT INTO `recompense` (`id`, `description`, `cout_en_points`, `disponibilite`) VALUES
@@ -311,27 +356,44 @@ INSERT INTO `recompense` (`id`, `description`, `cout_en_points`, `disponibilite`
 -- --------------------------------------------------------
 
 --
--- Structure de la table `reponse`
+-- Table structure for table `reponse`
 --
 
 CREATE TABLE `reponse` (
   `id_rep` int(11) NOT NULL,
   `id_rec` int(11) NOT NULL,
-  `date_rep` date NOT NULL,
+  `date_rep` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
   `contenu_rep` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `reponse`
+-- Dumping data for table `reponse`
 --
 
 INSERT INTO `reponse` (`id_rep`, `id_rec`, `date_rep`, `contenu_rep`) VALUES
-(4, 6, '2025-04-22', 'ok je l\'ai traité');
+(4, 6, '2025-04-22 00:00:00', 'ok je l\'ai traité');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Table structure for table `task`
+--
+
+CREATE TABLE `task` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `creates_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+  `description` varchar(1000) DEFAULT NULL,
+  `priority` varchar(50) NOT NULL,
+  `category` varchar(50) DEFAULT NULL,
+  `is_archived` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -351,16 +413,18 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Déchargement des données de la table `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `photo_profil`, `type_user`, `photo_carte_f1`, `photo_carte_f2`, `is_active`, `last_login`, `created_at`, `deleted_at`) VALUES
-(4, 'admin', 'admin', 'admin@trekswap.tn', '$2y$13$Pbqc8TxOYqfWtSo9Ygbp9usJeFOPlIj1BAw9KMxfsGpzqQLE1zMb6', NULL, 'Admin', NULL, NULL, 1, '2025-04-22 12:08:58', '2025-04-22 11:58:50', NULL);
+(4, 'admin', 'admin', 'admin@trekswap.tn', '$2y$13$Pbqc8TxOYqfWtSo9Ygbp9usJeFOPlIj1BAw9KMxfsGpzqQLE1zMb6', NULL, 'Admin', NULL, NULL, 1, '2025-04-28 15:05:37', '2025-04-22 11:58:50', NULL),
+(5, 'netej', 'ghodbane', 'netejghodbane@yahoo.com', '$2y$13$CTOXK/r6LST.7ZHgBzit5.OckfSQSC87ggCeXnwm7OpPFHDGMP.66', 'hotel-680caf9112043.png', 'Touriste', NULL, NULL, 0, '2025-04-28 15:00:11', '2025-04-26 12:04:01', NULL),
+(6, 'ghalia', 'abdelkebir', 'ghaliaabdelkebir@gmail.com', '$2y$13$u9ygT6qFqnvpidt46u3uweIEZZa4RR4ZOvUIQzF.Nimq/eOObAvB.', 'restaurant-680cc5c642de4.jpg', 'Touriste', NULL, NULL, 0, '2025-04-26 17:49:40', '2025-04-26 13:38:46', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user_abonnement`
+-- Table structure for table `user_abonnement`
 --
 
 CREATE TABLE `user_abonnement` (
@@ -371,7 +435,7 @@ CREATE TABLE `user_abonnement` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user_activite`
+-- Table structure for table `user_activite`
 --
 
 CREATE TABLE `user_activite` (
@@ -382,66 +446,124 @@ CREATE TABLE `user_activite` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user_mission`
+-- Table structure for table `user_mission`
 --
 
 CREATE TABLE `user_mission` (
-  `id_user` int(11) NOT NULL,
-  `id_mission` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mission_id` int(11) NOT NULL,
+  `validated_at` datetime NOT NULL,
+  `points_gagnes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_mission`
+--
+
+INSERT INTO `user_mission` (`id`, `user_id`, `mission_id`, `validated_at`, `points_gagnes`) VALUES
+(1, 5, 6, '2025-04-28 16:32:14', 1000),
+(2, 6, 4, '2025-04-28 16:32:37', 2000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_partenaire`
+--
+
+CREATE TABLE `user_partenaire` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `partenaire_id` int(11) NOT NULL,
+  `commentaire` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Index pour les tables déchargées
+-- Dumping data for table `user_partenaire`
+--
+
+INSERT INTO `user_partenaire` (`id`, `user_id`, `partenaire_id`, `commentaire`) VALUES
+(1, 5, 6, 'zzz');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `whishlist`
+--
+
+CREATE TABLE `whishlist` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `destination_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `whishlist`
+--
+
+INSERT INTO `whishlist` (`id`, `user_id`, `destination_id`) VALUES
+(11, 5, 14),
+(12, 5, 13);
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `abonnement`
+-- Indexes for table `abonnement`
 --
 ALTER TABLE `abonnement`
   ADD PRIMARY KEY (`id_abonnement`),
   ADD KEY `fk_abonnn` (`id_Pack`);
 
 --
--- Index pour la table `activite`
+-- Indexes for table `activite`
 --
 ALTER TABLE `activite`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_act` (`id_destination`);
 
 --
--- Index pour la table `avis`
+-- Indexes for table `avis`
 --
 ALTER TABLE `avis`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_dest` (`id_des`);
 
 --
--- Index pour la table `categorie`
+-- Indexes for table `avis_destination`
+--
+ALTER TABLE `avis_destination`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk1_us` (`user_id`),
+  ADD KEY `fk1_dest` (`destination_id`);
+
+--
+-- Indexes for table `categorie`
 --
 ALTER TABLE `categorie`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `destination`
+-- Indexes for table `destination`
 --
 ALTER TABLE `destination`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `destination_activite`
---
-ALTER TABLE `destination_activite`
-  ADD PRIMARY KEY (`id_destination`,`id_activite`),
-  ADD KEY `id_activite` (`id_activite`);
-
---
--- Index pour la table `doctrine_migration_versions`
+-- Indexes for table `doctrine_migration_versions`
 --
 ALTER TABLE `doctrine_migration_versions`
   ADD PRIMARY KEY (`version`);
 
 --
--- Index pour la table `messenger_messages`
+-- Indexes for table `historique_abonnement`
+--
+ALTER TABLE `historique_abonnement`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
   ADD PRIMARY KEY (`id`),
@@ -450,232 +572,298 @@ ALTER TABLE `messenger_messages`
   ADD KEY `IDX_75EA56E016BA31DB` (`delivered_at`);
 
 --
--- Index pour la table `mission`
+-- Indexes for table `mission`
 --
 ALTER TABLE `mission`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_recompense` (`id_recompense`) USING BTREE;
 
 --
--- Index pour la table `pack`
+-- Indexes for table `pack`
 --
 ALTER TABLE `pack`
   ADD PRIMARY KEY (`id_pack`);
 
 --
--- Index pour la table `partenaire`
+-- Indexes for table `partenaire`
 --
 ALTER TABLE `partenaire`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_part` (`id_categorie`);
 
 --
--- Index pour la table `password_reset`
+-- Indexes for table `password_reset`
 --
 ALTER TABLE `password_reset`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `reclamation`
+-- Indexes for table `reclamation`
 --
 ALTER TABLE `reclamation`
   ADD PRIMARY KEY (`id_rec`);
 
 --
--- Index pour la table `recompense`
+-- Indexes for table `recompense`
 --
 ALTER TABLE `recompense`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `reponse`
+-- Indexes for table `reponse`
 --
 ALTER TABLE `reponse`
   ADD PRIMARY KEY (`id_rep`),
   ADD KEY `fk_rep` (`id_rec`);
 
 --
--- Index pour la table `user`
+-- Indexes for table `task`
+--
+ALTER TABLE `task`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `user_abonnement`
+-- Indexes for table `user_abonnement`
 --
 ALTER TABLE `user_abonnement`
   ADD PRIMARY KEY (`id_user`,`id_abonnement`),
   ADD KEY `id_abonnement` (`id_abonnement`);
 
 --
--- Index pour la table `user_activite`
+-- Indexes for table `user_activite`
 --
 ALTER TABLE `user_activite`
   ADD PRIMARY KEY (`id_user`,`id_activite`),
   ADD KEY `id_activite` (`id_activite`);
 
 --
--- Index pour la table `user_mission`
+-- Indexes for table `user_mission`
 --
 ALTER TABLE `user_mission`
-  ADD PRIMARY KEY (`id_user`,`id_mission`),
-  ADD KEY `id_mission` (`id_mission`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_USER_MISSION_USER_ID` (`user_id`),
+  ADD KEY `IDX_USER_MISSION_MISSION_ID` (`mission_id`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- Indexes for table `user_partenaire`
+--
+ALTER TABLE `user_partenaire`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_la` (`user_id`),
+  ADD KEY `fk_al` (`partenaire_id`);
+
+--
+-- Indexes for table `whishlist`
+--
+ALTER TABLE `whishlist`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_userId` (`user_id`),
+  ADD KEY `fk_destinationId` (`destination_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `abonnement`
+-- AUTO_INCREMENT for table `abonnement`
 --
 ALTER TABLE `abonnement`
   MODIFY `id_abonnement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT pour la table `activite`
+-- AUTO_INCREMENT for table `activite`
 --
 ALTER TABLE `activite`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT pour la table `avis`
+-- AUTO_INCREMENT for table `avis`
 --
 ALTER TABLE `avis`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT pour la table `categorie`
+-- AUTO_INCREMENT for table `avis_destination`
+--
+ALTER TABLE `avis_destination`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `categorie`
 --
 ALTER TABLE `categorie`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT pour la table `destination`
+-- AUTO_INCREMENT for table `destination`
 --
 ALTER TABLE `destination`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT pour la table `messenger_messages`
+-- AUTO_INCREMENT for table `historique_abonnement`
+--
+ALTER TABLE `historique_abonnement`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `mission`
+-- AUTO_INCREMENT for table `mission`
 --
 ALTER TABLE `mission`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT pour la table `pack`
+-- AUTO_INCREMENT for table `pack`
 --
 ALTER TABLE `pack`
   MODIFY `id_pack` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `partenaire`
+-- AUTO_INCREMENT for table `partenaire`
 --
 ALTER TABLE `partenaire`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT pour la table `password_reset`
+-- AUTO_INCREMENT for table `password_reset`
 --
 ALTER TABLE `password_reset`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `reclamation`
+-- AUTO_INCREMENT for table `reclamation`
 --
 ALTER TABLE `reclamation`
   MODIFY `id_rec` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT pour la table `recompense`
+-- AUTO_INCREMENT for table `recompense`
 --
 ALTER TABLE `recompense`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT pour la table `reponse`
+-- AUTO_INCREMENT for table `reponse`
 --
 ALTER TABLE `reponse`
   MODIFY `id_rep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT for table `task`
+--
+ALTER TABLE `task`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- Contraintes pour les tables déchargées
+-- AUTO_INCREMENT for table `user_mission`
+--
+ALTER TABLE `user_mission`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `user_partenaire`
+--
+ALTER TABLE `user_partenaire`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `whishlist`
+--
+ALTER TABLE `whishlist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `abonnement`
+-- Constraints for table `abonnement`
 --
 ALTER TABLE `abonnement`
   ADD CONSTRAINT `fk_abonnn` FOREIGN KEY (`id_Pack`) REFERENCES `pack` (`id_pack`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `activite`
+-- Constraints for table `activite`
 --
 ALTER TABLE `activite`
   ADD CONSTRAINT `fk_act` FOREIGN KEY (`id_destination`) REFERENCES `destination` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `avis`
+-- Constraints for table `avis`
 --
 ALTER TABLE `avis`
   ADD CONSTRAINT `id_dest` FOREIGN KEY (`id_des`) REFERENCES `destination` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `destination_activite`
+-- Constraints for table `avis_destination`
 --
-ALTER TABLE `destination_activite`
-  ADD CONSTRAINT `destination_activite_ibfk_1` FOREIGN KEY (`id_destination`) REFERENCES `destination` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `destination_activite_ibfk_2` FOREIGN KEY (`id_activite`) REFERENCES `activite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `avis_destination`
+  ADD CONSTRAINT `fk1_dest` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk1_us` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `mission`
+-- Constraints for table `mission`
 --
 ALTER TABLE `mission`
   ADD CONSTRAINT `fk_mission_recompense` FOREIGN KEY (`id_recompense`) REFERENCES `recompense` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `partenaire`
+-- Constraints for table `partenaire`
 --
 ALTER TABLE `partenaire`
   ADD CONSTRAINT `fk_part` FOREIGN KEY (`id_categorie`) REFERENCES `categorie` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `reponse`
+-- Constraints for table `reponse`
 --
 ALTER TABLE `reponse`
   ADD CONSTRAINT `fk_rep` FOREIGN KEY (`id_rec`) REFERENCES `reclamation` (`id_rec`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `user_abonnement`
+-- Constraints for table `user_abonnement`
 --
 ALTER TABLE `user_abonnement`
   ADD CONSTRAINT `user_abonnement_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_abonnement_ibfk_2` FOREIGN KEY (`id_abonnement`) REFERENCES `abonnement` (`id_abonnement`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `user_activite`
+-- Constraints for table `user_activite`
 --
 ALTER TABLE `user_activite`
   ADD CONSTRAINT `user_activite_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_activite_ibfk_2` FOREIGN KEY (`id_activite`) REFERENCES `activite` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `user_mission`
+-- Constraints for table `user_partenaire`
 --
-ALTER TABLE `user_mission`
-  ADD CONSTRAINT `user_mission_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `user_mission_ibfk_2` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id`) ON DELETE CASCADE;
+ALTER TABLE `user_partenaire`
+  ADD CONSTRAINT `fk_al` FOREIGN KEY (`partenaire_id`) REFERENCES `partenaire` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_la` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `whishlist`
+--
+ALTER TABLE `whishlist`
+  ADD CONSTRAINT `fk_destinationId` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_userId` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
