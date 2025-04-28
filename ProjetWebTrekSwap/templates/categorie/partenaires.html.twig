@@ -9,6 +9,7 @@
         <span style="margin-left: 10px; font-size: 1rem; color: #ddd;">
             👁️ {{ categorie.views }} vues
         </span>
+
     </section>
 {% endblock %}
 
@@ -84,7 +85,7 @@
 
     <script>
         let currentPartnerId = null;
-
+        //ouvrir la modale d'avis
         function openCommentModal(partnerId) {
             currentPartnerId = partnerId;
             document.getElementById('commentaireInput').value = '';
