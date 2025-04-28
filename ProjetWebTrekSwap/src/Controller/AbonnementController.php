@@ -10,6 +10,7 @@ use App\Repository\PackRepository;
 use App\Repository\CategorieRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,6 +23,7 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\SvgWriter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 
 final class AbonnementController extends AbstractController
@@ -38,31 +40,6 @@ final class AbonnementController extends AbstractController
         ]);
     }
  // Search
- #[Route('/searchAbonnement', name: 'app_search_abonnement', methods: ['GET'])]
- public function searchAbonnement(Request $request, AbonnementRepository $abonnementRepository): JsonResponse
-{
-    $searchTerm = $request->query->get('q', '');
-    $statut = $request->query->get('statut', '');
-    $dateField = $request->query->get('date_Souscription', '');
-
-    $abonnements = $abonnementRepository->searchByFilters($searchTerm, $statut, $dateField);
-
-    $results = [];
-    foreach ($abonnements as $abonnement) {
-        $results[] = [
-            'id' => $abonnement->getIdAbonnement(),
-            'statut' => $abonnement->getStatut(),
-            'dateDeb' => $abonnement->getDateSouscription() ? $abonnement->getDateSouscription()->format('Y-m-d') : '',
-            'dateFin' => $abonnement->getDateExpiration() ? $abonnement->getDateExpiration()->format('Y-m-d') : '',
-        ];
-    }
-
-    return new JsonResponse($results);
-}
-
-
-
-
 
     //PREDICTION
 
@@ -274,5 +251,16 @@ public function edit(int $id_abonnement, Request $request, EntityManagerInterfac
 
         return $this->redirectToRoute('list_Abonnement');
 
+    }
+    #[Route('/abonnement/search', name: 'search_abonnement')]
+    public function searchAbonnement(Request $request, AbonnementRepository $repo, NormalizerInterface $normalizer): JsonResponse
+    {
+        $searchValue = $request->get('searchValue');
+
+        $abonnements = $repo->findByPackName($searchValue);
+
+        $jsonContent = $normalizer->normalize($abonnements, 'json', ['groups' => 'abonnements']);
+
+        return new JsonResponse($jsonContent);
     }
 }

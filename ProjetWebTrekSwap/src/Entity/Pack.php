@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PackRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PackRepository::class)]
 class Pack
@@ -11,6 +12,7 @@ class Pack
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['abonnements'])]
     private ?int $id_pack = null;
     
     #[ORM\Column(type: 'integer')]
@@ -22,6 +24,7 @@ class Pack
         pattern: "/^[A-Z].*/",
         message: "Le nom du pack doit commencer par une majuscule."
     )]
+    #[Groups(['abonnements'])]
     private ?string $nom_pack = null;
 
     #[ORM\Column(type: 'text')]
