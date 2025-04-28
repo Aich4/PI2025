@@ -20,9 +20,6 @@ services:
     #    App\EventSubscriber\CalendarSubscriber:
     ##calendar
     # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
   App\:
     resource: '../src/'
@@ -44,12 +41,12 @@ services:
   App\Twig\AppExtension:
     tags: [ 'twig.extension' ]
 
-  App\Service\TwilioService: # 👈 ici j'ajoute correctement Twilio
+  App\Service\TwilioService:
     arguments:
       $sid: '%env(TWILIO_SID)%'
       $token: '%env(TWILIO_TOKEN)%'
       $from: '%env(TWILIO_FROM)%'
 
-    # Twilio Service
-    App\Service\TestTwilioCommand:
-        public: true
+  App\Service\TestTwilioCommand:
+    public: true
+
