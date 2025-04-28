@@ -12,16 +12,17 @@ parameters:
   #karser_recaptcha3.secret_key: '%env(RECAPTCHA3_SECRET)%'
   #google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
   recaptcha_site_key: '%env(EWZ_RECAPTCHA_SITE_KEY)%'
-twig:
-  globals:
-    recaptcha_site_key: '%recaptcha_site_key%'
-
   twilio_account_sid: '%env(TWILIO_ACCOUNT_SID)%'
   twilio_auth_token: '%env(TWILIO_AUTH_TOKENN)%'
   twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
   twilio_sid_user2: '%env(TWILIO_SID_USER2)%'
   twilio_auth_token_user2: '%env(TWILIO_AUTH_TOKEN_USER2)%'
   twilio_phone_number_user2: '%env(TWILIO_WHATSAPP_FROM_USER2)%'
+twig:
+  globals:
+    recaptcha_site_key: '%recaptcha_site_key%'
+
+
 
 services:
   _defaults:
