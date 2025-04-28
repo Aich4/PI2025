@@ -27,6 +27,11 @@
   <link href="{{asset('backTemp/vendor/remixicon/remixicon.css')}}" rel="stylesheet">
   <link href="{{asset('backTemp/vendor/simple-datatables/style.css')}}" rel="stylesheet">
 
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% endblock %}
+
   <!-- Template Main CSS File -->
   <link href="{{asset('backTemp/css/style.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -53,6 +58,8 @@
 </head>
 
 <body>
+
+
 {% block navbar %}
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -64,6 +71,7 @@
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
+
 
    
 
@@ -279,12 +287,14 @@
 
       </ul>
     </nav><!-- End Icons Navigation -->
+    
 
   </header><!-- End Header -->
 {% endblock %}
 {% block sidebar %}
   {% if not (app.request.get('_route') == 'app_profile' and app.user.typeUser != 'Admin') %}
   <!-- ======= Sidebar ======= -->
+  
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
@@ -310,6 +320,11 @@
         </a>
       </li>
       {% endif %}
+        <li class="nav-item">
+    <a class="nav-link collapsed" href="{{ path('app_task_index') }}">
+      <i class="bi bi-menu-button-wide"></i><span>Progress Tracker</span>
+    </a>
+  </li> 
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
@@ -329,6 +344,7 @@
           </li>
         </ul>
       </li><!-- End Components Nav -->
+      
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
@@ -417,9 +433,11 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
+    
 
     <section class="section dashboard">
       <div class="row">
+      
 
         <!-- Left side columns -->
         <div class="col-lg-8">
@@ -1053,6 +1071,7 @@
     </section>
 {% endblock %}
   </main><!-- End #main -->
+  
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">

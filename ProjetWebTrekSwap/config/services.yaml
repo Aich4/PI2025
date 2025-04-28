@@ -1,3 +1,8 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
   uploads_directory: '%kernel.project_dir%/public/uploads'
   profile_pictures_directory: '%kernel.project_dir%/public/uploads/profile_pictures'
@@ -12,6 +17,12 @@ services:
       $uploadsDirectory: '%uploads_directory%'
       $profilePicturesDirectory: '%profile_pictures_directory%'
       $logosDirectory: '%logos_directory%'
+    #    App\EventSubscriber\CalendarSubscriber:
+    ##calendar
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
   App\:
     resource: '../src/'
@@ -38,3 +49,7 @@ services:
       $sid: '%env(TWILIO_SID)%'
       $token: '%env(TWILIO_TOKEN)%'
       $from: '%env(TWILIO_FROM)%'
+
+    # Twilio Service
+    App\Service\TestTwilioCommand:
+        public: true

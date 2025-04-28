@@ -14,5 +14,8 @@ return [
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
+    Nucleos\DompdfBundle\NucleosDompdfBundle::class => ['all' => true],
+    CalendarBundle\CalendarBundle::class => ['all' => true],
+
     Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true],
 ];
