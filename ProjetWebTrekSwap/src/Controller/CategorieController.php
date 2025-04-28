@@ -220,4 +220,14 @@ final class CategorieController extends AbstractController
 
         return new JsonResponse($jsonContent);
     }
+    /*#[Route('/categoriesearch', name: 'categorie_search')]
+    public function searchCategorie(Request $request, NormalizerInterface $normalizer, CategorieRepository $repository): JsonResponse
+    {
+        $searchValue = $request->get('searchValue');
+        $categories = $repository->findCategorieByNom($searchValue);
+
+        $jsonContent = $normalizer->normalize($categories, 'json', ['groups' => 'categories']);
+
+        return new JsonResponse($jsonContent);
+    }*/
 }

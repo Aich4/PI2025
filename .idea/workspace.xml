@@ -60,7 +60,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/CategorieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/categorie/partenaires.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/pidev.sql" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/pidev.sql" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -319,12 +323,16 @@
       <workItem from="1745661194943" duration="12633000" />
       <workItem from="1745674696544" duration="7966000" />
       <workItem from="1745699784392" duration="12731000" />
+
+      <workItem from="1745827666419" duration="4376000" />
+
       <workItem from="1745827666419" duration="339000" />
       <workItem from="1745833728560" duration="30000" />
       <workItem from="1745834169002" duration="2748000" />
       <workItem from="1745840121991" duration="197000" />
       <workItem from="1745840361915" duration="29000" />
       <workItem from="1745840442657" duration="27000" />
+
     </task>
     <servers />
   </component>
