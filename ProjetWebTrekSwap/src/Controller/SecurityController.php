@@ -13,29 +13,39 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class SecurityController extends AbstractController
 {
     #[Route('/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils,CategorieRepository $categorieRepository): Response
+    public function login(AuthenticationUtils $authenticationUtils, CategorieRepository $categorieRepository): Response
     {
         $categories = $categorieRepository->findAll();
         if ($this->getUser()) {
-            // Redirect based on user role
             if ($this->isGranted('ROLE_ADMIN')) {
+                $this->addFlash('info', 'Vous êtes déjà connecté en tant qu\'administrateur.');
                 return $this->redirectToRoute('app_Abonnements');
             }
+            $this->addFlash('info', 'Vous êtes déjà connecté.');
             return $this->redirectToRoute('app_Abonnement');
         }
 
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
+        // Personnalisation des messages d'erreur
+        $errorMessage = null;
+        if ($error) {
+            if ($error->getMessageKey() === 'Invalid credentials.') {
+                $errorMessage = 'Identifiants invalides. Veuillez vérifier votre email et mot de passe.';
+            } else {
+                $errorMessage = 'Une erreur est survenue lors de la connexion.';
+            }
+        }
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
-            'error' => $error,
+            'error' => $errorMessage,
             'categories' => $categories,
         ]);
     }
@@ -45,10 +55,13 @@ class SecurityController extends AbstractController
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher, 
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        CategorieRepository $categorieRepository,
+        ValidatorInterface $validator
     ): Response
     {
         if ($this->getUser()) {
+            $this->addFlash('info', 'Vous êtes déjà inscrit et connecté.');
             return $this->redirectToRoute('app_Abonnements');
         }
 
@@ -56,50 +69,62 @@ class SecurityController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Handle profile picture upload
-            $photoFile = $form->get('photo_profil')->getData();
-            if ($photoFile) {
-                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
+        if ($form->isSubmitted()) {
+            // Validation personnalisée
+            $errors = $validator->validate($user);
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            } elseif ($form->isValid()) {
+                $photoFile = $form->get('photo_profil')->getData();
+                if ($photoFile) {
+                    $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
 
+                    try {
+                        $photoFile->move(
+                            $this->getParameter('profile_pictures_directory'),
+                            $newFilename
+                        );
+                        $user->setPhotoProfile($newFilename);
+                    } catch (\Exception $e) {
+                        $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de la photo de profil. Veuillez réessayer.');
+                        return $this->redirectToRoute('app_register');
+                    }
+                }
+
+                $user->setTypeUser('Touriste');
+                
                 try {
-                    $photoFile->move(
-                        $this->getParameter('profile_pictures_directory'),
-                        $newFilename
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword(
+                            $user,
+                            $form->get('plainPassword')->getData()
+                        )
                     );
-                    $user->setPhotoProfile($newFilename);
+
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
+                    return $this->redirectToRoute('app_login');
                 } catch (\Exception $e) {
-                    // Handle file upload error
+                    $this->addFlash('error', 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.');
                 }
             }
-
-            // Set default type_user
-            $user->setTypeUser('Touriste');
-            
-            // Hash the password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('security/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'categories' => $categorieRepository->findAll(),
         ]);
     }
 
     #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {
-        // This method can be empty - it will be intercepted by the logout key on your firewall
+        // Cette méthode sera interceptée par la configuration de sécurité
     }
 } 

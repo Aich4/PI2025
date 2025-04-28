@@ -13,7 +13,8 @@
             </tr>
             <tr>
                 <th>Id_recompense</th>
-                <td>{{ mission.idRecompense }}</td>
+                <td>{{ mission.idRecompense ? mission.idRecompense.description : 'N/A' }}</td>
+
             </tr>
             <tr>
                 <th>Description</th>

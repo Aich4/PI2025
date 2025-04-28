@@ -16,6 +16,17 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class AbonnementController extends AbstractController
 {
+    #[Route('/', name: 'index')]
+    public function index(AbonnementRepository $abonnementRepository, PackRepository $packRepository, CategorieRepository $categorieRepository): Response
+    {
+        $abonnements = $abonnementRepository->findAll();
+        $categories = $categorieRepository->findAll();
+        return $this->render('base.html.twig', [
+            'abonnements' => $abonnements,
+            'packRepository' => $packRepository,
+            'categories' => $categories,
+        ]);
+    }
     #[Route('/pricing', name: 'app_Abonnement')]
     public function indexA(): Response
     {

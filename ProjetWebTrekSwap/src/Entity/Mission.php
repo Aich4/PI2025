@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MissionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MissionRepository::class)]
 class Mission
@@ -13,18 +14,28 @@ class Mission
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    #[Assert\NotNull(message: "L'ID de la recompense ne peut pas être nul.")]
-    private ?int $id_recompense = 0;
-
+    #[ORM\ManyToOne(targetEntity: Recompense::class, inversedBy: 'missions')]
+    #[ORM\JoinColumn(name: 'id_recompense', referencedColumnName: 'id', nullable: false)]
+    #[Assert\NotNull(message: "Veuillez sélectionner une récompense.")]
+    private ?Recompense $id_recompense = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La description est obligatoire.")]
+    #[Assert\Length(
+        min: 5,
+        max: 255,
+        minMessage: "La description doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "Le nombre de points de récompense est obligatoire.")]
+    #[Assert\Positive(message: "Le nombre de points de récompense doit être un nombre positif.")]
     private ?int $points_recompense = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le statut est obligatoire.")]
     private ?string $statut = null;
 
     public function getId(): ?int
@@ -37,7 +48,7 @@ class Mission
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -49,7 +60,7 @@ class Mission
         return $this->points_recompense;
     }
 
-    public function setPointsRecompense(int $points_recompense): static
+    public function setPointsRecompense(?int $points_recompense): static
     {
         $this->points_recompense = $points_recompense;
 
@@ -61,9 +72,21 @@ class Mission
         return $this->statut;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getIdRecompense(): ?Recompense
+    {
+        return $this->id_recompense;
+    }
+
+    public function setIdRecompense(?Recompense $id_recompense): static
+    {
+        $this->id_recompense = $id_recompense;
 
         return $this;
     }

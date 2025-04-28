@@ -15,7 +15,7 @@
 
             <div class="collapse show" id="modifierForm">
                 <div class="card card-body shadow-sm">
-                    {{ form_start(form) }}
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
                     <div class="mb-3">
                         {{ form_label(form.description) }}

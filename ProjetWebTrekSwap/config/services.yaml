@@ -4,11 +4,19 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    uploads_directory: '%kernel.project_dir%/public/uploads'
-    profile_pictures_directory: '%kernel.project_dir%/public/uploads/profile_pictures'
-    logos_directory: '%kernel.project_dir%/public/uploads/logos'
+  uploads_directory: '%kernel.project_dir%/public/uploads'
+  profile_pictures_directory: '%kernel.project_dir%/public/uploads/profile_pictures'
+  logos_directory: '%kernel.project_dir%/public/uploads/logos'
+  part_directory: '%kernel.project_dir%/public/uploads/partenaires'
 
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    bind:
+      $uploadsDirectory: '%uploads_directory%'
+      $profilePicturesDirectory: '%profile_pictures_directory%'
+      $logosDirectory: '%logos_directory%'
     #    App\EventSubscriber\CalendarSubscriber:
     ##calendar
     # default configuration for services in *this* file
@@ -16,27 +24,31 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+  App\Service\GeminiPart: ~ # ton service existant Gemini
 
-    # Login Success Listener
-    App\EventListener\LoginSuccessListener:
-        tags:
-            - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
+  App\EventListener\LoginSuccessListener:
+    tags:
+      - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
 
-    # Logout Success Listener
-    App\EventListener\LogoutSuccessListener:
-        tags:
-            - { name: kernel.event_listener, event: Symfony\Component\Security\Http\Event\LogoutEvent, method: onLogoutSuccess }
+  App\EventListener\LogoutSuccessListener:
+    tags:
+      - { name: kernel.event_listener, event: Symfony\Component\Security\Http\Event\LogoutEvent, method: onLogoutSuccess }
+
+  App\Twig\AppExtension:
+    tags: [ 'twig.extension' ]
+
+  App\Service\TwilioService: # 👈 ici j'ajoute correctement Twilio
+    arguments:
+      $sid: '%env(TWILIO_SID)%'
+      $token: '%env(TWILIO_TOKEN)%'
+      $from: '%env(TWILIO_FROM)%'
 
     # Twilio Service
     App\Service\TestTwilioCommand:

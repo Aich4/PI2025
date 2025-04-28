@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
@@ -21,36 +23,47 @@ class RegistrationFormType extends AbstractType
             ->add('nom', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Enter your last name'
+                    'placeholder' => 'Votre nom'
                 ]
             ])
             ->add('prenom', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Enter your first name'
+                    'placeholder' => 'Votre prénom'
                 ]
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Enter your email'
+                    'placeholder' => 'Votre email'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'L\'adresse email est requise'
+                    ]),
+                    new Email([
+                        'message' => 'L\'adresse email "{{ value }}" n\'est pas valide'
+                    ])
                 ]
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'attr' => [
-                    'autocomplete' => 'new-password',
                     'class' => 'form-control',
-                    'placeholder' => 'Enter your password'
+                    'placeholder' => 'Votre mot de passe'
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Le mot de passe est requis',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
                         'max' => 4096,
+                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^(?=.*[A-Za-z])(?=.*\d).{6,}$/',
+                        'message' => 'Le mot de passe doit contenir au moins une lettre et un chiffre',
                     ]),
                 ],
             ])
@@ -68,6 +81,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 } 
