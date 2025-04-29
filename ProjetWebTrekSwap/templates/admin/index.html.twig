@@ -69,6 +69,33 @@
         .delete-modal .btn-delete {
             min-width: 120px;
         }
+        .search-container {
+            position: relative;
+            width: 300px;
+        }
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: none;
+        }
+        .search-result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .search-result-item:hover {
+            background-color: #f8f9fa;
+        }
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
     </style>
 {% endblock %}
 
@@ -160,13 +187,9 @@
 
                             <!-- Search Box -->
                             <div class="search-box">
-                                <form method="get" class="d-flex">
-                                    <input type="search" name="q" class="form-control" placeholder="Search users..." value="{{ query }}">
-                                    <button type="submit" class="btn btn-primary ms-2">Search</button>
-                                    {% if query %}
-                                        <a href="{{ path('app_admin') }}" class="btn btn-secondary ms-2">Clear</a>
-                                    {% endif %}
-                                </form>
+                                <div class="search-container">
+                                    <input type="text" id="userSearch" class="form-control" placeholder="Rechercher un utilisateur...">
+                                </div>
                             </div>
 
                             <!-- Users Table -->
@@ -174,101 +197,91 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>User</th>
+                                            <th>Photo</th>
+                                            <th>Email</th>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
                                             <th>Type</th>
-                                            <th>Status</th>
-                                            <th>Created</th>
-                                            <th>Last Login</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {% for user in pagination %}
-                                            <tr>
+                                    <tbody id="userTableBody">
+                                        {% for user in users %}
+                                            <tr class="user-row" 
+                                                data-email="{{ user.email|lower }}" 
+                                                data-nom="{{ user.nom|lower }}" 
+                                                data-prenom="{{ user.prenom|lower }}">
                                                 <td>
-                                                    <div class="user-info">
-                                                        {% if user.photoProfile %}
-                                                            <img src="{{ asset('uploads/profile_pictures/' ~ user.photoProfile) }}" alt="Profile" class="user-avatar">
-                                                        {% else %}
-                                                            <img src="{{ asset('backTemp/img/profile-img.jpg') }}" alt="Default Profile" class="user-avatar">
-                                                        {% endif %}
-                                                        <div>
-                                                            <p class="user-name">{{ user.prenom }} {{ user.nom }}</p>
-                                                            <p class="user-email">{{ user.email }}</p>
-                                                        </div>
-                                                    </div>
+                                                    {% if user.photoProfile %}
+                                                        <img src="{{ asset('uploads/profile_pictures/' ~ user.photoProfile) }}" 
+                                                             alt="Photo de profil" 
+                                                             style="width: 50px; height: 50px; border-radius: 50%;">
+                                                    {% else %}
+                                                        <img src="{{ asset('backTemp/img/profile-img.jpg') }}" 
+                                                             alt="Photo de profil par défaut" 
+                                                             style="width: 50px; height: 50px; border-radius: 50%;">
+                                                    {% endif %}
                                                 </td>
+                                                <td>{{ user.email }}</td>
+                                                <td>{{ user.nom }}</td>
+                                                <td>{{ user.prenom }}</td>
+                                                <td>{{ user.typeUser }}</td>
                                                 <td>
-                                                    <span class="badge bg-{{ user.typeUser == 'Admin' ? 'primary' : 'success' }}">
-                                                        {{ user.typeUser }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ path('app_admin_toggle_user_status', {'id': user.id}) }}" 
-                                                       class="badge bg-{{ user.isActive ? 'success' : 'warning' }}"
-                                                       onclick="return confirm('Are you sure you want to {{ user.isActive ? 'deactivate' : 'activate' }} this user?')">
-                                                        {{ user.isActive ? 'Active' : 'Inactive' }}
-                                                    </a>
-                                                </td>
-                                                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i') : 'N/A' }}</td>
-                                                <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i') : 'Never' }}</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-sm btn-info me-2" data-bs-toggle="modal" data-bs-target="#userModal{{ user.id }}">
-                                                            <i class="bi bi-eye"></i>
+                                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#userModal{{ user.id }}">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                    {% if user != app.user %}
+                                                        <button type="button" 
+                                                                class="btn btn-sm btn-danger delete-user"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#deleteConfirmModal"
+                                                                data-user-id="{{ user.id }}"
+                                                                data-user-name="{{ user.prenom }} {{ user.nom }}"
+                                                                data-user-email="{{ user.email }}"
+                                                                data-delete-url="{{ path('app_admin_delete_user', {'id': user.id}) }}">
+                                                            <i class="bi bi-trash"></i>
                                                         </button>
-                                                        {% if user != app.user %}
-                                                            <button type="button" 
-                                                                    class="btn btn-sm btn-danger delete-user"
-                                                                    data-bs-toggle="modal" 
-                                                                    data-bs-target="#deleteConfirmModal"
-                                                                    data-user-id="{{ user.id }}"
-                                                                    data-user-name="{{ user.prenom }} {{ user.nom }}"
-                                                                    data-user-email="{{ user.email }}"
-                                                                    data-delete-url="{{ path('app_admin_delete_user', {'id': user.id}) }}">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        {% endif %}
-                                                    </div>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
 
-                                                    <!-- User Details Modal -->
-                                                    <div class="modal fade" id="userModal{{ user.id }}" tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">User Details</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="text-center mb-3">
-                                                                        {% if user.photoProfile %}
-                                                                            <img src="{{ asset('uploads/profile_pictures/' ~ user.photoProfile) }}" alt="Profile" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                                                                        {% else %}
-                                                                            <img src="{{ asset('backTemp/img/profile-img.jpg') }}" alt="Default Profile" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                                                                        {% endif %}
-                                                                    </div>
-                                                                    <div class="user-details">
-                                                                        <p><strong>Name:</strong> {{ user.prenom }} {{ user.nom }}</p>
-                                                                        <p><strong>Email:</strong> {{ user.email }}</p>
-                                                                        <p><strong>Type:</strong> {{ user.typeUser }}</p>
-                                                                        <p><strong>Status:</strong> {{ user.isActive ? 'Active' : 'Inactive' }}</p>
-                                                                        <p><strong>Created:</strong> {{ user.createdAt ? user.createdAt|date('Y-m-d H:i') : 'N/A' }}</p>
-                                                                        <p><strong>Last Login:</strong> {{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i') : 'Never' }}</p>
-                                                                    </div>
-                                                                </div>
+                                            <!-- User Details Modal -->
+                                            <div class="modal fade" id="userModal{{ user.id }}" tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Détails de l'utilisateur</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="text-center mb-3">
+                                                                {% if user.photoProfile %}
+                                                                    <img src="{{ asset('uploads/profile_pictures/' ~ user.photoProfile) }}" 
+                                                                         alt="Photo de profil" 
+                                                                         class="rounded-circle" 
+                                                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                                                {% else %}
+                                                                    <img src="{{ asset('backTemp/img/profile-img.jpg') }}" 
+                                                                         alt="Photo de profil par défaut" 
+                                                                         class="rounded-circle" 
+                                                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="user-details">
+                                                                <p><strong>Nom:</strong> {{ user.prenom }} {{ user.nom }}</p>
+                                                                <p><strong>Email:</strong> {{ user.email }}</p>
+                                                                <p><strong>Type:</strong> {{ user.typeUser }}</p>
+                                                                <p><strong>Statut:</strong> {{ user.isActive ? 'Actif' : 'Inactif' }}</p>
+                                                                <p><strong>Créé le:</strong> {{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : 'N/A' }}</p>
+                                                                <p><strong>Dernière connexion:</strong> {{ user.lastLogin ? user.lastLogin|date('d/m/Y H:i') : 'Jamais' }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </div>
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                            </div>
-
-                            <!-- Pagination -->
-                            <div class="navigation">
-                                {{ knp_pagination_render(pagination) }}
                             </div>
                         </div>
                     </div>
@@ -276,12 +289,30 @@
             </div>
         </section>
     </main>
-{% endblock %}
 
-{% block js %}
-    {{ parent() }}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('userSearch');
+            const userRows = document.querySelectorAll('.user-row');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                userRows.forEach(row => {
+                    const email = row.dataset.email;
+                    const nom = row.dataset.nom;
+                    const prenom = row.dataset.prenom;
+                    
+                    if (email.includes(searchTerm) || 
+                        nom.includes(searchTerm) || 
+                        prenom.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
             // Handle delete button clicks
             document.querySelectorAll('.delete-user').forEach(button => {
                 button.addEventListener('click', function() {
