@@ -579,22 +579,33 @@
                                 </li>
                                 <li>Start date: {{ abonnement.getDateSouscription()|date('d/m/Y') }}</li>
                                 <li>Expiration date: {{ abonnement.getDateExpiration()|date('d/m/Y') }}</li>
+
                             </ul>
 
-                            <!-- Buy Now button for Stripe -->
-                            <div class="btn-wrap">
-                                <a href="{{ path('checkout', { id: abonnement.getIdAbonnement() }) }}" class="btn-buy">Buy Now</a>
-                            </div>
+                           <div class="btn-wrap">
+    <button class="btn-buy" onclick="toggleBuyOptions({{ abonnement.getIdAbonnement() }})">Buy</button>
+</div>
 
-                            <!-- Show Pack Details button below Buy Now button, styled the same -->
-                            <div class="btn-wrap">
-                                <button class="btn-buy" onclick="togglePackDetails({{ abonnement.getIdPack() }})">Show Pack Details</button>
-                            </div>
+<div id="buy-options-{{ abonnement.getIdAbonnement() }}" class="hidden">
+    <div class="btn-wrap">
+        <a href="{{ path('checkout', { id: abonnement.getIdAbonnement() }) }}" class="btn-buy"> BUY NOW </a>
+    </div>
+    <div class="btn-wrap">
+        <a href="{{ path('checkoutqr', { id: abonnement.getIdAbonnement() }) }}" class="btn-buy"> Scan to buy </a>
+    </div>
+</div>
+<div class="btn-wrap">
+    <button class="btn-buy" onclick="togglePackDetails({{ abonnement.getIdPack() }})">Show Pack Details</button>
+</div>
+
+
+                            
 
                             <!-- Hidden Pack Details (QR Code) -->
                             <div id="pack-details-{{ abonnement.getIdPack() }}" class="pack-details hidden">
                                 {{ qrCodes[abonnement.getIdPack()]|raw }}
                             </div>
+
                         </div>
                     </div>
                 {% endfor %}
@@ -620,8 +631,47 @@
         }
     }
 </script>
+<script>
+    function toggleBuyOptions(abonnementId) {
+        let optionsDiv = document.getElementById('buy-options-' + abonnementId);
+        if (optionsDiv.classList.contains('hidden')) {
+            optionsDiv.classList.remove('hidden');
+        } else {
+            optionsDiv.classList.add('hidden');
+        }
+    }
+</script>
+
 
 <style>
+
+.btn-buy {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #ffffff; /* White background */
+    color: #333333; /* Dark text for contrast */
+    border: 2px solid #ffffff; /* White border */
+    transition: 0.3s ease;
+    font-weight: 600;
+}
+
+/* Optional: Hover effect to make it pop a little */
+.btn-buy:hover {
+    background-color: #f0f0f0; /* Light gray on hover */
+    border-color: #f0f0f0;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+    
+
+
     .hidden {
         display: none;
     }

@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/src/Controller/MissionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/activite/_list.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetWebTrekSwap/templates/mission/missionFront.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,6 +153,38 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-components" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-paginator-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/knplabs/knp-snappy" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/commonmark" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/league/config" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/schema" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dflydev/dot-access-data" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/twilio/sdk" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-crt-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-sdk-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/aws/aws-sdk-php-symfony" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/php-font-lib" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/php-svg-lib" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/nucleos/dompdf-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/symfony/twilio-notifier" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/tattali/calendar-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/mtdowling/jmespath.php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/stripe/stripe-php" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dasprid/enum" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/endroid/qr-code" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/dragonmantank/cron-expression" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/bacon/bacon-qr-code" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/zenstruck/schedule-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -166,18 +195,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;GestionMission&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "GestionPartenaire",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/abdgh/OneDrive/Bureau/ghaliaabdk/PI2025/ProjetWebTrekSwap/public/badges",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\abdgh\OneDrive\Bureau\ghaliaabdk\PI2025\ProjetWebTrekSwap\public\badges" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -187,8 +225,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
-        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-PS-251.23774.466" />
+        <option value="bundled-php-predefined-a98d8de5180a-aaeaa8632555-com.jetbrains.php.sharedIndexes-PS-251.23774.466" />
       </set>
     </attachedChunks>
   </component>
@@ -219,6 +257,20 @@
       <workItem from="1744676720620" duration="1153000" />
       <workItem from="1744709791227" duration="1677000" />
       <workItem from="1744717806386" duration="1732000" />
+      <workItem from="1745246683620" duration="6000" />
+      <workItem from="1745328080987" duration="3061000" />
+      <workItem from="1745499380813" duration="811000" />
+      <workItem from="1745590019274" duration="9100000" />
+      <workItem from="1745661194943" duration="12633000" />
+      <workItem from="1745674696544" duration="7966000" />
+      <workItem from="1745699784392" duration="12731000" />
+      <workItem from="1745827666419" duration="4376000" />
+      <workItem from="1745827666419" duration="339000" />
+      <workItem from="1745833728560" duration="30000" />
+      <workItem from="1745834169002" duration="2748000" />
+      <workItem from="1745840121991" duration="197000" />
+      <workItem from="1745840361915" duration="29000" />
+      <workItem from="1745840442657" duration="27000" />
     </task>
     <servers />
   </component>
