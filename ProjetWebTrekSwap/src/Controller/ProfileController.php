@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\ProfileFormType;
 use App\Repository\AbonnementRepository;
 use App\Repository\PackRepository;
+use App\Repository\UserAbonnementRepository; // Add this repository for user_abonnement
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,8 @@ class ProfileController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         SluggerInterface $slugger,
         AbonnementRepository $abonnementRepository,
-        PackRepository $packRepository
+        PackRepository $packRepository,
+        UserAbonnementRepository $userAbonnementRepository // Inject UserAbonnementRepository
     ): Response {
         $user = $this->getUser();
         if (!$user) {
@@ -63,8 +65,17 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile');
         }
 
-        // Récupérer les abonnements de l'utilisateur
-        $abonnements = $abonnementRepository->findBy(['id_utilisateur' => $user->getId()]);
+        // Retrieve abonnements for the current user by checking user_abonnement table
+        $userAbonnements = $userAbonnementRepository->findBy(['id_user' => $user->getId()]);
+        $abonnements = [];
+
+        foreach ($userAbonnements as $userAbonnement) {
+            // Retrieve the associated abonnement details
+            $abonnement = $abonnementRepository->find($userAbonnement->getIdAbonnement());
+            if ($abonnement) {
+                $abonnements[] = $abonnement; // Add the abonnement to the array
+            }
+        }
 
         return $this->render('profile/edit.html.twig', [
             'profileForm' => $form->createView(),
@@ -112,4 +123,4 @@ class ProfileController extends AbstractController
         $this->addFlash('error', 'Token invalide.');
         return $this->redirectToRoute('app_profile');
     }
-} 
+}

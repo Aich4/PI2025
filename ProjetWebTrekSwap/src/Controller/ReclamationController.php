@@ -14,18 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Notifier\Message\SmsMessage;
-use Symfony\Component\Notifier\TexterInterface;
-use libphonenumber\PhoneNumberUtil;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\NumberParseException;
 use App\Service\TestTwilioCommand;
 
-
-
 #[Route('/reclamation')]
-
-final class ReclamationController extends AbstractController {
+final class ReclamationController extends AbstractController
+{
     private $twilioService;
 
     public function __construct(TestTwilioCommand $twilioService)
@@ -33,31 +26,32 @@ final class ReclamationController extends AbstractController {
         $this->twilioService = $twilioService;
     }
 
-    
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
     public function index(ReclamationRepository $reclamationRepository): Response
     {
+        // ✅ Only fetch the reclamations for the logged-in user
+        $reclamations = $reclamationRepository->findBy([
+            'user' => $this->getUser()
+        ]);
+
         return $this->render('reclamation/index.html.twig', [
-            'reclamations' => $reclamationRepository->findAll(),
+            'reclamations' => $reclamations,
         ]);
     }
 
-    // Front office routes
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
         CategorieRepository $categorieRepository,
-        ReclamationRepository $reclamationRepository,
-        TexterInterface $texter,
-        TestTwilioCommand $twilioService
+        ReclamationRepository $reclamationRepository
     ): Response {
         $reclamation = new Reclamation();
         $form = $this->createForm(ReclamationType::class, $reclamation);
         $form->handleRequest($request);
         $categories = $categorieRepository->findAll();
 
-        $debugInfo = [ 
+        $debugInfo = [
             'sms_status' => 'not_attempted',
             'phone_number' => '+21658664146',
             'message_content' => null,
@@ -65,41 +59,35 @@ final class ReclamationController extends AbstractController {
             'message_id' => null,
             'timestamp' => date('Y-m-d H:i:s')
         ];
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                // Persister la réclamation d'abord
+                // ✅ Associate Reclamation with current user
+                $reclamation->setUser($this->getUser());
+
                 $entityManager->persist($reclamation);
                 $entityManager->flush();
-                
-                // Préparer et envoyer le SMS
+
+                // Send SMS (optional debug part you had)
                 $debugInfo['message_content'] = sprintf(
                     "Une nouvelle réclamation (#%d) a été enregistrée. Veuillez la traiter dans les plus brefs délais.",
                     $reclamation->getIdRec()
                 );
-                
-                $sent = $twilioService->sendSms($debugInfo['phone_number'], $debugInfo['message_content']);
-                
+
+                $this->twilioService->sendSms($debugInfo['phone_number'], $debugInfo['message_content']);
+
                 $debugInfo['sms_status'] = 'success';
-                $this->addFlash('success', 'Réclamation enregistrée et SMS de confirmation envoyé.');
-                
+                $this->addFlash('success', 'Réclamation enregistrée et SMS envoyé.');
             } catch (\Exception $e) {
                 $debugInfo['sms_status'] = 'error';
                 $debugInfo['error'] = $e->getMessage();
-                
-                // La réclamation est enregistrée même si le SMS échoue
-                $this->addFlash('warning', sprintf(
-                    'Réclamation enregistrée, mais erreur lors de l\'envoi du SMS : %s',
-                    $e->getMessage()
-                ));
+                $this->addFlash('warning', 'Réclamation enregistrée, mais échec d\'envoi du SMS.');
             }
 
-            // Stocker les informations de debug dans la session
             $request->getSession()->set('sms_debug_info', $debugInfo);
             return $this->redirectToRoute('app_reclamation_new');
         }
 
-        // Récupérer les informations de debug de la session
         $sessionDebugInfo = $request->getSession()->get('sms_debug_info', []);
         $debugInfo = array_merge([
             'sms_status' => 'not_attempted',
@@ -109,88 +97,74 @@ final class ReclamationController extends AbstractController {
             'message_id' => null,
             'timestamp' => null
         ], $sessionDebugInfo);
-        
+
         $request->getSession()->remove('sms_debug_info');
 
         return $this->render('reclamation/new.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
-            'reclamations' => $reclamationRepository->findAll(),
+            // ✅ Again: fetch only user's reclamations
+            'reclamations' => $reclamationRepository->findBy(['user' => $this->getUser()]),
             'categories' => $categories,
             'debug_info' => $debugInfo
         ]);
     }
 
-    private function renderWithDebug(array $debugOutput, $reclamation, $form, $reclamationRepository, $categories): Response
-    {
-        return $this->render('reclamation/new.html.twig', [
-            'reclamation' => $reclamation,
-            'form' => $form,
-            'reclamations' => $reclamationRepository->findAll(),
-            'categories' => $categories,
-            'debug_output' => $debugOutput
-        ]);
-    }
-
-    // Back office routes
     #[Route('/back', name: 'reclamationBack', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function showback(Request $request, ReclamationRepository $reclamationRepository): Response
     {
-        // Récupérer les paramètres de tri et de filtrage
+        // ADMIN view: show all reclamations (no filtering by user here)
+
         $sort = $request->query->get('sort', 'dateRec');
         $direction = $request->query->get('direction', 'DESC');
         $typeFilter = $request->query->get('type');
         $etatFilter = $request->query->get('etat');
         $searchQuery = $request->query->get('search');
 
-        // Créer le QueryBuilder
         $queryBuilder = $reclamationRepository->createQueryBuilder('r');
 
-        // Appliquer les filtres
         if ($typeFilter) {
             $queryBuilder->andWhere('r.typeRec = :type')
-                        ->setParameter('type', $typeFilter);
+                ->setParameter('type', $typeFilter);
         }
         if ($etatFilter) {
             $queryBuilder->andWhere('r.etatRec = :etat')
-                        ->setParameter('etat', $etatFilter);
+                ->setParameter('etat', $etatFilter);
         }
         if ($searchQuery) {
             $queryBuilder->andWhere('(r.descriptionRec LIKE :search OR r.typeRec LIKE :search OR r.etatRec LIKE :search)')
-                        ->setParameter('search', '%' . $searchQuery . '%');
+                ->setParameter('search', '%' . $searchQuery . '%');
         }
 
-        // Appliquer le tri
         $queryBuilder->orderBy('r.' . $sort, $direction);
-
-        // Exécuter la requête
         $reclamations = $queryBuilder->getQuery()->getResult();
 
-        $events = [];
-        foreach ($reclamations as $reclamation) {
-            $events[] = [
-                'id' => $reclamation->getIdRec(),
-                'title' => substr($reclamation->getDescriptionRec(), 0, 30) . '...',
-                'start' => $reclamation->getDateRec()->format('Y-m-d'),
-                'type' => $reclamation->getTypeRec(),
-                'backgroundColor' => $this->getEventColor($reclamation->getEtatRec()),
-                'borderColor' => $this->getEventColor($reclamation->getEtatRec()),
-            ];
-        }
-
-        // Récupérer les valeurs uniques pour les filtres
         $types = $reclamationRepository->createQueryBuilder('r')
             ->select('DISTINCT r.typeRec')
             ->getQuery()
             ->getResult();
-        
+
         $etats = $reclamationRepository->createQueryBuilder('r')
             ->select('DISTINCT r.etatRec')
             ->getQuery()
             ->getResult();
 
-        // Calculer les statistiques
+        return $this->render('reclamation/back.html.twig', [
+            'reclamations' => $reclamations,
+            'types' => array_column($types, 'typeRec'),
+            'etats' => array_column($etats, 'etatRec'),
+            'currentSort' => $sort,
+            'currentDirection' => $direction,
+            'currentType' => $typeFilter,
+            'currentEtat' => $etatFilter,
+            'searchQuery' => $searchQuery,
+            'stats' => $this->computeStats($reclamations)
+        ]);
+    }
+
+    private function computeStats(array $reclamations): array
+    {
         $stats = [
             'total' => count($reclamations),
             'enCours' => 0,
@@ -205,7 +179,6 @@ final class ReclamationController extends AbstractController {
         $stats['moisActuel'] = 0;
 
         foreach ($reclamations as $reclamation) {
-            // Compter par état
             switch ($reclamation->getEtatRec()) {
                 case 'En cours':
                     $stats['enCours']++;
@@ -218,42 +191,21 @@ final class ReclamationController extends AbstractController {
                     break;
             }
 
-            // Compter par type
             $type = $reclamation->getTypeRec();
-            if (!isset($stats['parType'][$type])) {
-                $stats['parType'][$type] = 0;
-            }
-            $stats['parType'][$type]++;
+            $stats['parType'][$type] = ($stats['parType'][$type] ?? 0) + 1;
 
-            // Compter par mois
             $moisReclamation = $reclamation->getDateRec()->format('Y-m');
-            if (!isset($stats['parMois'][$moisReclamation])) {
-                $stats['parMois'][$moisReclamation] = 0;
-            }
-            $stats['parMois'][$moisReclamation]++;
+            $stats['parMois'][$moisReclamation] = ($stats['parMois'][$moisReclamation] ?? 0) + 1;
 
-            // Compter pour le mois actuel
             if ($reclamation->getDateRec() >= $moisActuel) {
                 $stats['moisActuel']++;
             }
         }
 
-        // Trier les statistiques par mois
         krsort($stats['parMois']);
         $stats['parMois'] = array_slice($stats['parMois'], 0, 6, true);
 
-        return $this->render('reclamation/back.html.twig', [
-            'reclamations' => $reclamations,
-            'reclamations_events' => $events,
-            'types' => array_column($types, 'typeRec'),
-            'etats' => array_column($etats, 'etatRec'),
-            'currentSort' => $sort,
-            'currentDirection' => $direction,
-            'currentType' => $typeFilter,
-            'currentEtat' => $etatFilter,
-            'searchQuery' => $searchQuery,
-            'stats' => $stats
-        ]);
+        return $stats;
     }
 
     #[Route('/back/{id_rec}', name: 'app_reclamation_show', methods: ['GET'])]
@@ -261,7 +213,7 @@ final class ReclamationController extends AbstractController {
     public function show(ReclamationRepository $reclamationRepository, string $id_rec): Response
     {
         $reclamation = $reclamationRepository->findOneBy(['idRec' => (int)$id_rec]);
-        
+
         if (!$reclamation) {
             throw $this->createNotFoundException('La réclamation n\'existe pas');
         }
@@ -276,7 +228,7 @@ final class ReclamationController extends AbstractController {
     public function edit(Request $request, ReclamationRepository $reclamationRepository, int $id_rec, EntityManagerInterface $entityManager): Response
     {
         $reclamation = $reclamationRepository->findOneBy(['idRec' => $id_rec]);
-        
+
         if (!$reclamation) {
             throw $this->createNotFoundException('La réclamation n\'existe pas');
         }
@@ -288,7 +240,7 @@ final class ReclamationController extends AbstractController {
             $entityManager->flush();
 
             $this->addFlash('success', 'La réclamation a été modifiée avec succès.');
-            return $this->redirectToRoute('reclamationBack', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('reclamationBack');
         }
 
         return $this->render('reclamation/edit.html.twig', [
@@ -302,7 +254,7 @@ final class ReclamationController extends AbstractController {
     public function delete(Request $request, ReclamationRepository $reclamationRepository, int $id_rec, EntityManagerInterface $entityManager): Response
     {
         $reclamation = $reclamationRepository->findOneBy(['idRec' => $id_rec]);
-        
+
         if (!$reclamation) {
             throw $this->createNotFoundException('La réclamation n\'existe pas');
         }
@@ -313,7 +265,7 @@ final class ReclamationController extends AbstractController {
             $this->addFlash('success', 'La réclamation a été supprimée avec succès.');
         }
 
-        return $this->redirectToRoute('reclamationBack', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('reclamationBack');
     }
 
     #[Route('/back/calendar', name: 'app_reclamation_calendar', methods: ['GET'])]
@@ -354,7 +306,7 @@ final class ReclamationController extends AbstractController {
     #[Route('/reclamations/by-date', name: 'reclamation_by_date', methods: ['GET'])]
     public function reclamationsByDate(Request $request, ReclamationRepository $repo): JsonResponse
     {
-        $dateString = $request->query->get('date'); // format: YYYY-MM-DD
+        $dateString = $request->query->get('date');
 
         if (!$dateString) {
             return new JsonResponse(['error' => 'Missing date'], 400);
@@ -377,16 +329,16 @@ final class ReclamationController extends AbstractController {
 
         return new JsonResponse($data);
     }
+
     #[Route('/search', name: 'reclamation_search')]
     public function search(Request $request, NormalizerInterface $normalizer, ReclamationRepository $reclamationRepository): JsonResponse
     {
         $searchValue = $request->get('searchValue');
-        
+
         $reclamations = $reclamationRepository->findReclamationByDescriptionRec($searchValue);
 
         $jsonContent = $normalizer->normalize($reclamations, 'json', ['groups' => 'reclamations']);
-        
+
         return new JsonResponse($jsonContent);
     }
-
 }

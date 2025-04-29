@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ReclamationEventRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User; // Add this at the top
 
 #[ORM\Entity(repositoryClass: ReclamationEventRepository::class)]
 class ReclamationEvent
@@ -32,7 +33,6 @@ class ReclamationEvent
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $borderColor = null;
-
     public function getId(): ?int
     {
         return $this->id;

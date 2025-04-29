@@ -39,7 +39,7 @@ final class AbonnementController extends AbstractController
             'categories' => $categories,
         ]);
     }
- // Search
+
 
     //PREDICTION
 
