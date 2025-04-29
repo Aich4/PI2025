@@ -58,6 +58,8 @@ final class AbonnementController extends AbstractController
     {
         $abonnement = $this->entityManager->getRepository(Abonnement::class)->find($id);
 
+
+
         if (!$abonnement) {
             throw $this->createNotFoundException('Subscription not found.');
         }

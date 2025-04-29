@@ -306,7 +306,7 @@ final class ReclamationController extends AbstractController
     #[Route('/reclamations/by-date', name: 'reclamation_by_date', methods: ['GET'])]
     public function reclamationsByDate(Request $request, ReclamationRepository $repo): JsonResponse
     {
-        $dateString = $request->query->get('date');
+        $dateString = $request->query->get('datee');
 
         if (!$dateString) {
             return new JsonResponse(['error' => 'Missing date'], 400);
