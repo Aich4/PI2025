@@ -68,6 +68,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true, name: 'deleted_at')]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $resetToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $resetTokenExpiresAt = null;
 
     public function __construct()
     {
@@ -258,5 +263,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isSoftDeleted(): bool
     {
         return $this->deletedAt !== null;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
+        return $this;
+    }
+
+    public function getResetTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->resetTokenExpiresAt;
+    }
+
+    public function setResetTokenExpiresAt(?\DateTimeImmutable $resetTokenExpiresAt): static
+    {
+        $this->resetTokenExpiresAt = $resetTokenExpiresAt;
+        return $this;
     }
 }
