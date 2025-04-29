@@ -11,9 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UserPartenaireController extends AbstractController
 {
+    private HttpClientInterface $client;
+
+    public function __construct(HttpClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
     #[Route('/partenaire/{id}/avis', name: 'partenaire_avis', methods: ['POST'])]
     public function avis(
         int $id,
@@ -46,6 +54,15 @@ class UserPartenaireController extends AbstractController
     public function voirAvis(int $id, UserPartenaireRepository $userPartenaireRepository): Response
     {
         $avis = $userPartenaireRepository->findBy(['partenaireId' => $id]);
+
+        // Clean bad words using external API
+        foreach ($avis as $a) {
+            $response = $this->client->request('GET', 'https://www.purgomalum.com/service/plain', [
+                'query' => ['text' => $a->getCommentaire()],
+            ]);
+            $cleaned = $response->getContent();
+            $a->setCommentaire($cleaned); // override comment with cleaned version (not saved in DB)
+        }
 
         return $this->render('user_partenaire/_list_avis.html.twig', [
             'avis' => $avis,
