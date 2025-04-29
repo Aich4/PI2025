@@ -1,16 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block qr %}QR Code{% endblock %}
+{% block qr %}{% endblock %}
 
 {% block body %}
-    <h1>QR Code for Abonnement #{{ abonnement.id }}</h1>
 
-    <div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - Scan to Pay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 0px;
+        }
+        .qr-container {
+            margin-top: 30px;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Scan to Pay</h1>
+
+    <div class="qr-container">
         {{ qrCode|raw }}
     </div>
 
-    <p><strong>Nom Pack:</strong> {{ abonnement.pack.nomPack }}</p>
-    <p><strong>Prix:</strong> {{ abonnement.pack.prix }} DT</p>
-    <p><strong>Durée:</strong> {{ abonnement.pack.duree }} mois</p>
-    <p><strong>Avantages:</strong> {{ abonnement.pack.avantages }}</p>
+    <a href="{{ path('pricing') }}" class="btn-back">← Back to Home</a>
+
+</body>
+</html>
+
 {% endblock %}

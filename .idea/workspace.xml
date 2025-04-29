@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
+
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -204,8 +206,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "GestionMission",
+    "RunOnceActivity.git.unshallow": "true"
+    "git-widget-placeholder": "GestionPartenaire",
+
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/abdgh/OneDrive/Bureau/ghaliaabdk/PI2025/ProjetWebTrekSwap/public/badges",
     "node.js.detected.package.eslint": "true",
@@ -270,6 +273,7 @@
       <workItem from="1745661194943" duration="12633000" />
       <workItem from="1745674696544" duration="7966000" />
       <workItem from="1745699784392" duration="12731000" />
+      <workItem from="1745827666419" duration="4376000" />
       <workItem from="1745827666419" duration="339000" />
       <workItem from="1745833728560" duration="30000" />
       <workItem from="1745834169002" duration="2748000" />

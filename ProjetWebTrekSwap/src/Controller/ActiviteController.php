@@ -120,5 +120,33 @@ final class ActiviteController extends AbstractController
             'activities' => $activities,
         ]);
     }
+    #[Route('/fullcalendar', name: 'fullcalendar_activities')]
+    public function fullCalendar(): Response
+    {
+        return $this->render('activite/fullcalendar.html.twig');
+    }
+
+    #[Route('/api/activities', name: 'api_activities', methods: ['GET'])]
+    public function apiActivities(ActiviteRepository $activiteRepository): JsonResponse
+    {
+        $activites = $activiteRepository->findAll();
+
+        $data = [];
+
+        foreach ($activites as $activite) {
+            $destinationName = $activite->getIdDestination() ? $activite->getIdDestination()->getNomDestination() : 'Aucune destination';
+
+            $data[] = [
+                'id' => $activite->getId(),
+                'title' => $activite->getNomActivite(),  // 👉 Only activity name
+                'start' => $activite->getDate()->format('Y-m-d') . 'T' . $activite->getHeure(),
+                'destination' => $destinationName,        // 👉 Destination separately
+                'status' => $activite->getStatut(),
+            ];
+        }
+
+        return new JsonResponse($data);
+    }
+
 
 }

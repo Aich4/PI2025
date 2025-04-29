@@ -8,6 +8,7 @@ use App\Entity\Whishlist;
 use App\Form\DestinationType;
 use App\Repository\CategorieRepository;
 use App\Repository\DestinationRepository;
+use App\Service\WeatherService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,7 +38,8 @@ final class DestinationController extends AbstractController
     public function listDestination(
         DestinationRepository $destinationRepository,
         CategorieRepository $categorieRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        WeatherService $weatherService
     ): Response {
         $categories = $categorieRepository->findAll();
         $destinations = $destinationRepository->findAll();
@@ -55,7 +57,7 @@ final class DestinationController extends AbstractController
         $avisRepository = $entityManager->getRepository(\App\Entity\AvisDestination::class);
 
         foreach ($destinations as $destination) {
-            // ⭐ Get user personal vote
+            // Personal user vote
             $vote = $avisRepository->findOneBy([
                 'user' => $this->getUser(),
                 'destination' => $destination,
@@ -63,7 +65,7 @@ final class DestinationController extends AbstractController
 
             $destination->userRating = $vote ? $vote->getScore() : null;
 
-            // ⭐⭐ Get global average and number of votes
+            // Global rating
             $qb = $entityManager->createQueryBuilder()
                 ->select('AVG(a.score) as avgScore, COUNT(a.id) as voteCount')
                 ->from(\App\Entity\AvisDestination::class, 'a')
@@ -71,10 +73,14 @@ final class DestinationController extends AbstractController
                 ->setParameter('destination', $destination);
 
             $result = $qb->getQuery()->getSingleResult();
-
             $destination->avgRating = $result['avgScore'] ? round($result['avgScore'], 1) : null;
             $destination->voteCount = $result['voteCount'] ?? 0;
+
+            // ⭐ Inject the Weather directly inside Destination object
+            $weather = $weatherService->getWeather($destination->getLatitude(), $destination->getLongitude());
+            $destination->setWeather($weather);
         }
+
 
         return $this->render('destination/showFront.html.twig', [
             'destinations' => $destinations,

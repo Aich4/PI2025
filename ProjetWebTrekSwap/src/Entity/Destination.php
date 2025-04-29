@@ -61,6 +61,17 @@ class Destination
         notInRangeMessage: "Le taux doit être compris entre {{ min }} et {{ max }}."
     )]
     private ?float $rate = null;
+    private ?array $weather = null;
+
+    public function setWeather(?array $weather): void
+    {
+        $this->weather = $weather;
+    }
+
+    public function getWeather(): ?array
+    {
+        return $this->weather;
+    }
 
     public function getId(): ?int
     {

@@ -52,6 +52,21 @@ class Reclamation
 
     #[ORM\OneToMany(targetEntity: Reponse::class, mappedBy: 'reclamation')]
     private Collection $reponses;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true)] // User is required
+    private ?User $user = null;
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
 
     public function __construct()
     {
