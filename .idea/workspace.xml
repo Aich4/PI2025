@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
-
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -189,12 +184,10 @@
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/bacon/bacon-qr-code" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/zenstruck/schedule-bundle" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/thiagoalessio/tesseract_ocr" />
-
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/vich/uploader-bundle" />
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/jms/metadata" />
-      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/excelwebzone/recaptcha-bundle" />
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/google/recaptcha" />
-
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/vich/uploader-bundle" />
+      <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/excelwebzone/recaptcha-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -205,23 +198,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true"
-    "git-widget-placeholder": "GestionPartenaire",
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;
+    &quot;git-widget-placeholder&quot;: &quot;GestionPartenaire&quot;,
 
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/abdgh/OneDrive/Bureau/ghaliaabdk/PI2025/ProjetWebTrekSwap/public/badges",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/abdgh/OneDrive/Bureau/ghaliaabdk/PI2025/ProjetWebTrekSwap/public/badges&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\abdgh\OneDrive\Bureau\ghaliaabdk\PI2025\ProjetWebTrekSwap\public\badges" />
@@ -283,6 +276,7 @@
       <workItem from="1745840361915" duration="29000" />
       <workItem from="1745840442657" duration="27000" />
       <workItem from="1745871620829" duration="2857000" />
+      <workItem from="1746267217100" duration="34000" />
     </task>
     <servers />
   </component>

@@ -18,36 +18,39 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AdminController extends AbstractController
 {
     #[Route('/', name: 'app_admin')]
-    public function index(Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response
+    public function index(UserRepository $userRepository): Response
     {
-        $query = $request->query->get('q');
-        $queryBuilder = $userRepository->createQueryBuilder('u');
-
-        if ($query) {
-            $queryBuilder
-                ->where('u.email LIKE :query')
-                ->orWhere('u.nom LIKE :query')
-                ->orWhere('u.prenom LIKE :query')
-                ->setParameter('query', '%' . $query . '%');
-        }
-
-        $pagination = $paginator->paginate(
-            $queryBuilder->getQuery(),
-            $request->query->getInt('page', 1),
-            10
-        );
-
+        $users = $userRepository->findAll();
         $stats = [
-            'total' => $userRepository->count([]),
-            'active' => $userRepository->count(['isActive' => true]),
-            'inactive' => $userRepository->count(['isActive' => false])
+            'total' => count($users),
+            'active' => count(array_filter($users, fn($user) => $user->isActive())),
+            'inactive' => count(array_filter($users, fn($user) => !$user->isActive()))
         ];
 
         return $this->render('admin/index.html.twig', [
-            'pagination' => $pagination,
-            'query' => $query,
+            'users' => $users,
             'stats' => $stats
         ]);
+    }
+
+    #[Route('/search', name: 'app_admin_search', methods: ['GET'])]
+    public function search(Request $request, UserRepository $userRepository): JsonResponse
+    {
+        $query = $request->query->get('qu', '');
+        $users = $userRepository->search($query);
+
+        $results = array_map(function(User $user) {
+            return [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'nom' => $user->getNom(),
+                'prenom' => $user->getPrenom(),
+                'typeUser' => $user->getTypeUser(),
+                'photoProfile' => $user->getPhotoProfile(),
+            ];
+        }, $users);
+
+        return $this->json($results);
     }
 
     #[Route('/user/delete/{id}', name: 'app_admin_delete_user')]

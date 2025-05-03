@@ -10,7 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class TestEmailController extends AbstractController
 {
     private $client;
-    private $apiKey = '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'; // Mets ici ta vraie clé API HTTP Brevo
+    private $apiKey = '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';
 
     public function __construct(HttpClientInterface $client)
     {
@@ -20,26 +20,48 @@ class TestEmailController extends AbstractController
     #[Route('/send-mail-api', name: 'send_mail_api')]
     public function sendMailApi(): Response
     {
-        $response = $this->client->request('POST', 'https://api.brevo.com/v3/smtp/email', [
-            'headers' => [
-                'accept' => 'application/json',
-                'api-key' => $this->apiKey,
-                'content-type' => 'application/json',
-            ],
-            'json' => [
-                'sender' => ['email' => 'douaabj4@gmail.com'],  // Expéditeur
-                'to' => [['email' => 'douaabj4@gmail.com']],  // Destinataire
-                'subject' => 'Bravo 🎉',
-                'htmlContent' => '<p>Félicitations pour ta mission réussie ! 🎯</p>',
-            ],
-        ]);
+        try {
+            $response = $this->client->request('POST', 'https://api.brevo.com/v3/smtp/email', [
+                'headers' => [
+                    'accept' => 'application/json',
+                    'api-key' => $this->apiKey,
+                    'content-type' => 'application/json',
+                ],
+                'json' => [
+                    'sender' => [
+                        'name' => 'TrekSwap',
+                        'email' => 'medyassinehaji87@gmail.com'
+                    ],
+                    'to' => [[
+                        'email' => 'medyassinehaji87@gmail.com',
+                        'name' => 'Med Yassine'
+                    ]],
+                    'subject' => 'Test Email from TrekSwap',
+                    'htmlContent' => '<p>This is a test email from TrekSwap</p>',
+                ],
+            ]);
 
-        $statusCode = $response->getStatusCode();
-        $content = $response->getContent(false);
+            $statusCode = $response->getStatusCode();
+            $content = $response->getContent(false);
 
-        return $this->json([
-            'status' => $statusCode,
-            'response' => json_decode($content, true)
-        ]);
+            if ($statusCode === 201) {
+                return $this->json([
+                    'status' => 'success',
+                    'message' => 'Email sent successfully!'
+                ]);
+            } else {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'Failed to send email',
+                    'details' => json_decode($content, true)
+                ], $statusCode);
+            }
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'An error occurred while sending the email',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 }
