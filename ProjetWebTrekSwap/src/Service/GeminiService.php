@@ -4,8 +4,8 @@ namespace App\Service;
 
 class GeminiService
 {
-    private string $apiKey = 'AIzaSyBmclJH-djxlTjhP3tKeunWdNLcx6-g8KU'; // ✨ Put your API Key here directly
-    private string $endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+    private string $apiKey = 'AIzaSyCQ4y0D1vtWSq3nhZqtSS-9J5JMtAS00j0'; // ✨ Put your API Key here directly
+    private string $endpoint = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent';
 
     public function __construct()
     {
