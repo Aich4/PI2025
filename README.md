@@ -1,4 +1,3 @@
-
 # 🌍 ProjetWebTrekSwap
 
 Projet académique réalisé dans le cadre du module **PIDEV 3A** à **Esprit School of Engineering**.  
@@ -11,7 +10,6 @@ Ce projet Symfony 6.4 propose une plateforme complète pour la gestion de voyage
 Pensé comme un système modulaire et évolutif, le projet repose sur une architecture Symfony robuste et intègre des services avancés tels que la génération de documents, les paiements numériques, les QR codes, les statistiques décisionnelles, ainsi qu’un assistant intelligent basé sur l’IA générative (RAG).
 
 Cette solution vise à améliorer l’expérience utilisateur, automatiser les processus administratifs et offrir une vitrine moderne pour les partenaires touristiques.
-
 
 ## 🧩 Fonctionnalités principales
 
@@ -30,23 +28,34 @@ Cette solution vise à améliorer l’expérience utilisateur, automatiser les p
 ## 📁 Structure du projet
 
 ```text
-ProjetWebTrekSwap/
+Root/
 │
-├── assets/                  # Fichiers front-end (JS/CSS)
-├── bin/                     # Commandes Symfony
-├── config/                  # Fichiers de configuration
-├── migrations/              # Fichiers de migration Doctrine
-├── public/                  # Dossier public (entrée de l'app)
-├── Service/                 # Services personnalisés PHP
-├── src/                     # Code source (Contrôleurs, Entités…)
-├── templates/               # Templates Twig
-├── tests/                   # Tests automatisés
-├── translations/            # Fichiers de traduction
-├── var/                     # Cache, logs…
-├── vendor/                  # Dépendances Composer
-├── .env                     # Configuration des variables d’environnement
-├── composer.json            # Dépendances et métadonnées PHP
-└── symfony.lock             # Verrouillage des dépendances
+├── ProjetWebTrekSwap/       # Application web Symfony
+│   ├── assets/              # Fichiers front-end (JS/CSS)
+│   ├── bin/                 # Commandes Symfony
+│   ├── config/              # Fichiers de configuration
+│   ├── migrations/          # Fichiers de migration Doctrine
+│   ├── public/              # Dossier public (entrée de l'app)
+│   ├── Service/             # Services personnalisés PHP
+│   ├── src/                 # Code source (Contrôleurs, Entités…)
+│   ├── templates/           # Templates Twig
+│   ├── tests/               # Tests automatisés
+│   ├── translations/        # Fichiers de traduction
+│   ├── var/                 # Cache, logs…
+│   ├── vendor/              # Dépendances Composer
+│   ├── .env                 # Configuration des variables d’environnement
+│   ├── composer.json        # Dépendances et métadonnées PHP
+│   └── symfony.lock         # Verrouillage des dépendances
+│
+├── PI2025_DESKTOP/          # Module JavaFX desktop indépendant
+│   ├── src/                 # Code source Java
+│   ├── lib/                 # Librairies Java externes
+│   ├── resources/           # Fichiers FXML, images, etc.
+│   └── pidev.sql            # Script SQL partagé
+│
+├── pidev.sql                # Script SQL commun aux deux modules
+├── .gitignore               # Fichier gitignore
+└── README.md                # Documentation globale
 ```
 
 ## ⚙️ Installation rapide
