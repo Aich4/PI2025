@@ -184,4 +184,38 @@ public class GestionPartenaire {
             e.printStackTrace();
         }
     }
+    @FXML
+    void categorie(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichageCategorie.fxml"));
+        try {
+            Parent root = loader.load();
+            adresse.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void showDash(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+        try {
+            Parent root = loader.load();
+            adresse.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void logOut(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+        try {
+            Parent root = loader.load();
+            adresse.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
