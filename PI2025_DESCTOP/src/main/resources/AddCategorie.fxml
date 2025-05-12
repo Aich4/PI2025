@@ -87,7 +87,7 @@
                </image>
             </ImageView>
             <ImageView fitHeight="162.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <Button mnemonicParsing="false" onAction="#mission" prefHeight="32.0" prefWidth="220.0" stylesheets="@../../../../kol/integration/int/src/main/resources/css/styles.css" text="Partenaire" textFill="#ff760d">
+            <Button mnemonicParsing="false" onAction="#Part" prefHeight="32.0" prefWidth="220.0" stylesheets="@../../../../kol/integration/int/src/main/resources/css/styles.css" text="Partenaire" textFill="#ff760d">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

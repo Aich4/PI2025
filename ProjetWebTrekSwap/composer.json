@@ -20,6 +20,7 @@
         "guzzlehttp/guzzle": "^7.9",
         "knplabs/knp-paginator-bundle": "^6.8",
         "knplabs/knp-snappy-bundle": "^1.10",
+        "league/commonmark": "^2.6",
         "league/oauth2-google": "^4.0",
         "nucleos/dompdf-bundle": "^4.3",
         "phpdocumentor/reflection-docblock": "^5.6",

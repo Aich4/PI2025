@@ -288,4 +288,37 @@ public class ListCategorie {
         successAlert.setContentText("La catégorie a été supprimée avec succès !");
         successAlert.showAndWait();
     }
+    @FXML
+    void showDash(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+        try {
+            Parent root = loader.load();
+            listcategorie.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void logOut(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+        try {
+            Parent root = loader.load();
+            listcategorie.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void Part(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichagePartenaire.fxml"));
+        try {
+            Parent root = loader.load();
+            listcategorie.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

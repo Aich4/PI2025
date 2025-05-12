@@ -501,4 +501,38 @@ public class ListPartenaire {
     public void setSelectedPartenaire(Partenaire selectedPartenaire) {
         this.selectedPartenaire = selectedPartenaire;
     }
+    @FXML
+    void Categorie(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichageCategorie.fxml"));
+        try {
+            Parent root = loader.load();
+            searchField.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void showDash(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+        try {
+            Parent root = loader.load();
+            searchField.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void logOut(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+        try {
+            Parent root = loader.load();
+            searchField.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

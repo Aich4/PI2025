@@ -36,7 +36,7 @@ class AdminController extends AbstractController
     #[Route('/search', name: 'app_admin_search', methods: ['GET'])]
     public function search(Request $request, UserRepository $userRepository): JsonResponse
     {
-        $query = $request->query->get('q', '');
+        $query = $request->query->get('qu', '');
         $users = $userRepository->search($query);
 
         $results = array_map(function(User $user) {
