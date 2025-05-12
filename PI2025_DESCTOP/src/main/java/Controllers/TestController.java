@@ -32,7 +32,13 @@ public class TestController {
 
     @FXML
     void initialize() {
-        ObservableList<String> tList = FXCollections.observableArrayList("site", "bug", "pack", "commercant", "guide", "autre");
+        ObservableList<String> tList = FXCollections.observableArrayList(
+                "Problème technique",
+                "Problème de paiement",
+                "Problème de réservation",
+                "Autre"
+        );
+
         combo_rec.setItems(tList);
     }
 
@@ -46,7 +52,7 @@ public class TestController {
 
         // Créer une nouvelle réclamation avec l'état initial "0" (non traité)
         Reclamation reclamation = new Reclamation(description, type, currentTimestamp);
-        reclamation.setEtat("0"); // Définir l'état initial comme non traité
+        reclamation.setEtat("En cours"); // Définir l'état initial comme En cours
 
         try {
             if(reclamationService.create(reclamation)) {
