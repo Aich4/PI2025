@@ -6,20 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/AjoutActivite.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/AjoutActivite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionCategorie.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionCategorie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionDestination.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionDestination.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionPartenaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionPartenaire.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListActiviteBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListActiviteBack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListCategorie.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListCategorie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListDestinationBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListDestinationBack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListPartenaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListPartenaire.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/mission.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/mission.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/recompense.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/recompense.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/models/Partenaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/models/Partenaire.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/services/PartenaireService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/services/PartenaireService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/AddPartenaire.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/AddPartenaire.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/GestionDestination.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/GestionDestination.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/tokens/StoredCredential" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/tokens/StoredCredential" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -342,6 +329,7 @@
       <workItem from="1746267217100" duration="34000" />
       <workItem from="1746954030709" duration="2000000" />
       <workItem from="1747079143624" duration="10577000" />
+      <workItem from="1747090571942" duration="793000" />
     </task>
     <servers />
   </component>
