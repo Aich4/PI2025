@@ -11,6 +11,15 @@ public class Partenaire {
     Date date_ajout;
     private int id_categorie;
     int num_tel;
+    private double montant;
+    private String logo;
+
+    // + getters & setters
+    public double getMontant() { return montant; }
+    public void setMontant(double montant) { this.montant = montant; }
+
+    public String getLogo() { return logo; }
+    public void setLogo(String logo) { this.logo = logo; }
 
 
     public Partenaire() {}
@@ -23,6 +32,20 @@ public class Partenaire {
         this.date_ajout = date_ajout;
         this.id_categorie = id_categorie;
         this.num_tel = num_tel;
+
+    }
+    public Partenaire(String nom, String email, String adresse, String description, java.sql.Date date_ajout, int id_categorie, int num_tel, double montant, String logo)
+    {
+        this.nom = nom;
+        this.email = email;
+        this.adresse = adresse;
+        this.description = description;
+        this.date_ajout = date_ajout;
+        this.id_categorie = id_categorie;
+        this.num_tel = num_tel;
+
+        this.montant = montant;
+        this.logo = logo;
 
     }
 

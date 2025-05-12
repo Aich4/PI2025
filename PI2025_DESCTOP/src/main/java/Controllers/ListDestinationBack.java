@@ -178,13 +178,18 @@ public class ListDestinationBack {
                                 detailsLabel.setStyle("-fx-text-fill: #1A211B;");
 
                                 if (destination.getImage_destination() != null && !destination.getImage_destination().isEmpty()) {
-                                    String imagePath = destination.getImage_destination();
-                                    imagePath = imagePath.replace("file:/", "").replace("%20", " ");
-
-                                    Image image = new Image(new File(imagePath).toURI().toString(), 100, 75, true, true);
-                                    imageView.setImage(image);
-                                    vbox.getChildren().add(imageView);
+                                    try {
+                                        File imageFile = new File("../ProjetWebTrekSwap/public" + destination.getImage_destination());
+                                        if (imageFile.exists()) {
+                                            Image image = new Image(imageFile.toURI().toString(), 100, 75, true, true);
+                                            imageView.setImage(image);
+                                            vbox.getChildren().add(imageView);
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Image not found or invalid for: " + destination.getImage_destination());
+                                    }
                                 }
+
 
                                 vbox.getChildren().add(detailsLabel);
 
@@ -264,10 +269,7 @@ public class ListDestinationBack {
     }
 
     private void handleUpdate(Destination destination) {
-        // Create a new dialog (VBox) for updating the destination details
         VBox updateForm = new VBox(10);
-
-        // Create TextFields to display and edit the current data
         TextField nameField = new TextField(destination.getNom_destination());
         TextField descriptionField = new TextField(destination.getDecription());
         TextField temperatureField = new TextField(String.valueOf(destination.getTemperature()));
@@ -275,45 +277,43 @@ public class ListDestinationBack {
         TextField latitudeField = new TextField(String.valueOf(destination.getLatitude()));
         TextField longitudeField = new TextField(String.valueOf(destination.getLongitude()));
 
-        // Add TextFields to the VBox
         updateForm.getChildren().addAll(
-                new javafx.scene.control.Label("Name: "), nameField,
-                new javafx.scene.control.Label("Description: "), descriptionField,
-                new javafx.scene.control.Label("Temperature (°C): "), temperatureField,
-                new javafx.scene.control.Label("Rating: "), rateField,
-                new javafx.scene.control.Label("Latitude: "), latitudeField,
-                new javafx.scene.control.Label("Longitude: "), longitudeField
+                new Label("Name:"), nameField,
+                new Label("Description:"), descriptionField,
+                new Label("Temperature (°C):"), temperatureField,
+                new Label("Rating:"), rateField,
+                new Label("Latitude:"), latitudeField,
+                new Label("Longitude:"), longitudeField
         );
 
-        // Create an alert to show the update form
         Alert updateAlert = new Alert(Alert.AlertType.CONFIRMATION);
         updateAlert.setTitle("Update Destination");
         updateAlert.getDialogPane().setContent(updateForm);
+        updateAlert.setHeaderText("Update the details of: " + destination.getNom_destination());
 
-        // Set the behavior when the user presses the "OK" button
-        updateAlert.setHeaderText("Update the details of destination: " + destination.getNom_destination());
         updateAlert.showAndWait().ifPresent(response -> {
-            if (response == javafx.scene.control.ButtonType.OK) {
-                // Update the destination object with the new values from the form
-                destination.setNom_destination(nameField.getText());
-                destination.setDecription(descriptionField.getText());
-                destination.setTemperature(Double.parseDouble(temperatureField.getText()));
-                destination.setRate(Double.parseDouble(rateField.getText()));
-                destination.setLatitude(Double.parseDouble(latitudeField.getText()));
-                destination.setLongitude(Double.parseDouble(longitudeField.getText()));
+            if (response == ButtonType.OK) {
+                try {
+                    destination.setNom_destination(nameField.getText());
+                    destination.setDecription(descriptionField.getText());
+                    destination.setTemperature(Double.parseDouble(temperatureField.getText()));
+                    destination.setRate(Double.parseDouble(rateField.getText()));
+                    destination.setLatitude(Double.parseDouble(latitudeField.getText()));
+                    destination.setLongitude(Double.parseDouble(longitudeField.getText()));
 
-                // Save the updated destination
-                boolean success = destinationService.updatee(destination);
-                if (success) {
-                    // If update was successful, refresh the ListView to reflect changes
-                    afficherDestinations();
-                }else {
-                    showErrorAlert("Update Failed", "Failed to update destination.");
+                    boolean success = destinationService.updatee(destination);
+                    if (success) {
+                        afficherDestinations(); // Refresh
+                    } else {
+                        showErrorAlert("Update Failed", "Failed to update destination.");
+                    }
+                } catch (NumberFormatException e) {
+                    showErrorAlert("Invalid Input", "Please enter valid numeric values for temperature, rating, latitude, and longitude.");
                 }
-
             }
         });
     }
+
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

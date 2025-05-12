@@ -23,7 +23,7 @@
             <Image url="@backgroundNew.png" />
          </image>
       </ImageView>
-      <Pane layoutX="547.0" layoutY="60.0" prefHeight="525.0" prefWidth="392.0" style="-fx-background-color: #FFFFFF;">
+      <Pane layoutX="548.0" layoutY="14.0" prefHeight="635.0" prefWidth="562.0" style="-fx-background-color: #FFFFFF;">
          <effect>
             <DropShadow height="37.38" radius="15.850000000000001" width="28.02">
                <color>
@@ -70,15 +70,22 @@
             </TextField>
             <DatePicker fx:id="date" layoutX="59.0" layoutY="266.0" prefHeight="25.0" prefWidth="262.0" promptText="Date" />
             <ComboBox fx:id="idcategorie" layoutX="58.0" layoutY="382.0" prefHeight="25.0" prefWidth="262.0" promptText="categorie" />
-            <Button layoutX="99.0" layoutY="472.0" mnemonicParsing="false" onAction="#save" prefHeight="40.0" prefWidth="197.0" style="-fx-background-color: #FF7F32; -fx-text-fill: white; -fx-font-weight: bold;" text="ajouter" />
+            <Button layoutX="91.0" layoutY="581.0" mnemonicParsing="false" onAction="#save" prefHeight="40.0" prefWidth="197.0" style="-fx-background-color: #FF7F32; -fx-text-fill: white; -fx-font-weight: bold;" text="ajouter" />
             <TextField fx:id="num_tel" layoutX="58.0" layoutY="426.0" prefHeight="29.0" prefWidth="262.0" promptText="Numero Partenaire">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
+            <TextField fx:id="montant" layoutX="59.0" layoutY="470.0" prefHeight="29.0" prefWidth="262.0" promptText="montant">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <ImageView fx:id="imageView" fitHeight="138.0" fitWidth="220.0" layoutX="335.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true" />
+            <Button layoutX="59.0" layoutY="528.0" mnemonicParsing="false" onAction="#chooseImage" prefHeight="32.0" prefWidth="262.0" style="-fx-background-color: #FF7F32; -fx-text-fill: white; -fx-font-weight: bold;" text="image" />
          </children>
       </Pane>
-      <Button fx:id="afficher" blendMode="LIGHTEN" layoutX="627.0" layoutY="610.0" mnemonicParsing="false" onAction="#show" prefHeight="40.0" prefWidth="223.0" style="-fx-background-color: white; -fx-text-fill: #FF7F32; -fx-font-weight: bold;" text="afficher liste partenaires" />
+      <Button fx:id="afficher" blendMode="LIGHTEN" layoutX="624.0" layoutY="651.0" mnemonicParsing="false" onAction="#show" prefHeight="40.0" prefWidth="223.0" style="-fx-background-color: white; -fx-text-fill: #FF7F32; -fx-font-weight: bold;" text="afficher liste partenaires" />
       <VBox layoutY="-5.0" prefHeight="696.0" prefWidth="267.0" spacing="20.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@css/styles.css">
          <children>
             <Separator prefWidth="232.0" />

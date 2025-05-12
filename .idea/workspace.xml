@@ -5,16 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6435359-6374-4a41-ab3b-7ac24ce0d82d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/AjoutActivite.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/AjoutActivite.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionCategorie.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionCategorie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionDestination.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionDestination.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionPartenaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/GestionPartenaire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListActiviteBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListActiviteBack.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListCategorie.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListCategorie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListDestinationBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListDestinationBack.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListPartenaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/ListPartenaire.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/AddCategorie.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/AddCategorie.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/affichageCategorie.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/affichageCategorie.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/mission.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/mission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/recompense.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/Controllers/recompense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/models/Partenaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/models/Partenaire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/services/PartenaireService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/java/services/PartenaireService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/AddPartenaire.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/AddPartenaire.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/GestionDestination.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/PI2025_DESCTOP/src/main/resources/GestionDestination.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,18 +33,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "natej-ghodbane"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;natej-ghodbane&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Aich4/PI2025.git",
-    "accountId": "91f9ede7-9ced-45f4-bd56-6ac6a5b448ba"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Aich4/PI2025.git&quot;,
+    &quot;accountId&quot;: &quot;91f9ede7-9ced-45f4-bd56-6ac6a5b448ba&quot;
   }
-}]]></component>
+}</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/ProjetWebTrekSwap/vendor/composer" />
@@ -243,11 +248,46 @@
       <recent name="C:\Users\abdgh\OneDrive\Bureau\ghaliaabdk\PI2025\ProjetWebTrekSwap\public\badges" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Maven.pidev [javafx:run]">
+    <configuration name="pidev [javafx:run]" type="MavenRunConfiguration" factoryName="Maven" temporary="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="javafx:run" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$/PI2025_DESCTOP" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/ProjetWebTrekSwap/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Maven.pidev [javafx:run]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -301,6 +341,7 @@
       <workItem from="1745871620829" duration="2857000" />
       <workItem from="1746267217100" duration="34000" />
       <workItem from="1746954030709" duration="2000000" />
+      <workItem from="1747079143624" duration="10577000" />
     </task>
     <servers />
   </component>

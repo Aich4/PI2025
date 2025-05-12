@@ -15,6 +15,11 @@ import services.CategorieService;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 public class GestionCategorie {
 
@@ -55,8 +60,8 @@ public class GestionCategorie {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            imagePath = selectedFile.toURI().toString();  // Stocke le chemin
-            imageView.setImage(new Image(imagePath));  // Affiche l'image immédiatement
+            imagePath = selectedFile.getAbsolutePath(); // ✅ fixed here (no URI!)
+            imageView.setImage(new Image(selectedFile.toURI().toString())); // show preview
         }
     }
 
@@ -69,11 +74,9 @@ public class GestionCategorie {
 
     @FXML
     void save(ActionEvent event) {
-        // Récupération des données entrées
         String nom = nomcategorie.getText().trim();
         String description = descriptioncategorie.getText().trim();
 
-        // Vérification du nom
         if (nom.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom ne peut pas être vide.");
             return;
@@ -82,7 +85,6 @@ public class GestionCategorie {
             return;
         }
 
-        // Vérification de la description
         if (description.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "La description ne peut pas être vide.");
             return;
@@ -91,7 +93,6 @@ public class GestionCategorie {
             return;
         }
 
-        // Vérification de l'image
         if (imagePath == null || imagePath.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Une image doit être sélectionnée.");
             return;
@@ -102,19 +103,43 @@ public class GestionCategorie {
             return;
         }
 
-
-        // Création de la catégorie
-        Categorie categorie = new Categorie(nom, description, imagePath);
-
         try {
-            // Tentative de sauvegarde
-            this.ss.create(categorie);
-            reset();  // Réinitialisation des champs
+            // Get original image file
+            File originalFile = new File(imagePath);
+            if (!originalFile.exists()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Fichier image introuvable.");
+                return;
+            }
+
+            // Generate unique filename
+            String extension = imagePath.substring(imagePath.lastIndexOf('.') + 1);
+            String uniqueFileName = UUID.randomUUID().toString() + "." + extension;
+
+            // Dynamically resolve Symfony logo directory
+            String baseDir = System.getProperty("user.dir"); // e.g. PI2025_DESCTOP
+            Path destinationPath = Paths.get(baseDir, "../ProjetWebTrekSwap/public/uploads/logos", uniqueFileName).normalize();
+
+            // Ensure the parent directory exists
+            Files.createDirectories(destinationPath.getParent());
+
+            // Copy file to Symfony project
+            Files.copy(originalFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Save only filename in database
+            Categorie categorie = new Categorie(nom, description, uniqueFileName);
+            ss.create(categorie);
+
+            reset(); // Clear fields
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Catégorie créée avec succès.");
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la copie de l'image :\n" + e.getMessage());
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur :\n" + e.getMessage());
         }
     }
+
+
 
     // Méthode pour vérifier si le texte contient uniquement des chiffres
     private boolean isOnlyDigits(String str) {

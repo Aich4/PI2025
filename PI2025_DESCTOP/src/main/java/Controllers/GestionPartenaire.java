@@ -7,16 +7,24 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import models.Partenaire;
 import services.CategorieService;
 import services.PartenaireService;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
 public class GestionPartenaire {
     private PartenaireService ps = new PartenaireService();
@@ -39,6 +47,27 @@ public class GestionPartenaire {
 
     @FXML
     private Button categorie;
+
+    @FXML
+    private TextField montant;
+
+    @FXML
+    private ImageView imageView;  // ImageView pour afficher l’image sélectionnée
+
+    private String imagePath;
+
+    @FXML
+    void chooseImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers image", "*.jpg", "*.png", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            imagePath = selectedFile.getAbsolutePath(); // ✅ fixed here (no URI!)
+            imageView.setImage(new Image(selectedFile.toURI().toString())); // show preview
+        }
+    }
 
     @FXML
     void navigateToAddCategorie(ActionEvent event) {
@@ -103,9 +132,6 @@ public class GestionPartenaire {
                 throw new IllegalArgumentException("La date d'ajout ne peut pas être dans le passé.");
             }
 
-            Date sqlDate = Date.valueOf(selectedDate);
-            int idCategorie = cs.getIdByNom(nomCategorie);
-
             String numTelStr = num_tel.getText();
             if (numTelStr == null || numTelStr.trim().isEmpty()) {
                 throw new IllegalArgumentException("Le numéro de téléphone est obligatoire.");
@@ -113,9 +139,40 @@ public class GestionPartenaire {
             if (!numTelStr.matches("\\d{8}")) {
                 throw new IllegalArgumentException("Le numéro de téléphone doit être composé de 8 chiffres.");
             }
-
             int numTel = Integer.parseInt(numTelStr);
-            Partenaire p = new Partenaire(nom, email, adresse.getText(), description.getText(), sqlDate, idCategorie, numTel);
+
+            // Montant
+            double montantValue;
+            try {
+                montantValue = Double.parseDouble(montant.getText());
+                if (montantValue < 0) throw new NumberFormatException();
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException("Montant invalide. Entrez un nombre positif.");
+            }
+
+            // Logo
+            if (imagePath == null || imagePath.isEmpty()) {
+                throw new IllegalArgumentException("Un logo doit être sélectionné.");
+            }
+
+            File originalFile = new File(imagePath);
+            if (!originalFile.exists()) {
+                throw new IllegalArgumentException("Le fichier image est introuvable.");
+            }
+
+            String extension = imagePath.substring(imagePath.lastIndexOf('.') + 1);
+            String uniqueFileName = java.util.UUID.randomUUID().toString() + "." + extension;
+
+            // Path to Symfony's partenaire upload folder
+            String baseDir = System.getProperty("user.dir");
+            Path destinationPath = Paths.get(baseDir, "../ProjetWebTrekSwap/public/uploads/partenaires", uniqueFileName).normalize();
+            Files.createDirectories(destinationPath.getParent());
+            Files.copy(originalFile.toPath(), destinationPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+            // DB Insertion
+            Date sqlDate = Date.valueOf(selectedDate);
+            int idCategorie = cs.getIdByNom(nomCategorie);
+            Partenaire p = new Partenaire(nom, email, adresse.getText(), description.getText(), sqlDate, idCategorie, numTel, montantValue, uniqueFileName);
 
             ps.create(p);
             cs.incrementNbrCategorie(idCategorie);
@@ -134,6 +191,7 @@ public class GestionPartenaire {
         }
     }
 
+
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -147,10 +205,14 @@ public class GestionPartenaire {
         adresse.clear();
         description.clear();
         num_tel.clear();
+        montant.clear();
         idcategorie.getSelectionModel().clearSelection();
         idcategorie.setPromptText("Catégorie");
         date.setValue(null);
+        imageView.setImage(null);
+        imagePath = null;
     }
+
 
     @FXML
     void show(ActionEvent event) {
