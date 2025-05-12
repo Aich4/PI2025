@@ -8,6 +8,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import models.Destination;
 import services.DestinationService;
@@ -44,10 +46,13 @@ public class GestionDestination {
     private TextField temperatureDestination;
 
     @FXML
+    private ImageView imageView;
+
+    @FXML
     void ajoutDestination(ActionEvent event) {
         String nom = nomDestination.getText().trim();
         String description = descriptionDestination.getText().trim();
-        String image = (imagePath != null) ? imagePath.trim() : "";
+        String image = (imagePath != null) ? imagePath : "";
         String latitudeStr = latitudeDestination.getText().trim();
         String longitudeStr = longitudeDestination.getText().trim();
         String temperatureStr = temperatureDestination.getText().trim();
@@ -86,7 +91,8 @@ public class GestionDestination {
         }
 
         // Create and save the destination
-        Destination d = new Destination(nom, description, image, latitude, longitude, temperature, rating);
+        Destination d = new Destination(nom, description, "/uploads/" + image, latitude, longitude, temperature, rating);
+
         try {
             ds.create(d);
             reset();
@@ -101,10 +107,10 @@ public class GestionDestination {
         return text.matches("^[A-Za-zÀ-ÿ'\\s]{" + minLength + ",}$");
     }
 
-    // Helper method to validate image file format
     private boolean isValidImagePath(String path) {
         return path.matches(".*\\.(jpg|jpeg|png)$");
     }
+
 
     // Helper method to validate numeric fields with a range
     private Double validateDouble(String value, String fieldName, double min, double max) {
@@ -135,29 +141,52 @@ public class GestionDestination {
         }
 
 
-        @FXML
+    @FXML
     void chooseImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select an Image");
-
-        // Set file filter to show only images
+        fileChooser.setTitle("Sélectionner une image");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+                new FileChooser.ExtensionFilter("Fichiers image", "*.png", "*.jpg", "*.jpeg")
+        );
 
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            imagePath = selectedFile.toURI().toString(); // Save path
+            try {
+                // Generate unique name
+                String extension = selectedFile.getName().substring(selectedFile.getName().lastIndexOf('.') + 1);
+                String uniqueFileName = java.util.UUID.randomUUID().toString() + "." + extension;
+
+                // Copy to Symfony project
+                String baseDir = System.getProperty("user.dir");
+                File destinationDir = new File(baseDir, "../ProjetWebTrekSwap/public/uploads");
+                destinationDir.mkdirs(); // Ensure directory exists
+
+                File destinationFile = new File(destinationDir, uniqueFileName);
+                java.nio.file.Files.copy(
+                        selectedFile.toPath(),
+                        destinationFile.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+
+                imagePath = uniqueFileName; // Save just the filename for DB
+                imageView.setImage(new Image(destinationFile.toURI().toString())); // Preview
+            } catch (IOException e) {
+                showAlert("Erreur", "Échec lors de la copie de l'image : " + e.getMessage(), Alert.AlertType.ERROR);
+            }
         }
     }
+
     void reset() {
-        this.nomDestination.setText("");
-        this.descriptionDestination.setText("");
-        this.latitudeDestination.setText("");
-        this.longitudeDestination.setText("");
-        this.temperatureDestination.setText("");
-        this.ratingDestination.setText("");
-        this.imagePath = "";
+        nomDestination.clear();
+        descriptionDestination.clear();
+        latitudeDestination.clear();
+        longitudeDestination.clear();
+        temperatureDestination.clear();
+        ratingDestination.clear();
+        imagePath = "";
+        imageView.setImage(null);
     }
+
     @FXML
     void showUser(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListDestinationBack.fxml"));

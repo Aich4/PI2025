@@ -9,7 +9,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Partenaire;
@@ -18,6 +21,9 @@ import services.PartenaireService;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -253,9 +259,35 @@ public class ListPartenaire {
         TextField txtNom = new TextField(partenaire.getNom());
         TextField txtEmail = new TextField(partenaire.getEmail());
         TextField txtAdresse = new TextField(partenaire.getAdresse());
-        TextField txtNumTel = new TextField(String.valueOf(partenaire.getNum_tel())); // Ajout du champ num_tel
+        TextField txtNumTel = new TextField(String.valueOf(partenaire.getNum_tel()));
         TextArea txtDescription = new TextArea(partenaire.getDescription());
         DatePicker dpDateAjout = new DatePicker(partenaire.getDate_ajout().toLocalDate());
+        TextField txtMontant = new TextField(String.valueOf(partenaire.getMontant()));
+
+        ImageView logoPreview = new ImageView();
+        if (partenaire.getLogo() != null) {
+            File logoFile = new File("../ProjetWebTrekSwap/public/uploads/partenaires/" + partenaire.getLogo());
+            if (logoFile.exists()) {
+                logoPreview.setImage(new Image(logoFile.toURI().toString()));
+                logoPreview.setFitWidth(100);
+                logoPreview.setFitHeight(100);
+                logoPreview.setPreserveRatio(true);
+            }
+        }
+
+        Button btnChooseImage = new Button("Choisir un nouveau logo");
+        final String[] newLogoPath = {null}; // used to store selected image path
+
+        btnChooseImage.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Choisir une image");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.jpg", "*.jpeg", "*.png"));
+            File selectedFile = fileChooser.showOpenDialog(modificationStage);
+            if (selectedFile != null) {
+                newLogoPath[0] = selectedFile.getAbsolutePath();
+                logoPreview.setImage(new Image(selectedFile.toURI().toString()));
+            }
+        });
 
         ComboBox<String> categorieBox = new ComboBox<>();
         try {
@@ -265,80 +297,94 @@ public class ListPartenaire {
             e.printStackTrace();
         }
 
-        // GridPane layout for organization
         GridPane grid = new GridPane();
         grid.setVgap(8);
         grid.setHgap(10);
         grid.setPadding(new Insets(20));
 
-        grid.add(new Label("Nom:"), 0, 0);
-        grid.add(txtNom, 1, 0);
-        grid.add(new Label("Email:"), 0, 1);
-        grid.add(txtEmail, 1, 1);
-        grid.add(new Label("Adresse:"), 0, 2);
-        grid.add(txtAdresse, 1, 2);
-        grid.add(new Label("Numéro de téléphone:"), 0, 3); // Ajout du label
-        grid.add(txtNumTel, 1, 3); // Ajout du champ de saisie
-        grid.add(new Label("Description:"), 0, 4);
-        grid.add(txtDescription, 1, 4);
-        grid.add(new Label("Date d'ajout:"), 0, 5);
-        grid.add(dpDateAjout, 1, 5);
-        grid.add(new Label("Catégorie:"), 0, 6);
-        grid.add(categorieBox, 1, 6);
+        grid.add(new Label("Nom:"), 0, 0); grid.add(txtNom, 1, 0);
+        grid.add(new Label("Email:"), 0, 1); grid.add(txtEmail, 1, 1);
+        grid.add(new Label("Adresse:"), 0, 2); grid.add(txtAdresse, 1, 2);
+        grid.add(new Label("Numéro de téléphone:"), 0, 3); grid.add(txtNumTel, 1, 3);
+        grid.add(new Label("Montant (TND):"), 0, 4); grid.add(txtMontant, 1, 4);
+        grid.add(new Label("Description:"), 0, 5); grid.add(txtDescription, 1, 5);
+        grid.add(new Label("Date d'ajout:"), 0, 6); grid.add(dpDateAjout, 1, 6);
+        grid.add(new Label("Catégorie:"), 0, 7); grid.add(categorieBox, 1, 7);
+        grid.add(new Label("Logo actuel / nouveau:"), 0, 8); grid.add(logoPreview, 1, 8);
+        grid.add(btnChooseImage, 1, 9);
 
         Button btnEnregistrer = new Button("Sauvegarder");
         btnEnregistrer.getStyleClass().add("btn-primary");
-        grid.add(btnEnregistrer, 1, 7);
+        grid.add(btnEnregistrer, 1, 10);
 
         btnEnregistrer.setOnAction(event -> {
             String newNom = txtNom.getText().trim();
             String newEmail = txtEmail.getText().trim();
             String newAdresse = txtAdresse.getText().trim();
             String newNumTel = txtNumTel.getText().trim();
+            String newMontantStr = txtMontant.getText().trim();
             String newDescription = txtDescription.getText().trim();
             LocalDate newDateAjout = dpDateAjout.getValue();
             String newCategorie = categorieBox.getValue();
 
             // Validation
             if (newNom.isEmpty() || newNom.matches("\\d+")) {
-                showAlert(AlertType.ERROR, "Erreur", "Le nom ne peut pas être vide ou contenir uniquement des chiffres.");
-                return;
+                showAlert(AlertType.ERROR, "Erreur", "Le nom ne peut pas être vide ou contenir uniquement des chiffres."); return;
             }
             if (newEmail.isEmpty() || !newEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-                showAlert(AlertType.ERROR, "Erreur", "L'email n'est pas valide.");
-                return;
+                showAlert(AlertType.ERROR, "Erreur", "L'email n'est pas valide."); return;
             }
             if (newAdresse.isEmpty()) {
-                showAlert(AlertType.ERROR, "Erreur", "L'adresse ne peut pas être vide.");
-                return;
+                showAlert(AlertType.ERROR, "Erreur", "L'adresse ne peut pas être vide."); return;
             }
-            if (newNumTel.isEmpty() || !newNumTel.matches("\\d{8,15}")) { // Validation du numéro de téléphone
-                showAlert(AlertType.ERROR, "Erreur", "Le numéro de téléphone doit contenir entre 8 et 15 chiffres.");
-                return;
+            if (newNumTel.isEmpty() || !newNumTel.matches("\\d{8,15}")) {
+                showAlert(AlertType.ERROR, "Erreur", "Le numéro de téléphone doit contenir entre 8 et 15 chiffres."); return;
+            }
+            if (newMontantStr.isEmpty()) {
+                showAlert(AlertType.ERROR, "Erreur", "Le montant est obligatoire."); return;
+            }
+            double montant;
+            try {
+                montant = Double.parseDouble(newMontantStr);
+                if (montant < 0) throw new NumberFormatException();
+            } catch (NumberFormatException e) {
+                showAlert(AlertType.ERROR, "Erreur", "Montant invalide."); return;
             }
             if (newDescription.isEmpty() || newDescription.matches("\\d+")) {
-                showAlert(AlertType.ERROR, "Erreur", "La description ne peut pas être vide ou contenir uniquement des chiffres.");
-                return;
+                showAlert(AlertType.ERROR, "Erreur", "La description est invalide."); return;
             }
             if (newDateAjout == null || newDateAjout.isBefore(LocalDate.now())) {
-                showAlert(AlertType.ERROR, "Erreur", "Veuillez sélectionner une date valide (aujourd'hui ou une date future).");
-                return;
+                showAlert(AlertType.ERROR, "Erreur", "Veuillez sélectionner une date valide."); return;
             }
             if (newCategorie == null || newCategorie.isEmpty()) {
-                showAlert(AlertType.ERROR, "Erreur", "Veuillez sélectionner une catégorie.");
-                return;
+                showAlert(AlertType.ERROR, "Erreur", "Veuillez sélectionner une catégorie."); return;
             }
 
-            // Mise à jour de l'objet partenaire
             partenaire.setNom(newNom);
             partenaire.setEmail(newEmail);
             partenaire.setAdresse(newAdresse);
-            partenaire.setNum_tel(Integer.parseInt(newNumTel)); // Mise à jour du numéro de téléphone
+            partenaire.setNum_tel(Integer.parseInt(newNumTel));
+            partenaire.setMontant(montant);
             partenaire.setDescription(newDescription);
             partenaire.setDate_ajout(Date.valueOf(newDateAjout));
 
             try {
                 partenaire.setId_categorie(cs.getIdByNom(newCategorie));
+
+                // if new image selected, copy it and update the filename
+                if (newLogoPath[0] != null) {
+                    File originalFile = new File(newLogoPath[0]);
+                    String extension = newLogoPath[0].substring(newLogoPath[0].lastIndexOf('.') + 1);
+                    String uniqueFileName = java.util.UUID.randomUUID().toString() + "." + extension;
+
+                    String baseDir = System.getProperty("user.dir");
+                    Path destinationPath = Paths.get(baseDir, "../ProjetWebTrekSwap/public/uploads/partenaires", uniqueFileName).normalize();
+                    Files.createDirectories(destinationPath.getParent());
+                    Files.copy(originalFile.toPath(), destinationPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+                    partenaire.setLogo(uniqueFileName); // update logo
+                }
+
                 ss.update(partenaire);
                 afficherPartenaire();
                 showAlert(AlertType.INFORMATION, "Succès", "Partenaire mis à jour avec succès.");
@@ -348,10 +394,11 @@ public class ListPartenaire {
             }
         });
 
-        Scene scene = new Scene(grid, 450, 450); // Ajustement de la taille
+        Scene scene = new Scene(grid, 550, 550);
         modificationStage.setScene(scene);
         modificationStage.show();
     }
+
 
 
     private void showAlert(AlertType alertType, String title, String content) {
@@ -381,25 +428,40 @@ public class ListPartenaire {
                                 setText(null);
                                 setGraphic(null);
                             } else {
+                                // Assemble partner info
                                 String partenaireInfo = "Nom: " + partenaire.getNom() + "\n"
                                         + "Email: " + partenaire.getEmail() + "\n"
                                         + "Adresse: " + partenaire.getAdresse() + "\n"
                                         + "Date d'ajout: " + partenaire.getDate_ajout() + "\n"
-                                        + "Numéro de téléphone: " + partenaire.getNum_tel() + "\n"
+                                        + "Téléphone: " + partenaire.getNum_tel() + "\n"
+                                        + "Montant: " + partenaire.getMontant() + " TND\n"
                                         + "Description: " + partenaire.getDescription();
 
-                                VBox vbox = new VBox();
                                 Label label = new Label(partenaireInfo);
                                 label.setWrapText(true);
                                 label.setMaxWidth(300);
 
+                                // ImageView for logo
+                                ImageView logoView = new ImageView();
+                                try {
+                                    File logoFile = new File("../ProjetWebTrekSwap/public/uploads/partenaires/" + partenaire.getLogo());
+                                    if (logoFile.exists()) {
+                                        logoView.setImage(new Image(logoFile.toURI().toString()));
+                                        logoView.setFitWidth(100);
+                                        logoView.setFitHeight(100);
+                                        logoView.setPreserveRatio(true);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                // Buttons
                                 Button btnModifier = new Button("Modifier");
-                                Button btnSupprimer = new Button("Supprimer");
                                 btnModifier.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
-
-                                btnSupprimer.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
-
                                 btnModifier.setOnAction(event -> afficherFenetreModificationPartenaire(partenaire));
+
+                                Button btnSupprimer = new Button("Supprimer");
+                                btnSupprimer.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
                                 btnSupprimer.setOnAction(event -> {
                                     Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
                                     confirmationAlert.setTitle("Confirmer la suppression");
@@ -419,8 +481,11 @@ public class ListPartenaire {
                                     });
                                 });
 
-                                HBox hbox = new HBox(10, btnModifier, btnSupprimer);
-                                vbox.getChildren().addAll(label, hbox);
+                                // Layout
+                                HBox hboxButtons = new HBox(10, btnModifier, btnSupprimer);
+                                VBox vbox = new VBox(10, label, logoView, hboxButtons);
+                                vbox.setPadding(new Insets(10));
+
                                 setGraphic(vbox);
                             }
                         }
@@ -428,11 +493,11 @@ public class ListPartenaire {
                 }
             });
         } catch (Exception e) {
-            // Show error to user and log it
             showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue lors de la récupération des partenaires.");
             e.printStackTrace();
         }
     }
+
 
 
     @FXML

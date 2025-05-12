@@ -19,6 +19,9 @@ import models.Categorie;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javafx.scene.control.ListView;
@@ -82,11 +85,12 @@ public class ListCategorie {
 
                         // Charger l'image du logo si disponible
                         if (categorie.getLogo() != null && !categorie.getLogo().isEmpty()) {
-                            String imagePath = categorie.getLogo();
-                            imagePath = imagePath.replace("file:/", "").replace("%20", " ");
-                            Image image = new Image(new File(imagePath).toURI().toString(), 50, 50, true, true);
-                            imageView.setImage(image);
-                        } else {
+                            File imageFile = new File("../ProjetWebTrekSwap/public/uploads/logos/" + categorie.getLogo());
+                            if (imageFile.exists()) {
+                                imageView.setImage(new Image(imageFile.toURI().toString(), 50, 50, true, true));
+                            }
+                        }
+                        else {
                             imageView.setImage(null);
                         }
 
@@ -154,32 +158,31 @@ public class ListCategorie {
         Stage modificationStage = new Stage();
         modificationStage.setTitle("Modifier Catégorie");
 
-        // Champs modifiables
+        // Input fields
         TextField txtNom = new TextField(categorie.getNom());
         TextField txtDescription = new TextField(categorie.getDescription());
-        TextField txtLogo = new TextField(categorie.getLogo());
+        final String[] newLogoPath = {null}; // Holds new selected image path (full)
 
         // Labels
         Label lblNom = new Label("Nom:");
         Label lblDescription = new Label("Description:");
         Label lblLogo = new Label("Logo:");
 
-        // ImageView pour afficher l'image actuelle
+        // Image preview
         ImageView imageView = new ImageView();
         imageView.setFitWidth(150);
         imageView.setFitHeight(150);
+        imageView.setPreserveRatio(true);
 
-        // Charger l'image actuelle si elle existe
+        // Load current image
         if (categorie.getLogo() != null && !categorie.getLogo().isEmpty()) {
-            try {
-                Image image = new Image("file:" + categorie.getLogo());
-                imageView.setImage(image);
-            } catch (Exception e) {
-                System.out.println("Erreur de chargement de l'image.");
+            File logoFile = new File("../ProjetWebTrekSwap/public/uploads/logos/" + categorie.getLogo());
+            if (logoFile.exists()) {
+                imageView.setImage(new Image(logoFile.toURI().toString()));
             }
         }
 
-        // Bouton pour sélectionner une image
+        // Choose new image button
         Button btnChoisirImage = new Button("Choisir Image");
         btnChoisirImage.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
@@ -187,60 +190,73 @@ public class ListCategorie {
             File file = fileChooser.showOpenDialog(modificationStage);
 
             if (file != null) {
-                txtLogo.setText(file.getAbsolutePath()); // Stocker le chemin de l'image
-                imageView.setImage(new Image(file.toURI().toString())); // Mettre à jour l'aperçu
+                newLogoPath[0] = file.getAbsolutePath(); // Store selected path
+                imageView.setImage(new Image(file.toURI().toString())); // Preview
             }
         });
 
-        // Bouton pour enregistrer les modifications
+        // Save button
         Button btnEnregistrer = new Button("Sauvegarder");
-
         btnEnregistrer.setOnAction(event -> {
             String newNom = txtNom.getText().trim();
             String newDescription = txtDescription.getText().trim();
-            String newLogo = txtLogo.getText().trim(); // Nouveau chemin de l’image
 
-            // Vérifications des saisies
-            if (newNom.isEmpty() || newDescription.isEmpty() || newLogo.isEmpty()) {
+            // Validation
+            if (newNom.isEmpty() || newDescription.isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis.");
                 return;
             }
-
-            // Vérification spécifique (Exemple : Nom doit contenir au moins 3 caractères)
             if (newNom.length() < 3) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom doit contenir au moins 3 caractères.");
                 return;
             }
 
-            // Mise à jour de l'objet catégorie
+            // Update category fields
             categorie.setNom(newNom);
             categorie.setDescription(newDescription);
-            categorie.setLogo(newLogo); // Mettre à jour le chemin de l’image
 
             try {
-                ss.update(categorie); // Mettre à jour la base de données
-                afficherCategories(); // Rafraîchir la liste principale
+                // Handle logo update if new image selected
+                if (newLogoPath[0] != null) {
+                    File originalFile = new File(newLogoPath[0]);
+                    String extension = newLogoPath[0].substring(newLogoPath[0].lastIndexOf('.') + 1);
+                    String uniqueFileName = java.util.UUID.randomUUID().toString() + "." + extension;
+
+                    String baseDir = System.getProperty("user.dir");
+                    Path destinationPath = Paths.get(baseDir, "../ProjetWebTrekSwap/public/uploads/logos", uniqueFileName).normalize();
+                    Files.createDirectories(destinationPath.getParent());
+                    Files.copy(originalFile.toPath(), destinationPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+                    categorie.setLogo(uniqueFileName); // Save only the filename
+                }
+
+                // Save to DB
+                ss.update(categorie);
+                afficherCategories(); // Refresh list
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Catégorie mise à jour avec succès.");
-                modificationStage.close(); // Fermer la fenêtre après enregistrement
+                modificationStage.close();
+
             } catch (Exception e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la mise à jour : " + e.getMessage());
+                e.printStackTrace();
             }
         });
 
-        // Mise en page
+        // Layout
         VBox vbox = new VBox(10,
                 lblNom, txtNom,
                 lblDescription, txtDescription,
-                lblLogo, txtLogo,
-                imageView, btnChoisirImage, // Aperçu et bouton de sélection d'image
+                lblLogo, imageView,
+                btnChoisirImage,
                 btnEnregistrer
         );
         vbox.setPadding(new Insets(10));
 
-        Scene scene = new Scene(vbox, 400, 450);
+        Scene scene = new Scene(vbox, 450, 500);
         modificationStage.setScene(scene);
         modificationStage.show();
     }
+
 
 
     private boolean isOnlyDigits(String str) {

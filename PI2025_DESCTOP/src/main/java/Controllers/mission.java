@@ -176,7 +176,29 @@ public class mission {
             throw new RuntimeException("Erreur de chargement de ShowRecompense.fxml", e);
         }
     }
+    @FXML
+    void showDash(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+        try {
+            Parent root = loader.load();
+            description.getScene().setRoot(root);
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void logOut(ActionEvent event)
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+        try {
+            Parent root = loader.load();
+            description.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

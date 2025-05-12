@@ -120,21 +120,18 @@ public class AjoutActivite {
 
     @FXML
     void initialize() {
-        ObservableList<String> statutList = FXCollections.observableArrayList("annulé", "complet", "disponible");
+        // ✅ Restrict to only these values
+        ObservableList<String> statutList = FXCollections.observableArrayList("active", "inactive", "completed");
         Statut.setItems(statutList);
-        List<String> names = null;
+
         try {
-            names = destinationService.getAllNames();
+            List<String> names = destinationService.getAllNames();
+            ObservableList<String> nameList = FXCollections.observableArrayList(names);
+            idDest.setItems(nameList);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erreur lors du chargement des destinations.", e);
         }
-
-        // Convert List to ObservableList
-        ObservableList<String> nameList = FXCollections.observableArrayList(names);
-
-        // Set items in ComboBox
-        idDest.setItems(nameList);
-
     }
+
 
 }

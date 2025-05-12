@@ -24,7 +24,7 @@
             <Image url="@backgroundNew.png" />
          </image>
       </ImageView>
-      <Pane layoutX="403.0" layoutY="70.0" prefHeight="511.0" prefWidth="379.0" style="-fx-background-color: #ffffff;">
+      <Pane layoutX="403.0" layoutY="70.0" prefHeight="676.0" prefWidth="379.0" style="-fx-background-color: #ffffff;">
          <effect>
             <DropShadow height="37.38" radius="15.850000000000001" width="28.02">
                <color>
@@ -33,7 +33,7 @@
             </DropShadow>
          </effect>
          <children>
-            <Button layoutX="132.0" layoutY="465.0" mnemonicParsing="false" onAction="#ajoutDestination" prefHeight="32.0" prefWidth="116.0" stylesheets="@css/styles.css" text="Enregistrer" textFill="#413852">
+            <Button layoutX="140.0" layoutY="630.0" mnemonicParsing="false" onAction="#ajoutDestination" prefHeight="32.0" prefWidth="116.0" stylesheets="@css/styles.css" text="Enregistrer" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -91,7 +91,7 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="chooseImageButton" layoutX="84.0" layoutY="427.0" mnemonicParsing="false" onAction="#chooseImage" prefHeight="32.0" prefWidth="213.0" stylesheets="@css/styles.css" text="ajouter image de destination" textFill="#413852">
+            <Button fx:id="chooseImageButton" layoutX="83.0" layoutY="592.0" mnemonicParsing="false" onAction="#chooseImage" prefHeight="32.0" prefWidth="213.0" stylesheets="@css/styles.css" text="ajouter image de destination" textFill="#413852">
                <effect>
                   <DropShadow>
                      <color>
@@ -103,6 +103,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
+            <ImageView fx:id="imageView" fitHeight="138.0" fitWidth="254.0" layoutX="73.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
       <VBox layoutX="1.0" layoutY="3.0" prefHeight="765.0" prefWidth="223.0" spacing="10.0" style="-fx-background-color: #ffffff;" styleClass="white-background" stylesheets="@style.css">

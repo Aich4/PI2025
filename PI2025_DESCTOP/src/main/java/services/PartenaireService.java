@@ -16,11 +16,11 @@ public class PartenaireService implements CrudInterface <Partenaire>{
 
     @Override
     public void create(Partenaire obj) throws Exception {
-
         if (partenaireExists(obj.getNom())) {
             throw new Exception("A partner with this name already exists.");
         }
-        String sql = "insert into Partenaire(nom,email,adresse,date_ajout,description,id_categorie,num_tel)values(?,?,?,?,?,?,?)";
+
+        String sql = "INSERT INTO Partenaire(nom, email, adresse, date_ajout, description, id_categorie, num_tel, montant, logo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, obj.getNom());
         preparedStatement.setString(2, obj.getEmail());
@@ -28,24 +28,29 @@ public class PartenaireService implements CrudInterface <Partenaire>{
         preparedStatement.setDate(4, obj.getDate_ajout());
         preparedStatement.setString(5, obj.getDescription());
         preparedStatement.setInt(6, obj.getId_categorie());
-        preparedStatement.setInt(7,obj.getNum_tel());
+        preparedStatement.setInt(7, obj.getNum_tel());
+        preparedStatement.setDouble(8, obj.getMontant());
+        preparedStatement.setString(9, obj.getLogo());
         preparedStatement.executeUpdate();
-
     }
 
+
     public void update(Partenaire obj) throws Exception {
-        String sql = "UPDATE Partenaire SET nom=?, email=?, adresse=?, description=?, date_ajout=?, num_tel=?, id_categorie=? WHERE id=?";
+        String sql = "UPDATE Partenaire SET nom=?, email=?, adresse=?, description=?, date_ajout=?, num_tel=?, id_categorie=?, montant=?, logo=? WHERE id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, obj.getNom());
         preparedStatement.setString(2, obj.getEmail());
         preparedStatement.setString(3, obj.getAdresse());
         preparedStatement.setString(4, obj.getDescription());
         preparedStatement.setDate(5, obj.getDate_ajout());
-        preparedStatement.setInt(6, obj.getNum_tel());  // Corrected order
+        preparedStatement.setInt(6, obj.getNum_tel());
         preparedStatement.setInt(7, obj.getId_categorie());
-        preparedStatement.setInt(8, obj.getId());  // Corrected position for id
+        preparedStatement.setDouble(8, obj.getMontant());
+        preparedStatement.setString(9, obj.getLogo());
+        preparedStatement.setInt(10, obj.getId());
         preparedStatement.executeUpdate();
     }
+
 
 
 
@@ -61,10 +66,11 @@ public class PartenaireService implements CrudInterface <Partenaire>{
 
     @Override
     public List<Partenaire> getAll() throws Exception {
-        String sql = "select * from Partenaire";
+        String sql = "SELECT * FROM Partenaire";
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         List<Partenaire> list = new ArrayList<>();
+
         while (rs.next()) {
             Partenaire obj = new Partenaire();
             obj.setId(rs.getInt("id"));
@@ -75,11 +81,14 @@ public class PartenaireService implements CrudInterface <Partenaire>{
             obj.setDate_ajout(rs.getDate("date_ajout"));
             obj.setId_categorie(rs.getInt("id_categorie"));
             obj.setNum_tel(rs.getInt("num_tel"));
+            obj.setMontant(rs.getDouble("montant")); // new
+            obj.setLogo(rs.getString("logo"));       // new
             list.add(obj);
-
         }
+
         return list;
     }
+
 
     public String getCategorieNameById(int id_categorie) {
         String categorieName = "";

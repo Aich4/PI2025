@@ -125,21 +125,17 @@ public class ListActiviteBack {
 
     // Method for updating an Activite
     private void updateActivite(Activite activite) {
-        // Create the update form
         VBox updateForm = new VBox(10);
 
-        // Create input fields with current values
         TextField nameField = new TextField(activite.getNom_activite());
-
-        DatePicker datePicker = new DatePicker(activite.getDate().toLocalDate()); // Convert SQL date to LocalDate
+        DatePicker datePicker = new DatePicker(activite.getDate().toLocalDate());
         TextField timeField = new TextField(activite.getHeure());
 
-        // Create ComboBox for status selection
         ComboBox<String> statusComboBox = new ComboBox<>();
-        statusComboBox.getItems().addAll("Planned", "Ongoing", "Completed"); // Example statuses
+        statusComboBox.getItems().addAll("active", "inactive", "completed");
         statusComboBox.setValue(activite.getStatut());
+        statusComboBox.setEditable(false); // Optional: restrict input
 
-        // Add input fields to the form
         updateForm.getChildren().addAll(
                 new Label("Activity Name: "), nameField,
                 new Label("Date: "), datePicker,
@@ -147,53 +143,46 @@ public class ListActiviteBack {
                 new Label("Status: "), statusComboBox
         );
 
-        // Create an alert to show the update form
         Alert updateAlert = new Alert(Alert.AlertType.CONFIRMATION);
         updateAlert.setTitle("Update Activity");
         updateAlert.setHeaderText("Update the details of activity: " + activite.getNom_activite());
         updateAlert.getDialogPane().setContent(updateForm);
 
-        // Show the alert and handle user input
         updateAlert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                // Validate inputs
                 if (nameField.getText().isEmpty() || datePicker.getValue() == null ||
                         timeField.getText().isEmpty() || statusComboBox.getValue() == null) {
-
                     showAlert(Alert.AlertType.WARNING, "Warning", "All fields must be filled!");
                     return;
                 }
 
-                // Validate date (should not be in the past)
                 LocalDate selectedDate = datePicker.getValue();
                 if (selectedDate.isBefore(LocalDate.now())) {
                     showAlert(Alert.AlertType.WARNING, "Warning", "Date cannot be in the past!");
                     return;
                 }
 
-                // Validate time format (HH:mm)
                 if (!timeField.getText().matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
                     showAlert(Alert.AlertType.WARNING, "Warning", "Invalid time format! Use HH:mm.");
                     return;
                 }
 
-                // Update the activite object with new values
                 activite.setNom_activite(nameField.getText());
-                activite.setDate(java.sql.Date.valueOf(selectedDate)); // Convert LocalDate to SQL Date
+                activite.setDate(java.sql.Date.valueOf(selectedDate));
                 activite.setHeure(timeField.getText());
                 activite.setStatut(statusComboBox.getValue());
 
-                // Save the updated activite
                 boolean success = activiteService.updateActivite(activite);
                 if (success) {
                     showAlert(Alert.AlertType.INFORMATION, "Success", "Activity updated successfully!");
-                    afficherActivite(); // Refresh list
+                    afficherActivite();
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Error", "Failed to update activity.");
                 }
             }
         });
     }
+
 
     // Utility function to show alerts
     private void showAlert(Alert.AlertType type, String title, String message) {
