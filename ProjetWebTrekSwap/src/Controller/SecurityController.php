@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\CategorieRepository;
 use App\Service\GoogleOAuthService;
+use App\Service\BCryptPasswordHasher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,13 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class SecurityController extends AbstractController
 {
+    private $bcryptHasher;
+
+    public function __construct(BCryptPasswordHasher $bcryptHasher)
+    {
+        $this->bcryptHasher = $bcryptHasher;
+    }
+
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, CategorieRepository $categorieRepository): Response
     {
@@ -57,7 +65,6 @@ class SecurityController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(
         Request $request, 
-        UserPasswordHasherInterface $userPasswordHasher, 
         EntityManagerInterface $entityManager,
         SluggerInterface $slugger,
         CategorieRepository $categorieRepository,
@@ -102,9 +109,9 @@ class SecurityController extends AbstractController
                 $user->setTypeUser('Touriste');
                 
                 try {
+                    // Utiliser notre BCryptPasswordHasher qui génère directement le format $2a$
                     $user->setPassword(
-                        $userPasswordHasher->hashPassword(
-                            $user,
+                        $this->bcryptHasher->hash(
                             $form->get('plainPassword')->getData()
                         )
                     );
@@ -143,7 +150,6 @@ class SecurityController extends AbstractController
         Request $request,
         GoogleOAuthService $googleOAuthService,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $userPasswordHasher,
         UserAuthenticatorInterface $userAuthenticator,
         #[Autowire(service: 'security.authenticator.form_login.main')] FormLoginAuthenticator $authenticator
     ): Response {
@@ -165,9 +171,18 @@ class SecurityController extends AbstractController
                     
                     // Generate a random password for the user
                     $randomPassword = bin2hex(random_bytes(8));
-                    $user->setPassword(
-                        $userPasswordHasher->hashPassword($user, $randomPassword)
-                    );
+                    
+                    // Générer le hash BCrypt avec le format $2a$12$
+                    $hashedPassword = $this->bcryptHasher->hash($randomPassword);
+                    
+                    // Vérifier si le hash commence par $2a$12$
+                    if (!str_starts_with($hashedPassword, '$2a$12$')) {
+                        // Si ce n'est pas le cas, forcer le format $2a$12$
+                        $hashedPassword = str_replace('$2y$', '$2a$', $hashedPassword);
+                    }
+                    
+                    // Définir le mot de passe haché
+                    $user->setPassword($hashedPassword);
 
                     $entityManager->persist($user);
                     $entityManager->flush();

@@ -83,4 +83,8 @@ services:
     # config/services.yaml
   App\Service\StatistiqueMissionService: ~
 
+  App\Service\BCryptPasswordHasher:
+    arguments:
+      $hasherFactory: '@security.password_hasher_factory'
+
 
