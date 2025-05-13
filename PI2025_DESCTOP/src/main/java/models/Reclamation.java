@@ -19,7 +19,7 @@ public class Reclamation {
         this.description_rec = description_rec;
         this.type_rec = type_rec;
         this.date_rec = date_rec;
-        this.etat_rec = "0"; // Default state is "non traité"
+        this.etat_rec = "En cours"; // Default state is "En cours"
     }
 
     public Reclamation(String description_rec, String type_rec, Timestamp date_rec) {
@@ -66,23 +66,24 @@ public class Reclamation {
 
     public String getEtat() { return etat_rec; }
     public void setEtat(String etat_rec) {
-        if (!Arrays.asList("0", "1", "2").contains(etat_rec)) {
-            throw new IllegalArgumentException("État invalide. Les valeurs possibles sont: 0 (non traité), 1 (traité), 2 (en attente)");
+        if (!Arrays.asList("En cours", "Résolue", "Rejetée").contains(etat_rec)) {
+            throw new IllegalArgumentException("État invalide. Les valeurs possibles sont: En cours, Résolue, Rejetée");
         }
         this.etat_rec = etat_rec;
     }
 
     public String getEtatDescription() {
-        return switch (etat_rec) {
-            case "0" -> "non traité";
-            case "1" -> "traité";
-            case "2" -> "en attente";
-            default -> "état inconnu";
-        };
+        return etat_rec;
     }
 
     //ctrl saisie
-    private static final List<String> TYPES_VALIDES = Arrays.asList("site", "bug", "pack", "commercant", "guide", "autre");
+    private static final List<String> TYPES_VALIDES = Arrays.asList(
+            "Problème technique",
+            "Problème de paiement",
+            "Problème de réservation",
+            "Autre"
+    );
+
     public void setType_rec(String type_rec) {
         if (TYPES_VALIDES.contains(type_rec.toLowerCase())) {
             this.type_rec = type_rec;
