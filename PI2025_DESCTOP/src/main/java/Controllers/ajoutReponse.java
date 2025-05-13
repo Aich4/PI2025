@@ -57,11 +57,20 @@ public class ajoutReponse {
             try {
                 boolean success = reponseService.create(newResponse);
                 if (success) {
+                    // Mettre à jour l'état de la réclamation à "Résolue"
+                    try {
+                        rec.setEtat("Résolue");
+                        new services.ReclamationService().update(rec);
+                    } catch (Exception e) {
+                        showAlert("Erreur", "La réponse a été ajoutée, mais l'état de la réclamation n'a pas pu être mis à jour: " + e.getMessage(), Alert.AlertType.WARNING);
+                    }
+
                     showAlert("Succès", "Réponse ajoutée avec succès !", Alert.AlertType.INFORMATION);
                     stage.close();
                 } else {
                     showAlert("Erreur", "La réponse n'a pas été ajoutée.", Alert.AlertType.ERROR);
                 }
+
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible d'ajouter la réponse: " + e.getMessage(), Alert.AlertType.ERROR);
             }
