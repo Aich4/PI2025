@@ -73,7 +73,7 @@ h6 {
   transition: all 0.5s;
   z-index: 997;
   padding: 20px 0;
-  background: rgba(55, 64, 85, 0.9);
+  background: #ff760d;
 }
 
 #header.header-transparent {
@@ -81,7 +81,7 @@ h6 {
 }
 
 #header.header-scrolled {
-  background: rgba(55, 64, 85, 0.9);
+  background: #ff760d;
   padding: 15px 0;
 }
 
@@ -162,7 +162,7 @@ h6 {
   opacity: 0;
   visibility: hidden;
   background: #fff;
-  box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+  box-shadow: #ff760d;
   transition: 0.3s;
 }
 
@@ -174,7 +174,7 @@ h6 {
   padding: 10px 20px;
   font-size: 14px;
   text-transform: none;
-  color: #414c64;
+  color: #ff760d;
 }
 
 .navbar .dropdown ul a i {
@@ -245,7 +245,7 @@ h6 {
   right: 0;
   left: 0;
   bottom: 0;
-  background: rgba(45, 53, 69, 0.9);
+  background: #ff760d;
   transition: 0.3s;
   z-index: 999;
 }
@@ -291,7 +291,7 @@ h6 {
   opacity: 1;
   visibility: visible;
   background: #fff;
-  box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+  box-shadow: 0px 0px 30px #ff760d;
 }
 
 .navbar-mobile .dropdown ul li {
@@ -539,7 +539,7 @@ section {
 .about h3 {
   font-weight: 700;
   font-size: 34px;
-  color: #414c64;
+  color: #ff760d;
 }
 
 .about h4 {
@@ -708,7 +708,7 @@ section {
 # Cta
 --------------------------------------------------------------*/
 .cta {
-  background: #414c64;
+  background: #ff760d;
   background-size: cover;
   padding: 60px 0;
 }

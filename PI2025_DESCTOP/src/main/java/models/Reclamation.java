@@ -56,11 +56,7 @@ public class Reclamation {
         if (date == null) {
             throw new IllegalArgumentException("La date ne peut pas être nulle");
         }
-        // Vérifier si la date n'est pas dans le futur
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        if (date.after(now)) {
-            throw new IllegalArgumentException("La date ne peut pas être dans le futur");
-        }
+
         this.date_rec = date;
     }
 
