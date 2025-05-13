@@ -1,29 +1,32 @@
-# 🌍 ProjetWebTrekSwap
+# 🌍 ProjetTrekSwap (Web & Desktop)
 
 Projet académique réalisé dans le cadre du module **PIDEV 3A** à **Esprit School of Engineering**.  
-Ce projet Symfony 6.4 propose une plateforme complète pour la gestion de voyages, combinant plusieurs services comme la gestion des destinations, missions, abonnements, réclamations, paiements, recommandations et bien plus.
+**TrekSwap** est une solution complète combinant **application web Symfony 6.4** et **application desktop JavaFX** pour la gestion intelligente du tourisme.  
+Elle propose une plateforme unifiée pour explorer des destinations, gérer des missions, s'abonner à des offres, suivre des activités et bien plus.
+
+Pensé comme un système modulaire et évolutif, le projet repose sur une architecture **multi-plateforme (Web + Desktop)** intégrant :
+- des services avancés tels que génération de documents, paiements numériques, QR codes, chatbot IA, statistiques
+- une application JavaFX conviviale pour une expérience utilisateur en bureau sans navigateur web
 
 ## 🚀 Aperçu
 
-**TrekSwap** est une plateforme web innovante dédiée à la digitalisation du secteur touristique. Elle permet aux utilisateurs d’explorer des destinations, de s’abonner à des offres personnalisées, d’interagir avec des partenaires et de gérer facilement leurs activités de voyage à travers une interface intuitive.
-
-Pensé comme un système modulaire et évolutif, le projet repose sur une architecture Symfony robuste et intègre des services avancés tels que la génération de documents, les paiements numériques, les QR codes, les statistiques décisionnelles, ainsi qu’un assistant intelligent basé sur l’IA générative (RAG).
+**TrekSwap** est une plateforme **web et desktop** innovante dédiée à la digitalisation du secteur touristique. Elle permet aux utilisateurs d’explorer des destinations, de s’abonner à des offres personnalisées, d’interagir avec des partenaires et de gérer facilement leurs activités de voyage à travers une interface intuitive.
 
 Cette solution vise à améliorer l’expérience utilisateur, automatiser les processus administratifs et offrir une vitrine moderne pour les partenaires touristiques.
 
 ## 🧩 Fonctionnalités principales
 
-- 🔹 **Destinations & Activités** : navigation, affichage et filtrage des destinations avec leurs activités associées
-- 🔹 **Missions & Récompenses** : gestion de missions liées aux destinations avec attribution de récompenses
-- 🔹 **Abonnements & Packs** : inscription à des packs touristiques personnalisés
-- 🔹 **Partenaires & Catégories** : gestion des partenaires touristiques selon leurs catégories
-- 🔹 **Wishlist** : ajout de destinations aux favoris pour un accès rapide
-- 🔹 **Réclamations & Calendrier** : soumission et suivi des réclamations avec planification dans un calendrier
-- 🔹 **Paiement & QR Code** : gestion des paiements et génération automatique de QR codes
-- 🔹 **Utilisateurs** : gestion des profils (utilisateur, administrateur, partenaire)
-- 🔹 **Chatbot IA** : intégration d’un assistant intelligent basé sur la technologie RAG (Retrieval-Augmented Generation)
-- 🔹 **Statistiques** : visualisation graphique des indicateurs clés du système
-- 🔹 **Réinitialisation de mot de passe**, **tests d’envoi d’email**, etc.
+- 🔹 **Destinations & Activités** : navigation, affichage et filtrage des destinations avec leurs activités associées  
+- 🔹 **Missions & Récompenses** : gestion de missions liées aux destinations avec attribution de récompenses  
+- 🔹 **Abonnements & Packs** : inscription à des packs touristiques personnalisés  
+- 🔹 **Partenaires & Catégories** : gestion des partenaires touristiques selon leurs catégories  
+- 🔹 **Wishlist** : ajout de destinations aux favoris pour un accès rapide  
+- 🔹 **Réclamations & Calendrier** : soumission et suivi des réclamations avec planification dans un calendrier  
+- 🔹 **Paiement & QR Code** : gestion des paiements et génération automatique de QR codes  
+- 🔹 **Utilisateurs** : gestion des profils (utilisateur, administrateur, partenaire)  
+- 🔹 **Chatbot IA** : intégration d’un assistant intelligent basé sur la technologie RAG (Retrieval-Augmented Generation)  
+- 🔹 **Statistiques** : visualisation graphique des indicateurs clés du système  
+- 🔹 **Réinitialisation de mot de passe**, **tests d’envoi d’email**, etc.  
 
 ## 📁 Structure du projet
 
@@ -47,7 +50,7 @@ Root/
 │   ├── composer.json        # Dépendances et métadonnées PHP
 │   └── symfony.lock         # Verrouillage des dépendances
 │
-├── PI2025_DESKTOP/          # Module JavaFX desktop indépendant
+├── PI2025_DESKTOP/          # Application desktop JavaFX (interface riche pour utilisateurs hors navigateur)
 │   ├── src/                 # Code source Java
 │   ├── lib/                 # Librairies Java externes
 │   ├── resources/           # Fichiers FXML, images, etc.
@@ -60,24 +63,24 @@ Root/
 
 ## ⚙️ Installation rapide
 
-1. **Cloner le projet**
+### 1. **Cloner le projet**
 ```bash
 git clone https://github.com/Aich4/PI2025.git
 cd ProjetWebTrekSwap
 ```
 
-2. **Installer les dépendances**
+### 2. **Installer les dépendances Symfony**
 ```bash
 composer install
 ```
 
-3. **Configurer l’environnement**
+### 3. **Configurer l’environnement**
 ```bash
 cp .env .env.local
 # Modifier les paramètres de base de données dans .env.local
 ```
 
-4. **Créer la base de données**
+### 4. **Créer la base de données**
 Deux possibilités :
 - Automatique via Doctrine :
 ```bash
@@ -90,10 +93,14 @@ php bin/console doctrine:migrations:migrate
 mysql -u root -p pidev < pidev.sql
 ```
 
-5. **Démarrer le serveur**
+### 5. **Démarrer le serveur Symfony**
 ```bash
 symfony server:start
 ```
+
+### 6. **Lancer l’application desktop**
+Ouvrir le projet dans un IDE Java (comme IntelliJ ou NetBeans)  
+et exécuter la classe principale dans `PI2025_DESKTOP/src`.
 
 ## 🔧 Technologies utilisées
 
@@ -102,16 +109,17 @@ symfony server:start
 - Twig
 - Bootstrap
 - JavaScript (AJAX)
+- JavaFX
 - MySQL
 - API externes : OpenStreetMap, OpenWeather, Gemini AI ...
 
 ## 🤝 Contribution
 
-1. Fork le repo
-2. Crée ta branche (`git checkout -b feature/NouvelleFonction`)
-3. Commit (`git commit -m "Ajout d'une nouvelle fonction"`)
-4. Push (`git push origin feature/NouvelleFonction`)
-5. Ouvre une Pull Request
+1. Fork le repo  
+2. Crée ta branche (`git checkout -b feature/NouvelleFonction`)  
+3. Commit (`git commit -m "Ajout d'une nouvelle fonction"`)  
+4. Push (`git push origin feature/NouvelleFonction`)  
+5. Ouvre une Pull Request  
 
 ## 📄 Licence
 
