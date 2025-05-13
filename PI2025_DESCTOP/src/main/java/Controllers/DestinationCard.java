@@ -22,6 +22,7 @@ import services.AvisService;
 import services.WeatherService;
 import services.WishlistService;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -97,11 +98,16 @@ public class DestinationCard {
         this.destination = destination;
         weatherContainer.setVisible(false);
 
-        // Load image if available
         if (destination.getImage_destination() != null && !destination.getImage_destination().isEmpty()) {
             try {
-                Image image = new Image(destination.getImage_destination());
-                destinationImage.setImage(image);
+                String basePath = System.getProperty("user.dir");
+                File imageFile = new File("../ProjetWebTrekSwap/public" + destination.getImage_destination());
+                if (imageFile.exists()) {
+                    Image image = new Image(imageFile.toURI().toString());
+                    destinationImage.setImage(image);
+                } else {
+                    destinationImage.setImage(null);
+                }
             } catch (Exception e) {
                 System.out.println("Error loading image: " + e.getMessage());
                 destinationImage.setImage(null);
