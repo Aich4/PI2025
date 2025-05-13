@@ -75,12 +75,13 @@ public class listReclamation {
 
     private String getEtatText(String etat) {
         return switch (etat) {
-            case "0" -> "Non traité";
-            case "1" -> "Traité";
-            case "2" -> "En attente";
+            case "En cours" -> "🟠 En cours";
+            case "Résolue" -> "🟢 Résolue";
+            case "Rejetée" -> "🔴 Rejetée";
             default -> etat;
         };
     }
+
 
     @FXML
     public void initialize() {
@@ -90,9 +91,10 @@ public class listReclamation {
             "Date (Plus ancien)",
             "Type (A-Z)",
             "Type (Z-A)",
-            "État (Non traité)",
-            "État (En attente)",
-            "État (Traité)"
+            "État (En cours)",
+            "État (Rejetée)",
+            "État (Résolue)"
+
         );
         triComboBox.setItems(triOptions);
         triComboBox.setOnAction(e -> trierReclamations());
@@ -188,11 +190,12 @@ public class listReclamation {
 
     private String getEtatColor(String etat) {
         switch (etat) {
-            case "0": return "red"; // Non traité
-            case "1": return "orange"; // En cours
-            case "2": return "green"; // Traité
+            case "En cours": return "orange";
+            case "Résolue": return "green";
+            case "Rejetée": return "red";
             default: return "black";
         }
+
     }
 
     private void showReponsePopup(Reclamation rec) {
@@ -237,7 +240,7 @@ public class listReclamation {
                     // Sauvegarder la réponse
                     if (reponseService.create(reponse)) {
                         // Mettre à jour l'état de la réclamation
-                        rec.setEtat("1"); // En cours de traitement
+                        rec.setEtat("Résolue");
                         reclamationService.update(rec);
                         
                         showAlert("Succès", "Réponse envoyée avec succès", Alert.AlertType.INFORMATION);
@@ -318,13 +321,13 @@ public class listReclamation {
             case "Type (Z-A)":
                 sorted.sort((r1, r2) -> r2.getType().compareTo(r1.getType()));
                 break;
-            case "État (Non traité)":
+            case "État (En cours)":
                 sorted.sort((r1, r2) -> r1.getEtat().compareTo(r2.getEtat()));
                 break;
-            case "État (En attente)":
+            case "État (Rejetée)":
                 sorted.sort((r1, r2) -> r2.getEtat().compareTo(r1.getEtat()));
                 break;
-            case "État (Traité)":
+            case "État (Résolue)":
                 sorted.sort((r1, r2) -> r1.getEtat().compareTo(r2.getEtat()));
                 break;
         }
@@ -346,10 +349,10 @@ public class listReclamation {
 
         // ComboBox pour l'état uniquement
         ComboBox<String> etatCombo = new ComboBox<>();
-        etatCombo.getItems().addAll("0", "1", "2");
+        etatCombo.getItems().addAll("En cours", "Résolue", "Rejetée");
         etatCombo.setValue(rec.getEtat());
         Label etatLabel = new Label("État :");
-        Label etatDescription = new Label("0: non traité, 1: traité, 2: en attente");
+        Label etatDescription = new Label("Choisissez l'état : En cours, Résolue, ou Rejetée");
         etatDescription.setStyle("-fx-font-size: 11; -fx-text-fill: #666666;");
 
         Button saveButton = new Button("Modifier l'état");
