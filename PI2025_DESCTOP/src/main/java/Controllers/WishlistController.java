@@ -14,12 +14,9 @@ import javafx.stage.Stage;
 import models.Destination;
 import services.WishlistService;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
 import java.util.List;
 
 import static Controllers.planDestination.openPlanDestinationPage;
@@ -80,12 +77,22 @@ public class WishlistController {
 
             ImageView destinationImage = new ImageView();
             if (destination.getImage_destination() != null && !destination.getImage_destination().isEmpty()) {
-                Image image = new Image(destination.getImage_destination());
-                destinationImage.setImage(image);
-                destinationImage.setFitHeight(50);
-                destinationImage.setFitWidth(50);
-                destinationImage.setStyle("-fx-background-radius: 25;");
+                try {
+                    String basePath = System.getProperty("user.dir");
+                    File imageFile = new File("../ProjetWebTrekSwap/public" + destination.getImage_destination());
+                    if (imageFile.exists()) {
+                        Image image = new Image(imageFile.toURI().toString());
+                        destinationImage.setImage(image);
+                        destinationImage.setFitHeight(50);
+                        destinationImage.setFitWidth(50);
+                        destinationImage.setStyle("-fx-background-radius: 25;");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Failed to load image for wishlist item: " + e.getMessage());
+                    destinationImage.setImage(null);
+                }
             }
+
 
             VBox destinationInfo = new VBox(5);
             Text destinationName = new Text(destination.getNom_destination());
